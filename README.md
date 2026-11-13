@@ -12,7 +12,7 @@ It gives Claude Code, Codex, Cursor, Copilot, Gemini CLI and any agent that read
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-orange.svg)](skills/dent/references/styles/_styles-index.md)
 [![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](CHANGELOG.md)
 
-[Install](#install) · [What it does](#what-dent-does) · [How it works](docs/HOW-IT-WORKS.md) · [All install options](docs/INSTALL.md) · [Contribute](CONTRIBUTING.md)
+[Install](#install) · [See the difference](#see-the-difference-run-the-benchmark) · [What it does](#what-dent-does) · [How it works](docs/HOW-IT-WORKS.md) · [All install options](docs/INSTALL.md) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
@@ -34,6 +34,58 @@ DENT fixes that by changing **how** the agent works, not just what it outputs:
 | Starts a second design system in your codebase | Detects your existing tokens / UI library and extends them |
 | "I used blue because it's nice" | A Decision Log with the reason and source of every choice |
 | Forgets everything next session | An approved `DESIGN.md` that becomes the source of truth |
+
+## See the difference: run the benchmark
+
+Don't take our word for it. Give your agent the **same prompt twice**, once without DENT and once with it, and compare the two websites.
+
+**1. Copy this prompt** (unchanged; it never mentions DENT):
+
+<details>
+<summary><b>Benchmark prompt v1: "Brewlog" marketing website</b> (click to expand)</summary>
+
+```text
+Build a complete, production-quality marketing website for "Brewlog", a fictional app
+for home coffee brewers. Brewlog lets people log brew recipes (beans, grind size, water
+temperature, ratio, time), rate each cup, and see which settings make their best coffee
+over time. It has a free plan and a paid "Pro" plan ($6/month or $60/year) that adds
+unlimited recipes, bean inventory tracking and brew analytics.
+
+Requirements:
+- One self-contained file named index.html (HTML, CSS and JavaScript inline). Web fonts
+  from Google Fonts are allowed. No other external files, frameworks or images: build any
+  visuals (product screenshots, illustrations, icons) with HTML, CSS or inline SVG.
+- Sections: a header with navigation, hero, how it works, key features, a preview of the
+  app's interface, pricing (Free vs Pro, monthly/yearly), FAQ, a sign-up form, and a footer.
+- The sign-up form asks for name, email and password, validates in the browser and shows
+  helpful errors and a success state. It does not need a backend.
+- It must look great and work well on phones, tablets and desktops.
+
+Make every decision yourself and don't ask me any questions. When you are done, reply with
+a short summary of the design decisions you made.
+```
+
+</details>
+
+**2. Run it twice** with the same agent and model, each in a fresh session and an empty folder:
+- **Run A, without DENT:** skill not installed.
+- **Run B, with DENT:** skill installed ([install](#install)).
+
+Only reply `continue` if the agent stops early. No other feedback, and keep the first result of each run.
+
+**3. Compare** the two `index.html` files side by side on your phone and desktop. Which one would you trust with your coffee?
+
+**4. Share your result.** Post your screenshots via a pull request or a [Benchmark result issue](https://github.com/jeelnadaa/DENT/issues/new?template=benchmark_result.md). Wins, ties and losses all get published.
+
+Full rules, scoring sheet and a screenshot script: **[benchmark/](benchmark/README.md)**
+
+### Results
+
+| Agent + model | Without DENT | With DENT | Run by |
+|---|---|---|---|
+| *First official results coming soon* | | | [@jeelnadaa](https://github.com/jeelnadaa) |
+
+*Live side-by-side demos will be linked here as results come in.*
 
 ## What DENT does
 

@@ -2,6 +2,11 @@
 
 All notable changes to DENT are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- **Benchmark** (`benchmark/`): a fixed "Brewlog" website prompt (v1) to run with and without DENT, fair-run rules, a 10-criterion scoring sheet, a Playwright screenshot script, a result template and a "Benchmark result" issue template. README gains a "See the difference" section and a results table.
+
 ## [1.0.1] — 2026-11-14
 
 ### Fixed
