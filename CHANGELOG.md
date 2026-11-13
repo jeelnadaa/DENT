@@ -6,6 +6,7 @@ All notable changes to DENT are documented here. Format: [Keep a Changelog](http
 
 ### Added
 - **Benchmark** (`benchmark/`): a fixed "Brewlog" website prompt (v1) to run with and without DENT, fair-run rules, a 10-criterion scoring sheet, a Playwright screenshot script, a result template and a "Benchmark result" issue template. README gains a "See the difference" section and a results table.
+- **DENT landing page prompt** (`benchmark/PROMPT-DENT-LANDING.md`): the content-only prompt used to build DENT's own landing page with DENT, usable as a second benchmark that lets the agent ask questions. Both prompts are now shown in full in the README, each with its own results table.
 
 ## [1.0.1] — 2026-11-14
 

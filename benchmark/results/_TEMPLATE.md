@@ -6,7 +6,7 @@
 | **Date** | <yyyy-mm-dd> |
 | **Agent** | <e.g. Claude Code 2.x, Codex CLI, Cursor> |
 | **Model & settings** | <e.g. model name, reasoning/effort level> |
-| **Prompt version** | v1 |
+| **Prompt** | Brewlog v1 / DENT landing page v1 |
 | **DENT version** | <e.g. 1.0.1> |
 | **`continue` replies** | without: <n> · with: <n> |
 | **Time to finish (approx.)** | without: <min> · with: <min> |
@@ -19,6 +19,13 @@
 | Desktop (1440px) | ![without, desktop](without-1440.png) | ![with, desktop](with-1440.png) |
 
 Live files: [without/index.html](without/index.html) · [with/index.html](with/index.html)
+
+## Questions the agent asked (DENT landing page prompt)
+
+| Run | Question | Your answer |
+|---|---|---|
+| without | | |
+| with | | |
 
 ## Scores (1–5)
 

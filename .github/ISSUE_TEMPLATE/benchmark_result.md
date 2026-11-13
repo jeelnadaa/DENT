@@ -8,7 +8,8 @@ labels: benchmark
 **Agent:**
 **Model & settings:**
 **Date:**
-**Prompt version:** v1
+**Prompt:** Brewlog v1 / DENT landing page v1
+**Questions the agent asked + your answers (landing page prompt):**
 **DENT version:**
 **`continue` replies (without / with):**
 

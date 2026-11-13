@@ -4,6 +4,15 @@
 
 This benchmark shows what DENT changes in practice. You give an AI agent the same website request twice, once without DENT and once with it, then compare the two sites side by side. Anyone can run it and submit their results.
 
+There are two prompts:
+
+| Prompt | What it is | Questions |
+|---|---|---|
+| [PROMPT-DENT-LANDING.md](PROMPT-DENT-LANDING.md) | DENT's own landing page (the one we built with DENT). Full content given, design left open. | **Allowed**: answer them, same answers in both runs |
+| [PROMPT.md](PROMPT.md) | "Brewlog", a fictional coffee app website | **Not allowed**: one-shot by design |
+
+The steps below use Brewlog as the example; the landing page prompt works the same way, except that you answer the agent's questions and record them.
+
 ---
 
 ## 1. Run it (about 20 minutes)
@@ -16,7 +25,7 @@ This benchmark shows what DENT changes in practice. You give an AI agent the sam
 1. Make sure DENT is **not** installed (or is disabled) for this agent.
 2. Create an empty folder, e.g. `brewlog-without-dent/`, and open a **fresh session** there.
 3. Paste the prompt. Let the agent finish.
-4. If it stops early, you may reply only `continue`. Give no other feedback, no fixes and no extra requests.
+4. If it stops early, you may reply only `continue`. Give no other feedback, no fixes and no extra requests. (Landing page prompt: also answer any questions the agent asks, and note them.)
 
 ### Run B: with DENT
 1. Install DENT ([install guide](../docs/INSTALL.md)).
@@ -66,7 +75,8 @@ For a less biased verdict, ask someone who doesn't know which site is which to p
 
 1. Fork the repo and add a folder `benchmark/results/<agent>-<model>-<yyyy-mm-dd>/` containing:
    - the 4 screenshots and both `index.html` files (`without/index.html`, `with/index.html`);
-   - a `RESULT.md` copied from [results/_TEMPLATE.md](results/_TEMPLATE.md) and filled in.
+   - a `RESULT.md` copied from [results/_TEMPLATE.md](results/_TEMPLATE.md) and filled in (for the landing page prompt, include the agent's questions and your answers).
+   Name the folder with the prompt: `…/brewlog-<agent>-<model>-<date>/` or `…/dent-landing-<agent>-<model>-<date>/`.
 2. Open a pull request titled `Benchmark: <agent> + <model>`.
 
 Not comfortable with PRs? Open an issue with the **Benchmark result** template and attach the screenshots.
