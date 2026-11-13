@@ -20,4 +20,9 @@ jobs:
       - name: Publish GitHub release with dent.zip
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/dent.zip --title "DENT $GITHUB_REF_NAME" --notes "See CHANGELOG.md for details."
+        run: |
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/dent.zip --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/dent.zip --title "DENT $GITHUB_REF_NAME" --notes "See CHANGELOG.md for details."
+          fi
