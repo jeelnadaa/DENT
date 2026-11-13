@@ -2,6 +2,11 @@
 
 All notable changes to DENT are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [1.0.1] — 2026-11-14
+
+### Fixed
+- Release workflow now attaches `dent.zip` even when the GitHub release already exists, so the Claude.ai / Claude Desktop download is available from Releases.
+
 ## [1.0.0] — 2026-11-14
 
 First public release as **DENT** (previously an internal skill called `product-design`).

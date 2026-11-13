@@ -10,7 +10,7 @@ It gives Claude Code, Codex, Cursor, Copilot, Gemini CLI and any agent that read
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills%20(SKILL.md)-black.svg)](https://agentskills.io)
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-orange.svg)](skills/dent/references/styles/_styles-index.md)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](CHANGELOG.md)
 
 [Install](#install) · [What it does](#what-dent-does) · [How it works](docs/HOW-IT-WORKS.md) · [All install options](docs/INSTALL.md) · [Contribute](CONTRIBUTING.md)
 

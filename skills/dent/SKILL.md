@@ -4,7 +4,7 @@ description: DENT is a product design skill for any UI work - designing, redesig
 license: Apache-2.0
 metadata:
   author: Jeel Nada (solarquack)
-  version: "1.0.0"
+  version: "1.0.1"
   homepage: https://github.com/jeelnadaa/DENT
 ---
 
