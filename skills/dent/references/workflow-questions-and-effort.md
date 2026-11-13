@@ -1,0 +1,184 @@
+# Workflow — Questions, Effort Levels and Change Requests
+
+Used by SKILL.md › Workflow. First decide the **mode** (Create, Redesign, Audit, Extend, Implement, Adopt — see `modes-existing-products.md` §1). **Asking questions is the top priority** before designing anything. This file covers: how to ask (§1), effort levels (§2), the question order (§3), handling change and add-on requests (§4), defaults when the user says "don't ask" (§5), and how to avoid overwhelming the user (§6).
+
+---
+
+## 1. How to ask (rules for every question)
+
+1. **One question at a time.** Wait for the answer before asking the next. Never send a wall of questions.
+2. **Tailor options to the user's prompt.** Read what they already said and offer only options that fit. A prompt about "a meditation app" should never get "Cyberpunk" as an option.
+3. **Few options: 2–4.** Put the one you recommend first and mark it **(Recommended)**, with a one-line reason tied to their product.
+4. **Explain every option** in one short, plain line: what it looks/feels like and what it's good for. The user should be able to choose without knowing design terms.
+5. **Always allow a free answer.** Add "Something else — describe it in your own words" (if the question tool has a built-in free-text/"Other" choice, rely on that instead).
+6. **Always include an escape option** on the first question, and offer it again if the user seems impatient: **"Skip the questions — you decide everything"**. If chosen, stop asking and follow §5 below.
+7. **Skip what's already answered.** If the prompt says "dark mode fintech dashboard", don't ask about mode or product type; confirm in one line instead.
+8. **Use the question tool when available** (e.g. a multiple-choice question UI). Otherwise ask in plain text with numbered options.
+9. **Show, don't only tell, when useful.** For visual choices (style, palette, type), a tiny visual preview (color swatches, font sample line, mini mockup) helps more than words.
+10. **Keep the total short.** Follow the per-level counts in §3 (Essential ≤ 3 … All-out ~10–14). Stop early if you have enough to design well.
+11. **Record every answer** in the Decision Log (SKILL.md › Workflow › Decision Log).
+
+### Option format (example)
+> **Which overall look fits your app best?**
+> 1. **Minimal (Recommended)** — lots of white space, one accent color, very clean. Best for focus and productivity apps like yours.
+> 2. **Japandi / calm** — warm beige and natural tones, soft and quiet. Good if you want it to feel relaxing.
+> 3. **Playful** — bright colors, rounded shapes, bouncy animations. Good if your users are younger or you want it fun.
+> 4. **Something else** — describe it or share a site/app you like.
+> 5. **Skip the questions — you decide everything**
+
+---
+
+## 2. Effort levels
+
+The user decides how deep the design goes. **Ask this first** (question 0), with these explanations (shorten them to one line each in the question):
+
+> **How far should I go with this design?**
+> 1. **Essential** — clean, consistent and correct, nothing extra. Fastest. Good for internal tools, prototypes, MVPs.
+> 2. **Standard (Recommended)** — a complete, professional design in your chosen style, with all states and subtle animation.
+> 3. **Polished** — premium feel: refined typography, hover and scroll effects, dark mode, icons/images direction, full design review.
+> 4. **All-out** — everything: research, brand, multiple screens/flows, advanced motion, accessibility and localization in depth, marketing assets.
+> 5. **Skip the questions — you decide everything**
+
+### The floor (every level, including Essential — never skipped)
+- **Consistency:** tokens for color, type, spacing, radius, elevation; each component defined once and reused (SKILL.md › Foundations, › Components).
+- **Color rules:** three-role palette (or brand/style colors), contrast checked, never color alone.
+- **Foundation components** needed by the screen (buttons, inputs, selection controls, cards, nav…) with default, hover, focus, disabled and error states.
+- **Core laws:** clear hierarchy, one primary action, proximity/alignment, Fitts, Hick, Jakob.
+- **Accessibility minimum** (SKILL.md › Accessibility) and the pre-ship checklist's core items.
+- **Decision Log**, and DESIGN.md after approval.
+
+### What each level adds
+| Area | Essential | Standard | Polished | All-out |
+|---|---|---|---|---|
+| Questions | ≤ 3 | ~5–6 | ~7–9 | ~10–14 |
+| Aesthetic style | Minimal or a style's tokens only | Full style file applied | Full style + signature moves refined | Style + accent style, custom details |
+| Components | Only those needed, core states | Full specs incl. loading/empty/selected | + micro-interactions | + full spec for every component used, variants |
+| Screen states | Default + error | + empty, loading, success | + edge cases, content stress | + offline, permissions, all edge cases |
+| Layout & responsive | Mobile + desktop | All breakpoints + platform rules | + container queries, fluid type/spacing | + every surface in scope (tablet, desktop app…) |
+| Patterns | Basic structure | Matching page/flow pattern | + industry playbook | + IA/sitemap, full flows |
+| Motion | State transitions only (100–200ms) | Motion tokens + subtle feedback | Hover system, scroll reveals, shared transitions | Signature hero moments, choreography, springs, sound/haptics if relevant |
+| Typography | Type scale, 1–2 fonts | + style pairing | + typography craft (tracking, balance, fluid) | + expressive/kinetic moments |
+| Color & theme | One mode | One mode, full semantic set | Light + dark | + high contrast, theme switching, brand scales |
+| Copy | Clear labels & errors | UX-writing rules applied | Voice & tone defined | Full microcopy set |
+| Icons/images | One icon set | + image treatment | Illustration/imagery direction | Custom illustration/icon system, art direction |
+| Accessibility | Minimum bar | + component ARIA patterns | + full WCAG 2.2 AA checklist | + cognitive/motor/vision deep pass |
+| i18n | — | Logical CSS, no concatenated strings | + text expansion/RTL ready | Full localization plan, scripts, formats |
+| Data viz | Correct chart type | Data-viz rules | + interaction, dark-mode charts | + annotations, small multiples, accessibility tables |
+| Assets | — | Favicon | + OG/share image, app icon | + brand kit, social/marketing templates |
+| Brief & concept | Concept sentence (internal) | Concept sentence + signature element | One-page brief (confirmed) + concept | Brief + 2–3 divergent directions + success metrics & measurement plan |
+| Research & brand | — | — | Proto-persona + key flow | Personas/JTBD, journey, sitemap, mini brand, usability test plan |
+| Ethics | No deceptive patterns (always) | same | + persuasion review | + full ethics audit |
+| Quality | Pre-ship checklist (core) | + visual verification | + full review rubric & anti-patterns | + multiple variations to choose from, rubric ≥ 4 everywhere |
+| Output | Screen(s) + short log | + full DESIGN.md | + tokens 3-tier | + token export (DTCG), handoff notes |
+
+Rules:
+- Stay inside the chosen level. Don't add unrequested extras (that overwhelms the user); offer the next level in **one line** at the end ("Want hover/scroll animations and dark mode? That's the Polished level.").
+- The user can change level anytime ("go all out now") — continue from the current design; don't restart.
+- Any single extra can be added without changing level (§4 add-on requests).
+
+---
+
+## 3. Question order (ask only what's still unknown)
+
+| # | Topic | Why it matters | Typical tailored options |
+|---|---|---|---|
+| 0 | **Effort level** (always ask first, unless the prompt already says e.g. "quick" or "go all out") | Decides how deep everything else goes and how many more questions to ask | Essential · Standard (Recommended for most) · Polished · All-out — see §2 for the wording |
+| 1 | **What are we designing & for whom?** (product type, target users) | Decides patterns and tone | Infer from prompt; confirm in one line if clear |
+| 2 | **Platform** | Decides platform rules (platforms-and-devices.md) | Web (responsive) · iOS · Android · Desktop app · Cross-platform |
+| 3 | **Scope of this round** | Avoids over-building | One key screen first (Recommended) · A full flow (e.g. onboarding) · Full set of main screens · Design system only |
+| 4 | **Overall look (aesthetic style)** | Biggest visual decision | 2–3 styles from styles/_styles-index.md that fit the product + feeling words in the prompt; or "I have a reference site/screenshot" (→ inspiration-and-reference-sites.md §2) |
+| 5 | **Light or dark** | Base of the palette | Light · Dark · Both (with toggle) — recommend based on product and context of use |
+| 6 | **Colors** | Brand feel | "I have brand colors" (ask for hex/logo) · 2–3 palettes from color.md Part 2 or the style's tokens, each shown as swatches with a mood line |
+| 7 | **Typography** | Personality + readability | 2–3 pairings from typography.md §3 that fit the chosen style, each with a sample line and a mood note |
+| 8 | **Density** | Spacing and component sizes | Comfortable (Recommended for most) · Compact (data-heavy/pro tools) · Spacious (marketing/luxury) |
+| 9 | **Motion level** | How alive it feels | Subtle (Recommended) · Expressive (hero moments, scroll storytelling) · Minimal (almost none) |
+| 10 | **Corner shape** (only if the style allows choice) | Personality | Sharp (0–4px) · Soft (8–12px) · Round (16px+/pills) |
+| 11 | **References** (optional) | Fast alignment | "Any app or site whose look you like?" — free answer |
+| 12 | **Content & must-haves** | Real content beats placeholders | Key sections/features, logo, real copy, images available? |
+
+**How many questions per effort level:** Essential ≤ 3 (effort, look/colors, light/dark) · Standard ~5–6 · Polished ~7–9 · All-out ~10–14 (adds brand, references, content, research questions). Still one at a time; the user can say "skip" anytime.
+
+Stop asking when you can design confidently. For anything you didn't ask about, choose using §5 and record it in the Decision Log as **"Chosen by default"** so the user can review it.
+
+---
+
+## 4. Asking about changes (after a draft is shown)
+
+When the user asks for a change:
+1. **Restate the change in one line** to confirm the scope ("You want the primary button color warmer — only that, everything else stays?").
+2. If the request is vague ("make it pop", "looks off", "more modern"), ask **one** clarifying question with 2–4 concrete interpretations, each explained. Example for "make it pop":
+   1. **Stronger accent color** — the main button and highlights get a bolder color.
+   2. **Bigger, bolder headline** — more contrast between title and text.
+   3. **More depth** — subtle shadows/glow so cards stand out from the background.
+   4. **Add motion** — elements animate in and react on hover.
+3. **Change only what was asked.** Don't redesign other parts. If the change has side-effects (e.g. new accent color fails contrast on buttons), say so and propose the smallest fix.
+4. Update the Decision Log with the change and the reason.
+5. Show the result and ask if it's right before moving on.
+
+### Add-on requests ("now add animations", "add dark mode"…)
+When the user asks to add something to an existing design:
+1. **Look it up again** in the skill (table below) — don't improvise from memory.
+2. Read DESIGN.md / the Decision Log so the addition matches what exists.
+3. Ask **1–2 short questions** with explained options (scope and intensity), e.g. for animations: *Where?* (buttons & hovers only · page transitions · scroll reveals · all) and *How strong?* (subtle · expressive).
+4. Add **only** that, using existing tokens (add new tokens if needed, e.g. motion tokens).
+5. Verify (quality-review.md Part 1), update Decision Log + DESIGN.md changelog.
+
+| User asks for… | Read |
+|---|---|
+| Animations, transitions, micro-interactions | SKILL.md › Modern layer (motion system, micro-interactions, reduced motion, performance) |
+| Hover effects | SKILL.md › Modern layer › Hover |
+| Scroll effects, parallax, sticky storytelling | SKILL.md › Modern layer › Scroll |
+| "More modern / premium / polished" | SKILL.md › Modern layer + quality-review.md Part 2 §4 |
+| Dark mode / theme switch | color.md Part 1 §7 + design-tokens-and-code.md Part 1 §4 |
+| Change style / "make it look like X style" | styles/_styles-index.md + the style file |
+| "Make it look like this site/screenshot" | inspiration-and-reference-sites.md §2 |
+| Responsive / mobile / tablet / desktop app | platforms-and-devices.md |
+| New page or flow (pricing, onboarding, checkout, settings…) | page-and-flow-patterns.md (+ industry-playbooks.md) |
+| Charts, dashboard, KPIs, tables | data-visualization.md |
+| Accessibility improvements | accessibility.md |
+| Translation, RTL, Hindi/Indic, other languages | internationalization.md |
+| Better copy, error messages, tone | ux-writing.md |
+| Icons, illustrations, photos | icons-illustration-and-imagery.md |
+| Fonts, "change the typography" | typography.md |
+| Logo, brand | brand-identity.md |
+| Favicon, app icon, OG image, social posts, posters, slides, email | assets-and-marketing-graphics.md |
+| Sound, haptics, voice, AR/VR, watch, TV, AI/agent UI | platforms-and-devices.md §5–6, page-and-flow-patterns.md §16 |
+| Conversion, pricing psychology, "is this a dark pattern?" | persuasion-and-ethics.md |
+| Research, personas, sitemap, navigation structure | research-and-information-architecture.md |
+| Code / convert to React, Tailwind, Flutter, SwiftUI… | design-tokens-and-code.md Part 2 |
+| Review / critique / "why does it look off?" | quality-review.md + modes-existing-products.md §4 (audit report) |
+| Redesign / modernize an existing product, work in an existing codebase or UI library | modes-existing-products.md |
+| Date picker, file upload, stepper, command palette, data table features, kanban, calendar, OTP, carousel… | components-extended.md |
+| Teams, roles, billing, notifications center, audit log, versions, collaboration, import/export, 2FA, account deletion | complex-product-patterns.md Part 1 |
+| Blog, docs site, changelog, about/careers, contact, 404, legal, comparison, waitlist, case study | complex-product-patterns.md Part 2 |
+| "Make it less generic / more unique", concept, directions, composition | creative-direction.md |
+| Brief, goals, metrics, A/B tests, "how do we know it works?" | design-brief-and-metrics.md |
+| Figma, Storybook, previews, handoff to developers | tooling-and-handoff.md |
+
+---
+
+## 5. When the user says "don't ask, just decide"
+
+Choose the best default from this skill, in this order, and record each as **"Chosen by default"** in the Decision Log:
+0. **Effort level:** from the prompt's wording ("quick/simple" → Essential, "go all out/premium/complete" → All-out); otherwise **Standard**.
+1. **Product type & platform:** infer from the prompt; if unclear → responsive web.
+2. **Style:** match the prompt's words and product type using `styles/_styles-index.md` → "Pick by feeling". If nothing matches: **Minimal** for apps/tools, **Premium Product** for marketing pages.
+3. **Mode:** light for productivity, reading, commerce, daytime use; dark for media, creative, developer tools, night use.
+4. **Colors:** the chosen style's starter tokens; if the style doesn't fix colors, the best-matching palette in `color.md` Part 2.
+5. **Typography:** the style's suggested fonts.
+6. **Density:** comfortable; compact for data-heavy tools.
+7. **Motion:** subtle.
+8. Everything else: SKILL.md defaults.
+
+Then present the design with a short "Decisions I made" summary and invite changes. The user can still change anything later.
+
+---
+
+## 6. Don't overwhelm the user
+- **One question per message**, 2–4 options, one-line explanations. No walls of text.
+- **Never mention internal file names, sections or labels** ([Law], [Rule]) to the user unless they ask how the skill works. Say the reason in plain words ("so text stays readable").
+- **Decision Log stays short in chat:** the 5–8 most important rows; the full log lives in DESIGN.md.
+- **Match reply length to effort level:** Essential = brief; All-out = more detail, still skimmable (headings, short bullets).
+- **Progressive disclosure:** show what was asked; offer the next step in one line at the end.
+- **Visual previews over descriptions** for colors, fonts and styles when possible.
+- **Respect "stop asking":** switch to defaults immediately and say what you chose afterwards.

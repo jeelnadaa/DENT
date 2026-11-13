@@ -1,0 +1,26 @@
+{
+  "name": "dent",
+  "owner": {
+    "name": "Jeel Nada (solarquack)",
+    "url": "https://github.com/jeelnadaa"
+  },
+  "metadata": {
+    "description": "DENT: open-source product design skill for AI agents.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "dent",
+      "source": "./",
+      "description": "Product design skill: questions first, effort levels, 41 styles, UX laws, WCAG rules, anti-generic creative direction, visual self-review and DESIGN.md.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jeel Nada (solarquack)"
+      },
+      "homepage": "https://github.com/jeelnadaa/DENT",
+      "license": "Apache-2.0",
+      "category": "design",
+      "keywords": ["design", "ui", "ux", "design-system", "accessibility"]
+    }
+  ]
+}
