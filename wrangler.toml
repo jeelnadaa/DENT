@@ -1,21 +1,22 @@
-# Cloudflare Pages configuration for the DENT landing page.
-# Cloudflare reads this file when the repo is connected to a Pages project.
+# Cloudflare Workers configuration for the DENT landing page (static assets, no Worker code).
+# Cloudflare's Git integration runs `npx wrangler deploy`, which reads this file.
 #
 # What gets published: only the `site/` folder (a static site, no build step).
 #   site/index.html        the landing page (HTML, CSS and JS inline)
-#   site/404.html          shown for unknown paths
+#   site/404.html          shown for unknown paths (not_found_handling below)
 #   site/assets/           benchmark screenshots, share image, app icon
-#   site/_headers          security and cache headers
+#   site/_headers          security and cache headers (supported by Workers static assets)
 #   site/robots.txt, site/sitemap.xml
 #
-# Dashboard settings when connecting the repo (Workers & Pages > Create > Pages > Connect to Git):
-#   Project name:            dent   (must match `name` below)
-#   Production branch:       main
-#   Framework preset:        None
-#   Build command:           (leave empty)
-#   Build output directory:  site   (this file's pages_build_output_dir takes precedence)
-# Then add the custom domain dent.solarquack.in under the project's Custom domains tab.
+# Dashboard settings (Workers & Pages > your "dent" project > Settings > Build):
+#   Build command:   (leave empty)
+#   Deploy command:  npx wrangler deploy
+#   Root directory:  /   (the repo root, where this file lives)
+# Custom domain: Settings > Domains & Routes > Add > Custom domain > dent.solarquack.in
 
 name = "dent"
-pages_build_output_dir = "./site"
 compatibility_date = "2026-11-01"
+
+[assets]
+directory = "./site"
+not_found_handling = "404-page"
