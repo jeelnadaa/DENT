@@ -1,0 +1,1611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DENT: Make a dent with your product's design</title>
+<meta name="description" content="DENT is a free, open-source design skill for AI coding agents. It makes your agent ask the right questions, follow proven UX laws and accessibility rules, and ship interfaces that don't look like every other AI-made site.">
+<link rel="canonical" href="https://dent.solarquack.in/">
+<meta name="theme-color" content="#FBFAF6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171714" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DENT">
+<meta property="og:title" content="DENT: AI agents can build anything. Now they can design it, too.">
+<meta property="og:description" content="A free, open-source design skill that gives AI coding agents the judgment of a senior product designer.">
+<meta property="og:url" content="https://dent.solarquack.in/">
+<meta property="og:image" content="https://dent.solarquack.in/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DENT. Make a dent with your product's design. An orange dot on warm paper.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DENT: AI agents can build anything. Now they can design it, too.">
+<meta name="twitter:description" content="A free, open-source design skill for Claude Code, Codex, Cursor, Copilot and more.">
+<meta name="twitter:image" content="https://dent.solarquack.in/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121212'/%3E%3Ccircle cx='16' cy='16' r='7.5' fill='%23FF5A1F'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+/* Theme before first paint: no flash of the wrong theme */
+(function(){try{var t=localStorage.getItem('dent-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}document.documentElement.classList.add('js');})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&text=PixelArt&display=swap">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DENT","description":"A free, open-source skill (a folder with a SKILL.md file) that gives AI coding agents the judgment of a senior product designer.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","url":"https://dent.solarquack.in/","codeRepository":"https://github.com/jeelnadaa/DENT","license":"https://www.apache.org/licenses/LICENSE-2.0","author":{"@type":"Person","name":"Jeel Nada"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+<style>
+/* ============ TOKENS ============ */
+:root{
+  /* color: light (paper) */
+  --paper:#FBFAF6; --paper-2:#F3F0E8; --paper-3:#E9E5DA;
+  --ink:#121212; --ink-2:#2E2C28; --muted:#5C5850;
+  --rule:#D8D3C7; --rule-strong:#B9B2A3;
+  --dot:#E8461E;          /* graphic marks, fills (3.78:1 on paper: non-text only) */
+  --dot-text:#B8330F;     /* orange as text: 5.71:1 */
+  --on-dot:#121212;       /* text on orange fills: 4.75:1 */
+  --without:#8E887C;      /* bar fill, non-text */
+  --focus:#121212;
+  --inv-bg:#121212; --inv-bg-2:#1E1D1A; --inv-text:#F3F0E8; --inv-muted:#B9B3A6; --inv-rule:#34322D; --inv-dot:#FF5A1F;
+  --shadow-1:0 1px 0 rgba(18,18,18,.04),0 8px 24px -12px rgba(18,18,18,.18);
+  --shadow-2:0 2px 0 rgba(18,18,18,.05),0 24px 60px -24px rgba(18,18,18,.35);
+
+  /* type */
+  --f-display:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-text:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --t-hero:clamp(2.75rem,1.1rem + 5.6vw,6.4rem);
+  --t-h2:clamp(2.25rem,1.3rem + 3.6vw,4.25rem);
+  --t-h3:clamp(1.5rem,1.2rem + 1vw,2rem);
+  --t-lead:clamp(1.125rem,1.04rem + .35vw,1.3125rem);
+  --t-body:1.0625rem; --t-small:.9375rem; --t-label:.75rem;
+
+  /* space (4px base) */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px; --s-10:128px;
+  --section:clamp(72px,8vw,128px);
+  --gutter:clamp(16px,4vw,48px);
+  --max:1280px;
+
+  /* shape */
+  --r-control:3px; --r-box:4px; --r-pill:999px;
+
+  /* motion */
+  --d-1:80ms; --d-2:160ms; --d-n:260ms; --d-3:420ms; --d-4:900ms; --stagger:40ms;
+  --e-std:cubic-bezier(.2,0,0,1); --e-out:cubic-bezier(.16,1,.3,1); --e-in:cubic-bezier(.55,0,1,.45); --e-io:cubic-bezier(.65,0,.35,1);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#171714; --paper-2:#1F1E1B; --paper-3:#2A2925;
+    --ink:#F3F0E8; --ink-2:#DAD5CA; --muted:#A8A196;
+    --rule:#34322D; --rule-strong:#4A4740;
+    --dot:#FF5A1F; --dot-text:#FF7A45; --on-dot:#121212; --without:#7A7468; --focus:#F3F0E8;
+    --inv-bg:#0E0E0C; --inv-bg-2:#1A1916;
+    --shadow-1:0 1px 0 rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6);
+    --shadow-2:0 2px 0 rgba(0,0,0,.3),0 24px 60px -24px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#171714; --paper-2:#1F1E1B; --paper-3:#2A2925;
+  --ink:#F3F0E8; --ink-2:#DAD5CA; --muted:#A8A196;
+  --rule:#34322D; --rule-strong:#4A4740;
+  --dot:#FF5A1F; --dot-text:#FF7A45; --on-dot:#121212; --without:#7A7468; --focus:#F3F0E8;
+  --inv-bg:#0E0E0C; --inv-bg-2:#1A1916;
+  --shadow-1:0 1px 0 rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6);
+  --shadow-2:0 2px 0 rgba(0,0,0,.3),0 24px 60px -24px rgba(0,0,0,.8);
+}
+
+/* ============ BASE ============ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 var(--t-body)/1.6 var(--f-text);font-feature-settings:"ss01";-webkit-font-smoothing:antialiased;overflow-x:clip}
+h1,h2,h3,p,ul,ol,dl,dd,figure,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.2em}
+a:hover{text-decoration-color:var(--dot);text-decoration-thickness:2px}
+button{font:inherit;color:inherit}
+code,kbd{font-family:var(--f-mono)}
+::selection{background:var(--dot);color:var(--on-dot)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px}
+.nowrap{white-space:nowrap}
+::view-transition-old(root),::view-transition-new(root){animation-duration:var(--d-n);animation-timing-function:var(--e-std)}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.wrap{width:100%;max-width:calc(var(--max) + 2*var(--gutter));margin-inline:auto;padding-inline:var(--gutter)}
+.skip{position:absolute;left:var(--s-4);top:-80px;z-index:100;background:var(--ink);color:var(--paper);padding:12px 16px;border-radius:var(--r-control);font-weight:600;text-decoration:none}
+.skip:focus{top:var(--s-3)}
+
+/* labels / kickers (Utilitarian accent) */
+.label{font:500 var(--t-label)/1.3 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.kicker{display:flex;align-items:center;gap:var(--s-3);margin-bottom:var(--s-5)}
+.kicker .n{color:var(--dot-text)}
+.kicker::after{content:"";flex:1;height:1px;background:var(--rule)}
+.h2{font:400 var(--t-h2)/1 var(--f-display);letter-spacing:-.02em;text-wrap:balance}
+.h2 em{font-style:italic}
+.lead{font-size:var(--t-lead);line-height:1.55;color:var(--ink-2);max-width:60ch;text-wrap:pretty}
+
+/* ============ BUTTONS ============ */
+.btn{--h:52px;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:var(--h);padding:0 22px;border:0;border-radius:var(--r-control);font:600 1rem/1 var(--f-text);letter-spacing:-.005em;text-decoration:none;cursor:pointer;transition:transform var(--d-1) var(--e-std),background-color var(--d-2) var(--e-std),box-shadow var(--d-2) var(--e-std),color var(--d-2) var(--e-std)}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn-primary{background:var(--dot);color:var(--on-dot);box-shadow:inset 0 -2px 0 rgba(0,0,0,.14)}
+.btn-primary .gh{width:18px;height:18px}
+.btn-secondary{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn-sm{--h:44px;padding:0 16px;font-size:.9375rem}
+.btn-quiet{--h:44px;padding:0 14px;background:transparent;box-shadow:inset 0 0 0 1px var(--rule-strong);color:var(--ink);font-weight:500;font-size:.9375rem}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+@media (hover:hover){
+  .btn-primary:hover{background:color-mix(in srgb,var(--dot) 88%,#000);text-decoration:none}
+  .btn-secondary:hover{background:var(--ink);color:var(--paper);text-decoration:none}
+  .btn-quiet:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+}
+.arrow{transition:transform var(--d-2) var(--e-out)}
+@media (hover:hover){.btn:hover .arrow{transform:translate(2px,-2px)}}
+
+/* ============ HEADER ============ */
+.hdr{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid transparent;transition:border-color var(--d-2) var(--e-std)}
+.hdr.is-scrolled{border-bottom-color:var(--rule)}
+.hdr-in{display:flex;align-items:center;gap:var(--s-5);min-height:68px}
+.brand{display:inline-flex;align-items:baseline;gap:2px;font:800 1.375rem/1 var(--f-text);letter-spacing:-.04em;text-decoration:none;min-height:44px;align-items:center}
+.brand i{display:inline-block;width:.36em;height:.36em;border-radius:50%;background:var(--dot);margin-left:2px;transform:translateY(.28em)}
+.nav{margin-left:auto}
+.nav ul{display:flex;gap:var(--s-1)}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;font-size:.9375rem;font-weight:500;color:var(--ink-2);text-decoration:none;border-radius:var(--r-control);position:relative}
+.nav a::after{content:"";position:absolute;left:12px;right:12px;bottom:8px;height:2px;background:var(--dot);transform:scaleX(0);transform-origin:left;transition:transform var(--d-2) var(--e-out)}
+.nav a[aria-current="true"]{color:var(--ink)}
+.nav a[aria-current="true"]::after{transform:scaleX(1)}
+@media (hover:hover){.nav a:hover{color:var(--ink)}.nav a:hover::after{transform:scaleX(1)}}
+.icon-btn{display:inline-grid;place-items:center;width:44px;height:44px;border:0;border-radius:var(--r-control);background:transparent;color:var(--ink);cursor:pointer;box-shadow:inset 0 0 0 1px var(--rule)}
+@media (hover:hover){.icon-btn:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}}
+.icon-btn svg{width:20px;height:20px}
+.menu-btn{display:none}
+.menu-btn path{transform-box:view-box;transform-origin:10px 10px;transition:transform var(--d-2) var(--e-io)}
+.menu-btn[aria-expanded="true"] .l1{transform:translateY(3px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] .l2{transform:translateY(-3px) rotate(-45deg)}
+.hdr-actions{display:flex;align-items:center;gap:var(--s-2)}
+.mnav{display:none}
+@media (max-width:860px){
+  html{scroll-padding-top:var(--hdr-h)}
+  :root{--hdr-h:105px}
+  .hdr-in{flex-wrap:wrap;column-gap:var(--s-3);row-gap:0;min-height:0}
+  .brand,.hdr-actions{margin-block:8px}
+  .menu-btn{display:inline-grid}
+  .hdr-actions{margin-left:auto}
+  /* section links become a second, swipeable row */
+  .nav{order:3;flex-basis:calc(100% + 2*var(--gutter));margin:0 calc(-1*var(--gutter));padding:0 var(--gutter);border-top:1px solid var(--rule);overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent)}
+  .nav::-webkit-scrollbar{display:none}
+  .nav ul{gap:0;width:max-content;padding-right:24px}
+  .nav a{padding:0 10px;font-size:.875rem}
+  .nav a::after{left:10px;right:10px;bottom:7px}
+  .nav li:first-child a{padding-left:0}
+  .nav li:first-child a::after{left:0}
+  .mnav{position:fixed;inset:var(--hdr-h) 0 0 0;z-index:49;background:var(--paper);padding:var(--s-5) var(--gutter) var(--s-7);overflow:auto;border-top:1px solid var(--rule)}
+  .mnav.is-open{display:block;animation:fade var(--d-n) var(--e-out)}
+  .mnav.is-open li{animation:rise8 var(--d-n) var(--e-out) both}
+  .mnav.is-open li:nth-child(2){animation-delay:var(--stagger)}.mnav.is-open li:nth-child(3){animation-delay:calc(var(--stagger)*2)}.mnav.is-open li:nth-child(4){animation-delay:calc(var(--stagger)*3)}
+  .mnav ul{display:grid}
+  .mnav li{border-bottom:1px solid var(--rule)}
+  .mnav a{display:flex;align-items:center;justify-content:space-between;min-height:60px;font:400 2rem/1 var(--f-display);text-decoration:none}
+  .mnav .mnav-row{display:flex;gap:var(--s-3);margin-top:var(--s-6);flex-wrap:wrap}
+}
+body.menu-open{overflow:hidden}
+@media (max-width:380px){.hdr-actions .btn-sm{padding:0 12px}.hdr-actions{gap:6px}}
+
+/* ============ HERO ============ */
+.hero{position:relative;padding-block:clamp(36px,4.5vw,72px) clamp(56px,7vw,112px)}
+.crop{position:absolute;width:20px;height:20px;border-color:var(--rule-strong);border-style:solid;border-width:0;pointer-events:none}
+.crop.tl{top:18px;left:max(8px,calc(var(--gutter) - 24px));border-top-width:1px;border-left-width:1px}
+.crop.br{bottom:18px;right:max(8px,calc(var(--gutter) - 24px));border-bottom-width:1px;border-right-width:1px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(32px,5vw,80px);align-items:center}
+.hero h1{font:400 var(--t-hero)/.96 var(--f-display);letter-spacing:-.025em;text-wrap:balance;margin-bottom:var(--s-6)}
+.hero h1 .l2{display:block}
+.mark{position:relative;font-style:italic;white-space:nowrap;padding-inline:.04em}
+.mark svg{position:absolute;left:-.3em;top:-.04em;width:calc(100% + .52em);height:calc(100% + .16em);overflow:visible;pointer-events:none}
+.mark path{fill:none;stroke:var(--dot);stroke-width:2;stroke-linecap:round}
+@media (min-width:700px){.mark path{stroke-width:.9}}
+.js .mark path{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 900ms var(--e-out) 450ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.hero .lead{margin-bottom:var(--s-6)}
+.cta-row{display:flex;flex-wrap:wrap;gap:var(--s-3);margin-bottom:var(--s-4)}
+.fine{font:400 .875rem/1.5 var(--f-mono);color:var(--muted);max-width:56ch}
+.fine span{white-space:nowrap}
+
+/* ============ DENT DEMO ============ */
+.demo{position:relative}
+.win{position:relative;border:1px solid var(--rule-strong);border-radius:var(--r-box);background:var(--paper-2);box-shadow:var(--shadow-2);overflow:hidden}
+.win-bar{display:flex;align-items:center;gap:10px;height:38px;padding:0 12px;border-bottom:1px solid var(--rule);background:var(--paper)}
+.win-bar .dots{display:flex;gap:6px}
+.win-bar .dots i{width:9px;height:9px;border-radius:50%;background:var(--rule-strong)}
+.win-file{font:500 .75rem/1 var(--f-mono);color:var(--muted);letter-spacing:.02em}
+.win-file b{font-weight:500;color:var(--ink)}
+.stage{position:relative;aspect-ratio:5/4;overflow:hidden;transform-origin:50% 0}
+/* generic AI page */
+.gen{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;gap:12px;padding:8% 8%;text-align:center;color:#fff;background:radial-gradient(120% 90% at 50% 0%,#8B6CFF 0%,#5B5BF0 45%,#2B1F6B 100%)}
+.gen .pill{font:500 11px/1 var(--f-text);padding:6px 10px;border-radius:99px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3)}
+.gen .gt{font:700 clamp(18px,3.1vw,30px)/1.1 var(--f-text);letter-spacing:-.02em;max-width:14ch}
+.gen .gs{font:400 12px/1.4 var(--f-text);opacity:.85;max-width:30ch}
+.gen .gb{font:600 12px/1 var(--f-text);padding:10px 16px;border-radius:99px;background:#fff;color:#3B2F9E}
+.gen .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin-top:8px}
+.gen .cards span{height:52px;border-radius:10px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22)}
+/* designed page (after) */
+.des{position:absolute;top:0;bottom:0;left:0;right:31%;padding:7% 7%;background:var(--paper);display:grid;grid-template-rows:auto 1fr auto;color:var(--ink)}
+.des-top{display:flex;align-items:center;gap:6px;font:500 10px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.des-no{margin-left:auto}
+.des-logo{display:flex;align-items:center;gap:6px;font:800 13px/1 var(--f-text);letter-spacing:-.03em;color:var(--ink);text-transform:none}
+.des-logo i{width:9px;height:9px;border-radius:50%;background:var(--dot);opacity:0}
+.des-main{align-self:center}
+.des h4{margin:8px 0 10px;font:400 clamp(26px,3.3vw,42px)/.95 var(--f-display);letter-spacing:-.02em}
+.des h4 em{font-style:italic;color:var(--dot-text)}
+.des p{font:400 11.5px/1.45 var(--f-text);color:var(--ink-2);max-width:30ch}
+.des .k{font:500 9.5px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dot-text)}
+.des .b{display:inline-block;margin-top:12px;font:600 11px/1 var(--f-text);padding:9px 12px;border-radius:3px;background:var(--ink);color:var(--paper)}
+.des-foot{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.des-foot span:not(.mk){font:500 9px/1 var(--f-mono);padding:5px 6px;border:1px solid var(--rule-strong);border-radius:2px;color:var(--ink-2)}
+.mk{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:var(--dot);color:var(--on-dot);font:700 9px/1 var(--f-mono);vertical-align:top;margin-left:4px;letter-spacing:0;opacity:0}
+.margin{position:absolute;top:0;bottom:0;right:0;width:31%;border-left:1px dashed var(--rule-strong);background:var(--paper-2);padding:7% 5% 7% 6%;display:grid;align-content:space-around;gap:8px}
+.margin li{display:grid;grid-template-columns:18px 1fr;gap:6px;align-items:start;font:500 10.5px/1.35 var(--f-mono);color:var(--ink-2);opacity:0}
+.margin li i{display:grid;place-items:center;width:15px;height:15px;border-radius:50%;background:var(--dot);color:var(--on-dot);font:700 9px/1 var(--f-mono);font-style:normal}
+.win[data-state="before"] .margin{visibility:hidden}
+.win[data-state="after"] .mk,.win[data-state="after"] .margin li{opacity:1}
+.win.is-build .mk{animation:pop 420ms var(--e-out) both;animation-delay:520ms}
+.win.is-build .margin li{animation:rise 520ms var(--e-out) both}
+.win.is-build .margin li:nth-child(1){animation-delay:420ms}.win.is-build .margin li:nth-child(2){animation-delay:520ms}.win.is-build .margin li:nth-child(3){animation-delay:620ms}.win.is-build .margin li:nth-child(4){animation-delay:720ms}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+/* ball, ring, crater */
+.ball{position:absolute;left:50%;top:44%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:var(--dot);box-shadow:inset -4px -5px 0 rgba(0,0,0,.18);opacity:0;z-index:4;pointer-events:none}
+.ring{position:absolute;left:50%;top:44%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:2px solid var(--dot);opacity:0;z-index:3;pointer-events:none}
+.crater{position:absolute;left:50%;top:44%;width:180px;height:60px;margin:-12px 0 0 -90px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.28),rgba(0,0,0,0));opacity:0;z-index:2;pointer-events:none}
+/* states */
+.win[data-state="before"] .des{visibility:hidden}
+.win[data-state="after"] .gen{visibility:hidden}
+.win[data-state="after"] .des-logo i{opacity:1}
+.win.is-drop .ball{opacity:1;animation:fall 560ms var(--e-in) both}
+@keyframes fall{from{transform:translateY(-380px)}to{transform:translateY(0)}}
+.win.is-impact .stage{animation:dentk 420ms var(--e-out)}
+@keyframes dentk{0%{transform:none}30%{transform:scale(1.012,.965)}100%{transform:none}}
+.win.is-impact .ball{opacity:1;animation:squash 420ms var(--e-out) both}
+@keyframes squash{0%{transform:scale(1.5,.6)}55%{transform:scale(.92,1.08)}100%{transform:none}}
+.win.is-impact .ring{animation:ring 700ms var(--e-out) both}
+@keyframes ring{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(12)}}
+.win.is-impact .crater{animation:crater 900ms var(--e-out) both}
+@keyframes crater{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+.win.is-scatter .gen>*{transition:transform 520ms var(--e-in),opacity 520ms var(--e-in);transform:translate(var(--x,0),var(--y,0)) rotate(var(--r,0)) scale(.85);opacity:0}
+.win.is-scatter .gen{transition:opacity 320ms var(--e-std) 120ms;opacity:0}
+.win.is-build .des>*{animation:rise 620ms var(--e-out) both}
+.win.is-build .des>*:nth-child(2){animation-delay:80ms}
+.win.is-build .des>*:nth-child(3){animation-delay:160ms}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes rise8{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.win.is-fly .ball{opacity:1;animation:none}
+.win.is-build .des-logo i,.win.is-fly .des-logo i{opacity:0}
+.demo-ctl{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);margin-top:var(--s-4);flex-wrap:wrap}
+.demo-ctl .btns{display:flex;gap:var(--s-2);flex-wrap:wrap}
+.demo-cap{font:400 .8125rem/1.45 var(--f-mono);color:var(--muted);max-width:40ch}
+.snd[aria-pressed="true"]{box-shadow:inset 0 0 0 1.5px var(--dot)}
+.snd .on{display:none}.snd[aria-pressed="true"] .on{display:inline}.snd[aria-pressed="true"] .off{display:none}
+/* ============ WORKS WITH ============ */
+.what{border-block:1px solid var(--rule);background:var(--paper-2)}
+.what-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s-7);padding-block:var(--s-7)}
+.what-def{font:400 clamp(1.5rem,1.1rem + 1.4vw,2.25rem)/1.15 var(--f-display);letter-spacing:-.01em;text-wrap:balance}
+.what-def em{font-style:italic}
+.agents{display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-2);align-content:start;margin-top:var(--s-3)}
+.agents li{font:500 .875rem/1 var(--f-mono);padding:9px 11px;border:1px solid var(--rule-strong);border-radius:2px;background:var(--paper)}
+.agents li.more{border-style:dashed;color:var(--muted)}
+
+/* ============ PROBLEM ============ */
+.problem{padding-block:var(--section)}
+.problem-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s-7) clamp(32px,5vw,80px)}
+.problem .h2{max-width:11ch}
+.annot{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:var(--s-6);align-items:start}
+.annot-text{font:400 clamp(1.25rem,1rem + .9vw,1.75rem)/1.5 var(--f-display);color:var(--ink);text-wrap:pretty}
+.annot-text .x{text-decoration:line-through;text-decoration-color:var(--dot);text-decoration-thickness:2px;color:var(--muted)}
+.annot-text sup{font:600 .55em/0 var(--f-mono);color:var(--dot-text);margin-left:1px;vertical-align:super}
+.annot-notes{border-left:1px solid var(--rule);padding-left:var(--s-5);display:grid;gap:var(--s-3)}
+.annot-notes li{display:grid;grid-template-columns:22px 1fr;gap:6px;font:400 .875rem/1.45 var(--f-mono);color:var(--ink-2)}
+.annot-notes li b{font-weight:600;color:var(--dot-text)}
+
+/* ============ COMPARISON ============ */
+.compare{padding-block:var(--section);background:var(--paper-2);border-block:1px solid var(--rule)}
+.compare-head{display:flex;justify-content:space-between;align-items:end;gap:var(--s-6);margin-bottom:var(--s-7);flex-wrap:wrap}
+.ctable{width:100%;border-collapse:collapse;font-size:var(--t-body)}
+.ctable thead th{font:500 var(--t-label)/1.3 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;text-align:left;padding:0 0 var(--s-3);border-bottom:1.5px solid var(--ink)}
+.ctable thead th:last-child{color:var(--dot-text)}
+.ctable td{padding:var(--s-4) var(--s-5) var(--s-4) 0;border-bottom:1px solid var(--rule);vertical-align:top;width:50%}
+.ctable td:first-child{color:var(--muted)}
+.ctable td:last-child{color:var(--ink);font-weight:500;padding-left:28px;position:relative}
+.ctable td:last-child::before{content:"";position:absolute;left:6px;top:calc(var(--s-4) + .55em);width:9px;height:9px;border-radius:50%;background:var(--dot)}
+.ctable td:first-child .no{display:inline-block;width:20px;color:var(--muted);font-family:var(--f-mono)}
+
+/* ============ HOW IT WORKS ============ */
+.how{padding-block:var(--section)}
+.how-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s-6);align-items:end;margin-bottom:var(--s-8)}
+.route-box{position:relative}
+.route{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--s-5)}
+.route::before{content:"";position:absolute;left:0;right:0;top:15px;height:1px;background:var(--rule-strong)}
+.route-line{position:absolute;left:0;right:0;top:14px;height:3px;background:var(--dot);transform-origin:left;transform:scaleX(1);border-radius:2px}
+.route li{position:relative;padding-top:52px}
+.route .stop{position:absolute;top:4px;left:0;width:24px;height:24px;border-radius:50%;background:var(--paper);border:2px solid var(--ink);display:grid;place-items:center}
+.route .stop::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--dot)}
+.route .num{font:500 var(--t-label)/1 var(--f-mono);letter-spacing:.09em;color:var(--muted);display:block;margin-bottom:var(--s-2)}
+.route h3{font:400 clamp(2rem,1.4rem + 1.6vw,2.75rem)/1 var(--f-display);letter-spacing:-.015em;margin-bottom:var(--s-3)}
+.route p{font-size:var(--t-small);color:var(--ink-2);line-height:1.55}
+.js .route-box.pre .route-line{transform:scaleX(0)}
+.js .route-box.pre .stop::after{transform:scale(0)}
+.route-box.go .route-line{transition:transform 1100ms linear}
+.route-box.go .stop::after{transition:transform var(--d-n) var(--e-out);transition-delay:calc(var(--i) * 220ms + 40ms)}
+
+/* ============ FEATURES ============ */
+.features{padding-block:var(--section);border-top:1px solid var(--rule)}
+.feat-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s-7) clamp(32px,5vw,80px);margin-top:var(--s-7)}
+.effort{border:1px solid var(--ink);border-radius:var(--r-box);padding:clamp(20px,3vw,36px);background:var(--paper);box-shadow:6px 6px 0 var(--paper-3);align-self:start;position:sticky;top:96px}
+.effort h3{font:400 var(--t-h3)/1.1 var(--f-display);margin:var(--s-2) 0 var(--s-3)}
+.effort>p{color:var(--ink-2);margin-bottom:var(--s-5)}
+.tabs{position:relative;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--rule-strong);border-radius:var(--r-control);padding:3px;gap:3px;background:var(--paper-2)}
+.ind{position:absolute;top:3px;bottom:3px;left:0;width:100px;border-radius:2px;background:var(--ink);transform-origin:0 50%;transform:translateX(var(--x,0)) scaleX(var(--s,1));transition:transform var(--d-n) var(--e-io);pointer-events:none}
+.has-ind .tab,.has-ind .seg-btn{position:relative;z-index:1}
+.ind{opacity:0}
+.moving .ind{opacity:1}
+.moving .tab[aria-selected="true"],.moving .seg-btn[aria-pressed="true"]{background:transparent}
+.ind.no-anim{transition:none}
+.tab{min-height:44px;border:0;border-radius:2px;background:transparent;font:500 .875rem/1.1 var(--f-text);cursor:pointer;color:var(--ink-2);padding:4px 6px;transition:background-color var(--d-2) var(--e-std),color var(--d-n) var(--e-io)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+@media (hover:hover){.tab[aria-selected="false"]:hover{background:var(--paper-3);color:var(--ink)}}
+.tabpanel{padding-top:var(--s-5);min-height:9.5em}
+.tabpanel p{font-size:var(--t-lead);line-height:1.5}
+.tabpanel .depth{display:flex;gap:4px;margin-bottom:var(--s-4)}
+.tabpanel .depth i{flex:1;height:6px;border-radius:2px;background:var(--rule);transition:background-color var(--d-2) var(--e-std)}
+.tabpanel .depth i:nth-child(2){transition-delay:var(--stagger)}.tabpanel .depth i:nth-child(3){transition-delay:calc(var(--stagger)*2)}.tabpanel .depth i:nth-child(4){transition-delay:calc(var(--stagger)*3)}
+.tabpanel .depth i.on{background:var(--dot)}
+.effort .this{margin-top:var(--s-4);font:400 .8125rem/1.4 var(--f-mono);color:var(--muted)}
+.flist{counter-reset:f;display:grid}
+.flist li{display:grid;grid-template-columns:44px 1fr;gap:var(--s-3);padding:var(--s-5) 0;border-top:1px solid var(--rule)}
+.flist li:last-child{border-bottom:1px solid var(--rule)}
+.flist .no{font:500 .8125rem/1.9 var(--f-mono);color:var(--dot-text)}
+.flist h3{font:600 1.125rem/1.3 var(--f-text);letter-spacing:-.01em;margin-bottom:6px}
+.flist p{color:var(--ink-2);font-size:var(--t-small)}
+
+/* ============ STYLES WALL ============ */
+.styles{padding-block:var(--section);background:var(--paper-2);border-block:1px solid var(--rule)}
+.styles-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s-6);align-items:end;margin-bottom:var(--s-7)}
+.wall{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.sp{position:relative;min-height:128px;border-radius:4px;overflow:hidden;display:flex;align-items:flex-end;padding:14px;isolation:isolate;border:1px solid var(--rule)}
+.sp .nm{position:relative;z-index:2}
+.sp .no{position:absolute;top:10px;left:12px;font:500 10px/1 var(--f-mono);letter-spacing:.08em;opacity:.8;z-index:2}
+.sp-minimal{background:#FFFFFF;color:#121212}
+.sp-minimal .nm{font:300 1.25rem/1 var(--f-text);letter-spacing:.02em}
+.sp-swiss{background:#F4F4F1;color:#121212;align-items:flex-start;padding-top:30px}
+.sp-swiss .nm{font:700 2.1rem/.85 var(--f-text);letter-spacing:-.06em}
+.sp-swiss::after{content:"";position:absolute;right:12px;bottom:12px;width:30px;height:30px;background:#E30613}
+.sp-swiss::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.06) 1px,transparent 1px) 0 0/25% 100%}
+.sp-editorial{background:#FAF8F3;color:#141414;border-top:3px solid #141414}
+.sp-editorial .nm{font:400 1.9rem/1 var(--f-display);font-style:italic}
+.sp-editorial .nm::first-letter{font-style:normal;font-size:1.5em;color:#B3261E}
+.sp-luxury{background:#141210;color:#C9A96E;justify-content:center;align-items:center;border-color:#141210}
+.sp-luxury .nm{font:400 1.05rem/1 var(--f-display);letter-spacing:.42em;text-transform:uppercase;padding-left:.42em}
+.sp-luxury::before{content:"";position:absolute;inset:10px;border:1px solid rgba(201,169,110,.45)}
+.sp-japandi{background:#EDE6DA;color:#3D3A33}
+.sp-japandi .nm{font:400 1.6rem/1 var(--f-display)}
+.sp-japandi::before{content:"";position:absolute;right:16px;top:16px;width:42px;height:42px;border-radius:50%;border:2px solid #8C7B62;border-right-color:transparent;transform:rotate(-30deg)}
+.sp-japandi::after{content:"";position:absolute;left:14px;right:14px;bottom:48px;height:6px;background:#B49A78;border-radius:3px;opacity:.6}
+.sp-brutal{background:#FFD23F;color:#121212;border:2.5px solid #121212;box-shadow:5px 5px 0 #121212;margin:0 5px 5px 0}
+.sp-brutal .nm{font:800 1.25rem/1.05 var(--f-text);letter-spacing:-.02em;background:#fff;border:2.5px solid #121212;padding:6px 8px}
+.sp-glass{background:radial-gradient(60% 70% at 20% 20%,#FF8FB1 0%,transparent 70%),radial-gradient(60% 70% at 85% 30%,#7CC6FF 0%,transparent 70%),radial-gradient(70% 70% at 60% 100%,#B5A6FF 0%,transparent 70%),#E9E4FF;border-color:transparent}
+.sp-glass .nm{font:600 1.05rem/1 var(--f-text);color:#16133A;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);width:100%}
+.sp-darktech{background:radial-gradient(80% 60% at 50% 0%,rgba(120,140,255,.22),transparent 70%),#0B0B0C;color:#EDEDED;border-color:#2A2A2E}
+.sp-darktech .nm{font:500 1.1rem/1 var(--f-text);letter-spacing:-.01em}
+.sp-darktech .nm small{display:block;font:500 10px/1 var(--f-mono);color:#9A9AA3;margin-bottom:6px;letter-spacing:.06em}
+.sp-bento{background:#F2F0EB;color:#121212;padding:8px;display:grid;align-items:stretch;grid-template-columns:1.4fr 1fr;grid-template-rows:1fr 1fr;gap:6px}
+.sp-bento span{border-radius:12px;background:#fff;border:1px solid #E1DED6}
+.sp-bento span:nth-child(2){background:#DCE8FF}.sp-bento span:nth-child(3){background:#121212}
+.sp-bento .nm{grid-row:1/3;grid-column:1;border-radius:12px;background:#fff;border:1px solid #E1DED6;display:flex;align-items:flex-end;padding:10px;font:700 1.15rem/1 var(--f-text);letter-spacing:-.03em}
+.sp-util{background:#E3E1DC;color:#151515;background-image:linear-gradient(#C9C6BE 1px,transparent 1px);background-size:100% 22px;flex-direction:column;align-items:flex-start;justify-content:flex-end}
+.sp-util .nm{font:500 .8rem/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;background:#E3E1DC;padding:3px 0}
+.sp-util::after{content:"";position:absolute;top:12px;right:12px;width:10px;height:10px;border-radius:50%;background:#FF5A1F;box-shadow:0 0 0 3px #E3E1DC,0 0 0 4px #9C998F}
+.sp-util .no{color:#151515}
+.sp-retroos{background:#008080;padding:10px;align-items:stretch}
+.sp-retroos .w{flex:1;background:#C0C0C0;border:2px solid;border-color:#fff #404040 #404040 #fff;display:flex;flex-direction:column}
+.sp-retroos .tb{background:#000080;color:#fff;font:700 11px/1 var(--f-text);padding:4px 6px;display:flex;justify-content:space-between}
+.sp-retroos .tb i{width:11px;height:10px;background:#C0C0C0;border:1px solid;border-color:#fff #404040 #404040 #fff}
+.sp-retroos .nm{font:400 .95rem/1 var(--f-text);color:#000;padding:12px 8px}
+.sp-y2k{background:radial-gradient(circle at 30% 30%,#fff 0 6%,transparent 7%),linear-gradient(135deg,#E8ECF2 0%,#B9C2CF 35%,#F7F9FC 55%,#A9B4C4 80%,#E4E9F0 100%);color:#121212;border-color:#B9C2CF}
+.sp-y2k .nm{font:800 1.6rem/1 var(--f-text);font-style:italic;letter-spacing:-.04em;color:#1B1B3A;text-shadow:0 1px 0 #fff}
+.sp-y2k::after{content:"\2726";position:absolute;right:14px;top:10px;font-size:22px;color:#6B5BFF}
+.sp-synth{background:linear-gradient(#241047 0 58%,#3A0F5C 58% 100%);color:#FF71CE;border-color:#241047}
+.sp-synth::before{content:"";position:absolute;left:-20%;right:-20%;bottom:0;height:42%;background:linear-gradient(90deg,rgba(1,205,254,.55) 1px,transparent 1px) 0 0/22px 100%,linear-gradient(rgba(1,205,254,.55) 1px,transparent 1px) 0 0/100% 12px;transform:perspective(80px) rotateX(40deg);transform-origin:bottom}
+.sp-synth::after{content:"";position:absolute;left:50%;top:18%;width:56px;height:28px;margin-left:-28px;border-radius:56px 56px 0 0;background:linear-gradient(#FFB86B,#FF71CE)}
+.sp-synth .nm{font:800 1.15rem/1 var(--f-text);letter-spacing:.06em;text-transform:uppercase;text-shadow:0 0 12px rgba(255,113,206,.6);align-self:center;margin:0 auto;padding-top:34px}
+.sp-cyber{background:#0A0A0A;color:#F3E600;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));border:0}
+.sp-cyber .nm{font:700 1.2rem/1 var(--f-mono);text-transform:uppercase;letter-spacing:.04em}
+.sp-cyber::before{content:"";position:absolute;left:12px;right:30px;top:14px;height:2px;background:repeating-linear-gradient(90deg,#F3E600 0 14px,transparent 14px 20px)}
+.sp-cyber::after{content:"SYS//41";position:absolute;right:14px;bottom:12px;font:500 9px/1 var(--f-mono);color:#F3E600;opacity:.75}
+.sp-cyber .no{color:#F3E600;top:24px}
+.sp-terminal{background:#0B0F0B;color:#33FF66;border-color:#0B0F0B}
+.sp-terminal .nm{font:500 1rem/1 var(--f-mono)}
+.sp-terminal .nm::before{content:"$ ";color:#7CFF9E}
+.sp-terminal .cur{display:inline-block;width:.6em;height:1.05em;background:#33FF66;vertical-align:-2px;margin-left:3px;animation:blink 1s steps(1) 6}
+@keyframes blink{50%{opacity:0}}
+.sp-pixel{background:#23234A;color:#FFD866;border:0;box-shadow:0 -4px 0 0 #23234A,0 4px 0 0 #23234A,-4px 0 0 0 #23234A,4px 0 0 0 #23234A;margin:4px;border-radius:0}
+.sp-pixel .nm{font:400 1rem/1.2 "Silkscreen",var(--f-mono);letter-spacing:.02em}
+.sp-pixel::after{content:"";position:absolute;right:14px;top:14px;width:4px;height:4px;color:#FF5A8A;background:#FF5A8A;box-shadow:4px 0,8px 0,-4px 4px,0 4px,4px 4px,8px 4px,12px 4px,0 8px,4px 8px,8px 8px,4px 12px}
+.sp-more{grid-column:span 2;background:var(--paper);color:var(--ink);border:1.5px dashed var(--rule-strong);text-decoration:none;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:var(--s-3)}
+.sp-more .nm{font:400 2rem/1 var(--f-display)}
+.sp-more .go{font:500 .8125rem/1.3 var(--f-mono);color:var(--ink-2)}
+@media (hover:hover){.sp-more:hover{border-color:var(--ink);text-decoration:none}.sp-more:hover .arrow{transform:translate(2px,-2px)}}
+.sp-light .no{color:#121212}.sp-dark .no{color:inherit}
+
+/* ============ RESULTS ============ */
+.results{padding-block:var(--section)}
+.res-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s-6) clamp(32px,5vw,80px);margin-bottom:var(--s-7)}
+.res-head .lead{margin-bottom:var(--s-5)}
+.method{border-left:3px solid var(--dot);padding:var(--s-1) 0 var(--s-1) var(--s-4);display:grid;gap:var(--s-3)}
+.method p{font-size:var(--t-small);color:var(--ink-2)}
+.method strong{color:var(--ink)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block:1.5px solid var(--ink);margin-bottom:var(--s-7)}
+.fact{padding:var(--s-5) var(--s-5) var(--s-5) 0}
+.fact+.fact{padding-left:var(--s-5);border-left:1px solid var(--rule)}
+.fact .big{font:400 clamp(2.25rem,1.6rem + 2vw,3.25rem)/1 var(--f-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums lining-nums;margin:var(--s-2) 0}
+.fact .big span{font-size:.5em;color:var(--muted)}
+.fact p{font-size:var(--t-small);color:var(--ink-2)}
+.fact .note{margin-top:var(--s-2);font:400 .8125rem/1.45 var(--f-mono);color:var(--muted)}
+.ledger-wrap{margin-bottom:var(--s-8)}
+.ledger{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.ledger caption{text-align:left;padding-bottom:var(--s-3)}
+.ledger thead th{font:500 var(--t-label)/1.3 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 var(--s-4) var(--s-3) 0;border-bottom:1.5px solid var(--ink)}
+.ledger tbody th,.ledger td{padding:var(--s-4) var(--s-4) var(--s-4) 0;border-bottom:1px solid var(--rule);vertical-align:middle;text-align:left}
+.ledger tbody th{font-weight:500;min-width:220px}
+.ledger tbody th a{display:inline-block;padding:6px 0;text-decoration:none;font-weight:600}
+@media (hover:hover){.ledger tbody th a:hover{text-decoration:underline;text-decoration-color:var(--dot)}}
+.lg-model{display:block;font:400 .8125rem/1.4 var(--f-mono);color:var(--muted);margin-top:2px}
+.ledger td{white-space:nowrap;font-size:1rem}
+.ledger td b{font-weight:600;font-size:1.0625rem}
+.of{color:var(--muted);font-size:.8125rem;margin-left:1px}
+.bar{display:inline-block;width:clamp(70px,9vw,140px);height:8px;background:var(--paper-3);border-radius:2px;margin-right:10px;vertical-align:middle;overflow:hidden}
+.bar i{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(var(--v));border-radius:2px}
+.bar-wo i{background:var(--without)}
+.bar-w i{background:var(--dot)}
+.js .ledger.pre .bar i{transform:scaleX(0)}
+.ledger.go .bar i{transition:transform 700ms var(--e-out)}
+.ledger.go tr:nth-child(2) .bar i{transition-delay:40ms}.ledger.go tr:nth-child(3) .bar i{transition-delay:80ms}.ledger.go tr:nth-child(4) .bar i{transition-delay:120ms}.ledger.go tr:nth-child(5) .bar i{transition-delay:160ms}.ledger.go tr:nth-child(6) .bar i{transition-delay:200ms}.ledger.go tr:nth-child(7) .bar i{transition-delay:240ms}.ledger.go tr:nth-child(8) .bar i{transition-delay:280ms}.ledger.go tr:nth-child(9) .bar i{transition-delay:320ms}
+.diff{font:600 1rem/1 var(--f-mono)}
+.diff.up{color:var(--ink)}
+.diff.down{color:var(--dot-text)}
+.loss-note{display:inline-block;margin-left:8px;font:600 .6875rem/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border:1.5px solid var(--dot-text);color:var(--dot-text);border-radius:2px}
+.ledger tr.is-loss th,.ledger tr.is-loss td{background:color-mix(in srgb,var(--dot) 7%,transparent)}
+.ledger tr.is-loss th{padding-left:var(--s-3);box-shadow:inset 3px 0 0 var(--dot-text)}
+.ctag{display:inline-block;font:500 .6875rem/1.2 var(--f-mono);letter-spacing:.05em;text-transform:uppercase;padding:4px 7px;border-radius:2px;border:1px solid var(--rule-strong);color:var(--ink-2);white-space:nowrap}
+.ctag-close{border-color:var(--ink);color:var(--ink)}
+.ctag-limited{border-style:dashed}
+.ctag-earlier{background:var(--paper-3)}
+.ledger-foot{margin-top:var(--s-4);font:400 .8125rem/1.55 var(--f-mono);color:var(--muted);max-width:90ch}
+.legend{display:flex;gap:var(--s-5);flex-wrap:wrap;margin-bottom:var(--s-3);font:500 .8125rem/1 var(--f-mono);color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:18px;height:8px;border-radius:2px;display:inline-block}
+.cards{display:grid;gap:var(--s-5)}
+.tcard{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(20px,3vw,48px);padding:clamp(20px,3vw,36px);border:1px solid var(--rule);border-radius:var(--r-box);background:var(--paper);scroll-margin-top:90px}
+.tcard.is-loss{border:1.5px solid var(--dot-text);box-shadow:inset 4px 0 0 var(--dot-text)}
+.tnum{font:500 var(--t-label)/1 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:var(--s-3)}
+.tcard h3{font:400 clamp(1.6rem,1.3rem + 1vw,2.1rem)/1.05 var(--f-display);letter-spacing:-.01em;margin-bottom:var(--s-2);text-wrap:balance}
+.tmodel{font:400 .8125rem/1.45 var(--f-mono);color:var(--muted);margin-bottom:var(--s-4)}
+.tscore{display:flex;gap:var(--s-5);padding:var(--s-3) 0;border-block:1px solid var(--rule);margin-bottom:var(--s-4);flex-wrap:wrap}
+.tscore dt{font:500 .6875rem/1.2 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.tscore dd{font:400 2rem/1.1 var(--f-display);font-variant-numeric:tabular-nums lining-nums}
+.tscore dd span{font:400 .8125rem/1 var(--f-mono);color:var(--muted);margin-left:2px}
+.tscore .tdiff dd{font:600 1.25rem/1.6 var(--f-mono)}
+.tverdict{margin-bottom:var(--s-3);text-wrap:pretty}
+.tgates{font:400 .8125rem/1.5 var(--f-mono);color:var(--ink-2);margin-bottom:var(--s-3)}
+.tcomp{font-size:.875rem;color:var(--muted);margin-bottom:var(--s-4);line-height:1.5}
+.tcomp .ctag{margin-right:6px}
+.tlinks{display:flex;flex-wrap:wrap;gap:0 var(--s-4)}
+.tlinks a{display:inline-flex;align-items:center;min-height:36px;font-weight:500;font-size:.9375rem;text-decoration:underline;text-decoration-color:var(--rule-strong)}
+.tlinks a::after{content:"\2197";margin-left:6px;font-size:.85em;color:var(--dot-text)}
+@media (hover:hover){.tlinks a:hover{text-decoration-color:var(--dot)}}
+.tshots{display:grid;gap:var(--s-3);align-content:start}
+.seg{position:relative;display:inline-flex;justify-self:start;border:1px solid var(--rule-strong);border-radius:var(--r-control);padding:3px;gap:3px;background:var(--paper-2)}
+.seg-btn{min-height:40px;min-width:44px;padding:0 14px;border:0;border-radius:2px;background:transparent;font:500 .875rem/1 var(--f-text);color:var(--ink-2);cursor:pointer;transition:color var(--d-n) var(--e-io)}
+.seg-btn .seg-px{font:400 .75rem/1 var(--f-mono);color:inherit;opacity:.75}
+.seg-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
+.shot img{width:100%;border:1px solid var(--rule);border-radius:3px;background:var(--paper-3);transition:opacity var(--d-n) var(--e-std)}
+.shot figcaption{margin-top:8px;font:500 .75rem/1 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.shot:last-child figcaption{color:var(--dot-text)}
+.shots[data-view="phone"]{max-width:520px;justify-self:center;width:100%}
+
+/* ============ INSTALL ============ */
+.install{background:var(--inv-bg);color:var(--inv-text);padding-block:var(--section);--focus:#F3F0E8}
+.install .label{color:var(--inv-muted)}
+.install .kicker::after{background:var(--inv-rule)}
+.install .kicker .n{color:var(--inv-dot)}
+.install-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s-7) clamp(32px,5vw,80px);align-items:start}
+.install .h2{color:var(--inv-text)}
+.install-note{color:var(--inv-muted);margin-top:var(--s-5);max-width:44ch}
+.install-note a{color:var(--inv-text)}
+.cmds{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s-5);min-width:0}
+.cmd-group h3{font:500 var(--t-label)/1.3 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--inv-muted);margin-bottom:var(--s-3);display:flex;align-items:center;gap:var(--s-2)}
+.cmd-group h3 i{width:8px;height:8px;border-radius:50%;background:var(--inv-dot)}
+.cmd{display:flex;align-items:stretch;border:1px solid var(--inv-rule);border-radius:var(--r-box);background:var(--inv-bg-2);overflow:hidden}
+.cmd+.cmd{margin-top:var(--s-2)}
+.cmd code{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:16px 18px;font-size:clamp(.875rem,.8rem + .3vw,1.0625rem);overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
+.cmd code .pr{color:var(--inv-dot);user-select:none}
+.cmd code .step{color:var(--inv-muted);user-select:none;font-size:.8em}
+.copy{flex:none;min-width:96px;min-height:52px;border:0;border-left:1px solid var(--inv-rule);background:transparent;color:var(--inv-text);font:500 .875rem/1 var(--f-text);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;transition:background-color var(--d-2) var(--e-std)}
+.copy svg{width:16px;height:16px}
+.copy.is-done{color:var(--inv-dot)}
+.copy .ic-check{display:none}
+.copy.is-done .ic-copy{display:none}
+.copy.is-done .ic-check{display:block;animation:pop var(--d-n) var(--e-out)}
+@media (hover:hover){.copy:hover{background:#2A2925}}
+.copy-msg{min-height:1.5em;margin-top:var(--s-2);font:400 .8125rem/1.5 var(--f-mono);color:var(--inv-muted)}
+.no-js .copy{display:none}
+
+/* ============ FAQ ============ */
+.faq{padding-block:var(--section)}
+.faq-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s-7) clamp(32px,5vw,80px);align-items:start}
+.faq-side{position:sticky;top:100px}
+.faq-side p{margin-top:var(--s-5);color:var(--ink-2)}
+.qa{border-top:1.5px solid var(--ink)}
+.qa details{border-bottom:1px solid var(--rule)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);min-height:68px;padding:var(--s-4) 0;font:500 1.1875rem/1.35 var(--f-text);letter-spacing:-.01em}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary .pm{flex:none;position:relative;width:28px;height:28px;border-radius:50%;border:1px solid var(--rule-strong);transition:transform var(--d-n) var(--e-out),background-color var(--d-2) var(--e-std)}
+.qa summary .pm::before,.qa summary .pm::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;margin:-.75px 0 0 -5.5px;background:var(--ink)}
+.qa summary .pm::after{transform:rotate(90deg);transition:transform var(--d-n) var(--e-out)}
+.qa details[open] summary .pm{background:var(--dot);border-color:var(--dot)}
+.qa details[open] summary .pm::before,.qa details[open] summary .pm::after{background:var(--on-dot)}
+.qa details[open] summary .pm::after{transform:rotate(0)}
+@media (hover:hover){.qa summary:hover{color:var(--ink)}.qa summary:hover .pm{border-color:var(--ink)}}
+.qa .ans{padding:0 48px var(--s-5) 0;color:var(--ink-2);max-width:62ch}
+.qa details{interpolate-size:allow-keywords}
+.qa details::details-content{height:0;overflow:clip;transition:height 180ms var(--e-in),content-visibility 180ms allow-discrete}
+.qa details[open]::details-content{height:auto;transition:height var(--d-n) var(--e-out),content-visibility var(--d-n) allow-discrete}
+
+/* ============ FINAL CTA ============ */
+.final{position:relative;overflow:hidden;border-top:1px solid var(--rule);background:var(--paper-2);padding-top:var(--section)}
+.final-in{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--s-6);align-items:end}
+.final .h2{font-size:clamp(2.75rem,1.4rem + 5vw,6rem)}
+.final p{margin-top:var(--s-4);color:var(--ink-2);font-size:var(--t-lead)}
+.word{position:relative;margin-top:clamp(24px,4vw,56px);font:800 clamp(7rem,30vw,27rem)/.74 var(--f-text);letter-spacing:-.075em;white-space:nowrap;color:var(--ink);user-select:none;margin-left:-.05em;margin-bottom:-.06em;display:flex;align-items:flex-end}
+.word .wdot{position:relative;display:inline-block;width:.2em;height:.2em;margin-left:.035em;margin-bottom:.012em}
+.word .wdot b{position:absolute;inset:0;border-radius:50%;background:var(--dot);box-shadow:inset -.02em -.025em 0 rgba(0,0,0,.18)}
+.word .wdot::before{content:"";position:absolute;left:-.12em;right:-.12em;bottom:-.04em;height:.08em;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.35),transparent)}
+
+/* ============ FOOTER ============ */
+.ftr{background:var(--paper-2);padding-block:var(--s-6) var(--s-7);border-top:1px solid var(--rule)}
+.ftr-in{display:flex;justify-content:space-between;gap:var(--s-5) var(--s-7);flex-wrap:wrap;align-items:flex-start}
+.ftr-brand{font:400 1.25rem/1.3 var(--f-display)}
+.ftr-brand b{font:800 1rem/1 var(--f-text);letter-spacing:-.03em;margin-right:4px}
+.ftr nav ul{display:flex;flex-wrap:wrap;gap:0 var(--s-2)}
+.ftr nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px;font-weight:500;font-size:.9375rem}
+.ftr small{display:block;margin-top:var(--s-2);font:400 .8125rem/1.5 var(--f-mono);color:var(--muted)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1100px){
+  .wall{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .sp-more{grid-column:span 4}
+  .route{grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--s-4)}
+  .annot{grid-template-columns:1fr}
+  .annot-notes{border-left:0;border-top:1px solid var(--rule);padding:var(--s-4) 0 0;grid-template-columns:1fr 1fr}
+}
+@media (max-width:960px){
+  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .demo{max-width:620px}
+  .problem-grid,.feat-grid,.install-grid,.faq-grid,.res-head,.how-head,.styles-head{grid-template-columns:minmax(0,1fr)}
+  .what-in{grid-template-columns:minmax(0,1fr);gap:var(--s-5)}
+  .effort,.faq-side{position:static}
+  .route{grid-template-columns:minmax(0,1fr);gap:0}
+  .route::before{left:11px;right:auto;top:6px;bottom:6px;width:1px;height:auto}
+  .route-line{left:10px;right:auto;top:6px;bottom:6px;width:3px;height:auto;transform-origin:top}
+  .js .route-box.pre .route-line{transform:scaleY(0)}
+  .route li{padding:0 0 var(--s-6) 48px}
+  .route .stop{top:0}
+  .route h3{margin-bottom:var(--s-2)}
+  .tcard{grid-template-columns:minmax(0,1fr);gap:0}
+  .tmeta{display:contents}
+  .tnum{order:1}.tcard h3{order:2}.tmodel{order:3}.tscore{order:4}
+  .tshots{order:5;margin-bottom:var(--s-5)}
+  .tverdict{order:6}.tgates{order:7}.tcomp{order:8}.tlinks{order:9}
+  .final-in{grid-template-columns:minmax(0,1fr);align-items:start}
+}
+@media (max-width:900px){
+  /* ledger -> stacked */
+  .ledger thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .ledger,.ledger tbody,.ledger tr,.ledger th,.ledger td{display:block;width:100%}
+  .ledger tr{padding:var(--s-4) 0;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:var(--s-2) var(--s-4)}
+  .ledger tbody th{grid-column:1/3;min-width:0;border:0;padding:0 0 var(--s-1)}
+  .ledger td{border:0;padding:0;white-space:normal}
+  .ledger td::before{content:attr(data-label);display:block;font:500 .6875rem/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .ledger td .bar{width:calc(100% - 64px)}
+  .ledger tr.is-loss{padding-inline:var(--s-3)}
+  .ledger tr.is-loss th{padding-left:0;box-shadow:none}
+  .ledger tr.is-loss{box-shadow:inset 3px 0 0 var(--dot-text);background:color-mix(in srgb,var(--dot) 7%,transparent)}
+  .ledger tr.is-loss th,.ledger tr.is-loss td{background:none}
+}
+@media (max-width:720px){
+  .facts{grid-template-columns:1fr}
+  .fact{padding:var(--s-4) 0}
+  .fact+.fact{padding-left:0;border-left:0;border-top:1px solid var(--rule)}
+  /* comparison table -> stacked rows */
+  .ctable thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .ctable,.ctable tbody,.ctable tr,.ctable td{display:block;width:100%}
+  .ctable tr{padding:var(--s-4) 0;border-bottom:1px solid var(--rule)}
+  .ctable td{border:0;padding:0}
+  .ctable td::before{content:attr(data-label);display:block;font:500 .6875rem/1.3 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;margin-bottom:4px;color:var(--muted)}
+  .ctable td:first-child{margin-bottom:var(--s-3)}
+  .ctable td:last-child{padding-left:0}
+  .ctable td:last-child::before{color:var(--dot-text);position:static;width:auto;height:auto;background:none;border-radius:0}
+  .wall{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sp-more{grid-column:span 2}
+  .sp{min-height:112px}
+  .annot-notes{grid-template-columns:1fr}
+  .qa .ans{padding-right:0}
+  .cmd{flex-direction:column}
+  .cmd code{white-space:normal;overflow-wrap:anywhere;align-items:flex-start}
+  .copy{border-left:0;border-top:1px solid var(--inv-rule);min-height:48px;width:100%}
+}
+@media (max-width:480px){
+  .cta-row .btn{width:100%}
+  .stage{aspect-ratio:4/4.1}
+  .des{right:0;bottom:26%;padding:6% 6% 4%}
+  .margin{top:auto;height:26%;width:100%;border-left:0;border-top:1px dashed var(--rule-strong);grid-template-columns:1fr 1fr;align-content:center;padding:3% 5%;gap:6px 10px}
+  .margin li{font-size:10px}
+  .tscore{gap:var(--s-4)}
+  .shots[data-view="desktop"]{grid-template-columns:1fr 1fr}
+}
+@media (min-width:1700px){:root{--max:1440px}}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;animation-delay:0ms!important;transition-duration:1ms!important;transition-delay:0ms!important}
+  .js .mark path{stroke-dashoffset:0;animation:none}
+  .sp-terminal .cur{animation:none}
+}
+
+/* ============ PRINT ============ */
+@media print{
+  .hdr,.mnav,.demo-ctl,.copy,.seg,.skip,.word{display:none!important}
+  body{background:#fff;color:#000}
+  .install{background:#fff;color:#000}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.8em;color:#555}
+  .tcard,.sp{break-inside:avoid}
+}
+</style>
+</head>
+<body id="top">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="#top" aria-label="DENT, back to top">DENT<i aria-hidden="true"></i></a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#install">Install</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <div class="hdr-actions">
+      <button class="icon-btn theme-btn" type="button" data-theme-toggle aria-label="Switch to dark theme">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+      </button>
+      <a class="btn btn-primary btn-sm" href="https://github.com/jeelnadaa/DENT" target="_blank" rel="noopener">Get DENT<span class="sr-only"> on GitHub (opens in a new tab)</span></a>
+      <button class="icon-btn menu-btn" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Open menu">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M3 7h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/><path class="l2" d="M3 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mnav" id="mnav" role="dialog" aria-modal="true" aria-label="Menu">
+    <ul>
+      <li><a href="#how">How it works <span aria-hidden="true">→</span></a></li>
+      <li><a href="#results">Results <span aria-hidden="true">→</span></a></li>
+      <li><a href="#install">Install <span aria-hidden="true">→</span></a></li>
+      <li><a href="#faq">FAQ <span aria-hidden="true">→</span></a></li>
+    </ul>
+    <div class="mnav-row">
+      <button class="btn btn-quiet" type="button" data-theme-toggle aria-label="Switch to dark theme"><span data-theme-label>Dark theme</span></button>
+      <a class="btn btn-quiet" href="https://github.com/jeelnadaa/DENT" target="_blank" rel="noopener">GitHub<span class="sr-only"> (opens in a new tab)</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" aria-labelledby="hero-h">
+  <span class="crop tl" aria-hidden="true"></span><span class="crop br" aria-hidden="true"></span>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="label kicker"><span>Open-source design skill for AI agents</span></p>
+      <h1 id="hero-h">AI agents can build anything. <span class="l2">Now they can <span class="mark">design<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M8 26C6 12 30 3 56 4c26 1 42 9 40 19-2 11-30 16-56 14C16 35 2 27 9 15 14 8 26 5 34 4"/></svg></span> it, too.</span></h1>
+      <p class="lead">DENT is an open-source design skill that makes your AI agent ask the right questions, follow proven UX laws and accessibility rules, and ship interfaces that don't look like every other AI-made site.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/jeelnadaa/DENT" target="_blank" rel="noopener">
+          <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          Download on GitHub<span class="sr-only"> (opens in a new tab)</span><span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="btn btn-secondary" href="#how">See how it works</a>
+      </div>
+      <p class="fine"><span>Free and open source</span> · <span>Apache 2.0</span> · Works with Claude Code, Codex, Cursor, Copilot and more</p>
+    </div>
+
+    <figure class="demo" aria-labelledby="demo-cap">
+      <div class="win" data-state="after" id="win">
+        <div class="win-bar" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="win-file" id="win-file"><b>with-dent</b>.html</span></div>
+        <div class="stage" aria-hidden="true">
+          <div class="gen">
+            <span class="pill" style="--x:-140px;--y:-90px;--r:-18deg">✨ New: AI-powered</span>
+            <span class="gt" style="--x:30px;--y:-160px;--r:8deg">Supercharge your workflow</span>
+            <span class="gs" style="--x:-160px;--y:60px;--r:-10deg">The all-in-one platform to build, ship and scale faster than ever.</span>
+            <span class="gb" style="--x:150px;--y:40px;--r:16deg">Get started free</span>
+            <span class="cards" style="--x:0px;--y:150px;--r:4deg"><span></span><span></span><span></span></span>
+          </div>
+          <div class="des">
+            <div class="des-top"><span class="des-logo"><i id="des-dot"></i>Tidepool</span><span class="mk">1</span><span class="des-no">No. 01</span></div>
+            <div class="des-main">
+              <span class="k">A journal for the shoreline</span>
+              <h4>Notes from the <em>low</em> tide.<span class="mk">2</span></h4>
+              <p>Log what you find in each pool, by species, depth and hour.<span class="mk">3</span></p>
+              <span class="b">Start a notebook</span>
+            </div>
+            <div class="des-foot"><span>--ink</span><span>--paper</span><span>--tide</span><span class="mk">4</span></div>
+          </div>
+          <ol class="margin">
+            <li><i>1</i>Concept: a field journal</li>
+            <li><i>2</i>Serif + grotesk pairing</li>
+            <li><i>3</i>Contrast checked (AA)</li>
+            <li><i>4</i>Tokens, not one-offs</li>
+          </ol>
+          <span class="crater"></span><span class="ring"></span><span class="ball" id="ball"></span>
+        </div>
+      </div>
+      <p class="sr-only">Illustration: a generic AI-made page with a purple gradient, a centered "Supercharge your workflow" headline and three empty cards is hit by an orange dot and replaced by a designed page for a sample product. Margin notes point out its concept, type pairing, checked contrast and tokens.</p>
+      <div class="demo-ctl">
+        <p class="demo-cap" id="demo-cap">Same request, before and after DENT. <span class="nowrap">Sample product, for illustration.</span></p>
+        <div class="btns">
+          <button class="btn btn-quiet" type="button" id="replay">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 8A5.5 5.5 0 1 1 11.9 4.1M12.5 1.5v3h-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span id="replay-label">Drop it again</span></button>
+          <button class="btn btn-quiet snd" type="button" id="snd" aria-pressed="false">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6h2.5l3.5-3v10l-3.5-3h-2.5z" fill="currentColor"/><path class="on" d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.5a6 6 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path class="off" d="M11 6l4 4M15 6l-4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <span class="off">Sound off</span><span class="on">Sound on</span></button>
+        </div>
+      </div>
+      <p class="sr-only" aria-live="polite" id="demo-status"></p>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ WHAT IT IS ============ -->
+<section class="what" aria-label="What DENT is and where it works">
+  <div class="wrap what-in">
+    <p class="what-def">A free, open-source skill, <em>a folder with a SKILL.md file</em>, that gives AI coding agents the judgment of a senior product designer.</p>
+    <div>
+      <p class="label">Works with</p>
+      <ul class="agents">
+        <li>Claude Code</li><li>OpenAI Codex</li><li>Cursor</li><li>GitHub Copilot</li><li>Gemini CLI</li><li>OpenCode</li><li>Claude.ai</li><li>Claude Desktop</li><li class="more">Any agent that supports Agent Skills (SKILL.md)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section class="problem" aria-labelledby="prob-h">
+  <div class="wrap">
+    <p class="label kicker"><span class="n">01</span><span>The problem</span></p>
+    <div class="problem-grid">
+      <h2 class="h2" id="prob-h">Every AI-made website looks the same.</h2>
+      <div class="annot">
+        <p class="annot-text">Ask an agent for a landing page and you get the usual: <span class="x">a purple gradient</span><sup aria-hidden="true">1</sup>, <span class="x">a centered headline</span><sup aria-hidden="true">2</sup>, <span class="x">three feature cards</span><sup aria-hidden="true">3</sup>, <span class="x">one font at one weight</span><sup aria-hidden="true">4</sup>, <span class="x">missing states</span><sup aria-hidden="true">5</sup> and <span class="x">text you can barely read</span><sup aria-hidden="true">6</sup>. It works for a second and looks like everything else forever.</p>
+        <ol class="annot-notes" aria-label="DENT's corrections">
+          <li><b aria-hidden="true">1</b><span>A style chosen on purpose, from 41.</span></li>
+          <li><b aria-hidden="true">2</b><span>A hero composed for the concept.</span></li>
+          <li><b aria-hidden="true">3</b><span>Sections laid out by their job.</span></li>
+          <li><b aria-hidden="true">4</b><span>A type pairing with a real scale.</span></li>
+          <li><b aria-hidden="true">5</b><span>Empty, loading, error and success.</span></li>
+          <li><b aria-hidden="true">6</b><span>WCAG 2.2 AA contrast, checked.</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPARISON ============ -->
+<section class="compare" aria-labelledby="cmp-h">
+  <div class="wrap">
+    <p class="label kicker"><span class="n">02</span><span>The difference</span></p>
+    <div class="compare-head">
+      <h2 class="h2" id="cmp-h">Without DENT, <em>with DENT.</em></h2>
+    </div>
+    <table class="ctable">
+      <caption class="sr-only">What your agent does without DENT compared with what it does with DENT</caption>
+      <thead><tr><th scope="col">Without DENT</th><th scope="col">With DENT</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Without DENT">Guesses the look from one sentence</td><td data-label="With DENT">Asks a few focused questions, or decides for you if you say so</td></tr>
+        <tr><td data-label="Without DENT">Default template look</td><td data-label="With DENT">A clear concept, a deliberate style and a signature element</td></tr>
+        <tr><td data-label="Without DENT">One-off values everywhere</td><td data-label="With DENT">Design tokens and components reused on every screen</td></tr>
+        <tr><td data-label="Without DENT">Happy path only</td><td data-label="With DENT">Empty, loading, error, success, hover, focus and disabled states</td></tr>
+        <tr><td data-label="Without DENT">“Looks accessible”</td><td data-label="With DENT">WCAG 2.2 AA rules no style is allowed to break</td></tr>
+        <tr><td data-label="Without DENT">Adds a second design system to your codebase</td><td data-label="With DENT">Detects your existing UI library and extends it</td></tr>
+        <tr><td data-label="Without DENT">“I picked blue because it’s nice”</td><td data-label="With DENT">A decision log with the reason behind every choice</td></tr>
+        <tr><td data-label="Without DENT">Forgets everything next session</td><td data-label="With DENT">An approved DESIGN.md that becomes the source of truth</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="how" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <p class="label kicker"><span class="n">03</span><span>How it works</span></p>
+    <div class="how-head">
+      <h2 class="h2" id="how-h">Five steps, <em>in order.</em></h2>
+      <p class="lead">The same route a senior designer takes, run by your agent every time you ask for a screen.</p>
+    </div>
+    <div class="route-box pre" id="route">
+    <span class="route-line" aria-hidden="true"></span>
+    <ol class="route">
+      <li style="--i:0"><span class="stop" aria-hidden="true"></span><span class="num">01</span><h3>Ask</h3><p>DENT asks how far to go, then only the questions that matter, one at a time, each with a recommended answer.</p></li>
+      <li style="--i:1"><span class="stop" aria-hidden="true"></span><span class="num">02</span><h3>Direct</h3><p>It picks a concept and a style on purpose, not by default.</p></li>
+      <li style="--i:2"><span class="stop" aria-hidden="true"></span><span class="num">03</span><h3>Build</h3><p>Tokens first, then components with every state, then screens.</p></li>
+      <li style="--i:3"><span class="stop" aria-hidden="true"></span><span class="num">04</span><h3>Check</h3><p>It reviews its own work against a quality checklist and, when the agent can, takes screenshots and fixes what's wrong.</p></li>
+      <li style="--i:4"><span class="stop" aria-hidden="true"></span><span class="num">05</span><h3>Document</h3><p>Once you approve, everything goes into DESIGN.md so the next change stays consistent.</p></li>
+    </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section class="features" aria-labelledby="feat-h">
+  <div class="wrap">
+    <p class="label kicker"><span class="n">04</span><span>What's inside</span></p>
+    <h2 class="h2" id="feat-h">Taste, written down <em>as rules.</em></h2>
+    <div class="feat-grid">
+      <div class="effort">
+        <p class="label">01 · Effort levels</p>
+        <h3>Four effort levels. You choose the depth.</h3>
+        <p>DENT asks first how far to go. The answer sets how many questions it asks, how much it builds and how hard it checks.</p>
+        <div class="tabs" role="tablist" aria-label="Effort levels">
+          <button class="tab" role="tab" id="tab-1" aria-controls="panel-e" aria-selected="false" tabindex="-1" data-level="1">Essential</button>
+          <button class="tab" role="tab" id="tab-2" aria-controls="panel-e" aria-selected="true" tabindex="0" data-level="2">Standard</button>
+          <button class="tab" role="tab" id="tab-3" aria-controls="panel-e" aria-selected="false" tabindex="-1" data-level="3">Polished</button>
+          <button class="tab" role="tab" id="tab-4" aria-controls="panel-e" aria-selected="false" tabindex="-1" data-level="4">All-out</button>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="panel-e" aria-labelledby="tab-2" tabindex="0">
+          <div class="depth" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+          <p id="effort-text">A complete, professional design in your chosen style, with all states and subtle animation.</p>
+        </div>
+        <p class="this">This page was built at All-out.</p>
+      </div>
+      <ol class="flist">
+        <li><span class="no">02</span><div><h3>41 aesthetic styles</h3><p>From Minimal, Swiss and Editorial to Neo-Brutalism, Glassmorphism, Japandi, Dark Tech, Retro OS and Cyberpunk, each with rules for doing it well.</p></div></li>
+        <li><span class="no">03</span><div><h3>Proven principles</h3><p>Gestalt, Fitts's Law, Hick's Law, Jakob's Law and Nielsen's heuristics, applied for you.</p></div></li>
+        <li><span class="no">04</span><div><h3>Accessibility built in</h3><p>Contrast, touch targets, keyboard and focus, reduced motion.</p></div></li>
+        <li><span class="no">05</span><div><h3>Works with your code</h3><p>Detects shadcn/ui, MUI, Chakra, Tailwind and your existing tokens, and extends them.</p></div></li>
+        <li><span class="no">06</span><div><h3>Design to code</h3><p>HTML/CSS, Tailwind, React, Vue, Svelte, Flutter, SwiftUI, Jetpack Compose and React Native.</p></div></li>
+        <li><span class="no">07</span><div><h3>Six modes</h3><p>Create, redesign, audit, extend, implement, and adopt an existing design system.</p></div></li>
+        <li><span class="no">08</span><div><h3>Real product patterns</h3><p>Landing pages, pricing, dashboards, onboarding, checkout, settings, AI and chat interfaces, billing, roles, docs sites and more.</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STYLES ============ -->
+<section class="styles" aria-labelledby="sty-h">
+  <div class="wrap">
+    <p class="label kicker"><span class="n">05</span><span>Styles</span></p>
+    <div class="styles-head">
+      <h2 class="h2" id="sty-h">41 styles. <em>Zero templates.</em></h2>
+      <p class="lead">Each style is a set of rules: what it overrides, the moves that make it recognisable, and the accessibility traps to avoid. Here are 16, each set in its own style.</p>
+    </div>
+    <ul class="wall">
+      <li class="sp sp-minimal sp-light"><span class="nm">Minimal</span></li>
+      <li class="sp sp-swiss sp-light"><span class="nm">Swiss</span></li>
+      <li class="sp sp-editorial sp-light"><span class="nm">Editorial</span></li>
+      <li class="sp sp-luxury"><span class="nm">Luxury</span></li>
+      <li class="sp sp-japandi sp-light"><span class="nm">Japandi</span></li>
+      <li class="sp sp-brutal sp-light"><span class="nm">Neo-Brutalism</span></li>
+      <li class="sp sp-glass"><span class="nm">Glassmorphism</span></li>
+      <li class="sp sp-darktech"><span class="nm"><small aria-hidden="true">// v2.1</small>Dark Tech</span></li>
+      <li class="sp sp-bento"><span class="nm">Bento</span><span aria-hidden="true"></span><span aria-hidden="true"></span></li>
+      <li class="sp sp-util"><span class="no" aria-hidden="true">041 · SPEC</span><span class="nm">Utilitarian</span></li>
+      <li class="sp sp-retroos"><span class="w"><span class="tb" aria-hidden="true">dent.exe<i></i></span><span class="nm">Retro OS</span></span></li>
+      <li class="sp sp-y2k"><span class="nm">Y2K</span></li>
+      <li class="sp sp-synth"><span class="nm">Synthwave</span></li>
+      <li class="sp sp-cyber"><span class="nm">Cyberpunk</span></li>
+      <li class="sp sp-terminal"><span class="nm">Terminal<span class="cur" aria-hidden="true"></span></span></li>
+      <li class="sp sp-pixel"><span class="nm">Pixel Art</span></li>
+      <li class="sp-li-more" style="display:contents"><a class="sp sp-more" href="https://github.com/jeelnadaa/DENT/tree/main/skills/dent/references/styles" target="_blank" rel="noopener"><span class="nm">and 25 more</span><span class="go">Browse all 41 style guides on GitHub <span class="arrow" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></span></a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="results" id="results" aria-labelledby="res-h">
+  <div class="wrap">
+    <p class="label kicker"><span class="n">06</span><span>Real test results</span></p>
+    <div class="res-head">
+      <div>
+        <h2 class="h2" id="res-h">Don't take our word for it.</h2>
+      </div>
+      <div>
+        <p class="lead">We give an AI agent the same prompt twice, once without DENT and once with it, and publish both results: wins, ties and losses. This page itself was built with DENT. Run the benchmark yourself and share what you get.</p>
+        <div class="method">
+          <p><strong>How we test:</strong> same prompt, same agent and model, one run without DENT and one with, first result kept, each scored on the same 10 criteria (1 to 5 each, out of 50), every result published. <a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark" target="_blank" rel="noopener">Benchmark method and prompts<span class="sr-only"> (opens in a new tab)</span></a></p>
+          <p><strong>Read with care:</strong> the scores are by Claude Opus 5.5, the same model family that built both versions, and DENT's author, so they are not independent. Several with-DENT runs got a higher effort level or design feedback; each card says how comparable its test is. Human scores are welcome.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="facts" role="list">
+      <div class="fact" role="listitem">
+        <p class="label">Average score, 8 tests</p>
+        <p class="big">37.9 → 43.8<span>/50</span></p>
+        <p>Without DENT vs with DENT, Claude Opus 5.5 batch of 2026-11-14.</p>
+        <p class="note">Exact means: 37.875 and 43.75, a difference of 5.875.</p>
+      </div>
+      <div class="fact" role="listitem">
+        <p class="label">Web builds passing every automated gate</p>
+        <p class="big">0 → 7<span> of 7</span></p>
+        <p>With DENT, all 7 web builds passed every automated gate. Without DENT, all 7 failed at least one: mostly text contrast, 3 kept animating under reduced motion, 1 had an unlabeled input.</p>
+      </div>
+      <div class="fact" role="listitem">
+        <p class="label">Builds with invented social proof, 8 tests</p>
+        <p class="big">1 → 0</p>
+        <p>One build without DENT made up a rating (“4.8 · 312 reviews”); no build with DENT did. In the earlier DENT 1.0 run, both sides invented numbers, and DENT scored lower (35 vs 36).</p>
+      </div>
+    </div>
+
+    <div class="ledger-wrap">
+      <div class="legend" aria-hidden="true"><span><i style="background:var(--without)"></i>Without DENT</span><span><i style="background:var(--dot)"></i>With DENT</span><span>Bars on the full 0–50 scale</span></div>
+      <table class="ledger pre" id="ledger">
+        <caption class="sr-only">Every published test: scores out of 50 without and with DENT, the difference, and how comparable the two runs are</caption>
+        <thead><tr><th scope="col">Test</th><th scope="col">Without DENT</th><th scope="col">With DENT</th><th scope="col">Difference</th><th scope="col">Comparability</th></tr></thead>
+        <tbody>
+<!--LEDGER-->
+<tr class="">
+<th scope="row"><a href="#t-brewlog">Brewlog marketing website</a><span class="lg-model">Claude Code + Claude Opus 5.5 (medium effort)</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.76" aria-hidden="true"><i></i></span><b>38</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.88" aria-hidden="true"><i></i></span><b>44</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff up">+6</span><span class="sr-only"> (DENT higher by 6)</span></td>
+<td data-label="Comparability"><span class="ctag ctag-close">Close to protocol</span></td>
+</tr>
+<tr class="">
+<th scope="row"><a href="#t-dashboard">SaaS analytics dashboard</a><span class="lg-model">Claude Code + Claude Opus 5.5 (medium effort)</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.78" aria-hidden="true"><i></i></span><b>39</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.86" aria-hidden="true"><i></i></span><b>43</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff up">+4</span><span class="sr-only"> (DENT higher by 4)</span></td>
+<td data-label="Comparability"><span class="ctag ctag-close">Close to protocol</span></td>
+</tr>
+<tr class="">
+<th scope="row"><a href="#t-checkout">Multi-step checkout with failure recovery</a><span class="lg-model">Claude Code + Claude Opus 5.5 (medium effort)</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.78" aria-hidden="true"><i></i></span><b>39</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.88" aria-hidden="true"><i></i></span><b>44</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff up">+5</span><span class="sr-only"> (DENT higher by 5)</span></td>
+<td data-label="Comparability"><span class="ctag ctag-limited">Limited</span></td>
+</tr>
+<tr class="">
+<th scope="row"><a href="#t-project-app">Kanban + command palette + drawer + chart</a><span class="lg-model">Claude Code + Claude Opus 5.5 (medium effort)</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.74" aria-hidden="true"><i></i></span><b>37</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.86" aria-hidden="true"><i></i></span><b>43</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff up">+6</span><span class="sr-only"> (DENT higher by 6)</span></td>
+<td data-label="Comparability"><span class="ctag ctag-limited">Limited</span></td>
+</tr>
+<tr class="">
+<th scope="row"><a href="#t-scroll-story">Launch page with a scroll story (All-out)</a><span class="lg-model">Claude Code + Claude Opus 5.5 (medium effort)</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.74" aria-hidden="true"><i></i></span><b>37</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.90" aria-hidden="true"><i></i></span><b>45</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff up">+8</span><span class="sr-only"> (DENT higher by 8)</span></td>
+<td data-label="Comparability"><span class="ctag ctag-limited">Limited</span></td>
+</tr>
+<tr class="">
+<th scope="row"><a href="#t-meditation">Meditation timer with sound</a><span class="lg-model">Claude Code + Claude Opus 5.5 (medium effort)</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.78" aria-hidden="true"><i></i></span><b>39</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.88" aria-hidden="true"><i></i></span><b>44</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff up">+5</span><span class="sr-only"> (DENT higher by 5)</span></td>
+<td data-label="Comparability"><span class="ctag ctag-limited">Limited</span></td>
+</tr>
+<tr class="">
+<th scope="row"><a href="#t-3d-viewer">3D product viewer</a><span class="lg-model">Claude Code + Claude Opus 5.5 (medium effort)</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.72" aria-hidden="true"><i></i></span><b>36</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.88" aria-hidden="true"><i></i></span><b>44</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff up">+8</span><span class="sr-only"> (DENT higher by 8)</span></td>
+<td data-label="Comparability"><span class="ctag ctag-limited">Limited</span></td>
+</tr>
+<tr class="">
+<th scope="row"><a href="#t-launch-video">45-second launch video</a><span class="lg-model">Claude Code + Claude Opus 5.5 (medium effort)</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.76" aria-hidden="true"><i></i></span><b>38</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.86" aria-hidden="true"><i></i></span><b>43</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff up">+5</span><span class="sr-only"> (DENT higher by 5)</span></td>
+<td data-label="Comparability"><span class="ctag ctag-limited">Limited</span></td>
+</tr>
+<tr class="is-loss">
+<th scope="row"><a href="#t-brewlog-gemini">Brewlog marketing website (earlier batch)</a><span class="lg-model">Antigravity + Gemini 3.8 Flash (High) · DENT 1.0.1</span></th>
+<td data-label="Without DENT"><span class="bar bar-wo" style="--v:0.72" aria-hidden="true"><i></i></span><b>36</b><span class="of">/50</span></td>
+<td data-label="With DENT"><span class="bar bar-w" style="--v:0.70" aria-hidden="true"><i></i></span><b>35</b><span class="of">/50</span></td>
+<td data-label="Difference"><span class="diff down">−1</span><span class="sr-only"> (DENT lower by 1)</span><span class="loss-note">DENT lower</span></td>
+<td data-label="Comparability"><span class="ctag ctag-earlier">Earlier batch</span></td>
+</tr>
+<!--/LEDGER-->
+        </tbody>
+      </table>
+      <p class="ledger-foot">Scores and verdicts are copied from each test's RESULT.md. “Limited” means the with-DENT run got a different effort level, extra features or design feedback; the card below says exactly what. One run per side is not enough to call a winner on any single test.</p>
+    </div>
+
+    <div class="cards">
+<!--CARDS-->
+<article class="tcard" id="t-brewlog" aria-labelledby="t-brewlog-h">
+<div class="tmeta">
+<p class="tnum">Test 01</p>
+<h3 id="t-brewlog-h">Brewlog marketing website</h3>
+<p class="tmodel">Claude Code + Claude Opus 5.5 (medium effort)</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>38<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>44<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff up">+6</span><span class="sr-only"> (DENT higher by 6)</span></dd></div>
+</dl>
+<p class="tverdict">Both are polished. Without DENT: a well-made but familiar SaaS page (warm gradient, “New” pill, floating phone mockup). With DENT: a brew-journal concept on grid paper that passes every automated gate.</p>
+<p class="tgates">Automated gates: without DENT failed text contrast (G3); with DENT passed all 5.</p>
+<p class="tcomp"><span class="ctag ctag-close">Close to protocol</span> No questions on either side; the prompt forbids them.</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/brewlog-claude-code-opus-5.5-medium-2026-11-14/without/index.html" target="_blank" rel="noopener">Live page without DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/brewlog-claude-code-opus-5.5-medium-2026-11-14/with/index.html" target="_blank" rel="noopener">Live page with DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/brewlog-claude-code-opus-5.5-medium-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+<div class="seg" role="group" aria-label="Screenshot size for Brewlog marketing website">
+<button type="button" class="seg-btn" aria-pressed="true" data-view="desktop">Desktop<span class="seg-px"> 1440</span></button><button type="button" class="seg-btn" aria-pressed="false" data-view="phone">Phone<span class="seg-px"> 390</span></button>
+</div>
+<div class="shots" data-view="desktop">
+<figure class="shot"><img src="assets/results/brewlog-without-desktop.webp" data-desktop="assets/results/brewlog-without-desktop.webp" data-phone="assets/results/brewlog-without-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="Without DENT: first screen of the Brewlog marketing website"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/brewlog-with-desktop.webp" data-desktop="assets/results/brewlog-with-desktop.webp" data-phone="assets/results/brewlog-with-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="With DENT: first screen of the Brewlog marketing website"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<article class="tcard" id="t-dashboard" aria-labelledby="t-dashboard-h">
+<div class="tmeta">
+<p class="tnum">Test 02</p>
+<h3 id="t-dashboard-h">SaaS analytics dashboard</h3>
+<p class="tmodel">Claude Code + Claude Opus 5.5 (medium effort)</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>39<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>43<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff up">+4</span><span class="sr-only"> (DENT higher by 4)</span></dd></div>
+</dl>
+<p class="tverdict">Without DENT: a clean, competent dashboard in a familiar style. With DENT: one hero metric that answers the owner’s first question, a dense ledger style with one signal colour, and a “sample data” notice.</p>
+<p class="tgates">Automated gates: without DENT failed text contrast (G3); with DENT passed all 5.</p>
+<p class="tcomp"><span class="ctag ctag-close">Close to protocol</span> DENT skipped its questions (it treated the run as non-interactive); the effort level matched.</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/saas-dashboard-claude-code-opus-5.5-medium-2026-11-14/without/index.html" target="_blank" rel="noopener">Live page without DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/saas-dashboard-claude-code-opus-5.5-medium-2026-11-14/with/index.html" target="_blank" rel="noopener">Live page with DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/saas-dashboard-claude-code-opus-5.5-medium-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+<div class="seg" role="group" aria-label="Screenshot size for SaaS analytics dashboard">
+<button type="button" class="seg-btn" aria-pressed="true" data-view="desktop">Desktop<span class="seg-px"> 1440</span></button><button type="button" class="seg-btn" aria-pressed="false" data-view="phone">Phone<span class="seg-px"> 390</span></button>
+</div>
+<div class="shots" data-view="desktop">
+<figure class="shot"><img src="assets/results/dashboard-without-desktop.webp" data-desktop="assets/results/dashboard-without-desktop.webp" data-phone="assets/results/dashboard-without-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="Without DENT: first screen of the SaaS analytics dashboard"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/dashboard-with-desktop.webp" data-desktop="assets/results/dashboard-with-desktop.webp" data-phone="assets/results/dashboard-with-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="With DENT: first screen of the SaaS analytics dashboard"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<article class="tcard" id="t-checkout" aria-labelledby="t-checkout-h">
+<div class="tmeta">
+<p class="tnum">Test 03</p>
+<h3 id="t-checkout-h">Multi-step checkout with failure recovery</h3>
+<p class="tmodel">Claude Code + Claude Opus 5.5 (medium effort)</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>39<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>44<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff up">+5</span><span class="sr-only"> (DENT higher by 5)</span></dd></div>
+</dl>
+<p class="tverdict">Both handle the flow well. With DENT: a “quiet showroom” direction with drawn product illustrations, a clear stepper, a demo-store notice, and a full plan, design spec and scorecard.</p>
+<p class="tgates">Automated gates: without DENT failed text contrast (G3); with DENT passed all 5.</p>
+<p class="tcomp"><span class="ctag ctag-limited">Limited comparability</span> The with-DENT run was set to All-out (not Standard), for the Indian market (₹, GST), with opt-in sounds.</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/checkout-flow-claude-code-opus-5.5-medium-2026-11-14/without/index.html" target="_blank" rel="noopener">Live page without DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/checkout-flow-claude-code-opus-5.5-medium-2026-11-14/with/index.html" target="_blank" rel="noopener">Live page with DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/checkout-flow-claude-code-opus-5.5-medium-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+<div class="seg" role="group" aria-label="Screenshot size for Multi-step checkout with failure recovery">
+<button type="button" class="seg-btn" aria-pressed="true" data-view="desktop">Desktop<span class="seg-px"> 1440</span></button><button type="button" class="seg-btn" aria-pressed="false" data-view="phone">Phone<span class="seg-px"> 390</span></button>
+</div>
+<div class="shots" data-view="desktop">
+<figure class="shot"><img src="assets/results/checkout-without-desktop.webp" data-desktop="assets/results/checkout-without-desktop.webp" data-phone="assets/results/checkout-without-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="Without DENT: first screen of the Multi-step checkout with failure recovery"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/checkout-with-desktop.webp" data-desktop="assets/results/checkout-with-desktop.webp" data-phone="assets/results/checkout-with-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="With DENT: first screen of the Multi-step checkout with failure recovery"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<article class="tcard" id="t-project-app" aria-labelledby="t-project-app-h">
+<div class="tmeta">
+<p class="tnum">Test 04</p>
+<h3 id="t-project-app-h">Kanban + command palette + drawer + chart</h3>
+<p class="tmodel">Claude Code + Claude Opus 5.5 (medium effort)</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>37<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>43<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff up">+6</span><span class="sr-only"> (DENT higher by 6)</span></dd></div>
+</dl>
+<p class="tverdict">Without DENT: a capable Linear-style board. With DENT: a “drafting table” identity with a huge project title, numbered columns and a burndown with a table alternative. Its run found and fixed 4 bugs before delivery.</p>
+<p class="tgates">Automated gates: without DENT failed contrast (G3) and labels (G4); with DENT passed all 5.</p>
+<p class="tcomp"><span class="ctag ctag-limited">Limited comparability</span> With DENT ran at Standard, one level below the intended Polished. No scorecard; DESIGN.md was written only when asked.</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/project-app-claude-code-opus-5.5-medium-2026-11-14/without/index.html" target="_blank" rel="noopener">Live page without DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/project-app-claude-code-opus-5.5-medium-2026-11-14/with/index.html" target="_blank" rel="noopener">Live page with DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/project-app-claude-code-opus-5.5-medium-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+<div class="seg" role="group" aria-label="Screenshot size for Kanban + command palette + drawer + chart">
+<button type="button" class="seg-btn" aria-pressed="true" data-view="desktop">Desktop<span class="seg-px"> 1440</span></button><button type="button" class="seg-btn" aria-pressed="false" data-view="phone">Phone<span class="seg-px"> 390</span></button>
+</div>
+<div class="shots" data-view="desktop">
+<figure class="shot"><img src="assets/results/project-app-without-desktop.webp" data-desktop="assets/results/project-app-without-desktop.webp" data-phone="assets/results/project-app-without-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="Without DENT: first screen of the Kanban + command palette + drawer + chart"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/project-app-with-desktop.webp" data-desktop="assets/results/project-app-with-desktop.webp" data-phone="assets/results/project-app-with-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="With DENT: first screen of the Kanban + command palette + drawer + chart"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<article class="tcard" id="t-scroll-story" aria-labelledby="t-scroll-story-h">
+<div class="tmeta">
+<p class="tnum">Test 05</p>
+<h3 id="t-scroll-story-h">Launch page with a scroll story (All-out)</h3>
+<p class="tmodel">Claude Code + Claude Opus 5.5 (medium effort)</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>37<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>45<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff up">+8</span><span class="sr-only"> (DENT higher by 8)</span></dd></div>
+</dl>
+<p class="tverdict">Without DENT: strong type, but the textbook launch template (NEW pill, phone mockup, gradient). With DENT: a “tide almanac” editorial concept, bracketed placeholder pricing, and a self-score of 8.7, below its own target of 9.</p>
+<p class="tgates">Automated gates: without DENT failed contrast (G3) and reduced motion (G10); with DENT passed all 5.</p>
+<p class="tcomp"><span class="ctag ctag-limited">Limited comparability</span> Both runs were asked for All-out. The with-DENT run added an optional ocean sound (off by default), ₹ pricing placeholders, and Satoshi body text (user feedback).</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/scroll-story-launch-claude-code-opus-5.5-medium-2026-11-14/without/index.html" target="_blank" rel="noopener">Live page without DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/scroll-story-launch-claude-code-opus-5.5-medium-2026-11-14/with/index.html" target="_blank" rel="noopener">Live page with DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/scroll-story-launch-claude-code-opus-5.5-medium-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+<div class="seg" role="group" aria-label="Screenshot size for Launch page with a scroll story (All-out)">
+<button type="button" class="seg-btn" aria-pressed="true" data-view="desktop">Desktop<span class="seg-px"> 1440</span></button><button type="button" class="seg-btn" aria-pressed="false" data-view="phone">Phone<span class="seg-px"> 390</span></button>
+</div>
+<div class="shots" data-view="desktop">
+<figure class="shot"><img src="assets/results/scroll-story-without-desktop.webp" data-desktop="assets/results/scroll-story-without-desktop.webp" data-phone="assets/results/scroll-story-without-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="Without DENT: first screen of the Launch page with a scroll story (All-out)"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/scroll-story-with-desktop.webp" data-desktop="assets/results/scroll-story-with-desktop.webp" data-phone="assets/results/scroll-story-with-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="With DENT: first screen of the Launch page with a scroll story (All-out)"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<article class="tcard" id="t-meditation" aria-labelledby="t-meditation-h">
+<div class="tmeta">
+<p class="tnum">Test 06</p>
+<h3 id="t-meditation-h">Meditation timer with sound</h3>
+<p class="tmodel">Claude Code + Claude Opus 5.5 (medium effort)</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>39<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>44<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff up">+5</span><span class="sr-only"> (DENT higher by 5)</span></dd></div>
+</dl>
+<p class="tverdict">Without DENT: a beautiful gradient-orb timer. With DENT: an ensō ink circle, a calmer and more distinctive identity, and sound that stays off until the user turns it on.</p>
+<p class="tgates">Automated gates: without DENT failed contrast (G3) and reduced motion (G10); with DENT passed all 5.</p>
+<p class="tcomp"><span class="ctag ctag-limited">Limited comparability</span> The with-DENT run was set to All-out (not Polished), with extra features (custom patterns, session log, vibration, keep-awake).</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/meditation-sound-claude-code-opus-5.5-medium-2026-11-14/without/index.html" target="_blank" rel="noopener">Live page without DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/meditation-sound-claude-code-opus-5.5-medium-2026-11-14/with/index.html" target="_blank" rel="noopener">Live page with DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/meditation-sound-claude-code-opus-5.5-medium-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+<div class="seg" role="group" aria-label="Screenshot size for Meditation timer with sound">
+<button type="button" class="seg-btn" aria-pressed="true" data-view="desktop">Desktop<span class="seg-px"> 1440</span></button><button type="button" class="seg-btn" aria-pressed="false" data-view="phone">Phone<span class="seg-px"> 390</span></button>
+</div>
+<div class="shots" data-view="desktop">
+<figure class="shot"><img src="assets/results/meditation-without-desktop.webp" data-desktop="assets/results/meditation-without-desktop.webp" data-phone="assets/results/meditation-without-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="Without DENT: first screen of the Meditation timer with sound"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/meditation-with-desktop.webp" data-desktop="assets/results/meditation-with-desktop.webp" data-phone="assets/results/meditation-with-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="With DENT: first screen of the Meditation timer with sound"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<article class="tcard" id="t-3d-viewer" aria-labelledby="t-3d-viewer-h">
+<div class="tmeta">
+<p class="tnum">Test 07</p>
+<h3 id="t-3d-viewer-h">3D product viewer</h3>
+<p class="tmodel">Claude Code + Claude Opus 5.5 (medium effort)</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>36<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>44<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff up">+8</span><span class="sr-only"> (DENT higher by 8)</span></dd></div>
+</dl>
+<p class="tverdict">Without DENT: a tidy product page, but it invents social proof (“4.8 · 312 reviews”) and keeps animating under reduced motion. With DENT: an “assembly drawing” identity, a data-saving still-image mode, and prices labelled as sample values.</p>
+<p class="tgates">Automated gates: without DENT failed contrast (G3) and reduced motion (G10); with DENT passed all 5.</p>
+<p class="tcomp"><span class="ctag ctag-limited">Limited comparability</span> The with-DENT run was set to All-out with user design feedback, sample pricing and an opt-in click sound.</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/3d-product-viewer-claude-code-opus-5.5-medium-2026-11-14/without/index.html" target="_blank" rel="noopener">Live page without DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/3d-product-viewer-claude-code-opus-5.5-medium-2026-11-14/with/index.html" target="_blank" rel="noopener">Live page with DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/3d-product-viewer-claude-code-opus-5.5-medium-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+<div class="seg" role="group" aria-label="Screenshot size for 3D product viewer">
+<button type="button" class="seg-btn" aria-pressed="true" data-view="desktop">Desktop<span class="seg-px"> 1440</span></button><button type="button" class="seg-btn" aria-pressed="false" data-view="phone">Phone<span class="seg-px"> 390</span></button>
+</div>
+<div class="shots" data-view="desktop">
+<figure class="shot"><img src="assets/results/3d-viewer-without-desktop.webp" data-desktop="assets/results/3d-viewer-without-desktop.webp" data-phone="assets/results/3d-viewer-without-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="Without DENT: first screen of the 3D product viewer"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/3d-viewer-with-desktop.webp" data-desktop="assets/results/3d-viewer-with-desktop.webp" data-phone="assets/results/3d-viewer-with-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="With DENT: first screen of the 3D product viewer"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<article class="tcard" id="t-launch-video" aria-labelledby="t-launch-video-h">
+<div class="tmeta">
+<p class="tnum">Test 08</p>
+<h3 id="t-launch-video-h">45-second launch video</h3>
+<p class="tmodel">Claude Code + Claude Opus 5.5 (medium effort)</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>38<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>43<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff up">+5</span><span class="sr-only"> (DENT higher by 5)</span></dd></div>
+</dl>
+<p class="tverdict">Both are clean, code-rendered 45-second films with synthesised music. Without DENT: a solid product tour, but the UI text is small on phones and loudness sits at −15.4 LUFS. With DENT: stronger kinetic type, designed burned-in captions, narration, and exactly −14 LUFS.</p>
+<p class="tgates">Video: checked with video QA, not the web gates.</p>
+<p class="tcomp"><span class="ctag ctag-limited">Limited comparability</span> The with-DENT run used narration (the brief said music + captions only), 16:9 + 9:16 (the brief said 16:9 + 1:1), and All-out effort with user feedback.</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/launch-video-claude-code-opus-5.5-medium-2026-11-14/without/quill-launch-16x9.mp4" target="_blank" rel="noopener">Watch without DENT (16:9)<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/launch-video-claude-code-opus-5.5-medium-2026-11-14/with/quill-launch-16x9.mp4" target="_blank" rel="noopener">Watch with DENT (16:9)<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/launch-video-claude-code-opus-5.5-medium-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+
+<div class="shots shots-video">
+<figure class="shot"><img src="assets/results/launch-video-without-poster.webp" width="960" height="540" loading="lazy" decoding="async" alt="Without DENT: poster frame of the 45-second launch video"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/launch-video-with-poster.webp" width="960" height="540" loading="lazy" decoding="async" alt="With DENT: poster frame of the 45-second launch video"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<article class="tcard is-loss" id="t-brewlog-gemini" aria-labelledby="t-brewlog-gemini-h">
+<div class="tmeta">
+<p class="tnum">Test 09</p>
+<h3 id="t-brewlog-gemini-h">Brewlog marketing website (earlier batch)</h3>
+<p class="tmodel">Antigravity + Gemini 3.8 Flash (High) · DENT 1.0.1</p>
+<dl class="tscore">
+<div><dt>Without DENT</dt><dd>36<span>/50</span></dd></div>
+<div><dt>With DENT</dt><dd>35<span>/50</span></dd></div>
+<div class="tdiff"><dt>Difference</dt><dd><span class="diff down">−1</span><span class="sr-only"> (DENT lower by 1)</span></dd></div>
+</dl>
+<p class="tverdict">About a tie: DENT did not clearly win this run. Both landed on the same dark espresso-and-orange look. DENT changed the process (brief, DESIGN.md, reduced motion, light/dark), but shipped a mobile layout bug and kept invented social proof.</p>
+<p class="tgates">Automated checks: with DENT scrolled sideways at 320, 375 and 390 px; without DENT only at 320 px.</p>
+<p class="tcomp"><span class="ctag ctag-earlier">Earlier batch, DENT 1.0.1</span> This run used DENT 1.0.1. Its failures are why DENT 2.0 added gates and verify_page.py.</p>
+<ul class="tlinks">
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/without/index.html" target="_blank" rel="noopener">Live page without DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://jeelnadaa.github.io/DENT/benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/with/index.html" target="_blank" rel="noopener">Live page with DENT<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14" target="_blank" rel="noopener">Full RESULT.md on GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ul>
+</div>
+<div class="tshots">
+<div class="seg" role="group" aria-label="Screenshot size for Brewlog marketing website (earlier batch)">
+<button type="button" class="seg-btn" aria-pressed="true" data-view="desktop">Desktop<span class="seg-px"> 1440</span></button><button type="button" class="seg-btn" aria-pressed="false" data-view="phone">Phone<span class="seg-px"> 390</span></button>
+</div>
+<div class="shots" data-view="desktop">
+<figure class="shot"><img src="assets/results/brewlog-gemini-without-desktop.webp" data-desktop="assets/results/brewlog-gemini-without-desktop.webp" data-phone="assets/results/brewlog-gemini-without-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="Without DENT: first screen of the Brewlog marketing website (earlier batch)"><figcaption>Without DENT</figcaption></figure>
+<figure class="shot"><img src="assets/results/brewlog-gemini-with-desktop.webp" data-desktop="assets/results/brewlog-gemini-with-desktop.webp" data-phone="assets/results/brewlog-gemini-with-phone.webp" width="960" height="600" loading="lazy" decoding="async" alt="With DENT: first screen of the Brewlog marketing website (earlier batch)"><figcaption>With DENT</figcaption></figure>
+</div>
+</div>
+</article>
+<!--/CARDS-->
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSTALL ============ -->
+<section class="install" id="install" aria-labelledby="ins-h">
+  <div class="wrap install-grid">
+    <div>
+      <p class="label kicker"><span class="n">07</span><span>Install</span></p>
+      <h2 class="h2" id="ins-h">Install in <em>one line.</em></h2>
+      <p class="install-note">Or download the folder from GitHub and drop it into your agent's skills directory. Full guide: <a href="https://github.com/jeelnadaa/DENT/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">INSTALL.md<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+    </div>
+    <div class="cmds">
+      <div class="cmd-group">
+        <h3><i aria-hidden="true"></i>Any agent</h3>
+        <div class="cmd"><code id="c1"><span class="pr" aria-hidden="true">$</span><span class="t">npx skills add jeelnadaa/DENT</span></code><button class="copy" type="button" data-copy="c1" aria-label="Copy command: npx skills add jeelnadaa/DENT"><svg class="ic-copy" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3 10.5V3.5A1 1 0 0 1 4 2.5h6.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg><svg class="ic-check" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cl">Copy</span></button></div>
+      </div>
+      <div class="cmd-group">
+        <h3><i aria-hidden="true"></i>Claude Code</h3>
+        <div class="cmd"><code id="c2"><span class="step" aria-hidden="true">1</span><span class="t">/plugin marketplace add jeelnadaa/DENT</span></code><button class="copy" type="button" data-copy="c2" aria-label="Copy command: /plugin marketplace add jeelnadaa/DENT"><svg class="ic-copy" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3 10.5V3.5A1 1 0 0 1 4 2.5h6.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg><svg class="ic-check" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cl">Copy</span></button></div>
+        <div class="cmd"><code id="c3"><span class="step" aria-hidden="true">2</span><span class="t">/plugin install dent@dent</span></code><button class="copy" type="button" data-copy="c3" aria-label="Copy command: /plugin install dent@dent"><svg class="ic-copy" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3 10.5V3.5A1 1 0 0 1 4 2.5h6.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg><svg class="ic-check" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cl">Copy</span></button></div>
+      </div>
+      <p class="copy-msg" id="copy-msg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq" id="faq" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+    <div class="faq-side">
+      <p class="label kicker"><span class="n">08</span><span>FAQ</span></p>
+      <h2 class="h2" id="faq-h">Questions, <em>answered.</em></h2>
+      <p>Something missing? <a href="https://github.com/jeelnadaa/DENT/issues" target="_blank" rel="noopener">Ask on GitHub<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+    </div>
+    <div class="qa">
+      <details><summary>Is DENT free?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Yes. It's open source under the Apache 2.0 license, including for commercial work.</p></details>
+      <details><summary>Which agents does it work with?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Any agent that supports Agent Skills (SKILL.md): Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, OpenCode and more. For other agents you can point a rules file at it.</p></details>
+      <details><summary>Will it slow my agent down?<span class="pm" aria-hidden="true"></span></summary><p class="ans">DENT loads one main file and opens its detailed guides only when a task needs them.</p></details>
+      <details><summary>Do I own what I design with it?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Yes. DENT claims no rights over your designs.</p></details>
+      <details><summary>Can it work on my existing app?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Yes. It detects your existing design system and extends it, or audits your current UI and ranks what to fix.</p></details>
+      <details><summary>Can I contribute?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Yes. New styles, patterns and fixes are welcome on <a href="https://github.com/jeelnadaa/DENT" target="_blank" rel="noopener">GitHub<span class="sr-only"> (opens in a new tab)</span></a>.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final" aria-labelledby="fin-h">
+  <div class="wrap">
+    <div class="final-in">
+      <div>
+        <h2 class="h2" id="fin-h">Give your agent <em>taste.</em></h2>
+        <p>Install DENT in a minute and ask for your next screen.</p>
+      </div>
+      <a class="btn btn-primary" href="https://github.com/jeelnadaa/DENT" target="_blank" rel="noopener">Download on GitHub<span class="sr-only"> (opens in a new tab)</span><span class="arrow" aria-hidden="true">↗</span></a>
+    </div>
+    <div class="word" aria-hidden="true">DENT<span class="wdot"><b></b></span></div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap ftr-in">
+    <div>
+      <p class="ftr-brand"><b>DENT</b> · Make a dent with your product's design.</p>
+      <small>Created by Jeel Nada (solarquack). Apache 2.0.</small>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        <li><a href="https://github.com/jeelnadaa/DENT" target="_blank" rel="noopener">GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>
+        <li><a href="https://github.com/jeelnadaa/DENT/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">Install guide<span class="sr-only"> (opens in a new tab)</span></a></li>
+        <li><a href="https://github.com/jeelnadaa/DENT/tree/main/benchmark" target="_blank" rel="noopener">Benchmark<span class="sr-only"> (opens in a new tab)</span></a></li>
+        <li><a href="https://github.com/jeelnadaa/DENT/blob/main/LICENSE" target="_blank" rel="noopener">License<span class="sr-only"> (opens in a new tab)</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var doc=document.documentElement;
+  var mqReduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reduced=function(){return mqReduce.matches;};
+  var store={get:function(k){try{return localStorage.getItem(k);}catch(e){return null;}},set:function(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+
+  /* ---------- theme ---------- */
+  var mqDark=window.matchMedia('(prefers-color-scheme: dark)');
+  function currentTheme(){var t=doc.getAttribute('data-theme');return t?t:(mqDark.matches?'dark':'light');}
+  function syncThemeButtons(){
+    var next=currentTheme()==='dark'?'light':'dark';
+    document.querySelectorAll('[data-theme-toggle]').forEach(function(b){b.setAttribute('aria-label','Switch to '+next+' theme');});
+    document.querySelectorAll('[data-theme-label]').forEach(function(s){s.textContent=(next==='dark'?'Dark':'Light')+' theme';});
+    var meta=document.querySelectorAll('meta[name="theme-color"]');
+  }
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(b){
+    b.addEventListener('click',function(){var n=currentTheme()==='dark'?'light':'dark';var apply=function(){doc.setAttribute('data-theme',n);store.set('dent-theme',n);syncThemeButtons();};if(document.startViewTransition&&!reduced())document.startViewTransition(apply);else apply();});
+  });
+  if(mqDark.addEventListener)mqDark.addEventListener('change',syncThemeButtons);
+  syncThemeButtons();
+
+  /* ---------- logo: back to the very top ---------- */
+  document.querySelector('.brand').addEventListener('click',function(e){
+    e.preventDefault();
+    window.scrollTo({top:0,behavior:reduced()?'auto':'smooth'});
+    if(location.hash)history.replaceState(null,'',location.pathname+location.search);
+  });
+
+  /* ---------- header ---------- */
+  var hdr=document.querySelector('.hdr');
+  var onScroll=function(){hdr.classList.toggle('is-scrolled',window.scrollY>8);};
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  /* ---------- mobile menu ---------- */
+  var menuBtn=document.querySelector('.menu-btn'),mnav=document.getElementById('mnav');
+  function setMenu(open){
+    menuBtn.setAttribute('aria-expanded',String(open));
+    menuBtn.setAttribute('aria-label',open?'Close menu':'Open menu');
+    mnav.classList.toggle('is-open',open);
+    document.body.classList.toggle('menu-open',open);
+    if(open){var f=mnav.querySelector('a');if(f)f.focus();}
+  }
+  menuBtn.addEventListener('click',function(){setMenu(menuBtn.getAttribute('aria-expanded')!=='true');});
+  mnav.addEventListener('click',function(e){if(e.target.closest('a[href^="#"]'))setMenu(false);});
+  document.addEventListener('keydown',function(e){
+    if(!mnav.classList.contains('is-open'))return;
+    if(e.key==='Escape'){setMenu(false);menuBtn.focus();return;}
+    if(e.key==='Tab'){
+      var items=[menuBtn].concat([].slice.call(mnav.querySelectorAll('a,button')));
+      var first=items[0],last=items[items.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+    }
+  });
+  window.addEventListener('resize',function(){if(window.innerWidth>860&&mnav.classList.contains('is-open'))setMenu(false);});
+
+  /* ---------- active section in nav ---------- */
+  var navLinks=[].slice.call(document.querySelectorAll('.nav a'));
+  if('IntersectionObserver' in window){
+    var secs=navLinks.map(function(a){return document.querySelector(a.getAttribute('href'));});
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){navLinks.forEach(function(a){a.removeAttribute('aria-current');});
+          var l=navLinks[secs.indexOf(en.target)];if(l){l.setAttribute('aria-current','true');
+            var nv=l.closest('.nav');if(nv.scrollWidth>nv.clientWidth)nv.scrollTo({left:Math.max(0,l.offsetLeft-nv.offsetLeft-16),behavior:reduced()?'auto':'smooth'});}}
+      });
+    },{rootMargin:'-45% 0px -50% 0px'});
+    secs.forEach(function(s){if(s)io.observe(s);});
+  }
+
+  /* ---------- sound (opt-in, off by default, created only after a click) ---------- */
+  var sndBtn=document.getElementById('snd'),actx=null,soundOn=store.get('dent-sound')==='on';
+  var AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC){sndBtn.disabled=true;sndBtn.title='Sound is not supported in this browser';soundOn=false;}
+  sndBtn.setAttribute('aria-pressed',String(soundOn));
+  function thud(){
+    if(!soundOn||!AC)return;
+    try{
+      if(!actx)actx=new AC();
+      if(actx.state==='suspended')actx.resume();
+      var t=actx.currentTime,out=actx.createGain();out.gain.value=0.32;out.connect(actx.destination);
+      var o=actx.createOscillator(),g=actx.createGain();o.type='sine';
+      o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(46,t+0.2);
+      g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.9,t+0.008);g.gain.exponentialRampToValueAtTime(0.0001,t+0.32);
+      o.connect(g);g.connect(out);o.start(t);o.stop(t+0.34);
+      var len=Math.floor(actx.sampleRate*0.03),buf=actx.createBuffer(1,len,actx.sampleRate),d=buf.getChannelData(0);
+      for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+      var n=actx.createBufferSource(),lp=actx.createBiquadFilter(),ng=actx.createGain();
+      n.buffer=buf;lp.type='lowpass';lp.frequency.value=900;ng.gain.value=0.5;
+      n.connect(lp);lp.connect(ng);ng.connect(out);n.start(t);
+    }catch(e){}
+  }
+  sndBtn.addEventListener('click',function(){
+    soundOn=!soundOn;sndBtn.setAttribute('aria-pressed',String(soundOn));store.set('dent-sound',soundOn?'on':'off');
+    document.getElementById('demo-status').textContent=soundOn?'Sound on. The dot makes a thud when it lands.':'Sound off.';
+    if(soundOn)thud();
+  });
+
+  /* ---------- the dent demo ---------- */
+  var win=document.getElementById('win'),ball=document.getElementById('ball'),file=document.getElementById('win-file');
+  var replay=document.getElementById('replay'),replayLabel=document.getElementById('replay-label'),status=document.getElementById('demo-status');
+  var timers=[],playing=false;
+  function clearT(){timers.forEach(clearTimeout);timers=[];}
+  function at(ms,fn){timers.push(setTimeout(fn,ms));}
+  function setFile(after){file.innerHTML=after?'<b>with-dent</b>.html':'<b>generic-ai-site</b>.html';}
+  var flight=null;
+  function resetBall(){if(flight){flight.cancel();flight=null;}ball.style.transform='';}
+  function showBefore(){clearT();win.className='win';win.setAttribute('data-state','before');setFile(false);resetBall();}
+  function showAfter(){clearT();win.className='win';win.setAttribute('data-state','after');setFile(true);resetBall();playing=false;replay.disabled=false;}
+  function play(withSound){
+    if(reduced()){ // no motion: toggle before/after instead
+      var isAfter=win.getAttribute('data-state')==='after';
+      if(isAfter){showBefore();replayLabel.textContent='Show with DENT';status.textContent='Showing the generic page, without DENT.';}
+      else{showAfter();replayLabel.textContent='Show without DENT';status.textContent='Showing the designed page, with DENT.';}
+      return;
+    }
+    if(playing)return;playing=true;replay.disabled=true;
+    showBefore();
+    at(420,function(){win.classList.add('is-drop');});
+    at(980,function(){win.classList.remove('is-drop');win.classList.add('is-impact','is-scatter');if(withSound)thud();});
+    at(1300,function(){win.setAttribute('data-state','after');setFile(true);win.classList.add('is-build');win.classList.remove('is-scatter');});
+    at(1420,function(){ // the dot flies to become the logo dot
+      var s=win.querySelector('.stage').getBoundingClientRect(),d=document.getElementById('des-dot').getBoundingClientRect(),b=ball.getBoundingClientRect();
+      var rowT=new DOMMatrixReadOnly(getComputedStyle(win.querySelector('.des-top')).transform==='none'?undefined:getComputedStyle(win.querySelector('.des-top')).transform);
+      var dx=(d.left+d.width/2)-(b.left+b.width/2)-rowT.m41,dy=(d.top+d.height/2)-(b.top+b.height/2)-rowT.m42,sc=d.width/b.width; // aim at where the logo row lands, not where it is mid-rise
+      win.classList.remove('is-impact');win.classList.add('is-fly');
+      var end='translate('+dx+'px,'+dy+'px) scale('+sc+')';
+      if(ball.animate){flight=ball.animate([{transform:'none'},{transform:end}],{duration:520,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'});}
+      else{ball.style.transform=end;}
+    });
+    at(2000,function(){win.classList.remove('is-fly');resetBall();win.classList.remove('is-build');playing=false;replay.disabled=false;status.textContent='The generic page was replaced by the designed page.';});
+  }
+  replay.addEventListener('click',function(){play(true);});
+  document.addEventListener('visibilitychange',function(){if(document.hidden&&playing){showAfter();}});
+  function initDemo(){
+    if(reduced()){showAfter();replayLabel.textContent='Show without DENT';return;}
+    replayLabel.textContent='Drop it again';
+    if('IntersectionObserver' in window){
+      var once=new IntersectionObserver(function(es){if(es[0].isIntersecting){once.disconnect();showBefore();at(500,function(){play(false);});}},{threshold:.45});
+      once.observe(win);
+    }
+  }
+  initDemo();
+  if(mqReduce.addEventListener)mqReduce.addEventListener('change',function(){clearT();playing=false;showAfter();replayLabel.textContent=reduced()?'Show without DENT':'Drop it again';});
+
+  /* ---------- effort tabs ---------- */
+  var levels={
+    1:'Clean, consistent and correct, nothing extra. Fastest. Good for internal tools, prototypes and MVPs.',
+    2:'A complete, professional design in your chosen style, with all states and subtle animation.',
+    3:'A premium feel: refined typography, hover and scroll effects, dark mode, an icon and image direction, and a full design review.',
+    4:'The best possible result for your use case with nothing missed: research, 2 to 3 directions to choose from, every state and screen size, motion, deep accessibility, assets, and self-review until it scores 9/10.'
+  };
+  /* sliding indicator shared by the effort tabs and the screenshot switches */
+  var init=true;
+  function moveInd(group,btn,instant){
+    var ind=group.querySelector('.ind');
+    if(!ind){ind=document.createElement('span');ind.className='ind';ind.setAttribute('aria-hidden','true');group.insertBefore(ind,group.firstChild);group.classList.add('has-ind');instant=true;}
+    var still=instant||reduced();
+    if(still)ind.classList.add('no-anim');
+    ind.style.setProperty('--x',btn.offsetLeft+'px');ind.style.setProperty('--s',(btn.offsetWidth/100).toFixed(4));
+    if(still){void ind.offsetWidth;ind.classList.remove('no-anim');return;}
+    group.classList.add('moving');
+    clearTimeout(group._t);group._t=setTimeout(function(){group.classList.remove('moving');},300);
+  }
+  function syncInds(){document.querySelectorAll('.tabs,.seg').forEach(function(g){var on=g.querySelector('[aria-selected="true"],[aria-pressed="true"]');if(on&&on.offsetWidth)moveInd(g,on,true);});}
+  window.addEventListener('resize',syncInds);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(syncInds);
+  var tabs=[].slice.call(document.querySelectorAll('.tab')),panel=document.getElementById('panel-e'),etext=document.getElementById('effort-text'),bars=[].slice.call(panel.querySelectorAll('.depth i'));
+  function selectTab(t,focus){
+    tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',String(on));x.tabIndex=on?0:-1;});
+    var lv=+t.getAttribute('data-level');etext.textContent=levels[lv];panel.setAttribute('aria-labelledby',t.id);
+    bars.forEach(function(b,i){b.classList.toggle('on',i<lv);});
+    if(!reduced()&&etext.animate)etext.animate([{opacity:.25,transform:'translateY(4px)'},{opacity:1,transform:'none'}],{duration:260,easing:'cubic-bezier(.16,1,.3,1)'});
+    moveInd(t.parentNode,t);
+    if(focus)t.focus();
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){selectTab(t);});
+    t.addEventListener('keydown',function(e){
+      var k=e.key,j=null;
+      if(k==='ArrowRight')j=(i+1)%tabs.length;else if(k==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;else if(k==='Home')j=0;else if(k==='End')j=tabs.length-1;
+      if(j!==null){e.preventDefault();selectTab(tabs[j],true);}
+    });
+  });
+
+  /* ---------- reveals: route line + score bars (data is always visible) ---------- */
+  function reveal(el){
+    if(!el)return;
+    if(reduced()||!('IntersectionObserver' in window)){el.classList.remove('pre');return;}
+    var o=new IntersectionObserver(function(es){if(es[0].isIntersecting){o.disconnect();el.classList.add('go');requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.remove('pre');});});}},{threshold:.3});
+    o.observe(el);
+  }
+  reveal(document.getElementById('route'));reveal(document.getElementById('ledger'));
+
+  /* ---------- screenshot switch ---------- */
+  var smallScreen=window.matchMedia('(max-width: 600px)').matches;
+  document.querySelectorAll('.tshots').forEach(function(box){
+    var btns=[].slice.call(box.querySelectorAll('.seg-btn')),shots=box.querySelector('.shots');
+    btns.forEach(function(b){
+      if(smallScreen&&b.getAttribute('data-view')==='phone')setTimeout(function(){b.click();},0);
+      b.addEventListener('click',function(){
+        var v=b.getAttribute('data-view');
+        btns.forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+        moveInd(b.parentNode,b);
+        shots.setAttribute('data-view',v);
+        shots.querySelectorAll('img').forEach(function(img){
+          var src=img.getAttribute('data-'+v);if(img.getAttribute('src')===src)return;
+          if(!reduced()){img.style.opacity='0';var show=function(){img.style.opacity='';};img.addEventListener('load',show,{once:true});setTimeout(show,700);}
+          img.src=src;
+          if(v==='phone'){img.width=390;img.height=844;}else{img.width=960;img.height=600;}
+        });
+      });
+    });
+  });
+
+  syncInds();
+  /* ---------- copy commands ---------- */
+  var msg=document.getElementById('copy-msg');
+  document.querySelectorAll('.copy').forEach(function(btn){
+    var code=document.getElementById(btn.getAttribute('data-copy')),text=code.querySelector('.t').textContent,label=btn.querySelector('.cl'),t;
+    function done(ok){
+      clearTimeout(t);
+      if(ok){btn.classList.add('is-done');label.textContent='Copied';msg.textContent='Copied: '+text;}
+      else{var r=document.createRange();r.selectNodeContents(code.querySelector('.t'));var s=getSelection();s.removeAllRanges();s.addRange(r);
+        label.textContent='Select';msg.textContent='Could not copy automatically. The command is selected: press Ctrl+C (or ⌘C) to copy it.';}
+      t=setTimeout(function(){btn.classList.remove('is-done');label.textContent='Copy';},2200);
+    }
+    btn.addEventListener('click',function(){
+      if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(function(){done(true);},function(){done(false);});}
+      else{try{var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');document.body.removeChild(ta);done(ok);}catch(e){done(false);}}
+    });
+  });
+})();
+</script>
+<noscript><style>.copy{display:none}.route-line{transform:none!important}</style></noscript>
+</body>
+</html>
