@@ -1,0 +1,171 @@
+{
+  "target": "with/index.html",
+  "widths": {
+    "320": {
+      "viewport": 320,
+      "scrollWidth": 444,
+      "overflow": true,
+      "offenders": [
+        {
+          "element": "div.nav-actions",
+          "left": 155,
+          "right": 444
+        },
+        {
+          "element": "div.calc-inputs",
+          "left": 41,
+          "right": 407
+        },
+        {
+          "element": "div.calc-results-card",
+          "left": 41,
+          "right": 407
+        }
+      ]
+    },
+    "375": {
+      "viewport": 375,
+      "scrollWidth": 444,
+      "overflow": true,
+      "offenders": [
+        {
+          "element": "div.nav-actions",
+          "left": 155,
+          "right": 444
+        },
+        {
+          "element": "div.calc-inputs",
+          "left": 41,
+          "right": 407
+        },
+        {
+          "element": "div.calc-results-card",
+          "left": 41,
+          "right": 407
+        }
+      ]
+    },
+    "390": {
+      "viewport": 390,
+      "scrollWidth": 444,
+      "overflow": true,
+      "offenders": [
+        {
+          "element": "div.nav-actions",
+          "left": 155,
+          "right": 444
+        },
+        {
+          "element": "div.calc-inputs",
+          "left": 41,
+          "right": 407
+        },
+        {
+          "element": "div.calc-results-card",
+          "left": 41,
+          "right": 407
+        }
+      ]
+    },
+    "768": {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "offenders": []
+    },
+    "1024": {
+      "viewport": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "offenders": []
+    },
+    "1440": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "offenders": []
+    }
+  },
+  "gates": {
+    "G2_layout": "Failed",
+    "G3_contrast_sample": "Failed",
+    "G4_operability_auto": "Failed",
+    "G10_reduced_motion": "Passed",
+    "G11_no_autoplay_audio": "Passed"
+  },
+  "a11y": {
+    "unlabeledHiddenControls": [
+      "input#radarGrindInput.range-input[type=range]",
+      "input#radarTempInput.range-input[type=range]"
+    ],
+    "lang": "en",
+    "h1": 1,
+    "headingSkips": [
+      "h1->h3",
+      "h2->h4"
+    ],
+    "unlabeledControls": [],
+    "unnamedButtonsLinks": [],
+    "imagesWithoutAlt": [],
+    "deadLinks": [
+      "a.logo",
+      "a",
+      "a",
+      "a.logo",
+      "a.footer-link",
+      "a.footer-link",
+      "a.footer-link",
+      "a.footer-link"
+    ],
+    "autoplayMedia": []
+  },
+  "contrast_failures": [
+    {
+      "text": "Active Baristas",
+      "ratio": 4.1,
+      "need": 4.5,
+      "fontSize": 13,
+      "color": "rgb(125, 112, 97)"
+    },
+    {
+      "text": "Dose / Yield",
+      "ratio": 3.42,
+      "need": 4.5,
+      "fontSize": 12,
+      "color": "rgb(125, 112, 97)"
+    },
+    {
+      "text": "Bloom",
+      "ratio": 3.7,
+      "need": 4.5,
+      "fontSize": 11.2,
+      "color": "rgb(125, 112, 97)"
+    },
+    {
+      "text": "Pour 1",
+      "ratio": 2.74,
+      "need": 4.5,
+      "fontSize": 11.2,
+      "color": "rgb(125, 112, 97)"
+    },
+    {
+      "text": "Live Interactive Simulator",
+      "ratio": 4.39,
+      "need": 4.5,
+      "fontSize": 12,
+      "color": "rgb(224, 122, 44)"
+    }
+  ],
+  "audio": {
+    "ctxBeforeGesture": 0,
+    "runningCtx": 0,
+    "mediaPlayBeforeGesture": []
+  },
+  "motion": {
+    "running_normal": 0,
+    "running_reduced": 0,
+    "reduced_examples": []
+  },
+  "console_errors": [],
+  "note": "Automated checks find mechanical defects only. Inspect the screenshots, tab through the page, and test interactions yourself."
+}

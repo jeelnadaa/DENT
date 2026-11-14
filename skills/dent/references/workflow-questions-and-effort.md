@@ -36,11 +36,11 @@ The user decides how deep the design goes. **Ask this first** (question 0), with
 > 1. **Essential** — clean, consistent and correct, nothing extra. Fastest. Good for internal tools, prototypes, MVPs.
 > 2. **Standard (Recommended)** — a complete, professional design in your chosen style, with all states and subtle animation.
 > 3. **Polished** — premium feel: refined typography, hover and scroll effects, dark mode, icons/images direction, full design review.
-> 4. **All-out** — everything: research, brand, multiple screens/flows, advanced motion, accessibility and localization in depth, marketing assets.
+> 4. **All-out** — the best possible result for your use case with nothing missed: research, 2–3 directions to choose from, every state and screen size, motion (and sound/video if relevant), deep accessibility, assets, and self-review until it scores 9/10.
 > 5. **Skip the questions — you decide everything**
 
 ### The floor (every level, including Essential — never skipped)
-- **Consistency:** tokens for color, type, spacing, radius, elevation; each component defined once and reused (SKILL.md › Foundations, › Components).
+- **Consistency:** tokens for color, type, spacing, radius, elevation; each component defined once and reused (`foundations-and-components.md` §3, › Components).
 - **Color rules:** three-role palette (or brand/style colors), contrast checked, never color alone.
 - **Foundation components** needed by the screen (buttons, inputs, selection controls, cards, nav…) with default, hover, focus, disabled and error states.
 - **Core laws:** clear hierarchy, one primary action, proximity/alignment, Fitts, Hick, Jakob.
@@ -70,6 +70,8 @@ The user decides how deep the design goes. **Ask this first** (question 0), with
 | Ethics | No deceptive patterns (always) | same | + persuasion review | + full ethics audit |
 | Quality | Pre-ship checklist (core) | + visual verification | + full review rubric & anti-patterns | + multiple variations to choose from, rubric ≥ 4 everywhere |
 | Output | Screen(s) + short log | + full DESIGN.md | + tokens 3-tier | + token export (DTCG), handoff notes |
+
+**All-out** means the best achievable result for the user's specific use case with nothing missed: run `workflow/all-out.md` (mandatory sweep for the deliverable, score target ≥ 9 with no line < 8, self-run improve rounds). It applies to every workflow, including motion, sound, voice and video.
 
 Rules:
 - Stay inside the chosen level. Don't add unrequested extras (that overwhelms the user); offer the next level in **one line** at the end ("Want hover/scroll animations and dark mode? That's the Polished level.").
@@ -125,10 +127,10 @@ When the user asks to add something to an existing design:
 
 | User asks for… | Read |
 |---|---|
-| Animations, transitions, micro-interactions | SKILL.md › Modern layer (motion system, micro-interactions, reduced motion, performance) |
-| Hover effects | SKILL.md › Modern layer › Hover |
-| Scroll effects, parallax, sticky storytelling | SKILL.md › Modern layer › Scroll |
-| "More modern / premium / polished" | SKILL.md › Modern layer + quality-review.md Part 2 §4 |
+| Animations, transitions, micro-interactions | `modern-layer.md` (motion system, micro-interactions, reduced motion, performance) |
+| Hover effects | `modern-layer.md` §7.4 |
+| Scroll effects, parallax, sticky storytelling | `modern-layer.md` §7.5 |
+| "More modern / premium / polished" | `modern-layer.md` + quality-review.md Part 2 §4 |
 | Dark mode / theme switch | color.md Part 1 §7 + design-tokens-and-code.md Part 1 §4 |
 | Change style / "make it look like X style" | styles/_styles-index.md + the style file |
 | "Make it look like this site/screenshot" | inspiration-and-reference-sites.md §2 |
@@ -142,7 +144,14 @@ When the user asks to add something to an existing design:
 | Fonts, "change the typography" | typography.md |
 | Logo, brand | brand-identity.md |
 | Favicon, app icon, OG image, social posts, posters, slides, email | assets-and-marketing-graphics.md |
-| Sound, haptics, voice, AR/VR, watch, TV, AI/agent UI | platforms-and-devices.md §5–6, page-and-flow-patterns.md §16 |
+| Motion graphics, kinetic type, animated hero, scroll story, generative visuals | motion/motion-graphics.md + motion/motion-tech-catalog.md (`/dent:motion-graphics`) |
+| 3D, WebGL, product viewer | motion/3d-and-realtime.md (`/dent:3d`) |
+| Sound, UI sounds, sonic logo, ambience, music | audio/sound-design.md + audio/audio-implementation-and-verification.md (`/dent:sound`) |
+| Narration, voice-over, TTS, captions | audio/voice-and-narration.md (`/dent:voice`) |
+| Any video: launch, trailer, explainer, demo, social | video/video-types-and-craft.md + video/video-tools-and-pipeline.md (`/dent:video`, `/dent:launch-video`) |
+| Which library / component kit / chart / table / editor | catalog/component-selection.md (`/dent:components`) |
+| "Score it" / "make it better" after a draft | workflow/scoring-and-closeout.md (`/dent:score`, `/dent:improve`) |
+| Haptics, AR/VR, watch, TV, car, voice UI, AI/agent UI | platforms-and-devices.md §5–6, page-and-flow-patterns.md §16 |
 | Conversion, pricing psychology, "is this a dark pattern?" | persuasion-and-ethics.md |
 | Research, personas, sitemap, navigation structure | research-and-information-architecture.md |
 | Code / convert to React, Tailwind, Flutter, SwiftUI… | design-tokens-and-code.md Part 2 |
@@ -168,7 +177,7 @@ Choose the best default from this skill, in this order, and record each as **"Ch
 5. **Typography:** the style's suggested fonts.
 6. **Density:** comfortable; compact for data-heavy tools.
 7. **Motion:** subtle.
-8. Everything else: SKILL.md defaults.
+8. Everything else: DENT defaults (`foundations-and-components.md`, `modern-layer.md`).
 
 Then present the design with a short "Decisions I made" summary and invite changes. The user can still change anything later.
 

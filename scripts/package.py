@@ -19,7 +19,7 @@ def main() -> None:
     count = 0
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as zf:
         for path in sorted(SRC.rglob("*")):
-            if path.is_file() and not path.name.startswith("."):
+            if path.is_file() and not path.name.startswith(".") and "__pycache__" not in path.parts:
                 zf.write(path, Path("dent") / path.relative_to(SRC))
                 count += 1
         # ship license + notice inside the skill bundle too

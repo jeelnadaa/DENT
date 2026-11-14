@@ -13,7 +13,7 @@ labels: benchmark
 **DENT version:**
 **`continue` replies (without / with):**
 
-**Screenshots:** drag the four PNGs here (without-390, without-1440, with-390, with-1440).
+**Screenshots:** drag the four JPGs here (without-390, without-1440, with-390, with-1440).
 
 **Scores (1–5), without → with:**
 Clarity: → · Hierarchy: → · Layout: → · Typography: → · Color: → · Consistency: → · States: → · Accessibility: → · Mobile: → · Distinctiveness: →

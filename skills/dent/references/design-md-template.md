@@ -101,6 +101,15 @@ Sizes: sm/md/lg heights <..>, padding <..>, font <..>, radius <..>
 - Scroll behaviors: <reveals, sticky, parallax — or "Not used">
 - Reduced motion: <what changes>
 
+## 8b. Motion graphics, sound, voice and video (if any)
+- Motion personality + tokens; motion-graphics pieces with storyboard links (`templates/MOTION.md`).
+- Sound direction, palette, interaction map, controls/defaults (`templates/SOUND.md`).
+- Narration voice, script versions, captions; videos with specs and versions (`templates/VIDEO.md`).
+
+## 8c. Licences
+| Asset / library | Source | Licence | Attribution | Commercial OK? |
+|---|---|---|---|---|
+
 ## 9. Patterns and screens
 - Navigation pattern: <...>
 - Screens designed: <list with one-line purpose each>

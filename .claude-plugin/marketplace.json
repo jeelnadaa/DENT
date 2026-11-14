@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "DENT: open-source product design skill for AI agents.",
-    "version": "1.0.1"
+    "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "dent",
       "source": "./",
-      "description": "Product design skill: questions first, effort levels, 41 styles, UX laws, WCAG rules, anti-generic creative direction, visual self-review and DESIGN.md.",
-      "version": "1.0.1",
+      "description": "Design-engineering skill: 30 commands, orchestration, planning + plan audit, 41 styles + directions library, component/motion/audio/video catalogues, verify_page.py, self-scoring and DESIGN.md.",
+      "version": "2.0.0",
       "author": {
         "name": "Jeel Nada (solarquack)"
       },

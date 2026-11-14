@@ -116,7 +116,7 @@ Example extraction script (run in the page via browser tools):
 Show a compact summary (swatches + fonts + 3–5 key traits) and ask: "Keep all of this, or change anything?" Note any problems found (e.g. "their grey text fails contrast — I'll darken it slightly").
 
 ### Step 4 — Rebuild through the skill
-- Turn the profile into **tokens** and component specs (SKILL.md › Foundations and › Components).
+- Turn the profile into **tokens** and component specs (`foundations-and-components.md` §3–4).
 - Apply all **[Rule]s** (fix contrast, target sizes, focus states — even if the reference doesn't).
 - Apply the matching **style file** for anything the reference doesn't show (e.g. error states).
 - Record in the Decision Log: "Source: reference site X (look) — adapted: contrast, focus, sizes".

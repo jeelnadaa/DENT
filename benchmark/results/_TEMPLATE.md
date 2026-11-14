@@ -15,8 +15,8 @@
 
 | | Without DENT | With DENT |
 |---|---|---|
-| Phone (390px) | ![without, phone](without-390.png) | ![with, phone](with-390.png) |
-| Desktop (1440px) | ![without, desktop](without-1440.png) | ![with, desktop](with-1440.png) |
+| Phone (390px) | ![without, phone](without-390.jpg) | ![with, phone](with-390.jpg) |
+| Desktop (1440px) | ![without, desktop](without-1440.jpg) | ![with, desktop](with-1440.jpg) |
 
 Live files: [without/index.html](without/index.html) · [with/index.html](with/index.html)
 

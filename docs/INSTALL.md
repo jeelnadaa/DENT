@@ -98,10 +98,27 @@ and follow its workflow. Open files in `.dent/references/` only when SKILL.md po
 
 The installer can do this for you: `./scripts/install.sh rules --path .dent` copies the folder and prints the snippet.
 
+## Optional: verification tools
+
+DENT can check its own work in a real browser with `skills/dent/scripts/verify_page.py`. Install once:
+
+```bash
+pip install playwright
+```
+```bash
+python -m playwright install chromium
+```
+
+Or use an installed Chrome/Edge with `--channel chrome` / `--channel msedge`. Without it, DENT falls back to manual checks and reports them as "Not run".
+
+## Commands
+
+Plugin installs in Claude Code get 30 slash commands (`/dent:plan`, `/dent:audit`, `/dent:video`…). In every other agent, type the same text (`/dent:plan …`, `/dent plan …` or `dent plan …`) and the skill follows the matching command file. You never need them: plain `/dent` routes automatically. Reference: [COMMANDS.md](COMMANDS.md).
+
 ## Verify the install
 
 Ask your agent: **"What design skills do you have?"** or **"Design a sign-up screen for a recipe app."**
-DENT is working if the agent's first reply asks how far to go (Essential / Standard / Polished / All-out) with a recommended option, or decides everything and shows a Decision Log when you say "don't ask".
+DENT is working if the agent's first reply states a one-line plan (for example "I'll explore directions, build the page, check it at 6 sizes and score it") and asks how far to go (Essential / Standard / Polished / All-out) with a recommended option, or decides everything and shows a Decision Log when you say "don't ask".
 
 ## Updating
 

@@ -1,0 +1,3470 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brewlog — Stop Guessing Your Grind. Dial In Your Perfect Coffee.</title>
+  <meta name="description" content="Brewlog is the precision coffee companion for home baristas. Log recipe variables, track bean freshness, rate each cup, and unlock your golden extraction.">
+  
+  <!-- Google Fonts Preconnect & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. CSS CUSTOM PROPERTIES (DESIGN TOKENS - DENT COMPLIANT)
+       ========================================================================== */
+    :root {
+      /* Shared Tokens */
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-std: cubic-bezier(0.2, 0, 0, 1);
+      --transition-fast: 150ms var(--ease-std);
+      --transition-normal: 250ms var(--ease-std);
+      --transition-slow: 400ms var(--ease-out);
+
+      --container-max: 1200px;
+      --nav-height: 72px;
+      
+      /* Semantic Constants */
+      --success: #10B981;
+      --success-glow: rgba(16, 185, 129, 0.2);
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --error-glow: rgba(239, 68, 68, 0.2);
+      --info: #3B82F6;
+    }
+
+    /* Dark Mode Tokens (Default: Warm Specialty Espresso Dark Roast) */
+    html[data-theme="dark"] {
+      --bg: #0C0A09;              /* Deep obsidian espresso */
+      --bg-alt: #13100D;          /* Roasted bean layer */
+      --surface: #1B1713;         /* Card base */
+      --surface-raised: #241E19;  /* Raised component */
+      --surface-hover: #2E2721;   /* Hover state */
+      
+      --border: rgba(235, 215, 190, 0.11);
+      --border-focus: #E07A2C;
+      --border-subtle: rgba(235, 215, 190, 0.06);
+
+      --text-primary: #FAF5EE;    /* Steamed froth / warm white */
+      --text-secondary: #B5A898;  /* Almond husk */
+      --text-tertiary: #7D7061;   /* Coffee grounds */
+      --text-inverse: #0C0A09;
+
+      --accent: #E07A2C;          /* Amber caramel roast */
+      --accent-hover: #F28C3E;
+      --accent-active: #C8651E;
+      --accent-subtle: rgba(224, 122, 44, 0.15);
+      --accent-border: rgba(224, 122, 44, 0.35);
+      --btn-primary-text: #0C0A09; /* Dominant on accent: 6.58:1 contrast AA */
+
+      --card-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6);
+      --card-shadow-hover: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 20px rgba(224, 122, 44, 0.15);
+      --nav-bg: rgba(12, 10, 9, 0.82);
+    }
+
+    /* Light Mode Tokens (Artisanal Parchment / Hario Filter Cream) */
+    html[data-theme="light"] {
+      --bg: #FBF8F4;              /* Unbleached paper warm cream */
+      --bg-alt: #F3ECE2;          /* Subtle oat tint */
+      --surface: #FFFFFF;         /* Pure crisp card */
+      --surface-raised: #F8F3ED;  /* Gentle raised surface */
+      --surface-hover: #EFE6DC;   /* Soft warm hover */
+
+      --border: rgba(72, 48, 30, 0.13);
+      --border-focus: #B84D09;
+      --border-subtle: rgba(72, 48, 30, 0.07);
+
+      --text-primary: #201712;    /* Dark roasted Sumatra */
+      --text-secondary: #635345;  /* Nutty brown */
+      --text-tertiary: #968677;   /* Dried cascara */
+      --text-inverse: #FAF5EE;
+
+      --accent: #B84D09;          /* Rich copper roast: 4.83:1 on cream */
+      --accent-hover: #9E3E03;
+      --accent-active: #823101;
+      --accent-subtle: rgba(184, 77, 9, 0.10);
+      --accent-border: rgba(184, 77, 9, 0.30);
+      --btn-primary-text: #FFFFFF; /* White on copper roast: 5.12:1 contrast AA */
+
+      --card-shadow: 0 4px 20px -2px rgba(45, 25, 12, 0.08);
+      --card-shadow-hover: 0 12px 32px -4px rgba(45, 25, 12, 0.14), 0 0 16px rgba(184, 77, 9, 0.12);
+      --nav-bg: rgba(251, 248, 244, 0.85);
+    }
+
+    /* ==========================================================================
+       2. BASE RESET & ACCESSIBILITY DEFAULTS
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background-color var(--transition-normal), color var(--transition-normal);
+    }
+
+    /* Skip link for keyboard accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 16px;
+      background: var(--accent);
+      color: var(--btn-primary-text);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      z-index: 10000;
+      transition: top var(--transition-fast);
+      text-decoration: none;
+    }
+    .skip-link:focus {
+      top: 16px;
+      outline: 2px solid var(--border-focus);
+    }
+
+    /* Strict Focus Ring [DENT Rule] */
+    :focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 3px;
+    }
+
+    /* Typography Defaults */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+    }
+
+    p {
+      text-wrap: pretty;
+      color: var(--text-secondary);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    input, select, textarea {
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    img, svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* Container Utility */
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: clamp(16px, 4vw, 32px);
+      padding-right: clamp(16px, 4vw, 32px);
+    }
+
+    .section-spacing {
+      padding-top: clamp(64px, 8vw, 120px);
+      padding-bottom: clamp(64px, 8vw, 120px);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto clamp(40px, 5vw, 64px) auto;
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 12px;
+      padding: 4px 12px;
+      background: var(--accent-subtle);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius-full);
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 1.6rem + 2vw, 3.25rem);
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.25rem);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       3. BUTTONS & CONTROLS SYSTEM [DENT SPEC]
+       ========================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px; /* WCAG 2.2 touch target compliance */
+      padding: 10px 22px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+      user-select: none;
+      position: relative;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--btn-primary-text);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 4px 18px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: var(--surface-raised);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+    }
+
+    .btn-ghost {
+      color: var(--text-primary);
+      padding: 8px 16px;
+    }
+
+    .btn-ghost:hover {
+      color: var(--accent);
+      background: var(--accent-subtle);
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      transition: all var(--transition-fast);
+    }
+
+    .icon-btn:hover {
+      background: var(--surface-hover);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ==========================================================================
+       4. HEADER & NAVIGATION
+       ========================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: var(--nav-height);
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: background-color var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+      position: relative;
+      padding: 4px 0;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      color: var(--text-primary);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width var(--transition-fast);
+      border-radius: var(--radius-full);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+    }
+
+    /* Mobile Drawer */
+    .mobile-nav-drawer {
+      display: none;
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 24px;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+      z-index: 999;
+    }
+
+    .mobile-nav-drawer.open {
+      display: flex;
+    }
+
+    .mobile-nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mobile-nav-link {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: block;
+      padding: 8px 0;
+    }
+
+    /* ==========================================================================
+       5. HERO SECTION
+       ========================================================================== */
+    .hero {
+      position: relative;
+      padding-top: clamp(48px, 6vw, 84px);
+      padding-bottom: clamp(60px, 8vw, 100px);
+      overflow: hidden;
+    }
+
+    /* Subtle ambient coffee warmth background glow */
+    .hero-glow {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(400px, 70vw, 850px);
+      height: 450px;
+      background: radial-gradient(circle, var(--accent-subtle) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.8;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .hero-headline {
+      font-size: clamp(2.5rem, 1.8rem + 3.2vw, 4.5rem);
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      margin-bottom: 24px;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent);
+      padding-right: 0.05em;
+    }
+
+    .hero-subhead {
+      font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 36px auto;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    /* Trust Strip */
+    .hero-trust {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(20px, 4vw, 48px);
+      flex-wrap: wrap;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .trust-stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Hero Visual: Dialed Recipe Card Preview */
+    .hero-visual-wrap {
+      margin-top: clamp(40px, 5vw, 64px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-recipe-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: clamp(20px, 4vw, 36px);
+      box-shadow: var(--card-shadow);
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-recipe-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), #FBBF24);
+    }
+
+    .card-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-method-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      padding: 6px 12px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      color: var(--text-primary);
+    }
+
+    .card-rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--warning);
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+    }
+
+    .recipe-main-info {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 32px;
+    }
+
+    .recipe-title {
+      font-size: clamp(1.4rem, 1.2rem + 1vw, 1.85rem);
+      margin-bottom: 8px;
+    }
+
+    .recipe-origin {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .recipe-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .tag-chip {
+      font-size: 0.8125rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    /* Metric Param Grid */
+    .param-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .param-box {
+      background: var(--surface-raised);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .param-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-tertiary);
+      margin-bottom: 4px;
+    }
+
+    .param-val {
+      font-family: var(--font-mono);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .param-unit {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      font-weight: 400;
+      margin-left: 2px;
+    }
+
+    /* Extraction Curve Mini-Graph */
+    .extraction-panel {
+      background: var(--surface-raised);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .extraction-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .extraction-title {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .extraction-score {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .extraction-curve-svg {
+      width: 100%;
+      height: 100px;
+    }
+
+    .extraction-footnote {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ==========================================================================
+       6. HOW IT WORKS (3 TACTILE STEPS)
+       ========================================================================== */
+    .how-it-works {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background-color var(--transition-normal);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(20px, 3vw, 32px);
+    }
+
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: clamp(24px, 3vw, 36px);
+      box-shadow: var(--card-shadow);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    }
+
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--accent-subtle);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.125rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .step-title {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+    }
+
+    .step-desc {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      flex-grow: 1;
+    }
+
+    .step-visual {
+      background: var(--surface-raised);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      min-height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ==========================================================================
+       7. KEY FEATURES (BENTO GRID - DENT PATTERN)
+       ========================================================================== */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+    }
+
+    .bento-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: clamp(24px, 3vw, 36px);
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    .bento-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--card-shadow-hover);
+      border-color: var(--accent-border);
+    }
+
+    .bento-col-8 {
+      grid-column: span 8;
+    }
+
+    .bento-col-4 {
+      grid-column: span 4;
+    }
+
+    .bento-col-6 {
+      grid-column: span 6;
+    }
+
+    .bento-col-12 {
+      grid-column: span 12;
+    }
+
+    .bento-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .bento-title {
+      font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.75rem);
+      margin-bottom: 12px;
+    }
+
+    .bento-desc {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* Bento Visuals */
+    .bento-visual {
+      background: var(--surface-raised);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    /* Pour Timer Visual */
+    .pour-timer-strip {
+      display: flex;
+      gap: 8px;
+    }
+    .timer-stage {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      text-align: center;
+    }
+    .stage-active {
+      border-color: var(--accent);
+      background: var(--accent-subtle);
+    }
+    .stage-name {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+    .stage-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    /* Bean Freshness Visual */
+    .bean-stash-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .bean-stash-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .bean-info h4 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+    .bean-info span {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+    .freshness-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+    }
+    .freshness-peak {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .freshness-degas {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    /* Grinder Calibration Table */
+    .grinder-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      font-size: 0.8125rem;
+      text-align: center;
+    }
+    .grinder-cell {
+      background: var(--surface);
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+    .grinder-name {
+      color: var(--text-tertiary);
+      font-size: 0.7rem;
+    }
+    .grinder-setting {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       8. APP INTERFACE PREVIEW (INTERACTIVE APPLICATION SIMULATOR)
+       ========================================================================== */
+    .app-preview-section {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background-color var(--transition-normal);
+    }
+
+    .app-window-frame {
+      max-width: 1040px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .window-header {
+      background: var(--surface-raised);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-close { background: #FF5F56; }
+    .dot-min { background: #FFBD2E; }
+    .dot-max { background: #27C93F; }
+
+    .window-title-tab {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .window-mode-badge {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      background: var(--accent-subtle);
+      color: var(--accent);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+    }
+
+    .preview-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-raised);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 14px 24px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .tab-content-area {
+      padding: clamp(20px, 4vw, 36px);
+      min-height: 440px;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 250ms ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Live Studio Brew Layout */
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .studio-timer-box {
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-display {
+      font-family: var(--font-mono);
+      font-size: clamp(2.5rem, 2rem + 2vw, 3.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin: 12px 0;
+    }
+
+    .timer-sub {
+      font-size: 0.875rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .live-progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--surface);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-fill {
+      width: 65%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #FBBF24);
+      border-radius: var(--radius-full);
+    }
+
+    .studio-timer-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Interactive Dial-in Sweet Spot Radar Pane */
+    .radar-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 28px;
+    }
+
+    .radar-visual-box {
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radar-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .slider-val {
+      font-family: var(--font-mono);
+      color: var(--accent);
+    }
+
+    .range-input {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: var(--surface-hover);
+      outline: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: transform var(--transition-fast);
+    }
+    .range-input::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .extraction-taste-indicator {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .taste-badge {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+    }
+    .taste-balanced {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .taste-under {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .taste-over {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--error);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Bean Stash Tab Details */
+    .inventory-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .inventory-card {
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .card-bag-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .inventory-grams {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       9. INTERACTIVE COFFEE RATIO CALCULATOR
+       ========================================================================== */
+    .calc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: clamp(24px, 4vw, 44px);
+      box-shadow: var(--card-shadow);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: center;
+    }
+
+    .calc-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .calc-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .calc-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .calc-select {
+      height: 44px;
+      padding: 0 14px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      outline: none;
+      cursor: pointer;
+    }
+    .calc-select:focus {
+      border-color: var(--border-focus);
+    }
+
+    .calc-num-input {
+      height: 44px;
+      padding: 0 14px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      outline: none;
+    }
+    .calc-num-input:focus {
+      border-color: var(--border-focus);
+    }
+
+    .calc-results-card {
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .calc-res-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .calc-res-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .calc-res-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .calc-res-val {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+       10. PRICING SECTION (FREE VS PRO, MONTHLY/ANNUAL)
+       ========================================================================== */
+    .pricing-toggle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 48px;
+    }
+
+    .toggle-label {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .toggle-label.active {
+      color: var(--text-primary);
+    }
+
+    .switch-btn {
+      width: 56px;
+      height: 32px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      position: relative;
+      cursor: pointer;
+      padding: 3px;
+      transition: background-color var(--transition-fast);
+    }
+
+    .switch-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: transform var(--transition-fast);
+      display: block;
+    }
+
+    .switch-btn[aria-checked="true"] .switch-thumb {
+      transform: translateX(24px);
+    }
+
+    .savings-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 940px;
+      margin: 0 auto;
+      align-items: stretch;
+    }
+
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: clamp(28px, 4vw, 44px);
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .pricing-card-featured {
+      border: 2px solid var(--accent);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-raised) 100%);
+    }
+
+    .plan-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: var(--btn-primary-text);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .plan-name {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .plan-desc {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      min-height: 48px;
+    }
+
+    .plan-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+
+    .plan-price {
+      font-family: var(--font-mono);
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .plan-period {
+      font-size: 0.9375rem;
+      color: var(--text-tertiary);
+    }
+
+    .plan-features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 36px;
+      flex-grow: 1;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9375rem;
+      color: var(--text-primary);
+    }
+
+    .check-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--success);
+      flex-shrink: 0;
+    }
+
+    .feature-disabled {
+      color: var(--text-tertiary);
+      text-decoration: line-through;
+    }
+
+    .feature-disabled .check-icon {
+      color: var(--text-tertiary);
+    }
+
+    /* ==========================================================================
+       11. FAQ ACCORDION SECTION
+       ========================================================================== */
+    .faq-list {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      transition: border-color var(--transition-fast);
+    }
+
+    .faq-item:hover {
+      border-color: var(--accent-border);
+    }
+
+    .faq-question-btn {
+      width: 100%;
+      text-align: left;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .faq-chevron {
+      width: 20px;
+      height: 20px;
+      color: var(--text-tertiary);
+      transition: transform var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-chevron {
+      transform: rotate(180deg);
+      color: var(--accent);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-normal) ease-out, padding var(--transition-normal);
+      padding: 0 24px;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding-bottom: 20px;
+    }
+
+    .faq-answer p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       12. SIGN-UP FORM SECTION (CLIENT-SIDE VALIDATED)
+       ========================================================================== */
+    .signup-section {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background-color var(--transition-normal);
+    }
+
+    .signup-card {
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: clamp(28px, 4vw, 44px);
+      box-shadow: var(--card-shadow);
+      position: relative;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 46px;
+      padding: 0 14px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .form-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-subtle);
+    }
+
+    .form-input.has-error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px var(--error-glow);
+    }
+
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 12px;
+      color: var(--text-tertiary);
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+    }
+
+    .toggle-pwd-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .pwd-strength-bar {
+      height: 4px;
+      background: var(--surface-raised);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-top: 6px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .strength-segment {
+      flex: 1;
+      height: 100%;
+      background: var(--border);
+      border-radius: var(--radius-full);
+      transition: background-color var(--transition-fast);
+    }
+
+    .strength-label {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--text-tertiary);
+      text-align: right;
+    }
+
+    .form-error-msg {
+      font-size: 0.8125rem;
+      color: var(--error);
+      min-height: 18px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-bottom: 24px;
+      user-select: none;
+    }
+
+    .form-checkbox {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    /* Submit Button Spinner */
+    .btn-spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #FFFFFF;
+      border-radius: 50%;
+      animation: spin 600ms linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn.loading .btn-text {
+      visibility: hidden;
+    }
+
+    .btn.loading .btn-spinner {
+      display: block;
+      position: absolute;
+    }
+
+    /* Success State */
+    .signup-success-state {
+      display: none;
+      text-align: center;
+      padding: 24px 0;
+      animation: fadeIn 300ms ease-out;
+    }
+
+    .success-icon-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--success-glow);
+      border: 2px solid var(--success);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px auto;
+    }
+
+    .success-title {
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+    }
+
+    .success-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       13. FOOTER
+       ========================================================================== */
+    .site-footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding-top: clamp(48px, 6vw, 80px);
+      padding-bottom: 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      margin-bottom: 60px;
+    }
+
+    .footer-brand p {
+      margin-top: 14px;
+      max-width: 320px;
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+    }
+
+    .footer-col-title {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-primary);
+      margin-bottom: 18px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-link {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       14. RESPONSIVE MEDIA QUERIES
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      .bento-col-8, .bento-col-4, .bento-col-6 {
+        grid-column: span 12;
+      }
+      .recipe-main-info {
+        grid-template-columns: 1fr;
+      }
+      .studio-grid, .radar-grid, .calc-card {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-actions .btn-ghost {
+        display: none;
+      }
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .param-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .inventory-cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ==========================================================================
+       HEADER WITH NAVIGATION
+       ========================================================================== -->
+  <header class="site-header">
+    <div class="container nav-inner">
+      <a href="#" class="logo" aria-label="Brewlog Home">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 8h20l-4 14H10L6 8z"/>
+          <path d="M4 8h24"/>
+          <path d="M12 22v4h8v-4"/>
+          <path d="M10 26h12"/>
+          <path d="M16 12c-1 1-1 2 0 3s1 2 0 3"/>
+        </svg>
+        <span>Brewlog</span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#preview" class="nav-link">App Preview</a></li>
+          <li><a href="#calculator" class="nav-link">Ratio Tool</a></li>
+          <li><a href="#pricing" class="nav-link">Pricing</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle dark and light color theme" title="Toggle Theme">
+          <svg id="themeIconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg id="themeIconMoon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <a href="#signup" class="btn btn-ghost">Sign In</a>
+        <a href="#signup" class="btn btn-primary">Start Brewing Free</a>
+
+        <!-- Mobile Hamburger Button -->
+        <button id="mobileMenuBtn" class="icon-btn mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobileDrawer" class="mobile-nav-drawer" aria-label="Mobile Navigation">
+    <ul class="mobile-nav-links">
+      <li><a href="#how-it-works" class="mobile-nav-link">How It Works</a></li>
+      <li><a href="#features" class="mobile-nav-link">Features</a></li>
+      <li><a href="#preview" class="mobile-nav-link">App Preview</a></li>
+      <li><a href="#calculator" class="mobile-nav-link">Ratio Tool</a></li>
+      <li><a href="#pricing" class="mobile-nav-link">Pricing</a></li>
+      <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+      <li><a href="#signup" class="btn btn-primary" style="width:100%; margin-top:8px;">Start Brewing Free</a></li>
+    </ul>
+  </div>
+
+  <main id="main-content">
+    <!-- ==========================================================================
+         HERO SECTION
+         ========================================================================== -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          <span>The Dial-in Companion for Specialty Coffee</span>
+        </div>
+
+        <h1 id="hero-title" class="hero-headline">
+          Stop guessing your grind.<br>
+          <em>Dial in</em> your best cup.
+        </h1>
+
+        <p class="hero-subhead">
+          Log beans, grind microns, water temperature, ratio, and draw time. 
+          Brewlog analyzes your ratings to pinpoint the exact parameters that make your morning coffee sublime.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#signup" class="btn btn-primary" style="padding: 12px 30px; font-size: 1.05rem;">
+            Create Free Account
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#preview" class="btn btn-secondary" style="padding: 12px 24px; font-size: 1.05rem;">
+            Explore Live Preview
+          </a>
+        </div>
+
+        <!-- Trust Metric Strip -->
+        <div class="hero-trust">
+          <div class="trust-stat">
+            <span class="stat-number">14,200+</span>
+            <span class="stat-label">Active Baristas</span>
+          </div>
+          <div class="trust-stat">
+            <span class="stat-number">1.8M+</span>
+            <span class="stat-label">Brews Logged</span>
+          </div>
+          <div class="trust-stat">
+            <span class="stat-number">4.9 / 5.0</span>
+            <span class="stat-label">Barista Rating</span>
+          </div>
+          <div class="trust-stat">
+            <span class="stat-number">94.2%</span>
+            <span class="stat-label">Report Better Cups</span>
+          </div>
+        </div>
+
+        <!-- Hero Visual: Dialed Recipe Snapshot Card -->
+        <div class="hero-visual-wrap">
+          <div class="hero-recipe-card">
+            <div class="card-topbar">
+              <div class="card-method-pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v20M2 12h20"/>
+                </svg>
+                HARIO V60 · 2-POUR DRIP
+              </div>
+              <div class="card-rating-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                94 / 100 Golden Cup
+              </div>
+            </div>
+
+            <div class="recipe-main-info">
+              <div>
+                <h3 class="recipe-title">Ethiopia Yirgacheffe Chelchele</h3>
+                <p class="recipe-origin">Washed Process · Heirloom Varietal · Roasted 8 days ago</p>
+                
+                <div class="recipe-tags">
+                  <span class="tag-chip">🌸 Jasmine</span>
+                  <span class="tag-chip">🍋 Bergamot</span>
+                  <span class="tag-chip">🍑 White Peach</span>
+                  <span class="tag-chip">🍯 Honey Body</span>
+                </div>
+
+                <div class="param-grid">
+                  <div class="param-box">
+                    <div class="param-label">Dose / Yield</div>
+                    <div class="param-val">18.5<span class="param-unit">g</span> → 300<span class="param-unit">g</span></div>
+                  </div>
+                  <div class="param-box">
+                    <div class="param-label">Ratio</div>
+                    <div class="param-val">1:16.2</div>
+                  </div>
+                  <div class="param-box">
+                    <div class="param-label">Water Temp</div>
+                    <div class="param-val">93.5<span class="param-unit">°C</span></div>
+                  </div>
+                  <div class="param-box">
+                    <div class="param-label">Grind Size</div>
+                    <div class="param-val">19 <span class="param-unit">clicks</span></div>
+                  </div>
+                  <div class="param-box">
+                    <div class="param-label">Drawdown</div>
+                    <div class="param-val">03:12</div>
+                  </div>
+                  <div class="param-box">
+                    <div class="param-label">Extraction</div>
+                    <div class="param-val">20.8<span class="param-unit">%</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Extraction Curve Mini-Graph -->
+              <div class="extraction-panel">
+                <div class="extraction-header">
+                  <span class="extraction-title">Extraction Curve</span>
+                  <span class="extraction-score">Optimal Balance</span>
+                </div>
+
+                <!-- Inline SVG Extraction Chart -->
+                <svg class="extraction-curve-svg" viewBox="0 0 260 100" fill="none">
+                  <defs>
+                    <linearGradient id="curveGradient" x1="0" y1="0" x2="0" y2="100" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="var(--accent)" stop-opacity="0.35"/>
+                      <stop offset="1" stop-color="var(--accent)" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Reference Guide Lines -->
+                  <line x1="0" y1="20" x2="260" y2="20" stroke="var(--border-subtle)" stroke-dasharray="3 3"/>
+                  <line x1="0" y1="50" x2="260" y2="50" stroke="var(--border-subtle)" stroke-dasharray="3 3"/>
+                  <line x1="0" y1="80" x2="260" y2="80" stroke="var(--border-subtle)" stroke-dasharray="3 3"/>
+                  
+                  <!-- Shaded Area -->
+                  <path d="M0,85 Q40,82 70,60 T140,32 T200,24 T260,20 L260,100 L0,100 Z" fill="url(#curveGradient)"/>
+                  <!-- Smooth Curve Line -->
+                  <path d="M0,85 Q40,82 70,60 T140,32 T200,24 T260,20" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+                  <!-- Data Dots -->
+                  <circle cx="70" cy="60" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+                  <circle cx="140" cy="32" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+                  <circle cx="200" cy="24" r="5" fill="var(--accent)"/>
+                </svg>
+
+                <div class="extraction-footnote">
+                  <span>0:45 Bloom (50g)</span>
+                  <span>1:30 First Pour</span>
+                  <span>3:12 Finish</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         HOW IT WORKS SECTION
+         ========================================================================== -->
+    <section id="how-it-works" class="section-spacing how-it-works" aria-labelledby="how-title">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">Repeatable Alchemy</div>
+          <h2 id="how-title" class="section-title">From lucky morning cups to deliberate mastery</h2>
+          <p class="section-desc">
+            You don't need a lab degree to brew café-quality coffee at home. 
+            Three frictionless steps turn your daily routine into a self-optimizing system.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <!-- Step 1 -->
+          <article class="step-card">
+            <div class="step-num">01</div>
+            <h3 class="step-title">Log your variables in 15 seconds</h3>
+            <p class="step-desc">
+              Record dose, grind clicks, water temp, ratio, and equipment. 
+              Our fast presets for Comandante, Fellow Ode, Baratza, and 1Zpresso eliminate friction.
+            </p>
+            <div class="step-visual" aria-hidden="true">
+              <svg width="180" height="90" viewBox="0 0 180 90" fill="none">
+                <rect x="10" y="15" width="48" height="60" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+                <text x="34" y="42" fill="var(--accent)" font-family="var(--font-mono)" font-size="12" font-weight="700" text-anchor="middle">18.0g</text>
+                <text x="34" y="58" fill="var(--text-tertiary)" font-size="8" text-anchor="middle">DOSE</text>
+
+                <rect x="66" y="15" width="48" height="60" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+                <text x="90" y="42" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="12" font-weight="700" text-anchor="middle">93°C</text>
+                <text x="90" y="58" fill="var(--text-tertiary)" font-size="8" text-anchor="middle">TEMP</text>
+
+                <rect x="122" y="15" width="48" height="60" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+                <text x="146" y="42" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="12" font-weight="700" text-anchor="middle">1:16.5</text>
+                <text x="146" y="58" fill="var(--text-tertiary)" font-size="8" text-anchor="middle">RATIO</text>
+              </svg>
+            </div>
+          </article>
+
+          <!-- Step 2 -->
+          <article class="step-card">
+            <div class="step-num">02</div>
+            <h3 class="step-title">Taste, score & tag flavor notes</h3>
+            <p class="step-desc">
+              Rate acidity, sweetness, clarity, and body with one thumb swipe. 
+              Tap descriptors from the integrated SCA cupping wheel to build your palate.
+            </p>
+            <div class="step-visual" aria-hidden="true">
+              <svg width="180" height="90" viewBox="0 0 180 90" fill="none">
+                <circle cx="50" cy="45" r="28" fill="none" stroke="var(--border)" stroke-width="4"/>
+                <circle cx="50" cy="45" r="28" fill="none" stroke="var(--warning)" stroke-width="4" stroke-dasharray="140" stroke-dashoffset="25"/>
+                <text x="50" y="50" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="13" font-weight="700" text-anchor="middle">4.8★</text>
+                
+                <rect x="92" y="24" width="76" height="18" rx="9" fill="var(--surface)" stroke="var(--border)"/>
+                <text x="130" y="36" fill="var(--text-secondary)" font-size="9" text-anchor="middle">Bergamot</text>
+                
+                <rect x="92" y="48" width="76" height="18" rx="9" fill="var(--accent-subtle)" stroke="var(--accent-border)"/>
+                <text x="130" y="60" fill="var(--accent)" font-size="9" font-weight="600" text-anchor="middle">Jasmine Tea</text>
+              </svg>
+            </div>
+          </article>
+
+          <!-- Step 3 -->
+          <article class="step-card">
+            <div class="step-num">03</div>
+            <h3 class="step-title">See which settings make your best coffee</h3>
+            <p class="step-desc">
+              Brewlog correlates grind size, water temp, and bean age against your ratings. 
+              Get clear recommendations: <em>"For this roast, grind 2 clicks finer at 92°C."</em>
+            </p>
+            <div class="step-visual" aria-hidden="true">
+              <svg width="180" height="90" viewBox="0 0 180 90" fill="none">
+                <line x1="20" y1="75" x2="160" y2="75" stroke="var(--border)" stroke-width="2"/>
+                <line x1="20" y1="15" x2="20" y2="75" stroke="var(--border)" stroke-width="2"/>
+                <!-- Scatter points -->
+                <circle cx="45" cy="62" r="3" fill="var(--text-tertiary)"/>
+                <circle cx="65" cy="50" r="3" fill="var(--text-tertiary)"/>
+                <circle cx="95" cy="35" r="4" fill="var(--warning)"/>
+                <circle cx="120" cy="22" r="6" fill="var(--accent)"/>
+                <circle cx="145" cy="40" r="3" fill="var(--text-tertiary)"/>
+                <!-- Golden sweet spot highlight -->
+                <ellipse cx="120" cy="22" rx="14" ry="10" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-dasharray="2 2"/>
+              </svg>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         KEY FEATURES (BENTO GRID - HIGH CRAFT)
+         ========================================================================== -->
+    <section id="features" class="section-spacing" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">Precision Toolkit</div>
+          <h2 id="features-title" class="section-title">Designed for obsessives. Simple enough for mornings.</h2>
+          <p class="section-desc">
+            Everything you need to master extraction dynamics, manage your roast shelf, and calibrate your grinder with surgical consistency.
+          </p>
+        </div>
+
+        <div class="bento-grid">
+          <!-- Bento Tile 1: Multi-stage Pour Timer (Span 8) -->
+          <article class="bento-card bento-col-8">
+            <div>
+              <div class="bento-badge">Multi-Stage Guidance</div>
+              <h3 class="bento-title">Visual Pour-Over Timer with Audio Cues</h3>
+              <p class="bento-desc">
+                Execute structured recipes effortlessly. Brewlog alerts you when bloom finishes, prompts subsequent pour weights, and tracks total drawdown time.
+              </p>
+            </div>
+
+            <div class="bento-visual">
+              <div class="pour-timer-strip">
+                <div class="timer-stage">
+                  <div class="stage-name">Bloom</div>
+                  <div class="stage-val">0:45 · 50g</div>
+                </div>
+                <div class="timer-stage stage-active">
+                  <div class="stage-name">Pour 1</div>
+                  <div class="stage-val">1:30 · 180g</div>
+                </div>
+                <div class="timer-stage">
+                  <div class="stage-name">Pour 2</div>
+                  <div class="stage-val">2:15 · 300g</div>
+                </div>
+                <div class="timer-stage">
+                  <div class="stage-name">Drawdown</div>
+                  <div class="stage-val">3:15 Target</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bento Tile 2: Bean Freshness & Degas Window (Span 4) -->
+          <article class="bento-card bento-col-4">
+            <div>
+              <div class="bento-badge">Inventory Management</div>
+              <h3 class="bento-title">Smart Bean Freshness Tracker</h3>
+              <p class="bento-desc">
+                Know when bags enter their peak degassing window (Days 7–28). Never brew flat beans again.
+              </p>
+            </div>
+
+            <div class="bento-visual">
+              <div class="bean-stash-item">
+                <div class="bean-info">
+                  <h4>Kenya Nyeri Hill</h4>
+                  <span>Roast: Nov 06 · 140g left</span>
+                </div>
+                <span class="freshness-tag freshness-peak">Peak Window</span>
+              </div>
+              <div class="bean-stash-item">
+                <div class="bean-info">
+                  <h4>Panama Geisha</h4>
+                  <span>Roast: Nov 12 · 250g left</span>
+                </div>
+                <span class="freshness-tag freshness-degas">Degas 3d</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bento Tile 3: Extraction Analytics (Span 4) -->
+          <article class="bento-card bento-col-4">
+            <div>
+              <div class="bento-badge">Pro Analytics</div>
+              <h3 class="bento-title">Correlation Curves</h3>
+              <p class="bento-desc">
+                Visualize how grind micron shifts directly govern your cup acidity vs bitterness balance over dozens of brews.
+              </p>
+            </div>
+
+            <div class="bento-visual">
+              <svg width="100%" height="90" viewBox="0 0 200 80" fill="none">
+                <path d="M10,65 Q60,65 100,20 T190,60" stroke="var(--accent)" stroke-width="2" fill="none"/>
+                <circle cx="100" cy="20" r="5" fill="var(--accent)"/>
+                <text x="100" y="12" fill="var(--accent)" font-family="var(--font-mono)" font-size="9" text-anchor="middle" font-weight="700">Sweet Spot</text>
+                <text x="25" y="76" fill="var(--text-tertiary)" font-size="8">Sour (Coarse)</text>
+                <text x="175" y="76" fill="var(--text-tertiary)" font-size="8" text-anchor="end">Bitter (Fine)</text>
+              </svg>
+            </div>
+          </article>
+
+          <!-- Bento Tile 4: Grinder Presets & Click Conversion (Span 4) -->
+          <article class="bento-card bento-col-4">
+            <div>
+              <div class="bento-badge">Hardware Calibration</div>
+              <h3 class="bento-title">Universal Grinder Index</h3>
+              <p class="bento-desc">
+                Instantly map recipe clicks between Comandante C40, Fellow Ode v2, Baratza Encore, Timemore, and 1Zpresso.
+              </p>
+            </div>
+
+            <div class="bento-visual">
+              <div class="grinder-grid">
+                <div class="grinder-cell">
+                  <div class="grinder-name">C40</div>
+                  <div class="grinder-setting">21 clicks</div>
+                </div>
+                <div class="grinder-cell">
+                  <div class="grinder-name">Ode v2</div>
+                  <div class="grinder-setting">4.2</div>
+                </div>
+                <div class="grinder-cell">
+                  <div class="grinder-name">Encore</div>
+                  <div class="grinder-setting">14</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bento Tile 5: Offline First & Data Ownership (Span 4) -->
+          <article class="bento-card bento-col-4">
+            <div>
+              <div class="bento-badge">Reliability</div>
+              <h3 class="bento-title">100% Offline Capable</h3>
+              <p class="bento-desc">
+                Brew in remote mountain cabins or off-grid camps. Syncs seamlessly the moment you reconnect. Full CSV data export anytime.
+              </p>
+            </div>
+
+            <div class="bento-visual" style="display:flex; align-items:center; justify-content:center; gap:16px;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <div style="font-size:0.875rem;">
+                <strong style="color:var(--text-primary); display:block;">Local Encrypted SQLite</strong>
+                <span style="color:var(--text-tertiary); font-size:0.8125rem;">Zero cloud lock-in</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         PREVIEW OF THE APP'S INTERFACE (INTERACTIVE SIMULATOR)
+         ========================================================================== -->
+    <section id="preview" class="section-spacing app-preview-section" aria-labelledby="preview-title">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">Interactive Showcase</div>
+          <h2 id="preview-title" class="section-title">Experience the Brewlog studio</h2>
+          <p class="section-desc">
+            Explore the interface designed for clean, one-handed morning operation. 
+            Click the tabs below to test the active timer, dial-in radar, and bean inventory.
+          </p>
+        </div>
+
+        <div class="app-window-frame">
+          <!-- Window Header Chrome -->
+          <div class="window-header">
+            <div class="window-dots" aria-hidden="true">
+              <span class="dot dot-close"></span>
+              <span class="dot dot-min"></span>
+              <span class="dot dot-max"></span>
+            </div>
+            <div class="window-title-tab">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Brewlog Studio — v2.4</span>
+            </div>
+            <span class="window-mode-badge">Live Interactive Simulator</span>
+          </div>
+
+          <!-- Tab Bar -->
+          <div class="preview-tabs" role="tablist" aria-label="App feature tabs">
+            <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="pane-timer" id="tab-timer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              1. Live Brew Studio
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="pane-radar" id="tab-radar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              2. Dial-in Sweet Spot Radar
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="pane-inventory" id="tab-inventory">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              3. Bean Stash & Degas
+            </button>
+          </div>
+
+          <!-- Tab Content Area -->
+          <div class="tab-content-area">
+            <!-- PANE 1: Live Brew Studio -->
+            <div id="pane-timer" class="tab-pane active" role="tabpanel" aria-labelledby="tab-timer">
+              <div class="studio-grid">
+                <!-- Left: Timer & Pour status -->
+                <div class="studio-timer-box">
+                  <span style="font-size:0.8125rem; font-family:var(--font-mono); color:var(--text-tertiary); text-transform:uppercase;">Current Phase: Second Pour</span>
+                  <div id="simTimerVal" class="timer-display">02:14</div>
+                  <div class="timer-sub">Target Target Pour: 280g / 300g</div>
+                  
+                  <div class="live-progress-bar">
+                    <div id="simProgressBar" class="progress-fill" style="width: 72%;"></div>
+                  </div>
+
+                  <div class="studio-timer-actions">
+                    <button id="simPlayPauseBtn" class="btn btn-primary" style="min-height:38px; padding:6px 18px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                      <span id="simPlayText">Pause Session</span>
+                    </button>
+                    <button id="simResetBtn" class="btn btn-secondary" style="min-height:38px; padding:6px 14px;">Reset</button>
+                  </div>
+                </div>
+
+                <!-- Right: Active Recipe Parameters -->
+                <div>
+                  <h4 style="font-size:1.25rem; margin-bottom:6px;">Colombia El Paraiso (Anaerobic Lychee)</h4>
+                  <p style="font-size:0.875rem; color:var(--text-secondary); margin-bottom:18px;">Originated by Diego Bermudez · Thermal Shock Fermentation</p>
+                  
+                  <div class="param-grid" style="margin-bottom:20px;">
+                    <div class="param-box">
+                      <div class="param-label">Dose</div>
+                      <div class="param-val">15.0<span class="param-unit">g</span></div>
+                    </div>
+                    <div class="param-box">
+                      <div class="param-label">Water Target</div>
+                      <div class="param-val">250<span class="param-unit">g</span></div>
+                    </div>
+                    <div class="param-box">
+                      <div class="param-label">Temp</div>
+                      <div class="param-val">91.0<span class="param-unit">°C</span></div>
+                    </div>
+                    <div class="param-box">
+                      <div class="param-label">Grind</div>
+                      <div class="param-val">23 <span class="param-unit">clicks</span></div>
+                    </div>
+                    <div class="param-box">
+                      <div class="param-label">Ratio</div>
+                      <div class="param-val">1:16.7</div>
+                    </div>
+                    <div class="param-box">
+                      <div class="param-label">Dripper</div>
+                      <div class="param-val" style="font-size:0.95rem;">Kalita 155</div>
+                    </div>
+                  </div>
+
+                  <div style="font-size:0.8125rem; background:var(--surface-raised); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:10px 14px;">
+                    <strong style="color:var(--accent);">Pro Barista Tip:</strong> Thermal shock roasts generate faster flow. Keep water pour gentle to maintain bed turbulence.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANE 2: Interactive Dial-in Radar -->
+            <div id="pane-radar" class="tab-pane" role="tabpanel" aria-labelledby="tab-radar">
+              <div class="radar-grid">
+                <!-- Visual Sensory Radar SVG -->
+                <div class="radar-visual-box">
+                  <h4 style="font-size:1.1rem; margin-bottom:4px;">Sensory Extraction Radar</h4>
+                  <span style="font-size:0.75rem; color:var(--text-tertiary); margin-bottom:12px;">Move sliders to simulate extraction shift</span>
+
+                  <svg width="240" height="220" viewBox="0 0 240 220" fill="none">
+                    <!-- Pentagon Grid -->
+                    <polygon points="120,20 215,89 179,199 61,199 25,89" stroke="var(--border)" stroke-width="1" fill="none"/>
+                    <polygon points="120,50 184,97 159,173 81,173 56,97" stroke="var(--border-subtle)" stroke-width="1" fill="none"/>
+                    <polygon points="120,80 152,104 140,147 100,147 88,104" stroke="var(--border-subtle)" stroke-width="1" fill="none"/>
+                    
+                    <!-- Labels -->
+                    <text x="120" y="14" fill="var(--text-secondary)" font-size="10" text-anchor="middle" font-weight="600">SWEETNESS</text>
+                    <text x="222" y="92" fill="var(--text-secondary)" font-size="10" font-weight="600">BODY</text>
+                    <text x="186" y="212" fill="var(--text-secondary)" font-size="10" font-weight="600">FINISH</text>
+                    <text x="54" y="212" fill="var(--text-secondary)" font-size="10" font-weight="600">CLARITY</text>
+                    <text x="18" y="92" fill="var(--text-secondary)" font-size="10" font-weight="600">ACIDITY</text>
+
+                    <!-- Dynamic Radar Polygon -->
+                    <polygon id="radarPolygon" points="120,40 190,95 160,180 75,180 40,85" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="2.5"/>
+                    <circle cx="120" cy="40" r="3.5" fill="var(--accent)"/>
+                    <circle cx="190" cy="95" r="3.5" fill="var(--accent)"/>
+                    <circle cx="160" cy="180" r="3.5" fill="var(--accent)"/>
+                    <circle cx="75" cy="180" r="3.5" fill="var(--accent)"/>
+                    <circle cx="40" cy="85" r="3.5" fill="var(--accent)"/>
+                  </svg>
+                </div>
+
+                <!-- Sliders Controls -->
+                <div class="radar-controls">
+                  <div class="slider-group">
+                    <div class="slider-header">
+                      <span>Grind Size (Clicks)</span>
+                      <span id="radarGrindVal" class="slider-val">20 clicks (Medium)</span>
+                    </div>
+                    <input type="range" id="radarGrindInput" class="range-input" min="10" max="32" value="20">
+                  </div>
+
+                  <div class="slider-group">
+                    <div class="slider-header">
+                      <span>Water Temperature</span>
+                      <span id="radarTempVal" class="slider-val">93°C</span>
+                    </div>
+                    <input type="range" id="radarTempInput" class="range-input" min="85" max="99" value="93">
+                  </div>
+
+                  <div id="radarTasteBox" class="extraction-taste-indicator">
+                    <span id="radarTasteBadge" class="taste-badge taste-balanced">Balanced Extraction</span>
+                    <span id="radarTasteDesc" style="font-size:0.875rem; color:var(--text-secondary);">Optimal dissolved solids. High floral sweetness with sparkling acidity.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANE 3: Bean Stash & Degas -->
+            <div id="pane-inventory" class="tab-pane" role="tabpanel" aria-labelledby="tab-inventory">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <div>
+                  <h4 style="font-size:1.25rem;">Active Coffee Bean Stash</h4>
+                  <p style="font-size:0.875rem; color:var(--text-secondary);">Tracking roast date, degas release & remaining grams in stock</p>
+                </div>
+                <button class="btn btn-secondary" style="font-size:0.8125rem; min-height:36px; padding:4px 14px;">+ Add New Bag</button>
+              </div>
+
+              <div class="inventory-cards-grid">
+                <!-- Bag 1 -->
+                <div class="inventory-card">
+                  <div>
+                    <div class="card-bag-top">
+                      <span class="freshness-tag freshness-peak">Peak Flavor (Day 11)</span>
+                      <span class="inventory-grams">185g</span>
+                    </div>
+                    <h5 style="font-size:1.1rem; margin-top:12px;">Ethiopia Chelchele</h5>
+                    <p style="font-size:0.8125rem; color:var(--text-secondary);">Onyx Coffee Lab · Washed</p>
+                  </div>
+                  <div style="font-size:0.75rem; color:var(--text-tertiary); border-top:1px solid var(--border-subtle); padding-top:10px;">
+                    Best for: V60, Chemex · 10 brews left
+                  </div>
+                </div>
+
+                <!-- Bag 2 -->
+                <div class="inventory-card">
+                  <div>
+                    <div class="card-bag-top">
+                      <span class="freshness-tag freshness-degas">Degas Window (Day 4)</span>
+                      <span class="inventory-grams">250g</span>
+                    </div>
+                    <h5 style="font-size:1.1rem; margin-top:12px;">Guatemala El Injerto</h5>
+                    <p style="font-size:0.8125rem; color:var(--text-secondary);">Tim Wendelboe · Pacamara</p>
+                  </div>
+                  <div style="font-size:0.75rem; color:var(--text-tertiary); border-top:1px solid var(--border-subtle); padding-top:10px;">
+                    Best starting Nov 18 · Unopened bag
+                  </div>
+                </div>
+
+                <!-- Bag 3 -->
+                <div class="inventory-card">
+                  <div>
+                    <div class="card-bag-top">
+                      <span class="freshness-tag" style="background:rgba(59,130,246,0.15); color:var(--info); border:1px solid rgba(59,130,246,0.3);">Resting (Day 22)</span>
+                      <span class="inventory-grams">60g</span>
+                    </div>
+                    <h5 style="font-size:1.1rem; margin-top:12px;">Colombia La Palma</h5>
+                    <p style="font-size:0.8125rem; color:var(--text-secondary);">Sey Coffee · Sidra Lactic</p>
+                  </div>
+                  <div style="font-size:0.75rem; color:var(--text-tertiary); border-top:1px solid var(--border-subtle); padding-top:10px;">
+                    Low inventory alert · ~3 brews left
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         INTERACTIVE COFFEE RATIO CALCULATOR TOOL
+         ========================================================================== -->
+    <section id="calculator" class="section-spacing" aria-labelledby="calc-title">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">Interactive Utility</div>
+          <h2 id="calc-title" class="section-title">Instant Brew Ratio Calculator</h2>
+          <p class="section-desc">
+            Calculate your exact target water weight, bloom volume, and grinder guidance in one tap.
+          </p>
+        </div>
+
+        <div class="calc-card">
+          <!-- Inputs Column -->
+          <div class="calc-inputs">
+            <div class="calc-field-group">
+              <label for="calcMethod" class="calc-label">
+                <span>Brewing Method</span>
+                <span style="font-size:0.75rem; color:var(--text-tertiary);">Presets standard ratios</span>
+              </label>
+              <select id="calcMethod" class="calc-select">
+                <option value="16.5" selected>Hario V60 (Golden 1:16.5)</option>
+                <option value="15.0">Chemex (Fuller Body 1:15.0)</option>
+                <option value="12.0">AeroPress Standard (Concentrated 1:12.0)</option>
+                <option value="14.0">French Press (Rich Immersion 1:14.0)</option>
+                <option value="16.0">Kalita Wave (Balanced 1:16.0)</option>
+                <option value="2.0">Espresso Double (Tradition 1:2.0)</option>
+              </select>
+            </div>
+
+            <div class="calc-field-group">
+              <div class="calc-label">
+                <label for="calcDose">Coffee Dose (Grams)</label>
+                <span id="calcDoseVal" style="font-family:var(--font-mono); color:var(--accent);">18.0 g</span>
+              </div>
+              <input type="range" id="calcDose" class="range-input" min="10" max="60" step="0.5" value="18">
+            </div>
+
+            <div class="calc-field-group">
+              <div class="calc-label">
+                <label for="calcRatio">Custom Ratio Multiplier (1 : X)</label>
+                <span id="calcRatioVal" style="font-family:var(--font-mono); color:var(--accent);">1 : 16.5</span>
+              </div>
+              <input type="range" id="calcRatio" class="range-input" min="2" max="20" step="0.5" value="16.5">
+            </div>
+          </div>
+
+          <!-- Calculated Results Column -->
+          <div class="calc-results-card">
+            <div class="calc-res-row">
+              <span class="calc-res-label">Total Water Weight</span>
+              <span id="resWater" class="calc-res-val">297 g</span>
+            </div>
+            <div class="calc-res-row">
+              <span class="calc-res-label">Bloom Water (3x Dose)</span>
+              <span id="resBloom" class="calc-res-val" style="font-size:1.25rem;">54 g</span>
+            </div>
+            <div class="calc-res-row">
+              <span class="calc-res-label">Recommended Temp</span>
+              <span id="resTemp" class="calc-res-val" style="font-size:1.25rem;">93°C (200°F)</span>
+            </div>
+            <div class="calc-res-row">
+              <span class="calc-res-label">Estimated Drawdown Time</span>
+              <span id="resTime" class="calc-res-val" style="font-size:1.25rem;">03:00 – 03:15</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         PRICING SECTION (FREE VS PRO, MONTHLY/ANNUAL)
+         ========================================================================== -->
+    <section id="pricing" class="section-spacing" style="background:var(--bg-alt); border-top:1px solid var(--border); border-bottom:1px solid var(--border);" aria-labelledby="pricing-title">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">Simple Transparent Pricing</div>
+          <h2 id="pricing-title" class="section-title">Invest in better coffee mornings</h2>
+          <p class="section-desc">
+            Start free forever with core logging tools. Upgrade to Pro when you want unlimited history, bean inventory, and advanced extraction analytics.
+          </p>
+        </div>
+
+        <!-- Monthly vs Annual Billing Switch -->
+        <div class="pricing-toggle-wrap">
+          <span id="labelMonthly" class="toggle-label active">Monthly</span>
+          <button id="billingSwitch" class="switch-btn" role="switch" aria-checked="false" aria-label="Toggle annual billing discount">
+            <span class="switch-thumb"></span>
+          </button>
+          <span id="labelAnnual" class="toggle-label">Yearly Billing</span>
+          <span class="savings-pill">Save 17% (2 Months Free)</span>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- FREE PLAN -->
+          <article class="pricing-card">
+            <h3 class="plan-name">Free Plan</h3>
+            <p class="plan-desc">For home brewers getting started with basic logging and dialing in their daily cup.</p>
+            
+            <div class="plan-price-wrap">
+              <span class="plan-price">$0</span>
+              <span class="plan-period">/ forever</span>
+            </div>
+
+            <ul class="plan-features-list">
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Up to <strong>15 active brew recipes</strong></span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Built-in multi-stage pour timer</span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Core brew methods (V60, AeroPress, French Press)</span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Basic 1–5 star rating system</span>
+              </li>
+              <li class="feature-item feature-disabled">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Unlimited recipe archive</span>
+              </li>
+              <li class="feature-item feature-disabled">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Bean stash & degas inventory tracking</span>
+              </li>
+              <li class="feature-item feature-disabled">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Extraction analytics & correlation curves</span>
+              </li>
+            </ul>
+
+            <a href="#signup" class="btn btn-secondary" style="width:100%;">Start Free Today</a>
+          </article>
+
+          <!-- PRO PLAN -->
+          <article class="pricing-card pricing-card-featured">
+            <div class="plan-badge">Barista's Choice</div>
+            <h3 class="plan-name">Brewlog Pro</h3>
+            <p class="plan-desc">For dedicated coffee enthusiasts who want unlimited history, bean inventory, and deep dial-in analytics.</p>
+            
+            <div class="plan-price-wrap">
+              <span id="proPriceVal" class="plan-price">$6</span>
+              <span id="proPricePeriod" class="plan-period">/ month</span>
+            </div>
+
+            <ul class="plan-features-list">
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Unlimited recipes & brew history</strong></span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Bean inventory tracking</strong> with degassing alerts</span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Brew analytics</strong> (Grind vs Rating scatter plots)</span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Full SCA sensory cupping radar & flavor tags</span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Universal grinder calibration profiles</span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Offline storage with automatic cloud sync</span>
+              </li>
+              <li class="feature-item">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Complete CSV export & recipe card sharing</span>
+              </li>
+            </ul>
+
+            <a href="#signup" class="btn btn-primary" style="width:100%;">
+              <span>Upgrade to Pro</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FAQ ACCORDION SECTION
+         ========================================================================== -->
+    <section id="faq" class="section-spacing" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">Got Questions?</div>
+          <h2 id="faq-title" class="section-title">Frequently Asked Questions</h2>
+          <p class="section-desc">
+            Everything you need to know about Brewlog, hardware compatibility, and Pro billing.
+          </p>
+        </div>
+
+        <div class="faq-list">
+          <!-- FAQ 1 -->
+          <div class="faq-item">
+            <button class="faq-question-btn" aria-expanded="false" aria-controls="faq-ans-1" id="faq-q-1">
+              <span>What coffee equipment do I need to use Brewlog?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="faq-ans-1" class="faq-answer" role="region" aria-labelledby="faq-q-1">
+              <p>
+                Brewlog is hardware-agnostic. You only need whatever you brew with today! 
+                Whether you use a simple plastic V60, an AeroPress, a Chemex, a French press, or a dual-boiler espresso machine, 
+                you can log your variables and dial in repeatable cups. A kitchen scale with gram precision is recommended.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item">
+            <button class="faq-question-btn" aria-expanded="false" aria-controls="faq-ans-2" id="faq-q-2">
+              <span>How does Brewlog determine my best coffee settings?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="faq-ans-2" class="faq-answer" role="region" aria-labelledby="faq-q-2">
+              <p>
+                As you rate cups, Brewlog’s correlation engine cross-references your sensory ratings against your grind clicks, 
+                water temperature, ratio, and bean roast age. When you log multiple brews with the same bag, Brewlog identifies 
+                the golden extraction plateau and tells you whether grinding finer or tweaking water temperature by 1°C will elevate sweetness.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item">
+            <button class="faq-question-btn" aria-expanded="false" aria-controls="faq-ans-3" id="faq-q-3">
+              <span>Can I switch between monthly and annual Pro billing?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="faq-ans-3" class="faq-answer" role="region" aria-labelledby="faq-q-3">
+              <p>
+                Yes, at any time. If you switch from monthly ($6/mo) to annual ($60/yr), you automatically save 17% 
+                (equivalent to $5/month, or 2 months completely free). Any remaining days on your monthly plan are credited toward your annual invoice.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item">
+            <button class="faq-question-btn" aria-expanded="false" aria-controls="faq-ans-4" id="faq-q-4">
+              <span>Does Brewlog work offline when I'm traveling or camping?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="faq-ans-4" class="faq-answer" role="region" aria-labelledby="faq-q-4">
+              <p>
+                Absolutely. Brewlog is built offline-first. Your entire recipe collection, bean stash, and brew history are stored 
+                locally on your device. You can log recipes in a remote campsite with zero cell signal, and your data syncs securely 
+                the next time you connect to the internet.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="faq-item">
+            <button class="faq-question-btn" aria-expanded="false" aria-controls="faq-ans-5" id="faq-q-5">
+              <span>What happens to my data if I downgrade from Pro to Free?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="faq-ans-5" class="faq-answer" role="region" aria-labelledby="faq-q-5">
+              <p>
+                We never delete your coffee history. If you downgrade to the Free plan, all your past recipes, tasting notes, 
+                and bean logs remain fully intact and searchable. You will simply be limited to editing your 15 most recent active recipes. 
+                You can also export your full database to CSV at any time.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SIGN-UP FORM SECTION (CLIENT-SIDE VALIDATED WITH ERROR & SUCCESS STATES)
+         ========================================================================== -->
+    <section id="signup" class="section-spacing signup-section" aria-labelledby="signup-title">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">Join the Community</div>
+          <h2 id="signup-title" class="section-title">Brew your best coffee yet</h2>
+          <p class="section-desc">
+            Create your account in under 30 seconds. No credit card required.
+          </p>
+        </div>
+
+        <div class="signup-card">
+          <!-- Active Form -->
+          <form id="signupForm" novalidate aria-label="Sign up for Brewlog">
+            <!-- Full Name -->
+            <div class="form-group">
+              <label for="userName" class="form-label">Full Name</label>
+              <input type="text" id="userName" class="form-input" placeholder="e.g. James Hoffmann" autocomplete="name" required>
+              <div id="nameError" class="form-error-msg" aria-live="polite"></div>
+            </div>
+
+            <!-- Email Address -->
+            <div class="form-group">
+              <label for="userEmail" class="form-label">Email Address</label>
+              <input type="email" id="userEmail" class="form-input" placeholder="barista@specialtycoffee.com" autocomplete="email" required>
+              <div id="emailError" class="form-error-msg" aria-live="polite"></div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <div class="form-label">
+                <label for="userPassword">Create Password</label>
+                <span id="pwdStrengthLabel" class="strength-label">Min 8 chars</span>
+              </div>
+              <div class="input-wrap">
+                <input type="password" id="userPassword" class="form-input" placeholder="••••••••••••" autocomplete="new-password" required>
+                <button type="button" id="togglePwdBtn" class="toggle-pwd-btn" aria-label="Show password as plain text">
+                  <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <!-- Strength Bar -->
+              <div class="pwd-strength-bar" aria-hidden="true">
+                <span id="strength1" class="strength-segment"></span>
+                <span id="strength2" class="strength-segment"></span>
+                <span id="strength3" class="strength-segment"></span>
+                <span id="strength4" class="strength-segment"></span>
+              </div>
+              <div id="pwdError" class="form-error-msg" aria-live="polite"></div>
+            </div>
+
+            <!-- Checkbox Terms -->
+            <label class="form-checkbox-label">
+              <input type="checkbox" id="termsCheck" class="form-checkbox" required>
+              <span>I agree to the <a href="#" style="text-decoration:underline; color:var(--accent);">Terms of Service</a> and <a href="#" style="text-decoration:underline; color:var(--accent);">Privacy Policy</a>.</span>
+            </label>
+            <div id="termsError" class="form-error-msg" style="margin-top:-16px; margin-bottom:16px;" aria-live="polite"></div>
+
+            <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%; min-height:48px; font-size:1rem;">
+              <span class="btn-text">Create Free Brewlog Account</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+          </form>
+
+          <!-- Success State -->
+          <div id="signupSuccess" class="signup-success-state" role="alert" aria-live="assertive">
+            <div class="success-icon-wrap">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h3 class="success-title">Welcome to Brewlog!</h3>
+            <p id="successWelcomeMsg" class="success-desc">
+              Your account is ready. We’ve configured your personal brew journal. Start logging your morning parameters today!
+            </p>
+            <button id="resetFormBtn" class="btn btn-secondary">Register Another Account</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <svg class="logo-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8h20l-4 14H10L6 8z"/>
+              <path d="M4 8h24"/>
+              <path d="M12 22v4h8v-4"/>
+              <path d="M10 26h12"/>
+              <path d="M16 12c-1 1-1 2 0 3s1 2 0 3"/>
+            </svg>
+            <span>Brewlog</span>
+          </a>
+          <p>
+            Crafted for home coffee obsessives who believe great mornings are engineered, not stumbled upon.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Brewing Tools</h4>
+          <ul class="footer-links">
+            <li><a href="#calculator" class="footer-link">Ratio Calculator</a></li>
+            <li><a href="#features" class="footer-link">Pour Timer</a></li>
+            <li><a href="#features" class="footer-link">Grinder Calibration</a></li>
+            <li><a href="#preview" class="footer-link">Degas Tracker</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Product</h4>
+          <ul class="footer-links">
+            <li><a href="#how-it-works" class="footer-link">How It Works</a></li>
+            <li><a href="#pricing" class="footer-link">Pricing Plans</a></li>
+            <li><a href="#preview" class="footer-link">App Interface</a></li>
+            <li><a href="#faq" class="footer-link">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Legal & Security</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+            <li><a href="#" class="footer-link">Terms of Service</a></li>
+            <li><a href="#" class="footer-link">Cookie Preferences</a></li>
+            <li><a href="#" class="footer-link">Data Security</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear">2026</span> Brewlog Technologies Inc. All rights reserved.</span>
+        <span>Made with care for specialty coffee lovers worldwide.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       INLINE JAVASCRIPT: THEME, ACCORDIONS, SIMULATORS & VALIDATION
+       ========================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. Copyright Year
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+      // 2. Dark / Light Theme Toggle with LocalStorage & OS Preference
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const themeIconSun = document.getElementById('themeIconSun');
+      const themeIconMoon = document.getElementById('themeIconMoon');
+      const htmlEl = document.documentElement;
+
+      function applyTheme(theme) {
+        htmlEl.setAttribute('data-theme', theme);
+        localStorage.setItem('brewlog-theme', theme);
+        if (theme === 'light') {
+          themeIconSun.style.display = 'none';
+          themeIconMoon.style.display = 'block';
+        } else {
+          themeIconSun.style.display = 'block';
+          themeIconMoon.style.display = 'none';
+        }
+      }
+
+      // Initial Theme Check
+      const savedTheme = localStorage.getItem('brewlog-theme');
+      if (savedTheme) {
+        applyTheme(savedTheme);
+      } else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(prefersDark ? 'dark' : 'dark'); // Default warm dark espresso
+      }
+
+      themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = htmlEl.getAttribute('data-theme') || 'dark';
+        applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+      });
+
+      // 3. Mobile Navigation Drawer Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+
+      mobileMenuBtn.addEventListener('click', () => {
+        const isOpen = mobileDrawer.classList.contains('open');
+        mobileDrawer.classList.toggle('open', !isOpen);
+        mobileMenuBtn.setAttribute('aria-expanded', !isOpen);
+      });
+
+      // Close mobile drawer when clicking a link
+      mobileDrawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileDrawer.classList.remove('open');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      // 4. App Preview Tabs Switcher
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          tabPanes.forEach(p => p.classList.remove('active'));
+
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          const targetId = btn.getAttribute('aria-controls');
+          document.getElementById(targetId).classList.add('active');
+        });
+      });
+
+      // 5. Live Studio Timer Simulator
+      let simSeconds = 134; // 2m 14s
+      let timerRunning = true;
+      const timerValEl = document.getElementById('simTimerVal');
+      const playPauseBtn = document.getElementById('simPlayPauseBtn');
+      const playText = document.getElementById('simPlayText');
+      const resetBtn = document.getElementById('simResetBtn');
+      const progressBar = document.getElementById('simProgressBar');
+
+      function formatTime(sec) {
+        const m = Math.floor(sec / 60);
+        const s = sec % 60;
+        return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+      }
+
+      let timerInterval = setInterval(() => {
+        if (timerRunning) {
+          simSeconds++;
+          if (simSeconds > 195) simSeconds = 0; // Loop at 3:15
+          timerValEl.textContent = formatTime(simSeconds);
+          progressBar.style.width = Math.min(100, Math.round((simSeconds / 195) * 100)) + '%';
+        }
+      }, 1000);
+
+      playPauseBtn.addEventListener('click', () => {
+        timerRunning = !timerRunning;
+        playText.textContent = timerRunning ? 'Pause Session' : 'Resume Session';
+      });
+
+      resetBtn.addEventListener('click', () => {
+        simSeconds = 0;
+        timerValEl.textContent = '00:00';
+        progressBar.style.width = '0%';
+      });
+
+      // 6. Interactive Dial-in Sweet Spot Radar
+      const radarGrindInput = document.getElementById('radarGrindInput');
+      const radarGrindVal = document.getElementById('radarGrindVal');
+      const radarTempInput = document.getElementById('radarTempInput');
+      const radarTempVal = document.getElementById('radarTempVal');
+      const radarPolygon = document.getElementById('radarPolygon');
+      const radarTasteBadge = document.getElementById('radarTasteBadge');
+      const radarTasteDesc = document.getElementById('radarTasteDesc');
+
+      function updateRadar() {
+        const grind = parseInt(radarGrindInput.value, 10);
+        const temp = parseInt(radarTempInput.value, 10);
+
+        let grindDesc = 'Medium';
+        if (grind < 16) grindDesc = 'Fine (Espresso / AeroPress)';
+        else if (grind > 25) grindDesc = 'Coarse (Chemex / French Press)';
+        radarGrindVal.textContent = grind + ' clicks (' + grindDesc + ')';
+        radarTempVal.textContent = temp + '°C';
+
+        // Extraction balance calculation
+        // Optimal: Grind 18-22, Temp 91-95
+        if (grind < 17 || temp > 96) {
+          // Over-extracted / bitter
+          radarTasteBadge.className = 'taste-badge taste-over';
+          radarTasteBadge.textContent = 'Heavy / Over-Extracted';
+          radarTasteDesc.textContent = 'High astringency and dry finish. Suggest grinding 2 clicks coarser or lowering water temp.';
+          radarPolygon.setAttribute('points', '120,60 210,120 180,195 50,160 30,105');
+        } else if (grind > 24 || temp < 90) {
+          // Under-extracted / sour
+          radarTasteBadge.className = 'taste-badge taste-under';
+          radarTasteBadge.textContent = 'Sour / Under-Extracted';
+          radarTasteDesc.textContent = 'Sharp lemon acid with hollow sweetness. Suggest grinding finer or increasing water temperature.';
+          radarPolygon.setAttribute('points', '120,65 160,80 140,160 85,185 20,80');
+        } else {
+          // Golden balance
+          radarTasteBadge.className = 'taste-badge taste-balanced';
+          radarTasteBadge.textContent = 'Golden Cup (Balanced)';
+          radarTasteDesc.textContent = 'Optimal dissolved solids. High floral sweetness with clean sparkling acidity.';
+          radarPolygon.setAttribute('points', '120,35 195,90 165,185 75,185 35,85');
+        }
+      }
+
+      radarGrindInput.addEventListener('input', updateRadar);
+      radarTempInput.addEventListener('input', updateRadar);
+
+      // 7. Interactive Ratio Calculator
+      const calcMethod = document.getElementById('calcMethod');
+      const calcDose = document.getElementById('calcDose');
+      const calcDoseVal = document.getElementById('calcDoseVal');
+      const calcRatio = document.getElementById('calcRatio');
+      const calcRatioVal = document.getElementById('calcRatioVal');
+      const resWater = document.getElementById('resWater');
+      const resBloom = document.getElementById('resBloom');
+      const resTemp = document.getElementById('resTemp');
+      const resTime = document.getElementById('resTime');
+
+      function calculateBrew() {
+        const dose = parseFloat(calcDose.value);
+        const ratio = parseFloat(calcRatio.value);
+
+        calcDoseVal.textContent = dose.toFixed(1) + ' g';
+        calcRatioVal.textContent = '1 : ' + ratio.toFixed(1);
+
+        const totalWater = Math.round(dose * ratio);
+        const bloomWater = Math.round(dose * 3);
+
+        resWater.textContent = totalWater + ' g';
+        resBloom.textContent = bloomWater + ' g';
+
+        // Temp & Time presets
+        if (ratio < 4) {
+          resTemp.textContent = '93.5°C (200°F)';
+          resTime.textContent = '0:25 – 0:32 (Espresso)';
+        } else if (ratio < 13) {
+          resTemp.textContent = '88°C (190°F)';
+          resTime.textContent = '01:30 – 02:00';
+        } else {
+          resTemp.textContent = '93°C (200°F)';
+          resTime.textContent = '03:00 – 03:30';
+        }
+      }
+
+      calcMethod.addEventListener('change', () => {
+        calcRatio.value = calcMethod.value;
+        calculateBrew();
+      });
+
+      calcDose.addEventListener('input', calculateBrew);
+      calcRatio.addEventListener('input', calculateBrew);
+      calculateBrew(); // init
+
+      // 8. Pricing Billing Switch (Monthly / Annual)
+      const billingSwitch = document.getElementById('billingSwitch');
+      const labelMonthly = document.getElementById('labelMonthly');
+      const labelAnnual = document.getElementById('labelAnnual');
+      const proPriceVal = document.getElementById('proPriceVal');
+      const proPricePeriod = document.getElementById('proPricePeriod');
+
+      let isAnnual = false;
+      function setBilling(annual) {
+        isAnnual = annual;
+        billingSwitch.setAttribute('aria-checked', isAnnual);
+        if (isAnnual) {
+          labelMonthly.classList.remove('active');
+          labelAnnual.classList.add('active');
+          proPriceVal.textContent = '$5';
+          proPricePeriod.textContent = '/ month ($60/yr)';
+        } else {
+          labelMonthly.classList.add('active');
+          labelAnnual.classList.remove('active');
+          proPriceVal.textContent = '$6';
+          proPricePeriod.textContent = '/ month';
+        }
+      }
+
+      billingSwitch.addEventListener('click', () => setBilling(!isAnnual));
+      labelMonthly.addEventListener('click', () => setBilling(false));
+      labelAnnual.addEventListener('click', () => setBilling(true));
+
+      // 9. FAQ Accordion Logic
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const btn = item.querySelector('.faq-question-btn');
+        btn.addEventListener('click', () => {
+          const isOpen = item.classList.contains('open');
+          // Close other items for neatness
+          faqItems.forEach(other => {
+            other.classList.remove('open');
+            other.querySelector('.faq-question-btn').setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+
+      // 10. Sign-up Form Validation & Feedback
+      const signupForm = document.getElementById('signupForm');
+      const signupSuccess = document.getElementById('signupSuccess');
+      const successWelcomeMsg = document.getElementById('successWelcomeMsg');
+      const resetFormBtn = document.getElementById('resetFormBtn');
+
+      const userName = document.getElementById('userName');
+      const userEmail = document.getElementById('userEmail');
+      const userPassword = document.getElementById('userPassword');
+      const termsCheck = document.getElementById('termsCheck');
+      const submitBtn = document.getElementById('submitBtn');
+
+      const nameError = document.getElementById('nameError');
+      const emailError = document.getElementById('emailError');
+      const pwdError = document.getElementById('pwdError');
+      const termsError = document.getElementById('termsError');
+
+      const togglePwdBtn = document.getElementById('togglePwdBtn');
+      const pwdStrengthLabel = document.getElementById('pwdStrengthLabel');
+      const s1 = document.getElementById('strength1');
+      const s2 = document.getElementById('strength2');
+      const s3 = document.getElementById('strength3');
+      const s4 = document.getElementById('strength4');
+
+      // Password visibility toggle
+      togglePwdBtn.addEventListener('click', () => {
+        const isPwd = userPassword.type === 'password';
+        userPassword.type = isPwd ? 'text' : 'password';
+        togglePwdBtn.setAttribute('aria-label', isPwd ? 'Hide password' : 'Show password');
+      });
+
+      // Live Password Strength Meter
+      userPassword.addEventListener('input', () => {
+        const val = userPassword.value;
+        let score = 0;
+        if (val.length >= 8) score++;
+        if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        [s1, s2, s3, s4].forEach(s => s.style.backgroundColor = 'var(--border)');
+
+        if (val.length === 0) {
+          pwdStrengthLabel.textContent = 'Min 8 chars';
+          pwdStrengthLabel.style.color = 'var(--text-tertiary)';
+        } else if (score <= 1) {
+          s1.style.backgroundColor = 'var(--error)';
+          pwdStrengthLabel.textContent = 'Weak';
+          pwdStrengthLabel.style.color = 'var(--error)';
+        } else if (score === 2) {
+          s1.style.backgroundColor = 'var(--warning)';
+          s2.style.backgroundColor = 'var(--warning)';
+          pwdStrengthLabel.textContent = 'Fair';
+          pwdStrengthLabel.style.color = 'var(--warning)';
+        } else if (score === 3) {
+          s1.style.backgroundColor = 'var(--info)';
+          s2.style.backgroundColor = 'var(--info)';
+          s3.style.backgroundColor = 'var(--info)';
+          pwdStrengthLabel.textContent = 'Good';
+          pwdStrengthLabel.style.color = 'var(--info)';
+        } else {
+          [s1, s2, s3, s4].forEach(s => s.style.backgroundColor = 'var(--success)');
+          pwdStrengthLabel.textContent = 'Strong Barista Password';
+          pwdStrengthLabel.style.color = 'var(--success)';
+        }
+      });
+
+      // Inline validation function
+      function validateForm() {
+        let isValid = true;
+
+        // Name
+        if (!userName.value.trim() || userName.value.trim().length < 2) {
+          nameError.textContent = 'Please enter your full name (at least 2 letters).';
+          userName.classList.add('has-error');
+          isValid = false;
+        } else {
+          nameError.textContent = '';
+          userName.classList.remove('has-error');
+        }
+
+        // Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!userEmail.value.trim() || !emailRegex.test(userEmail.value.trim())) {
+          emailError.textContent = 'Please enter a valid email address.';
+          userEmail.classList.add('has-error');
+          isValid = false;
+        } else {
+          emailError.textContent = '';
+          userEmail.classList.remove('has-error');
+        }
+
+        // Password
+        if (!userPassword.value || userPassword.value.length < 8) {
+          pwdError.textContent = 'Password must be at least 8 characters long.';
+          userPassword.classList.add('has-error');
+          isValid = false;
+        } else {
+          pwdError.textContent = '';
+          userPassword.classList.remove('has-error');
+        }
+
+        // Terms
+        if (!termsCheck.checked) {
+          termsError.textContent = 'You must agree to the Terms of Service to continue.';
+          isValid = false;
+        } else {
+          termsError.textContent = '';
+        }
+
+        return isValid;
+      }
+
+      // Clear errors on field blur / input
+      userName.addEventListener('input', () => {
+        if (userName.value.trim().length >= 2) {
+          nameError.textContent = '';
+          userName.classList.remove('has-error');
+        }
+      });
+      userEmail.addEventListener('input', () => {
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail.value.trim())) {
+          emailError.textContent = '';
+          userEmail.classList.remove('has-error');
+        }
+      });
+      userPassword.addEventListener('input', () => {
+        if (userPassword.value.length >= 8) {
+          pwdError.textContent = '';
+          userPassword.classList.remove('has-error');
+        }
+      });
+      termsCheck.addEventListener('change', () => {
+        if (termsCheck.checked) termsError.textContent = '';
+      });
+
+      signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        // Show loading state
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+          submitBtn.classList.remove('loading');
+          submitBtn.disabled = false;
+          
+          // Switch to celebratory success state
+          signupForm.style.display = 'none';
+          signupSuccess.style.display = 'block';
+          successWelcomeMsg.textContent = `Welcome, ${userName.value.trim()}! Your Brewlog studio account is activated. Check your inbox at ${userEmail.value.trim()} for your quick dial-in cheat sheet.`;
+        }, 800);
+      });
+
+      resetFormBtn.addEventListener('click', () => {
+        signupForm.reset();
+        [s1, s2, s3, s4].forEach(s => s.style.backgroundColor = 'var(--border)');
+        pwdStrengthLabel.textContent = 'Min 8 chars';
+        pwdStrengthLabel.style.color = 'var(--text-tertiary)';
+        signupSuccess.style.display = 'none';
+        signupForm.style.display = 'block';
+      });
+
+    })();
+  </script>
+</body>
+</html>

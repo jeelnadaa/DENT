@@ -136,7 +136,7 @@ Each item: **the pattern → why it hurts → what to do instead.**
 
 ### Visual identity
 1. **Default purple-to-blue gradient everywhere** (hero, buttons, text) → signals "template", no brand → pick a palette deliberately (see color.md Part 2 or the style file); use gradients only where the style calls for them.
-2. **One default font for everything, all at medium weight** → no hierarchy, no character → choose a display/body pairing or one family with strong weight and size contrast (SKILL.md › Modern layer › Typography).
+2. **One default font for everything, all at medium weight** → no hierarchy, no character → choose a display/body pairing or one family with strong weight and size contrast (`modern-layer.md` §7.1).
 3. **Everything centered** → long centered text is hard to read; no tension or structure → left-align body text and most layouts; center only short hero content.
 4. **Every element has the same big radius + soft shadow + border** → visual mush, no layers → choose border OR shadow, a radius hierarchy (controls < containers), and reserve elevation for things that are actually above others.
 5. **Glass, glow and gradient text all at once** → noisy, cheap → pick one style and its signature moves (styles index).
@@ -158,11 +158,11 @@ Each item: **the pattern → why it hurts → what to do instead.**
 17. **Headings with an icon on every single one** → visual noise → icons only where they aid recognition.
 
 ### Components & interaction
-18. **Missing states** (no hover/focus/disabled/loading/empty/error) → feels broken in use → define all states (SKILL.md › Components).
+18. **Missing states** (no hover/focus/disabled/loading/empty/error) → feels broken in use → define all states (`foundations-and-components.md` §4).
 19. **Mixed icon sets / stroke weights** → subtle but obvious sloppiness → one family, one stroke, one size scale.
 20. **Inconsistent radii, button heights, input styles** across screens → not designed as a system → use component specs.
 21. **Placeholder used as label** → disappears when typing, low contrast → persistent labels.
-22. **Animation on everything** (every section fades in, every card bounces) → slow and distracting → motion only with purpose (SKILL.md › Modern layer › Ground rules).
+22. **Animation on everything** (every section fades in, every card bounces) → slow and distracting → motion only with purpose (`modern-layer.md` §7.0).
 23. **Hamburger menu on desktop** with plenty of space → hides navigation → visible nav.
 24. **Modal on page load** (newsletter, cookie wall) → blocks the user's goal → inline or compact, delayed until engagement.
 

@@ -1,0 +1,124 @@
+{
+  "target": "without/index.html",
+  "widths": {
+    "320": {
+      "viewport": 320,
+      "scrollWidth": 357,
+      "overflow": true,
+      "offenders": [
+        {
+          "element": "div.pricing-card",
+          "left": 24,
+          "right": 357
+        },
+        {
+          "element": "div.pricing-card.featured",
+          "left": 24,
+          "right": 357
+        }
+      ]
+    },
+    "375": {
+      "viewport": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "offenders": []
+    },
+    "390": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "offenders": []
+    },
+    "768": {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "offenders": []
+    },
+    "1024": {
+      "viewport": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "offenders": []
+    },
+    "1440": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "offenders": []
+    }
+  },
+  "gates": {
+    "G2_layout": "Failed",
+    "G3_contrast_sample": "Failed",
+    "G4_operability_auto": "Passed",
+    "G10_reduced_motion": "Failed",
+    "G11_no_autoplay_audio": "Passed"
+  },
+  "a11y": {
+    "unlabeledHiddenControls": [],
+    "lang": "en",
+    "h1": 1,
+    "headingSkips": [
+      "h1->h3"
+    ],
+    "unlabeledControls": [],
+    "unnamedButtonsLinks": [],
+    "imagesWithoutAlt": [],
+    "deadLinks": [
+      "a.social-link-btn",
+      "a.social-link-btn",
+      "a.social-link-btn",
+      "a.social-link-btn"
+    ],
+    "autoplayMedia": []
+  },
+  "contrast_failures": [
+    {
+      "text": "|",
+      "ratio": 1.57,
+      "need": 4.5,
+      "fontSize": 14,
+      "color": "rgba(245, 235, 224, 0.16)"
+    },
+    {
+      "text": "18.5g : 300g (1:16.2)",
+      "ratio": 4.29,
+      "need": 4.5,
+      "fontSize": 12,
+      "color": "rgb(143, 130, 118)"
+    }
+  ],
+  "audio": {
+    "ctxBeforeGesture": 0,
+    "runningCtx": 0,
+    "mediaPlayBeforeGesture": []
+  },
+  "motion": {
+    "running_normal": 3,
+    "running_reduced": 3,
+    "reduced_examples": [
+      {
+        "name": "pulseDot",
+        "target": "span.badge-dot",
+        "iterations": "Infinity",
+        "duration": 2000
+      },
+      {
+        "name": "floatMotion",
+        "target": "div.floating-accent-card",
+        "iterations": "Infinity",
+        "duration": 4000
+      },
+      {
+        "name": "floatMotion",
+        "target": "div.floating-accent-card",
+        "iterations": "Infinity",
+        "duration": 4000
+      }
+    ]
+  },
+  "console_errors": [],
+  "note": "Automated checks find mechanical defects only. Inspect the screenshots, tab through the page, and test interactions yourself."
+}

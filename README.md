@@ -1,39 +1,92 @@
-<div align="center">
+<a href="#install">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
+  <img src="assets/hero-light.svg" alt="DENT 2.0: a generic AI-template layout is knocked away by an orange dot and replaced by the DENT wordmark and the line 'Make a dent with your product's design.'" width="100%">
+</picture>
+</a>
 
-# DENT
+**DENT is an open-source design-engineering skill for AI agents.** Install it once and your agent (Claude Code, Codex, Cursor, Copilot, Gemini CLI, Antigravity, or anything that reads `SKILL.md`) designs like a senior product designer, builds like a front-end engineer, animates like a motion designer, and scores like a strict reviewer. Interfaces, motion graphics, 3D, sound, narration and video.
 
-### Make a dent with your product's design.
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-111?style=flat-square)](LICENSE)
+[![Agent Skills](https://img.shields.io/badge/format-SKILL.md-111?style=flat-square)](https://agentskills.io)
+[![Version](https://img.shields.io/badge/version-2.0.0-E8461E?style=flat-square)](CHANGELOG.md)
+[![Styles](https://img.shields.io/badge/aesthetic%20styles-41-111?style=flat-square)](skills/dent/references/styles/_styles-index.md)
+[![Commands](https://img.shields.io/badge/commands-30-111?style=flat-square)](docs/COMMANDS.md)
 
-**DENT is an open-source product design skill for AI agents.**
-It gives Claude Code, Codex, Cursor, Copilot, Gemini CLI and any agent that reads `SKILL.md` the judgment of a senior product designer: it asks the right questions, applies proven UX laws, follows accessibility rules, avoids the generic "AI look", checks its own work and documents every decision in a `DESIGN.md`.
-
-[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills%20(SKILL.md)-black.svg)](https://agentskills.io)
-[![Styles](https://img.shields.io/badge/aesthetic%20styles-41-orange.svg)](skills/dent/references/styles/_styles-index.md)
-[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](CHANGELOG.md)
-
-[Install](#install) · [See the difference](#see-the-difference-run-the-benchmark) · [What it does](#what-dent-does) · [How it works](docs/HOW-IT-WORKS.md) · [All install options](docs/INSTALL.md) · [Contribute](CONTRIBUTING.md)
-
-</div>
+**[Install](#install)** · **[One command](#one-command-the-right-pipeline)** · **[What it can make](#what-dent-can-make)** · **[Proof](#see-the-difference-run-the-benchmark)** · **[Commands](docs/COMMANDS.md)** · **[Architecture](docs/ARCHITECTURE.md)**
 
 ---
 
-## Why DENT
+## The problem
 
-Ask an AI agent to "design a landing page" and you usually get the same thing: a purple gradient, a centered headline, three feature cards, Inter at one weight, missing states, and contrast that fails. It looks fine for a second and like everything else forever.
+Ask any agent for a landing page and you get the average of every template: a violet gradient, a glowing orb, a centered headline, three equal cards, invented "loved by 10,000+ teams" stats, and a phone layout that scrolls sideways. It looks finished for a second and forgettable forever.
 
-DENT fixes that by changing **how** the agent works, not just what it outputs:
+**DENT changes how the agent works, not just what it outputs.**
 
-| Without DENT | With DENT |
+| Without DENT | With DENT 2.0 |
 |---|---|
-| Guesses the look from one sentence | Asks a few focused questions (one at a time, with a recommended option) — or decides for you if you say so |
-| Default template look | A concept, a deliberate style (41 to choose from) and a signature element |
-| One-off values everywhere | Design tokens and component specs reused on every screen |
-| Happy path only | Empty, loading, error, success, hover, focus and disabled states |
-| "Looks accessible" | WCAG 2.2 AA rules that no style is allowed to break |
-| Starts a second design system in your codebase | Detects your existing tokens / UI library and extends them |
-| "I used blue because it's nice" | A Decision Log with the reason and source of every choice |
-| Forgets everything next session | An approved `DESIGN.md` that becomes the source of truth |
+| Guesses the look from one sentence | Classifies the task, asks the few questions that matter, or decides for you and shows why |
+| The category cliché | Names the cliché, then diverges: concept, one of 41 styles, a directions library, a signature hero |
+| Invents social proof | **Never.** Honesty is a gate: real proof or clearly marked placeholders |
+| "Looks fine on my screen" | `verify_page.py` checks overflow at 6 widths, contrast, labels, reduced motion, autoplay audio |
+| Adds a second UI library to your repo | Detects your design system and extends it; picks libraries from sourced catalogues, licences included |
+| Fades everything in | Motion with a purpose, storyboards for motion graphics, reduced-motion versions |
+| Click sounds everywhere, autoplaying music | Sound as a designed, opt-in system; narration with captions |
+| "Done!" | Scores itself against *your* request with evidence; `/dent:improve` raises the score |
+
+---
+
+## One command. The right pipeline.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/workflow-dark.svg">
+  <img src="assets/workflow-light.svg" alt="Diagram: any request goes to /dent, which builds a pipeline (route, plan, audit, direct, build, verify, score, improve) powered by knowledge, catalogues, quality checks and memory." width="100%">
+</picture>
+
+You never have to learn the commands. Type `/dent` (or just describe what you want) and DENT's router works out the deliverable, the state of your project, the media involved and the risk, then chains the right sub-commands:
+
+```text
+/dent go all out: a landing page for my app and a 45-second launch video with voice-over
+```
+→ *two pipelines, one shared design system:* `directions → create → type → motion-graphics → assets → verify → score → improve`, then `launch-video → voice → sound → verify → score`.
+
+```text
+/dent this dashboard scrolls sideways on my phone
+```
+→ `responsive → verify`. No questionnaire for a bug.
+
+Power users can call any of the [30 commands](docs/COMMANDS.md) directly: `/dent:plan`, `/dent:audit`, `/dent:components`, `/dent:motion-graphics`, `/dent:sound`, `/dent:video`, `/dent:score`, `/dent:improve`…
+
+---
+
+## What DENT can make
+
+| Discipline | What DENT brings |
+|---|---|
+| **Product design** | Six modes (create, redesign, audit, extend, implement, adopt), 4 effort levels, 4 task depths, UX laws labelled Law / Rule / Convention, recipes for landing pages, apps and dashboards |
+| **Creative direction** | Concept sentence, category-cliché check, 41 aesthetic styles, a [library of 25 named directions](skills/dent/references/creative/directions-library.md) plus motion, sound and video directions, a [hero typography system](skills/dent/references/creative/hero-typography.md) with 18 composition techniques |
+| **Front-end engineering** | Tokens first, ~45 component specs, code guides for HTML/CSS, Tailwind, React, Vue, Svelte, Flutter, SwiftUI, Compose, React Native |
+| **Component intelligence** | A [sourced catalogue](skills/dent/references/catalog/README.md) of primitives (Radix, Base UI, React Aria, Ark…), systems (MUI, Mantine, Ant, Carbon, Fluent…), collections (shadcn/ui, Magic UI, Aceternity…) and specialists (TanStack Table, AG Grid, Tiptap, cmdk, Sonner, dnd-kit, React Flow…), with licences and paid tiers called out |
+| **Motion graphics** | Interface motion vs motion graphics vs 3D, 1D → 2D → 2.5D → 3D → XR, storyboards, kinetic type, scroll stories, generative visuals, and a tech ladder from CSS to GSAP, Rive, PixiJS, Three.js and shaders |
+| **Sound and voice** | UI sound, sonic identity, ambience, interactive and procedural audio, music, narration and TTS, captions; never autoplay, always opt-in |
+| **Video** | Launch (teaser, reveal, feature tour, manifesto), trailers, explainers, demos, social, ads; scripts, storyboards, animatics; generative tools if you have them, otherwise HyperFrames, Remotion, Motion Canvas and FFmpeg |
+| **Quality** | 12 gates, runnable checks, an [All-out protocol](skills/dent/references/workflow/all-out.md) that misses nothing, request-specific self-scoring, and attribution of what came from DENT vs the agent vs you |
+
+---
+
+## Built with DENT 2.0
+
+The next showcase pieces are being produced **with DENT 2.0 itself**, using the exact prompts in [`evals/scenarios.md`](evals/scenarios.md) (S19–S21). Every question the agent asks and every answer given will be published with the result.
+
+| Piece | Status |
+|---|---|
+| DENT's own landing page | Next |
+| A kinetic-typography motion piece about DENT | Next |
+| A 60–75 s explainer video with narration and captions | Next |
+
+The animated banner at the top of this page is hand-built SVG: the wordmark is drawn as paths, it plays once, and it respects reduced-motion settings. Its source is [`assets/build_assets.py`](assets/build_assets.py).
+
+---
 
 ## See the difference: run the benchmark
 
@@ -45,11 +98,11 @@ Don't take our word for it. Give your agent the **same prompt twice**, once with
 3. Paste the prompt unchanged. Apart from answering the agent's questions (benchmark 1 only), reply only `continue` if it stops early. Keep the first result of each run.
 4. Open both `index.html` files side by side on your phone and desktop, and share your screenshots via a pull request or a [Benchmark result issue](https://github.com/jeelnadaa/DENT/issues/new?template=benchmark_result.md).
 
-Full rules, scoring sheet and a screenshot script: **[benchmark/](benchmark/README.md)**
+Full rules, scoring sheet and a screenshot script: **[benchmark/](benchmark/README.md)** · Full test protocol: **[evals/protocol.md](evals/protocol.md)**
 
 ### Benchmark 1: DENT's own landing page, built with DENT
 
-We built DENT's landing page with DENT itself. Here is the exact prompt we used, so you can build it **with and without DENT** and compare.
+We are building DENT's landing page with DENT itself. Here is the exact prompt, so you can build it **with and without DENT** and compare.
 
 This prompt gives the agent the **content** (headlines, copy, links) and nothing about the look. It also **lets the agent ask questions**, the way real requests work: answer them briefly, and give the same answers in both runs where the questions overlap.
 
@@ -210,105 +263,126 @@ a short summary of the design decisions you made.
 
 **Results: Brewlog**
 
-| Agent + model | Without DENT | With DENT | Run by |
-|---|---|---|---|
-| *Official results coming soon* | | | [@jeelnadaa](https://github.com/jeelnadaa) |
+**Run 1: Antigravity + Gemini 3.8 Flash (High effort)**, 2026-11-14, run by [@jeelnadaa](https://github.com/jeelnadaa)
 
-*Live side-by-side demos will be linked here as results come in.*
+| | Without DENT | With DENT |
+|---|---|---|
+| Desktop | ![Brewlog without DENT, desktop first screen](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/without-hero-1440.jpg) | ![Brewlog with DENT, desktop first screen](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/with-hero-1440.jpg) |
+| Phone | ![Brewlog without DENT, phone first screen](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/without-hero-390.jpg) | ![Brewlog with DENT, phone first screen](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/with-hero-390.jpg) |
+| Full page | [Desktop](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/without-1440.jpg) · [Phone](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/without-390.jpg) | [Desktop](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/with-1440.jpg) · [Phone](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/with-390.jpg) |
+| Live site | [Open](https://jeelnadaa.github.io/DENT/benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/without/index.html) | [Open](https://jeelnadaa.github.io/DENT/benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/with/index.html) |
+| Score (/50) | **36** | **35** |
 
-## What DENT does
+**Honest verdict: about a tie.** On this model both runs produced a very similar dark espresso-and-orange site. DENT clearly improved the process: a written brief and concept, a full `DESIGN.md`, reduced-motion support, a light/dark theme and clearer pricing states. But it also shipped a sideways-scrolling header on phones and kept invented stats that its own rules forbid, so the run without DENT scored slightly higher (36 vs 35; the without-DENT page also overflows at 320 px and ignores reduced motion). We're fixing both in the skill. Full scores, checks and notes: **[RESULT.md](benchmark/results/brewlog-antigravity-gemini-3.8-flash-high-2026-11-14/RESULT.md)**
 
-- **Six working modes** — Create, Redesign, Audit, Extend, Implement and Adopt (working inside an existing codebase or UI library).
-- **Four effort levels** — Essential · Standard · Polished · All-out. You choose how deep it goes; a non-negotiable quality floor applies to all of them.
-- **Proven principles** — Gestalt, Fitts, Hick, Jakob, Doherty, Nielsen's heuristics and more, each labeled as *Law*, *Rule* or *Convention* so the agent knows what it may bend.
-- **A full component system** — ~45 components specced (sizes, states, behavior, accessibility), from buttons to date pickers, data tables, command palettes and kanban boards.
-- **41 aesthetic styles** — Minimal, Swiss, Neo-Brutalism, Glassmorphism, Dark Tech, Editorial, Luxury, Japandi, Utilitarian, Retro OS, Y2K, Cyberpunk and more, each with overrides, signature moves, accessibility watch-outs and starter tokens.
-- **Creative direction** — concept sentences, divergent directions, composition and an explicit list of "default look" patterns to avoid.
-- **Patterns for real products** — landing, pricing, dashboards, onboarding, auth, checkout, settings, AI/agent UIs, plus teams, roles, billing, notifications, audit logs, collaboration, import/export, docs sites, changelogs and more.
-- **Platforms** — responsive web, iOS (HIG), Android (Material 3), desktop, watch, TV, car, voice, AR/VR, sound and haptics.
-- **Accessibility, i18n and ethics built in** — WCAG 2.2 AA checklist, ARIA patterns, RTL and Indic/CJK scripts, and a deceptive-patterns blocklist.
-- **Design → code** — token architecture (3 tiers, DTCG export) and implementation guides for HTML/CSS, Tailwind, React, Vue, Svelte, Flutter, SwiftUI, Compose and React Native.
-- **Self-review** — renders and screenshots what it built when the agent can, scores it against a 12-point rubric and fixes issues before showing you.
-- **DESIGN.md** — after you approve, everything is written to a living spec the agent reads before any future design work.
+*More runs on other agents and models are welcome. One run per side isn't enough to call a winner.*
+
+**What DENT 2.0 changed because of this run:** every failure above is now an enforced gate (overflow, honesty, labels, style mixing, category cliché, proofreading), the [landing-page recipe](skills/dent/references/recipes/landing-page.md) walks the agent through them step by step, and `verify_page.py` catches the mechanical ones automatically (its raw output for both pages is in the result folder). The next Brewlog run will use DENT 2.0.
+
+---
 
 ## Install
 
-DENT follows the open **Agent Skills** format: a folder with a `SKILL.md` and reference files. Pick your agent:
-
-### Claude Code (recommended: plugin marketplace)
+**Claude Code (plugin, gets all 30 slash commands)**
 ```bash
 /plugin marketplace add jeelnadaa/DENT
+```
+```bash
 /plugin install dent@dent
 ```
 
-### Any agent, one command (via the `skills` CLI)
+**Any agent, one command** (detects Claude Code, Codex, Cursor, Copilot, Gemini CLI, OpenCode…)
 ```bash
 npx skills add jeelnadaa/DENT
 ```
-It detects the agents you have installed (Claude Code, Codex, Cursor, Copilot, Gemini CLI, OpenCode…) and installs DENT for them.
 
-### Manual (any agent)
-```bash
-git clone https://github.com/jeelnadaa/DENT.git
-```
-Then copy `skills/dent/` into your agent's skills folder:
+**Manual:** copy `skills/dent/` into your agent's skills folder:
 
 | Agent | Personal (all projects) | Project only |
 |---|---|---|
 | Claude Code | `~/.claude/skills/dent/` | `.claude/skills/dent/` |
 | OpenAI Codex | `~/.codex/skills/dent/` | `.agents/skills/dent/` |
-| GitHub Copilot (VS Code / coding agent) | `~/.copilot/skills/dent/` | `.github/skills/dent/` |
+| GitHub Copilot | `~/.copilot/skills/dent/` | `.github/skills/dent/` |
 | Cursor | `~/.cursor/skills/dent/` | `.cursor/skills/dent/` |
 | Gemini CLI | `~/.gemini/skills/dent/` | `.gemini/skills/dent/` |
-| OpenCode, Goose, Amp & other Agent Skills tools | — | `.agents/skills/dent/` |
+| Antigravity, OpenCode, Goose, Amp & other Agent Skills tools | — | `.agents/skills/dent/` |
 
-Or use the installer script: `./scripts/install.sh claude` (macOS/Linux) or `.\scripts\install.ps1 -Agent claude` (Windows).
+Or run the installer: `./scripts/install.sh claude` (macOS/Linux) · `.\scripts\install.ps1 -Agent claude` (Windows).
 
-**Claude.ai / Claude Desktop:** download `dent.zip` from [Releases](https://github.com/jeelnadaa/DENT/releases) and upload it under **Settings → Capabilities → Skills**.
+**Claude.ai / Claude Desktop:** download `dent.zip` from [Releases](https://github.com/jeelnadaa/DENT/releases) and upload it under **Settings → Capabilities → Skills**. Agents without skill support (Windsurf, Cline, Aider, Zed…): see [docs/INSTALL.md](docs/INSTALL.md#agents-without-native-skill-support).
 
-**Agents without skill support** (Windsurf, Cline, Aider, Zed…): see [docs/INSTALL.md](docs/INSTALL.md#agents-without-native-skill-support) for a two-line rules-file setup.
+**Optional, for real verification:** `pip install playwright && python -m playwright install chromium` lets DENT run `verify_page.py` on what it builds.
 
-> Skill folder paths change as tools evolve. If a path above doesn't work, check your agent's docs for its "skills" directory — DENT works anywhere `SKILL.md` is read. Full details: [docs/INSTALL.md](docs/INSTALL.md).
+> Skill folder paths change as tools evolve. If a path doesn't work, check your agent's docs for its "skills" directory. Full details: [docs/INSTALL.md](docs/INSTALL.md).
+
+---
 
 ## Use it
 
-You don't need special commands — just ask for design work:
+Just ask. These all work with plain `/dent` or no command at all:
 
 ```text
 Design a landing page for my meditation app.
-Redesign our settings screen — keep the brand colors.
+Redesign our settings screen. Keep the brand colors.
 Review this dashboard screenshot and tell me what's wrong.
 Build the pricing page from DESIGN.md in Next.js + Tailwind.
-Add dark mode.
+Add sound to the app, but keep it subtle.
+Make a 60-second explainer video with a calm narrator.
 Go all out on an onboarding flow for a fintech app. Don't ask, just decide.
+Score it. Then improve it.
 ```
 
-In Claude Code you can also invoke it directly: `/dent` (manual install) or `/dent:dent` (plugin install).
+**Effort levels:** Essential · Standard · Polished · **All-out**. All-out is a promise: the best achievable result for your use case with nothing missed, a mandatory completeness sweep, and self-review until the work scores 9/10 with evidence.
 
-## What's inside
+---
+
+## Architecture
 
 ```
 skills/dent/
-├── SKILL.md                         # Workflow + laws + tokens + components + modern layer + checklist
-└── references/                      # Read only when needed (progressive disclosure)
-    ├── workflow-questions-and-effort.md
-    ├── modes-existing-products.md   # Redesign, audit, existing codebases
-    ├── creative-direction.md        # Concept, signature, composition, anti-generic
-    ├── design-brief-and-metrics.md  # Brief, JTBD, HEART, A/B tests
-    ├── components-extended.md       # 25 more component specs
-    ├── complex-product-patterns.md  # Teams, billing, roles, docs, blog, 404…
-    ├── page-and-flow-patterns.md
-    ├── color.md · typography.md · accessibility.md · ux-writing.md
-    ├── design-tokens-and-code.md · tooling-and-handoff.md · quality-review.md
-    ├── platforms-and-devices.md · industry-playbooks.md · internationalization.md
-    ├── data-visualization.md · icons-illustration-and-imagery.md · brand-identity.md
-    ├── assets-and-marketing-graphics.md · persuasion-and-ethics.md
-    ├── research-and-information-architecture.md · inspiration-and-reference-sites.md
-    ├── design-md-template.md
-    └── styles/                      # 41 aesthetic styles + index + template
+├── SKILL.md            # the router: classify → route → gates → score (lean, always loaded)
+├── commands/           # 30 command definitions (one source of truth per command)
+├── references/         # loaded only when needed
+│   ├── workflow/       # orchestration, planning + plan audit, execution, verification, scoring, all-out
+│   ├── recipes/        # step-by-step procedures with gates (landing page, app & dashboard)
+│   ├── creative/       # directions library, hero typography, anti-slop detector
+│   ├── catalog/        # components, primitives, specialists, assets + selection method
+│   ├── motion/         # motion graphics, tech catalogue, 3D, motion system + verification
+│   ├── audio/          # sound design, voice & narration, audio tech, implementation + verification
+│   ├── video/          # video types & craft, tools & pipeline
+│   ├── styles/         # 41 aesthetic styles
+│   └── *.md            # color, typography, accessibility, patterns, platforms, industries, tokens & code…
+├── templates/          # PLAN, AUDIT, REVIEW, SCORECARD, MOTION, SOUND, VIDEO
+└── scripts/            # verify_page.py, contrast.py
+commands/               # Claude Code plugin wrappers → /dent:<name>
+evals/                  # behaviour cases, 21 scenarios, command + routing tests, fixtures
+benchmark/              # public with/without comparisons
 ```
 
-The agent loads only `SKILL.md` up front and opens a reference file only when the task needs it, so DENT stays light on context even though it holds a full design curriculum.
+Progressive disclosure keeps the agent's context small: `SKILL.md` is about 330 lines; the other 130+ files load only when a task needs them. More: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+---
+
+## Verification and evaluation
+
+- `python scripts/validate.py`: frontmatter, 400+ internal references, the styles index, the command trio (definition ↔ plugin wrapper ↔ router), 200+ catalogue entries with sources and status, and versions.
+- `python scripts/test_tools.py`: `verify_page.py` must fail a deliberately broken page on every gate and pass a clean one.
+- [`evals/`](evals/): 15 behaviour cases, 21 scenarios (dashboards, data-heavy apps, checkout, existing design systems, unfamiliar frameworks, strict accessibility, motion graphics, 3D, animated data, audiovisual, launch and explainer videos, sonic identity) and a protocol that records the prompt, **every question asked and the answer chosen**, the output, machine checks, self-score and an independent score.
+- Catalogue licences are marked ✓ (checked against official sources on a date) or K (from knowledge, to verify), so DENT never presents a guess as a fact.
+
+CI runs the validator, the tool tests and the packager on every push.
+
+---
+
+## Roadmap
+- Publish the three showcase pieces built with DENT 2.0 (landing page, motion piece, explainer).
+- Re-run Brewlog with DENT 2.0, plus runs on more agents and models.
+- More recipes (mobile app, e-commerce, docs site, email) and more verified catalogue entries.
+- Motion verification tooling (frame-rate capture, timeline checks) alongside `verify_page.py`.
+
+Ideas and results are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
 
 ## Creator
 
@@ -317,6 +391,6 @@ If DENT helps you ship something, a ⭐ on the repo or a mention is the best tha
 
 ## License
 
-DENT is licensed under the [Apache License 2.0](LICENSE). You may use, modify and distribute it — including commercially — as long as you keep the license and the [NOTICE](NOTICE) file (which credits the creator). The license does **not** grant rights to the DENT name or logo; see [TRADEMARKS.md](TRADEMARKS.md) for how you may refer to the project.
+DENT is licensed under the [Apache License 2.0](LICENSE). You may use, modify and distribute it, commercially too, as long as you keep the license and the [NOTICE](NOTICE) file (which credits the creator). The license does **not** grant rights to the DENT name or logo; see [TRADEMARKS.md](TRADEMARKS.md).
 
 Designs you create with DENT are yours. DENT claims no rights over its output.

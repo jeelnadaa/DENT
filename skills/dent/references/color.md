@@ -1,6 +1,6 @@
 # Color — Theory, Scales, Dark Mode and Default Palettes
 
-Everything about color beyond the basics in SKILL.md › Foundations › Color. Part 1 is theory and systems; Part 2 is the optional default palettes.
+Everything about color beyond the basics in `foundations-and-components.md` §3 (Color). Part 1 is theory and systems; Part 2 is the optional default palettes.
 
 # Part 1 — Color system
 

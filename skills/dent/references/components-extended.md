@@ -1,6 +1,6 @@
 # Components — Extended Library
 
-SKILL.md §4 defines the foundation components. This file specs the next tier, using the same shared control tokens (§4.1) and the spec template (§4.21). Everything here inherits: control height/radius/font, focus ring, state color formula, hit areas, and the "define once, reuse everywhere" rule. Keyboard/ARIA details: `accessibility.md` §4.
+`foundations-and-components.md` §4 defines the foundation components. This file specs the next tier, using the same shared control tokens (§4.1) and the spec template (§4.21). Everything here inherits: control height/radius/font, focus ring, state color formula, hit areas, and the "define once, reuse everywhere" rule. Keyboard/ARIA details: `accessibility.md` §4.
 
 ---
 
@@ -71,7 +71,7 @@ SKILL.md §4 defines the foundation components. This file specs the next tier, u
 - Auto-submit when complete; show resend with countdown ("Resend in 0:24"); say where the code was sent ("Sent to ••• 4821").
 
 ## 11. Tag / multi-select input
-- Selected values as removable chips inside the field (chip spec SKILL.md §4.12); field grows to wrap.
+- Selected values as removable chips inside the field (chip spec `foundations-and-components.md` §4.12); field grows to wrap.
 - Typing filters options; Enter adds; Backspace on empty removes last chip (with undo-able behavior); comma/paste splits values for free-form tags.
 - Show "+3 more" when collapsed; list all on focus.
 - Max selections stated up front if limited.
@@ -93,7 +93,7 @@ SKILL.md §4 defines the foundation components. This file specs the next tier, u
 - Lazy load deep levels with an inline spinner row.
 
 ## 15. Data table — advanced
-Builds on SKILL.md §4.15.
+Builds on `foundations-and-components.md` §4.15.
 - **Sorting:** click header; arrow icon shows direction; only one active sort unless multi-sort is needed (Shift+click). `aria-sort`.
 - **Selection:** checkbox column (40–48px), header checkbox with indeterminate state; selecting shows a **bulk action bar** (replaces the table toolbar or sticks at the bottom) with count ("12 selected") and actions; "Select all 1,284" link after selecting a page.
 - **Filtering:** filter chips above the table showing active filters, each removable, "Clear all".
@@ -128,7 +128,7 @@ Builds on SKILL.md §4.15.
 - Markdown shortcuts (`#`, `-`, `**`) for power users.
 
 ## 20. Inline confirmation and popconfirm
-- For low-to-medium risk destructive actions in lists, prefer **undo toast** (SKILL.md §7.8). If confirmation is needed, a small popover anchored to the button ("Delete 'Q3 plan'? [Cancel] [Delete]") beats a full modal.
+- For low-to-medium risk destructive actions in lists, prefer **undo toast** (`modern-layer.md` §7.8). If confirmation is needed, a small popover anchored to the button ("Delete 'Q3 plan'? [Cancel] [Delete]") beats a full modal.
 - High-risk/irreversible (delete workspace, cancel subscription): modal with consequence summary; for the most severe, type-to-confirm the resource name.
 
 ## 21. Empty state (component)
@@ -151,4 +151,4 @@ Builds on SKILL.md §4.15.
 - Show contrast warning when the chosen color will be used behind text.
 
 ## 25. Range slider (two thumbs)
-- Same as slider spec (SKILL.md §4.10) with two thumbs; thumbs can't cross; paired number inputs for min/max; show histogram above for price filters if data allows.
+- Same as slider spec (`foundations-and-components.md` §4.10) with two thumbs; thumbs can't cross; paired number inputs for min/max; show histogram above for price filters if data allows.

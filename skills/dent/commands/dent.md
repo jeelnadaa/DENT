@@ -1,0 +1,29 @@
+# /dent
+
+The main entry point: understand any design, front-end or media request, pick the right sub-commands, chain them and deliver the best result.
+
+**Usage:** `/dent <anything you want designed, built, fixed, reviewed or produced>`
+**Default depth:** decided by the router. Effort level and the gates in SKILL.md §3 always apply.
+
+## Load
+- `references/workflow/orchestration.md (the router: follow it step by step)`
+- SKILL.md §1.0 and §3 (already loaded)
+
+## Steps
+1. Fill the signal card from orchestration.md Step 1 (deliverable, state, verb, media, effort, risk, constraints).
+2. Map the signals to a main command + companions with the table in Step 2. Several deliverables → one pipeline each.
+3. Expand into the default pipeline for each deliverable (Step 3) and tell the user the plan in one line.
+4. Ask only the questions the pipeline needs, one at a time, effort first (Step 4).
+5. Run each sub-command's file (`commands/<name>.md`) in order, carrying the direction, DESIGN.md and Decision Log forward (Step 5).
+6. If the effort is All-out, also run `references/workflow/all-out.md` for every deliverable.
+7. Finish with one close-out: gates, scorecard per deliverable, attribution, next step (Step 6).
+
+## Output
+Whatever the pipeline produces, plus the gate results, scorecard(s), attribution and a one-line next step.
+
+## Never
+- Answer with generic advice when the user wanted something built.
+- Skip verify/score because the user only typed /dent.
+- Load every reference "just in case".
+
+Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8).

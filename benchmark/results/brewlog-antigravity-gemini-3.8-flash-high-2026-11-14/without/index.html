@@ -1,0 +1,3945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brewlog — Master Your Morning Brew</title>
+  <meta name="description" content="Brewlog is the precision coffee companion for home baristas. Dial in recipes, track water temp, grind size, extraction yield, and bean freshness to brew your best cup every day.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       1. CSS RESET & VARIABLES
+       ========================================================================== */
+    :root {
+      /* Palette - Warm Roasted Coffee & Crema Theme */
+      --bg-base: #0E0A08;
+      --bg-surface: #17120F;
+      --bg-elevated: #221A16;
+      --bg-card: #1D1612;
+      --bg-card-hover: #261E18;
+      --bg-glass: rgba(23, 18, 15, 0.82);
+      
+      --border-subtle: rgba(245, 235, 224, 0.08);
+      --border-medium: rgba(245, 235, 224, 0.16);
+      --border-accent: rgba(217, 138, 59, 0.35);
+      
+      --text-primary: #F7F3EE;
+      --text-secondary: #C8BFB5;
+      --text-muted: #8F8276;
+      --text-inverted: #120E0C;
+      
+      --accent-amber: #E28735;
+      --accent-amber-light: #F4A259;
+      --accent-amber-glow: rgba(226, 135, 53, 0.22);
+      --accent-caramel: #C06B22;
+      --accent-crema: #EED8B6;
+      --accent-sage: #5A826D;
+      --accent-sage-glow: rgba(90, 130, 109, 0.2);
+      --accent-cherry: #D9534F;
+      
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-full: 9999px;
+      
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.6);
+      --shadow-amber: 0 10px 30px rgba(226, 135, 53, 0.25);
+      
+      --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-normal: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-slow: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      
+      --container-max: 1200px;
+      --container-padding: 1.5rem;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(226, 135, 53, 0.12), transparent),
+        radial-gradient(circle at 90% 25%, rgba(192, 107, 34, 0.06), transparent 500px),
+        radial-gradient(circle at 10% 65%, rgba(90, 130, 109, 0.05), transparent 450px);
+      background-attachment: fixed;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    img, svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding-left: var(--container-padding);
+      padding-right: var(--container-padding);
+    }
+
+    /* Section Utilities */
+    .section {
+      padding: 6rem 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-amber-light);
+      background: rgba(226, 135, 53, 0.12);
+      border: 1px solid var(--border-accent);
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.85rem);
+      font-weight: 550;
+      line-height: 1.2;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      letter-spacing: -0.015em;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* Common Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.75rem 1.45rem;
+      border-radius: var(--radius-full);
+      transition: all var(--transition-normal);
+      white-space: nowrap;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--accent-amber-light);
+      outline-offset: 3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-amber-light) 0%, var(--accent-amber) 60%, var(--accent-caramel) 100%);
+      color: #0E0A08;
+      box-shadow: var(--shadow-amber);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(226, 135, 53, 0.4);
+      filter: brightness(1.05);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(245, 235, 224, 0.05);
+      border: 1px solid var(--border-medium);
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(245, 235, 224, 0.1);
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      color: var(--accent-crema);
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .btn-lg {
+      padding: 0.95rem 1.95rem;
+      font-size: 1.05rem;
+    }
+
+    /* ==========================================================================
+       2. HEADER & NAVIGATION
+       ========================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background var(--transition-normal), border var(--transition-normal), box-shadow var(--transition-normal);
+    }
+
+    .site-header.scrolled {
+      background: rgba(14, 10, 8, 0.92);
+      border-bottom-color: var(--border-medium);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.35rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-amber), var(--accent-caramel));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0E0A08;
+      box-shadow: 0 4px 14px rgba(226, 135, 53, 0.35);
+    }
+
+    .brand-text span {
+      color: var(--accent-amber);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 0.925rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      position: relative;
+      padding: 0.35rem 0;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--accent-amber);
+      transition: width var(--transition-fast);
+      border-radius: 2px;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-cta {
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .nav-cta {
+        display: inline-flex;
+      }
+    }
+
+    /* Mobile Menu Toggle */
+    .mobile-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      background: rgba(245, 235, 224, 0.05);
+      border: 1px solid var(--border-subtle);
+    }
+
+    @media (max-width: 900px) {
+      .mobile-toggle {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: var(--bg-surface);
+        border-bottom: 1px solid var(--border-medium);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 1.5rem;
+        transform: translateY(-120%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform var(--transition-normal), opacity var(--transition-normal);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+      }
+
+      .nav-menu.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-link {
+        display: block;
+        padding: 0.85rem 0;
+        font-size: 1.05rem;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+    }
+
+    /* ==========================================================================
+       3. HERO SECTION
+       ========================================================================== */
+    .hero {
+      padding: 4.5rem 0 5.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow-sphere {
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 650px;
+      height: 400px;
+      background: radial-gradient(ellipse at center, rgba(226, 135, 53, 0.16) 0%, rgba(226, 135, 53, 0.02) 65%, transparent 80%);
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 1rem;
+      background: rgba(226, 135, 53, 0.1);
+      border: 1px solid rgba(226, 135, 53, 0.3);
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-crema);
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-amber-light);
+      box-shadow: 0 0 10px var(--accent-amber-light);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
+
+    .hero-title .title-highlight {
+      background: linear-gradient(135deg, #FFF0DC 0%, #E28735 60%, #F4A259 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .hero-description {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto 2.25rem;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-social-proof {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--bg-base);
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--accent-crema);
+      margin-left: -8px;
+    }
+
+    .avatar:first-child {
+      margin-left: 0;
+    }
+
+    .stars-group {
+      display: flex;
+      gap: 2px;
+      color: #F59E0B;
+    }
+
+    /* Hero Visual Card Stack */
+    .hero-visual-wrapper {
+      position: relative;
+      max-width: 1040px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    .hero-main-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(245, 235, 224, 0.05);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Mac-style Window Bar */
+    .window-header {
+      background: var(--bg-elevated);
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .window-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(245, 235, 224, 0.15);
+    }
+
+    .window-dot:nth-child(1) { background: #FF5F56; }
+    .window-dot:nth-child(2) { background: #FFBD2E; }
+    .window-dot:nth-child(3) { background: #27C93F; }
+
+    .window-title {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .window-badge {
+      background: rgba(90, 130, 109, 0.2);
+      color: #79B995;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+    }
+
+    /* Hero Showcase Grid */
+    .hero-showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      padding: 1.75rem;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 860px) {
+      .hero-showcase-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 2rem;
+        padding: 2.25rem;
+      }
+    }
+
+    .showcase-recipe-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .recipe-meta-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1.25rem;
+    }
+
+    .recipe-origin {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .recipe-roaster {
+      font-size: 0.95rem;
+      color: var(--accent-crema);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .recipe-score-badge {
+      background: linear-gradient(135deg, rgba(226, 135, 53, 0.2), rgba(192, 107, 34, 0.1));
+      border: 1px solid var(--border-accent);
+      padding: 0.5rem 0.85rem;
+      border-radius: var(--radius-md);
+      text-align: right;
+    }
+
+    .score-value {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-amber-light);
+      line-height: 1;
+    }
+
+    .score-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    /* Metric Grid Cards */
+    .metric-tiles-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    @media (min-width: 520px) {
+      .metric-tiles-row {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .metric-tile {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .metric-tile-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-tile-val {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .metric-tile-sub {
+      font-size: 0.7rem;
+      color: var(--accent-amber-light);
+    }
+
+    /* Flavor Tag Pills */
+    .flavor-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .flavor-tag {
+      font-size: 0.785rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-full);
+      background: rgba(245, 235, 224, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .flavor-tag.highlight {
+      background: rgba(226, 135, 53, 0.15);
+      border-color: var(--border-accent);
+      color: var(--accent-crema);
+    }
+
+    /* Right Side Stats / Dial-In Box */
+    .showcase-dialin-sidebar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .dialin-heading {
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-primary);
+    }
+
+    .dialin-graph-container {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      position: relative;
+    }
+
+    .dialin-graph-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .dialin-tip-box {
+      background: rgba(90, 130, 109, 0.12);
+      border: 1px solid rgba(90, 130, 109, 0.3);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+      font-size: 0.825rem;
+      color: #9ECDB2;
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+    }
+
+    /* Floating Accents */
+    .floating-accent-card {
+      position: absolute;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      padding: 0.85rem 1.2rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 2;
+      animation: floatMotion 4s ease-in-out infinite;
+    }
+
+    .floating-card-left {
+      bottom: -20px;
+      left: -20px;
+      display: none;
+    }
+
+    .floating-card-right {
+      top: -20px;
+      right: -20px;
+      display: none;
+      animation-delay: 2s;
+    }
+
+    @media (min-width: 1024px) {
+      .floating-card-left, .floating-card-right {
+        display: flex;
+      }
+    }
+
+    @keyframes floatMotion {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* ==========================================================================
+       4. HOW IT WORKS SECTION
+       ========================================================================== */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .steps-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 1.75rem;
+      position: relative;
+      transition: all var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .step-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .step-number {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-amber);
+      background: rgba(226, 135, 53, 0.12);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-accent);
+    }
+
+    .step-illustration {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    .step-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       5. KEY FEATURES SECTION
+       ========================================================================== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .feature-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-medium);
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      background: rgba(226, 135, 53, 0.12);
+      border: 1px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-amber-light);
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.65rem;
+      color: var(--text-primary);
+    }
+
+    .feature-description {
+      color: var(--text-secondary);
+      font-size: 0.925rem;
+      line-height: 1.6;
+    }
+
+    .feature-pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.685rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-amber), var(--accent-caramel));
+      color: #0E0A08;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    /* ==========================================================================
+       6. INTERACTIVE APP PREVIEW (SIMULATED COFFEE STUDIO)
+       ========================================================================== */
+    .app-preview-section {
+      background: linear-gradient(180deg, var(--bg-base) 0%, #140F0D 50%, var(--bg-base) 100%);
+    }
+
+    .studio-frame {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg), 0 0 80px rgba(226, 135, 53, 0.08);
+      overflow: hidden;
+    }
+
+    /* Studio Header Navigation Bar */
+    .studio-navbar {
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .studio-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Method Selector Tabs */
+    .method-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-base);
+      padding: 0.3rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    .method-tab-btn {
+      padding: 0.45rem 0.95rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+
+    .method-tab-btn.active {
+      background: var(--accent-amber);
+      color: #0E0A08;
+      box-shadow: 0 2px 8px rgba(226, 135, 53, 0.3);
+    }
+
+    .unit-switch {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 0.2rem;
+    }
+
+    .unit-btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: var(--radius-full);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .unit-btn.active {
+      background: rgba(245, 235, 224, 0.12);
+      color: var(--text-primary);
+    }
+
+    /* Studio Main Work Area */
+    .studio-work-area {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 992px) {
+      .studio-work-area {
+        grid-template-columns: 310px 1fr 340px;
+      }
+    }
+
+    /* Studio Left Column: Saved Recipes */
+    .studio-col-sidebar {
+      background: rgba(20, 15, 12, 0.7);
+      border-right: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .sidebar-section-title {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .recipe-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .recipe-item-btn {
+      text-align: left;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .recipe-item-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-medium);
+    }
+
+    .recipe-item-btn.selected {
+      background: rgba(226, 135, 53, 0.12);
+      border-color: var(--border-accent);
+    }
+
+    .recipe-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .recipe-item-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .recipe-item-method {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--accent-amber-light);
+    }
+
+    .recipe-item-bottom {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Bean Stash Card */
+    .bean-stash-widget {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .freshness-bar-bg {
+      height: 6px;
+      background: rgba(245, 235, 224, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .freshness-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #5A826D, #E28735);
+      border-radius: 3px;
+      width: 75%;
+    }
+
+    /* Studio Center Column: Interactive Brew Form */
+    .studio-col-center {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    @media (min-width: 768px) {
+      .studio-col-center {
+        padding: 2.25rem;
+      }
+    }
+
+    .active-recipe-headline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1.25rem;
+    }
+
+    .recipe-header-title {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .recipe-header-sub {
+      font-size: 0.875rem;
+      color: var(--accent-crema);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.2rem;
+    }
+
+    /* Sliders & Controls Grid */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 600px) {
+      .controls-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .control-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .control-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control-label {
+      font-size: 0.825rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .control-val-display {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent-amber-light);
+    }
+
+    .custom-range {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(245, 235, 224, 0.12);
+      outline: none;
+      transition: background var(--transition-fast);
+    }
+
+    .custom-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      cursor: pointer;
+      border: 2px solid #0E0A08;
+      box-shadow: 0 0 10px rgba(226, 135, 53, 0.5);
+      transition: transform var(--transition-fast);
+    }
+
+    .custom-range::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .custom-range::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      cursor: pointer;
+      border: 2px solid #0E0A08;
+      box-shadow: 0 0 10px rgba(226, 135, 53, 0.5);
+    }
+
+    /* Interactive Live Timer */
+    .brew-timer-widget {
+      background: linear-gradient(135deg, rgba(29, 22, 18, 0.8), rgba(20, 15, 12, 0.9));
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+    }
+
+    .timer-readout {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .timer-clock {
+      font-family: var(--font-mono);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .timer-phase-pill {
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      color: #9ECDB2;
+      background: rgba(90, 130, 109, 0.15);
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(90, 130, 109, 0.3);
+    }
+
+    .timer-controls-btns {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    /* Tasting Notes Selector */
+    .tasting-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .tasting-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tasting-chip {
+      font-size: 0.8125rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-full);
+      background: rgba(245, 235, 224, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .tasting-chip:hover {
+      border-color: var(--border-medium);
+      color: var(--text-primary);
+    }
+
+    .tasting-chip.selected {
+      background: rgba(226, 135, 53, 0.18);
+      border-color: var(--accent-amber);
+      color: var(--accent-crema);
+      font-weight: 600;
+    }
+
+    /* Rating Stars Component */
+    .cup-rating-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+    }
+
+    .star-rater {
+      display: flex;
+      gap: 0.35rem;
+      font-size: 1.5rem;
+      color: rgba(245, 235, 224, 0.2);
+      cursor: pointer;
+    }
+
+    .star-rater .star-btn {
+      color: inherit;
+      transition: color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .star-rater .star-btn:hover,
+    .star-rater .star-btn.active {
+      color: #F59E0B;
+      transform: scale(1.15);
+    }
+
+    /* Studio Right Column: Analytics & Extraction */
+    .studio-col-insights {
+      background: rgba(20, 15, 12, 0.7);
+      border-left: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .gauge-widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .gauge-value-big {
+      font-family: var(--font-mono);
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--accent-amber-light);
+      margin-top: 0.5rem;
+    }
+
+    .gauge-status-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #79B995;
+      background: rgba(90, 130, 109, 0.18);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      display: inline-block;
+      margin-top: 0.35rem;
+    }
+
+    .extraction-breakdown-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      font-size: 0.8125rem;
+    }
+
+    .extraction-row {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .extraction-row span:last-child {
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       7. PRICING SECTION
+       ========================================================================== */
+    .pricing-toggle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .toggle-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .toggle-label.active {
+      color: var(--text-primary);
+    }
+
+    .switch-pill {
+      position: relative;
+      width: 58px;
+      height: 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: background var(--transition-fast);
+    }
+
+    .switch-knob {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      background: var(--accent-amber);
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: transform var(--transition-normal);
+    }
+
+    .switch-pill.yearly .switch-knob {
+      transform: translateX(25px);
+    }
+
+    .discount-pill {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #9ECDB2;
+      background: rgba(90, 130, 109, 0.18);
+      border: 1px solid rgba(90, 130, 109, 0.35);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+    }
+
+    .pricing-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 960px;
+      margin: 0 auto 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .pricing-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .pricing-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all var(--transition-normal);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .pricing-card.featured {
+      background: linear-gradient(180deg, rgba(29, 22, 18, 0.95) 0%, rgba(20, 15, 12, 0.98) 100%);
+      border-color: var(--accent-amber);
+      box-shadow: var(--shadow-amber);
+    }
+
+    .popular-ribbon {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--accent-amber-light), var(--accent-caramel));
+      color: #0E0A08;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.35rem 1.15rem;
+      border-radius: var(--radius-full);
+      box-shadow: 0 4px 12px rgba(226, 135, 53, 0.35);
+    }
+
+    .plan-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-desc {
+      color: var(--text-secondary);
+      font-size: 0.925rem;
+      min-height: 44px;
+      margin-bottom: 1.75rem;
+    }
+
+    .plan-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .price-num {
+      font-family: var(--font-mono);
+      font-size: 3.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .price-period {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+      margin-bottom: 2.25rem;
+      flex-grow: 1;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.925rem;
+      color: var(--text-secondary);
+    }
+
+    .feature-check {
+      color: var(--accent-amber);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .feature-item.muted {
+      color: var(--text-muted);
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    /* Comparison Table */
+    .compare-section {
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .compare-table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .compare-table th, .compare-table td {
+      padding: 0.9rem 1rem;
+      text-align: left;
+    }
+
+    .compare-table th {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-medium);
+    }
+
+    .compare-table td {
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .compare-center {
+      text-align: center !important;
+    }
+
+    /* ==========================================================================
+       8. FAQ ACCORDION SECTION
+       ========================================================================== */
+    .faq-container {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .faq-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      overflow: hidden;
+    }
+
+    .faq-card:hover {
+      border-color: var(--border-medium);
+    }
+
+    .faq-question-btn {
+      width: 100%;
+      text-align: left;
+      padding: 1.35rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: color var(--transition-fast);
+    }
+
+    .faq-question-btn:hover {
+      color: var(--accent-amber-light);
+    }
+
+    .faq-icon-indicator {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(245, 235, 224, 0.05);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform var(--transition-normal), background var(--transition-fast);
+    }
+
+    .faq-card.open .faq-icon-indicator {
+      transform: rotate(180deg);
+      background: var(--accent-amber);
+      color: #0E0A08;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-normal) ease-out, padding var(--transition-normal);
+      padding: 0 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .faq-card.open .faq-answer {
+      max-height: 300px;
+      padding-bottom: 1.35rem;
+    }
+
+    /* ==========================================================================
+       9. SIGN-UP FORM SECTION
+       ========================================================================== */
+    .signup-section {
+      background: radial-gradient(circle at 50% 30%, rgba(226, 135, 53, 0.1), transparent 60%);
+      padding: 6.5rem 0;
+    }
+
+    .signup-card-wrapper {
+      max-width: 580px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-xl);
+      padding: 2.75rem 2.25rem;
+      box-shadow: var(--shadow-lg), 0 0 60px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    @media (max-width: 540px) {
+      .signup-card-wrapper {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    .signup-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      text-align: left;
+    }
+
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem 0.85rem 2.75rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 0 3px rgba(226, 135, 53, 0.2);
+      background: var(--bg-elevated);
+    }
+
+    .form-input.has-error {
+      border-color: var(--accent-cherry) !important;
+      background: rgba(217, 83, 79, 0.05);
+    }
+
+    .input-icon-left {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .input-error-msg {
+      font-size: 0.785rem;
+      color: #FF8580;
+      display: none;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+    }
+
+    .input-error-msg.show {
+      display: flex;
+    }
+
+    /* Password Strength Indicator */
+    .strength-meter-wrap {
+      margin-top: 0.45rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .strength-bars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      height: 4px;
+    }
+
+    .strength-segment {
+      background: rgba(245, 235, 224, 0.1);
+      border-radius: 2px;
+      transition: background var(--transition-fast);
+    }
+
+    .strength-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Plan Picker inside Form */
+    .plan-selector-chips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .plan-chip-label {
+      cursor: pointer;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+      background: var(--bg-base);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      transition: all var(--transition-fast);
+    }
+
+    .plan-chip-label:hover {
+      border-color: var(--border-medium);
+    }
+
+    .plan-chip-label.selected {
+      border-color: var(--accent-amber);
+      background: rgba(226, 135, 53, 0.1);
+    }
+
+    .plan-chip-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .plan-chip-price {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-amber-light);
+    }
+
+    .terms-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+    }
+
+    .terms-checkbox {
+      margin-top: 3px;
+      accent-color: var(--accent-amber);
+    }
+
+    /* Form Success State Screen */
+    .signup-success-state {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .signup-success-state.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .success-badge-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(90, 130, 109, 0.2);
+      border: 2px solid #5A826D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ECDB2;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ==========================================================================
+       10. FOOTER
+       ========================================================================== */
+    .site-footer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-subtle);
+      padding: 5rem 0 2.5rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 600px) {
+      .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .footer-grid {
+        grid-template-columns: 2.2fr 1fr 1fr 1fr;
+      }
+    }
+
+    .footer-brand-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .footer-desc {
+      color: var(--text-secondary);
+      font-size: 0.925rem;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+
+    .footer-col-title {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-primary);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-link {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: color var(--transition-fast);
+    }
+
+    .footer-link:hover {
+      color: var(--accent-amber-light);
+    }
+
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-link-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(245, 235, 224, 0.05);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+    }
+
+    .social-link-btn:hover {
+      color: var(--accent-amber-light);
+      border-color: var(--border-accent);
+      background: rgba(226, 135, 53, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       HEADER & NAVIGATION
+       ======================================================================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-logo" aria-label="Brewlog Home">
+        <div class="brand-icon">
+          <!-- Coffee Dripper Icon SVG -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 3h16l-3 10a5 5 0 0 1-5 4 5 5 0 0 1-5-4L4 3z"></path>
+            <path d="M12 17v4"></path>
+            <path d="M8 21h8"></path>
+            <path d="M10 7h4"></path>
+          </svg>
+        </div>
+        <span class="brand-text">Brewlog<span>.</span></span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#preview" class="nav-link">App Preview</a></li>
+          <li><a href="#pricing" class="nav-link">Pricing</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#signup" class="btn btn-primary btn-sm nav-cta">Start Free</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation Menu" aria-expanded="false">
+          <!-- Hamburger / Close Icon SVG -->
+          <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================================================================
+         HERO SECTION
+         ====================================================================== -->
+    <section class="hero" id="hero">
+      <div class="hero-glow-sphere"></div>
+
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span>The Specialty Coffee Dial-In App</span>
+          </div>
+
+          <h1 class="hero-title">
+            Master your morning brew. <br>
+            <span class="title-highlight">Every bean. Every variable.</span>
+          </h1>
+
+          <p class="hero-description">
+            Stop guessing why yesterday's cup tasted magical. Brewlog logs your ratio, grind size, water temperature, and brew time — turning sensory notes into repeatable perfection.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#signup" class="btn btn-primary btn-lg">
+              <span>Start Brewing Free</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+            <a href="#preview" class="btn btn-secondary btn-lg">
+              <!-- Sliders icon -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><circle cx="4" cy="14" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="20" cy="16" r="2"/></svg>
+              <span>Explore Interactive Studio</span>
+            </a>
+          </div>
+
+          <div class="hero-social-proof">
+            <div class="avatar-stack">
+              <div class="avatar" title="Barista from Ethiopia">🇪🇹</div>
+              <div class="avatar" title="Roaster from Colombia">🇨🇴</div>
+              <div class="avatar" title="Brewer from Japan">🇯🇵</div>
+              <div class="avatar" title="Sensory Judge">⭐</div>
+            </div>
+            <div class="stars-group">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <span><strong>4.9 / 5</strong> rating from 14,000+ passionate home brewers</span>
+          </div>
+        </div>
+
+        <!-- Hero App Showcase Card Preview -->
+        <div class="hero-visual-wrapper">
+          <div class="hero-main-card">
+            <!-- Window Bar -->
+            <div class="window-header">
+              <div class="window-dots">
+                <div class="window-dot"></div>
+                <div class="window-dot"></div>
+                <div class="window-dot"></div>
+              </div>
+              <div class="window-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>brewlog.app/session/rec-40291</span>
+              </div>
+              <span class="window-badge">● DIALED IN</span>
+            </div>
+
+            <div class="hero-showcase-grid">
+              <!-- Left Recipe Meta -->
+              <div class="showcase-recipe-summary">
+                <div class="recipe-meta-header">
+                  <div>
+                    <h3 class="recipe-origin">Yirgacheffe Chelbesa</h3>
+                    <div class="recipe-roaster">
+                      <span>Onyx Coffee Lab</span>
+                      <span>•</span>
+                      <span>Washed Organic</span>
+                    </div>
+                  </div>
+                  <div class="recipe-score-badge">
+                    <div class="score-value">9.4</div>
+                    <div class="score-label">Cup Score</div>
+                  </div>
+                </div>
+
+                <!-- Parameters Tiles -->
+                <div class="metric-tiles-row">
+                  <div class="metric-tile">
+                    <span class="metric-tile-label">Dose / Water</span>
+                    <span class="metric-tile-val">18.5g : 300g</span>
+                    <span class="metric-tile-sub">1:16.2 Ratio</span>
+                  </div>
+                  <div class="metric-tile">
+                    <span class="metric-tile-label">Grind Size</span>
+                    <span class="metric-tile-val">19 Clicks</span>
+                    <span class="metric-tile-sub">Comandante C40</span>
+                  </div>
+                  <div class="metric-tile">
+                    <span class="metric-tile-label">Water Temp</span>
+                    <span class="metric-tile-val">93.5°C</span>
+                    <span class="metric-tile-sub">Lotus Light Drops</span>
+                  </div>
+                  <div class="metric-tile">
+                    <span class="metric-tile-label">Total Time</span>
+                    <span class="metric-tile-val">2m 48s</span>
+                    <span class="metric-tile-sub">45s Bloom (55g)</span>
+                  </div>
+                </div>
+
+                <!-- Flavor Tags -->
+                <div>
+                  <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.06em; display:block; margin-bottom:0.6rem;">Sensory Profile</span>
+                  <div class="flavor-cloud">
+                    <span class="flavor-tag highlight">🌸 Jasmine Floral</span>
+                    <span class="flavor-tag highlight">🍑 White Peach</span>
+                    <span class="flavor-tag highlight">🍋 Meyer Lemon</span>
+                    <span class="flavor-tag">🍯 Orange Blossom Honey</span>
+                    <span class="flavor-tag">🍵 Silky Green Tea Finish</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Extraction Chart & Dial-In Radar -->
+              <div class="showcase-dialin-sidebar">
+                <div class="dialin-heading">
+                  <span>Extraction Analytics</span>
+                  <span style="font-family:var(--font-mono); color:var(--accent-amber-light); font-size:0.85rem;">20.8% EY</span>
+                </div>
+
+                <div class="dialin-graph-container">
+                  <div class="dialin-graph-header">
+                    <span>Target Extraction Sweet-Spot</span>
+                    <span style="color:#79B995;">Sweet & Balanced</span>
+                  </div>
+                  <!-- Inline SVG Yield Curve -->
+                  <svg viewBox="0 0 280 100" style="width:100%; height:90px; overflow:visible;">
+                    <!-- Optimal Zone Background -->
+                    <rect x="90" y="10" width="100" height="80" fill="rgba(90, 130, 109, 0.12)" rx="6"/>
+                    <line x1="90" y1="10" x2="90" y2="90" stroke="rgba(90,130,109,0.3)" stroke-dasharray="2 2"/>
+                    <line x1="190" y1="10" x2="190" y2="90" stroke="rgba(90,130,109,0.3)" stroke-dasharray="2 2"/>
+                    
+                    <!-- Yield curve path -->
+                    <path d="M 10 85 Q 70 80, 110 35 T 190 32 T 270 75" fill="none" stroke="rgba(245,235,224,0.2)" stroke-width="2"/>
+                    <!-- Active brew highlighted point -->
+                    <circle cx="145" cy="30" r="6" fill="#E28735" stroke="#0E0A08" stroke-width="2"/>
+                    <circle cx="145" cy="30" r="11" fill="rgba(226,135,53,0.25)"/>
+                    
+                    <text x="145" y="18" fill="#F4A259" font-size="9" font-family="JetBrains Mono" text-anchor="middle" font-weight="600">Current (20.8%)</text>
+                    <text x="45" y="94" fill="#8F8276" font-size="8" font-family="JetBrains Mono">Under</text>
+                    <text x="140" y="94" fill="#9ECDB2" font-size="8" font-family="JetBrains Mono" font-weight="bold">Golden Cup</text>
+                    <text x="235" y="94" fill="#8F8276" font-size="8" font-family="JetBrains Mono">Over</text>
+                  </svg>
+                </div>
+
+                <div class="dialin-tip-box">
+                  <!-- Sparkle / Lightbulb icon -->
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                  <div>
+                    <strong>Dial-in Insight:</strong> Compared to your 91°C brew yesterday, raising water to 93.5°C boosted floral intensity by +28% without increasing bitterness.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating Badges on Desktop -->
+          <div class="floating-accent-card floating-card-left">
+            <div style="width:34px; height:34px; border-radius:50%; background:rgba(90,130,109,0.2); display:flex; align-items:center; justify-content:center; color:#79B995;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <div>
+              <div style="font-size:0.825rem; font-weight:700; color:var(--text-primary);">Bean Inventory Alert</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Chelbesa: Day 10 post-roast (Peak Window)</div>
+            </div>
+          </div>
+
+          <div class="floating-accent-card floating-card-right">
+            <div style="width:34px; height:34px; border-radius:50%; background:rgba(226,135,53,0.2); display:flex; align-items:center; justify-content:center; color:var(--accent-amber);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <div style="font-size:0.825rem; font-weight:700; color:var(--text-primary);">Pulse Pour Checkpoint</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Target: 180g at 1m 15s ✓ On Track</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         HOW IT WORKS SECTION
+         ====================================================================== -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">The 3-Step Methodology</span>
+          <h2 class="section-title">From bag to cup, zero guesswork</h2>
+          <p class="section-subtitle">
+            Great coffee isn't luck. It's the systematic adjustment of 5 key variables until the flavor in the cup matches the roaster's vision.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-illustration">
+              <!-- Scale & Dripper SVG -->
+              <svg width="84" height="84" viewBox="0 0 100 100" fill="none">
+                <rect x="15" y="75" width="70" height="12" rx="4" fill="#221A16" stroke="#E28735" stroke-width="2"/>
+                <rect x="42" y="79" width="16" height="4" rx="2" fill="#E28735"/>
+                <path d="M28 30 L72 30 L58 65 L42 65 Z" fill="#1D1612" stroke="#F4A259" stroke-width="2"/>
+                <path d="M50 15 L50 25" stroke="#E28735" stroke-width="2" stroke-dasharray="2 3"/>
+                <circle cx="50" cy="48" r="4" fill="#E28735"/>
+              </svg>
+            </div>
+            <h3 class="step-title">Log the Variables</h3>
+            <p class="step-text">
+              Pick your brew method, dial in your coffee dose (grams), water weight, grinder click setting, and exact kettle temperature in seconds.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-illustration">
+              <!-- Tasting Cup & Aromas SVG -->
+              <svg width="84" height="84" viewBox="0 0 100 100" fill="none">
+                <path d="M25 45 C25 75 75 75 75 45 Z" fill="#1D1612" stroke="#E28735" stroke-width="2"/>
+                <path d="M75 50 C85 50 85 62 75 62" stroke="#E28735" stroke-width="2" fill="none"/>
+                <ellipse cx="50" cy="45" rx="25" ry="7" fill="#C06B22" opacity="0.6"/>
+                <!-- Steam Waves -->
+                <path d="M42 35 C40 25 45 20 43 12" stroke="#F4A259" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M52 32 C54 22 50 18 52 10" stroke="#F4A259" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M60 36 C58 26 62 22 61 14" stroke="#F4A259" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="step-title">Rate & Tag Flavors</h3>
+            <p class="step-text">
+              Score the cup from 1–10. Select SCA-calibrated tasting tags (acidity, sweetness, floral, cocoa) and note astringency or hollow finish.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-illustration">
+              <!-- Analytics Graph SVG -->
+              <svg width="84" height="84" viewBox="0 0 100 100" fill="none">
+                <rect x="15" y="15" width="70" height="70" rx="12" fill="#1D1612" stroke="#5A826D" stroke-width="2"/>
+                <line x1="25" y1="70" x2="75" y2="70" stroke="rgba(245,235,224,0.15)"/>
+                <line x1="25" y1="50" x2="75" y2="50" stroke="rgba(245,235,224,0.15)"/>
+                <line x1="25" y1="30" x2="75" y2="30" stroke="rgba(245,235,224,0.15)"/>
+                <polyline points="28,65 42,55 58,35 72,25" fill="none" stroke="#E28735" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="58" cy="35" r="4" fill="#F4A259"/>
+                <circle cx="72" cy="25" r="4" fill="#9ECDB2"/>
+              </svg>
+            </div>
+            <h3 class="step-title">Dial-In & Perfect</h3>
+            <p class="step-text">
+              Brewlog correlates your ratings with brew variables. You'll see immediately: <em>"Grind 1 click finer"</em> or <em>"Drop temp 2°C to tame bitterness"</em>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         KEY FEATURES SECTION
+         ====================================================================== -->
+    <section class="section" id="features" style="background: rgba(23, 18, 15, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Engineered For Taste</span>
+          <h2 class="section-title">Everything you need to master extraction</h2>
+          <p class="section-subtitle">
+            Whether you brew delicate washed Geishas on a V60 or dense honey-processed espresso, Brewlog equips you with barista-grade tools.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Feature 1 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3 class="feature-title">Universal Recipe Vault</h3>
+            <p class="feature-description">
+              Dedicated parameters for V60, Espresso, AeroPress, Chemex, Kalita Wave, French Press, and Cold Brew. Never mix up pour-over ratios with 1:2 espresso extractions.
+            </p>
+          </div>
+
+          <!-- Feature 2 (Pro) -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+            <h3 class="feature-title">
+              Bean Stash & Freshness Radar
+              <span class="feature-pro-badge">PRO</span>
+            </h3>
+            <p class="feature-description">
+              Track roast dates, remaining bag weight in grams, freezer vaults, and optimal degassing windows. Get alerted when your Gesha hits its 14-day flavor peak.
+            </p>
+          </div>
+
+          <!-- Feature 3 (Pro) -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <h3 class="feature-title">
+              Grinder Calibration Sync
+              <span class="feature-pro-badge">PRO</span>
+            </h3>
+            <p class="feature-description">
+              Translate grind settings between 40+ popular grinders: Comandante C40 clicks, Fellow Ode Gen 2, Baratza Encore, Niche Zero, and 1Zpresso K-Ultra with zero math.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3 class="feature-title">Multi-Stage Pour Timer</h3>
+            <p class="feature-description">
+              Follow step-by-step pulse pours. The timer guides your bloom, pour 1, and drawdown with visual targets so you hit your exact water weight every 30 seconds.
+            </p>
+          </div>
+
+          <!-- Feature 5 (Pro) -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            </div>
+            <h3 class="feature-title">
+              Extraction Yield Analytics
+              <span class="feature-pro-badge">PRO</span>
+            </h3>
+            <p class="feature-description">
+              Calculates estimated TDS and Extraction Yield percentage based on your refractometer readings or dose-to-yield equations. See sweet spot correlations in color.
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+            <h3 class="feature-title">Complete Data Ownership</h3>
+            <p class="feature-description">
+              Export your entire coffee journal to CSV or JSON anytime. Works offline in your kitchen without a cellular or Wi-Fi connection, syncing automatically when reconnected.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         INTERACTIVE APP PREVIEW (STUDIO SIMULATOR)
+         ====================================================================== -->
+    <section class="section app-preview-section" id="preview">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Interactive Demo</span>
+          <h2 class="section-title">The Coffee Studio in your hands</h2>
+          <p class="section-subtitle">
+            Try Brewlog's live interface below. Switch brew methods, drag the dose and ratio sliders, and see how extraction calculations adapt in real time.
+          </p>
+        </div>
+
+        <div class="studio-frame">
+          <!-- Studio Top Nav -->
+          <div class="studio-navbar">
+            <div class="studio-brand">
+              <span style="color:var(--accent-amber);">☕ BREW STUDIO</span>
+              <span style="color:var(--border-medium);">|</span>
+              <span style="color:var(--text-secondary); font-size:0.8rem;">Session #842</span>
+            </div>
+
+            <!-- Method Selector Buttons -->
+            <div class="method-tabs" role="tablist" aria-label="Brew Method Selector">
+              <button class="method-tab-btn active" data-method="v60" id="method-v60">V60 Pour Over</button>
+              <button class="method-tab-btn" data-method="espresso" id="method-espresso">Espresso</button>
+              <button class="method-tab-btn" data-method="aeropress" id="method-aeropress">AeroPress</button>
+              <button class="method-tab-btn" data-method="chemex" id="method-chemex">Chemex</button>
+            </div>
+
+            <!-- Temp Unit Toggle -->
+            <div class="unit-switch" aria-label="Temperature Unit Switch">
+              <button class="unit-btn active" id="unitC">°C</button>
+              <button class="unit-btn" id="unitF">°F</button>
+            </div>
+          </div>
+
+          <!-- Studio 3-Column Workspace -->
+          <div class="studio-work-area">
+            <!-- Left Column: Recipe & Bean List -->
+            <div class="studio-col-sidebar">
+              <div class="sidebar-section-title">
+                <span>Recent Dial-Ins</span>
+                <span style="color:var(--accent-amber); font-weight:700;">3 SAVED</span>
+              </div>
+
+              <div class="recipe-list">
+                <button class="recipe-item-btn selected" id="recItem1" data-id="1">
+                  <div class="recipe-item-top">
+                    <span class="recipe-item-name">Chelbesa Natural</span>
+                    <span class="recipe-item-method">V60</span>
+                  </div>
+                  <div class="recipe-item-bottom">
+                    <span>18.5g : 300g (1:16.2)</span>
+                    <span style="color:var(--accent-amber-light); font-weight:600;">9.4 ★</span>
+                  </div>
+                </button>
+
+                <button class="recipe-item-btn" id="recItem2" data-id="2">
+                  <div class="recipe-item-top">
+                    <span class="recipe-item-name">Pink Bourbon Honey</span>
+                    <span class="recipe-item-method">Espresso</span>
+                  </div>
+                  <div class="recipe-item-bottom">
+                    <span>19.0g : 42g (1:2.2)</span>
+                    <span style="color:var(--accent-amber-light); font-weight:600;">9.1 ★</span>
+                  </div>
+                </button>
+
+                <button class="recipe-item-btn" id="recItem3" data-id="3">
+                  <div class="recipe-item-top">
+                    <span class="recipe-item-name">Nyeri Hill AA</span>
+                    <span class="recipe-item-method">AeroPress</span>
+                  </div>
+                  <div class="recipe-item-bottom">
+                    <span>15.0g : 225g (1:15.0)</span>
+                    <span style="color:var(--accent-amber-light); font-weight:600;">8.8 ★</span>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Bean Stash Widget -->
+              <div class="bean-stash-widget">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-family:var(--font-mono);">Active Bean Bag</span>
+                  <span style="font-size:0.7rem; color:#79B995; font-weight:600;">140g Left</span>
+                </div>
+                <div style="font-weight:600; font-size:0.875rem;" id="stashBeanName">Onyx — Chelbesa Natural</div>
+                <div class="freshness-bar-bg">
+                  <div class="freshness-bar-fill" id="freshnessFill"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted);">
+                  <span>Roasted: 9 days ago</span>
+                  <span style="color:var(--accent-amber-light);">Peak Window</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Middle Column: Interactive Form & Live Sliders -->
+            <div class="studio-col-center">
+              <div class="active-recipe-headline">
+                <div>
+                  <h3 class="recipe-header-title" id="studioRecipeTitle">Yirgacheffe Chelbesa</h3>
+                  <div class="recipe-header-sub">
+                    <span id="studioMethodBadge">Hario V60 02</span>
+                    <span>•</span>
+                    <span id="studioRoaster">Onyx Coffee Lab</span>
+                  </div>
+                </div>
+                <div>
+                  <span class="section-eyebrow" style="margin-bottom:0;" id="studioStatusPill">OPTIMAL DIAL-IN</span>
+                </div>
+              </div>
+
+              <!-- Interactive Sliders -->
+              <div class="controls-grid">
+                <!-- Dose Slider -->
+                <div class="control-box">
+                  <div class="control-top">
+                    <label for="doseRange" class="control-label">
+                      <!-- Scale icon -->
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="m4 6 8-3 8 3"/><path d="m6 10-2 7h6l-2-7"/><path d="m18 10-2 7h6l-2-7"/></svg>
+                      <span>Coffee Dose</span>
+                    </label>
+                    <span class="control-val-display" id="doseDisplay">18.5g</span>
+                  </div>
+                  <input type="range" class="custom-range" id="doseRange" min="12" max="30" step="0.5" value="18.5" aria-label="Coffee Dose in Grams">
+                  <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted);">
+                    <span>12g (Single)</span>
+                    <span>30g (Batch)</span>
+                  </div>
+                </div>
+
+                <!-- Ratio Slider -->
+                <div class="control-box">
+                  <div class="control-top">
+                    <label for="ratioRange" class="control-label">
+                      <!-- Ratio / Beaker icon -->
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/></svg>
+                      <span>Brew Ratio</span>
+                    </label>
+                    <span class="control-val-display" id="ratioDisplay">1:16.2</span>
+                  </div>
+                  <input type="range" class="custom-range" id="ratioRange" min="12" max="18" step="0.1" value="16.2" aria-label="Brew Water Ratio">
+                  <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted);">
+                    <span>1:12 (Intense)</span>
+                    <span>1:18 (Light)</span>
+                  </div>
+                </div>
+
+                <!-- Grind Size Slider -->
+                <div class="control-box">
+                  <div class="control-top">
+                    <label for="grindRange" class="control-label">
+                      <!-- Gear icon -->
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                      <span>Grinder Setting</span>
+                    </label>
+                    <span class="control-val-display" id="grindDisplay">19 Clicks</span>
+                  </div>
+                  <input type="range" class="custom-range" id="grindRange" min="10" max="32" step="1" value="19" aria-label="Grind Size in Clicks">
+                  <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted);">
+                    <span>Fine (#10)</span>
+                    <span>Coarse (#32)</span>
+                  </div>
+                </div>
+
+                <!-- Temperature Slider -->
+                <div class="control-box">
+                  <div class="control-top">
+                    <label for="tempRange" class="control-label">
+                      <!-- Thermometer icon -->
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></svg>
+                      <span>Water Temp</span>
+                    </label>
+                    <span class="control-val-display" id="tempDisplay">93.5°C</span>
+                  </div>
+                  <input type="range" class="custom-range" id="tempRange" min="86" max="98" step="0.5" value="93.5" aria-label="Water Temperature">
+                  <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted);">
+                    <span id="tempMinLabel">86°C (Dark)</span>
+                    <span id="tempMaxLabel">98°C (Light)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Simulated Brew Timer Widget -->
+              <div class="brew-timer-widget">
+                <div class="timer-readout">
+                  <span class="timer-clock" id="timerClock">02:48</span>
+                  <span class="timer-phase-pill" id="timerPhase">Drawdown Complete</span>
+                </div>
+                <div class="timer-controls-btns">
+                  <button class="btn btn-secondary btn-sm" id="btnTimerReset">Reset</button>
+                  <button class="btn btn-primary btn-sm" id="btnTimerToggle">
+                    <!-- Play icon -->
+                    <svg id="playIconSvg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span id="timerBtnText">Simulate Pour</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tasting Tags Clicker -->
+              <div class="tasting-panel">
+                <span style="font-size:0.825rem; font-weight:600; color:var(--text-secondary);">Tasting Notes (Click to toggle):</span>
+                <div class="tasting-chips-grid" id="tastingGrid">
+                  <button class="tasting-chip selected">🌸 Jasmine Floral</button>
+                  <button class="tasting-chip selected">🍑 White Peach</button>
+                  <button class="tasting-chip selected">🍋 Meyer Lemon</button>
+                  <button class="tasting-chip">🍯 Honey Blossom</button>
+                  <button class="tasting-chip">🍫 Dark Cocoa</button>
+                  <button class="tasting-chip">🫐 Blueberry Jam</button>
+                  <button class="tasting-chip">🌿 Bergamot</button>
+                </div>
+              </div>
+
+              <!-- Cup Rating -->
+              <div class="cup-rating-box">
+                <div>
+                  <div style="font-weight:600; font-size:0.9rem;">Your Cup Rating</div>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">Click stars to calibrate score</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.75rem;">
+                  <div class="star-rater" id="starRater" aria-label="Cup Rating">
+                    <button class="star-btn active" data-val="1">★</button>
+                    <button class="star-btn active" data-val="2">★</button>
+                    <button class="star-btn active" data-val="3">★</button>
+                    <button class="star-btn active" data-val="4">★</button>
+                    <button class="star-btn active" data-val="5">★</button>
+                  </div>
+                  <span style="font-family:var(--font-mono); font-weight:700; color:var(--accent-amber-light); font-size:1.1rem;" id="cupRatingVal">9.4</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Live Yield & Extraction Insights -->
+            <div class="studio-col-insights">
+              <div class="sidebar-section-title">
+                <span>Extraction Diagnostics</span>
+                <span style="color:#79B995;">LIVE</span>
+              </div>
+
+              <!-- Extraction Yield Meter -->
+              <div class="gauge-widget">
+                <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.05em;">Calculated Yield</span>
+                <div class="gauge-value-big" id="gaugeYield">20.8%</div>
+                <div class="gauge-status-tag" id="gaugeStatus">Optimal Sweet Spot</div>
+              </div>
+
+              <!-- Quick Calculations Table -->
+              <div class="extraction-breakdown-list">
+                <div class="extraction-row">
+                  <span>Target Water Out:</span>
+                  <span id="targetWaterDisplay">300g</span>
+                </div>
+                <div class="extraction-row">
+                  <span>Contact Time:</span>
+                  <span id="timeEstDisplay">2m 45s</span>
+                </div>
+                <div class="extraction-row">
+                  <span>Estimated TDS:</span>
+                  <span id="tdsDisplay">1.38%</span>
+                </div>
+                <div class="extraction-row">
+                  <span>Bitterness Risk:</span>
+                  <span id="bitternessDisplay" style="color:#79B995;">Very Low</span>
+                </div>
+              </div>
+
+              <!-- Barista Assistant Tip Box -->
+              <div class="dialin-tip-box" id="assistantTip">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <div id="assistantTipText">
+                  Settings are balanced. At 1:16.2 and 19 clicks, expect clean floral brightness with silky peach acidity.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         PRICING SECTION
+         ====================================================================== -->
+    <section class="section" id="pricing">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Fair, Simple Pricing</span>
+          <h2 class="section-title">Invest in better coffee every morning</h2>
+          <p class="section-subtitle">
+            Start completely free to log your daily recipes. Upgrade to Pro when you're ready for unlimited history, bean inventory alerts, and deep extraction analytics.
+          </p>
+        </div>
+
+        <!-- Billing Cycle Toggle -->
+        <div class="pricing-toggle-wrap">
+          <span class="toggle-label active" id="labelMonthly">Billed Monthly</span>
+          <div class="switch-pill" id="billingToggle" role="switch" aria-checked="false" aria-label="Toggle Monthly or Yearly Billing">
+            <div class="switch-knob"></div>
+          </div>
+          <span class="toggle-label" id="labelYearly">
+            Billed Annually
+            <span class="discount-pill">SAVE 17% (2 MOS FREE)</span>
+          </span>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="pricing-cards-grid">
+          <!-- Free Plan -->
+          <div class="pricing-card">
+            <h3 class="plan-title">Free</h3>
+            <p class="plan-desc">For the casual home brewer tracking their favorite morning coffee.</p>
+            
+            <div class="plan-price-row">
+              <span class="price-num">$0</span>
+              <span class="price-period">/ forever</span>
+            </div>
+
+            <ul class="features-list">
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Up to 15 saved brew recipes</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Standard variables (dose, ratio, temp, time)</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>1 active bean bag in pantry</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Basic cup rating (1–10) & notes</span>
+              </li>
+              <li class="feature-item muted">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Bean freshness & degas tracking</span>
+              </li>
+              <li class="feature-item muted">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Extraction yield correlation analytics</span>
+              </li>
+            </ul>
+
+            <a href="#signup" class="btn btn-secondary btn-lg" onclick="selectPlanInForm('free')">Get Started Free</a>
+          </div>
+
+          <!-- Pro Plan -->
+          <div class="pricing-card featured">
+            <div class="popular-ribbon">BARISTA RECOMMENDED</div>
+            <h3 class="plan-title">Pro</h3>
+            <p class="plan-desc">For specialty coffee obsessives dialing in multiple origins and grinders.</p>
+            
+            <div class="plan-price-row">
+              <span class="price-num" id="proPriceVal">$6</span>
+              <span class="price-period" id="proPricePeriod">/ month</span>
+            </div>
+
+            <ul class="features-list">
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Unlimited</strong> brew recipes & journal history</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Bean Inventory Tracking</strong> (roast dates, degas & freezer stash)</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Extraction Analytics</strong> & dial-in trend radar charts</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Grinder Sync Matrix</strong> (40+ grinder models)</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Water chemistry profiles (GH/KH & Lotus drops)</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>CSV / JSON data export & full offline sync</span>
+              </li>
+            </ul>
+
+            <a href="#signup" class="btn btn-primary btn-lg" onclick="selectPlanInForm('pro')">
+              <span id="proBtnCta">Start 14-Day Free Trial</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Comparison Breakdown -->
+        <div class="compare-section">
+          <h4 style="font-family:var(--font-display); font-size:1.25rem; margin-bottom:1.25rem; text-align:center;">Side-by-Side Comparison</h4>
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th class="compare-center">Free</th>
+                <th class="compare-center" style="color:var(--accent-amber-light);">Pro Plan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Saved Recipes</td>
+                <td class="compare-center">15 Maximum</td>
+                <td class="compare-center" style="color:var(--accent-amber-light); font-weight:600;">Unlimited</td>
+              </tr>
+              <tr>
+                <td>Bean Inventory Tracking</td>
+                <td class="compare-center">1 Bag Only</td>
+                <td class="compare-center" style="color:#79B995;">Unlimited Bags + Degas Alerts</td>
+              </tr>
+              <tr>
+                <td>Extraction Yield & Correlation Charts</td>
+                <td class="compare-center">✕</td>
+                <td class="compare-center" style="color:#79B995;">✓ Full Access</td>
+              </tr>
+              <tr>
+                <td>Grinder Cross-Calibration Converter</td>
+                <td class="compare-center">✕</td>
+                <td class="compare-center" style="color:#79B995;">✓ 40+ Grinders</td>
+              </tr>
+              <tr>
+                <td>Water Minerals Profile (Lotus / TWW)</td>
+                <td class="compare-center">✕</td>
+                <td class="compare-center" style="color:#79B995;">✓ Included</td>
+              </tr>
+              <tr>
+                <td>Export to CSV / JSON</td>
+                <td class="compare-center">✕</td>
+                <td class="compare-center" style="color:#79B995;">✓ 1-Click Export</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         FAQ SECTION
+         ====================================================================== -->
+    <section class="section" id="faq" style="background: rgba(23, 18, 15, 0.3);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Frequently Asked Questions</span>
+          <h2 class="section-title">Got questions? We have answers.</h2>
+          <p class="section-subtitle">
+            Everything you need to know about Brewlog, grinder compatibility, and how your coffee data is safeguarded.
+          </p>
+        </div>
+
+        <div class="faq-container">
+          <!-- FAQ 1 -->
+          <div class="faq-card">
+            <button class="faq-question-btn" aria-expanded="false">
+              <span>Can I use Brewlog offline in my kitchen without Wi-Fi?</span>
+              <div class="faq-icon-indicator">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              Yes, 100%. Brewlog is designed as a local-first Progressive Web App. All your brew logs, recipes, and timer calculations function completely offline while you make coffee. When your device reconnects to Wi-Fi or cellular, changes sync seamlessly to the cloud.
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-card">
+            <button class="faq-question-btn" aria-expanded="false">
+              <span>How does the grinder calibration feature work across different brands?</span>
+              <div class="faq-icon-indicator">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              Brewlog includes an extensive laboratory-measured particle distribution curve database for over 40 grinders (including Comandante C40, Fellow Ode 2, Timemore Chestnut, 1Zpresso, Baratza Encore/Sette, Niche Zero, and Eureka Mignon). You can switch recipes written for Comandante clicks directly into settings for your Fellow Ode or hand grinder with one tap.
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-card">
+            <button class="faq-question-btn" aria-expanded="false">
+              <span>Why not just use Apple Notes, Notion, or a spreadsheet?</span>
+              <div class="faq-icon-indicator">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              Notes apps don't calculate real-time extraction yields, won't guide your pulse pours with an integrated timer, and won't correlate your flavor notes against grind clicks. Brewlog understands coffee physics: it actively identifies why a cup tasted acidic or bitter and tells you the exact adjustment to make on your next brew.
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-card">
+            <button class="faq-question-btn" aria-expanded="false">
+              <span>Can I export my data if I ever decide to leave?</span>
+              <div class="faq-icon-indicator">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              Absolutely. We believe your coffee journey belongs to you. Pro subscribers can export their entire recipe database, tasting notes, bean stash records, and sensory charts into clean CSV and JSON files at any moment with a single click.
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="faq-card">
+            <button class="faq-question-btn" aria-expanded="false">
+              <span>How does the 14-day Pro free trial work?</span>
+              <div class="faq-icon-indicator">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              When you select the Pro plan on signup, you get full unrestricted access to bean tracking, extraction analytics, and unlimited recipes for 14 days without charge. If you decide not to continue, you can cancel in one click or automatically downgrade to the Free plan while preserving your first 15 recipes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SIGN-UP FORM SECTION
+         ====================================================================== -->
+    <section class="section signup-section" id="signup">
+      <div class="container">
+        <div class="signup-card-wrapper">
+          
+          <!-- Normal Form State -->
+          <div id="signupFormContainer">
+            <div class="signup-header">
+              <span class="section-eyebrow">Start Dialing In</span>
+              <h2 class="section-title" style="font-size:2rem; margin-bottom:0.5rem;">Create Your Brewlog Account</h2>
+              <p class="section-subtitle" style="font-size:0.95rem;">Join thousands of home baristas brewing better coffee every morning.</p>
+            </div>
+
+            <form id="brewlogSignupForm" novalidate>
+              <!-- Name Input -->
+              <div class="form-group">
+                <label for="userName" class="form-label">Full Name</label>
+                <div class="input-wrapper">
+                  <!-- User SVG -->
+                  <svg class="input-icon-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" id="userName" class="form-input" placeholder="James Hoffmann" required autocomplete="name">
+                </div>
+                <div class="input-error-msg" id="nameError">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span>Please enter your name (at least 2 characters).</span>
+                </div>
+              </div>
+
+              <!-- Email Input -->
+              <div class="form-group">
+                <label for="userEmail" class="form-label">Email Address</label>
+                <div class="input-wrapper">
+                  <!-- Mail SVG -->
+                  <svg class="input-icon-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  <input type="email" id="userEmail" class="form-input" placeholder="barista@brewlog.app" required autocomplete="email">
+                </div>
+                <div class="input-error-msg" id="emailError">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span>Please enter a valid email address (e.g., name@domain.com).</span>
+                </div>
+              </div>
+
+              <!-- Password Input -->
+              <div class="form-group">
+                <label for="userPassword" class="form-label">Create Password</label>
+                <div class="input-wrapper">
+                  <!-- Lock SVG -->
+                  <svg class="input-icon-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <input type="password" id="userPassword" class="form-input" placeholder="At least 8 characters" required autocomplete="new-password">
+                </div>
+                
+                <!-- Password Strength Meter -->
+                <div class="strength-meter-wrap" id="strengthWrap">
+                  <div class="strength-bars">
+                    <div class="strength-segment" id="str1"></div>
+                    <div class="strength-segment" id="str2"></div>
+                    <div class="strength-segment" id="str3"></div>
+                    <div class="strength-segment" id="str4"></div>
+                  </div>
+                  <div class="strength-text">
+                    <span id="strengthLabel">Password strength</span>
+                    <span id="strengthHint" style="color:var(--text-muted);">Use 8+ chars & numbers</span>
+                  </div>
+                </div>
+
+                <div class="input-error-msg" id="passwordError">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span>Password must be at least 8 characters long.</span>
+                </div>
+              </div>
+
+              <!-- Plan Selector Radio Chips -->
+              <div class="form-group">
+                <span class="form-label">Selected Membership Plan</span>
+                <div class="plan-selector-chips">
+                  <label class="plan-chip-label" id="chipFreeLabel">
+                    <input type="radio" name="planSelect" value="free" style="display:none;">
+                    <span class="plan-chip-name">Free Plan</span>
+                    <span class="plan-chip-price">$0 forever</span>
+                  </label>
+
+                  <label class="plan-chip-label selected" id="chipProLabel">
+                    <input type="radio" name="planSelect" value="pro" checked style="display:none;">
+                    <span class="plan-chip-name">Pro (14-Day Trial)</span>
+                    <span class="plan-chip-price" id="formProPriceLabel">$6/mo after trial</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Terms Checkbox -->
+              <label class="terms-label">
+                <input type="checkbox" id="agreeTerms" class="terms-checkbox" required>
+                <span>I agree to the <a href="#faq" style="text-decoration:underline; color:var(--text-primary);">Terms of Service</a> and confirm I love fresh coffee.</span>
+              </label>
+              <div class="input-error-msg" id="termsError" style="margin-top:-1rem; margin-bottom:1rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>Please accept the terms to continue.</span>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" class="btn btn-primary btn-lg" style="width:100%;" id="submitBtn">
+                <span id="submitBtnText">Create My Brewlog Account</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- Success Screen (Shown upon valid submission) -->
+          <div class="signup-success-state" id="signupSuccessState">
+            <div class="success-badge-icon">
+              <!-- Coffee Cup & Heart SVG -->
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 8h1a4 4 0 1 1 0 8h-1"></path>
+                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path>
+                <line x1="6" y1="2" x2="6" y2="4"></line>
+                <line x1="10" y1="2" x2="10" y2="4"></line>
+                <line x1="14" y1="2" x2="14" y2="4"></line>
+              </svg>
+            </div>
+
+            <h3 style="font-family:var(--font-display); font-size:1.9rem; margin-bottom:0.5rem; color:var(--text-primary);">
+              Welcome to the Studio, <span id="successUserName" style="color:var(--accent-amber);">Brewer</span>!
+            </h3>
+            
+            <p style="color:var(--text-secondary); font-size:1.05rem; max-width:440px; margin-bottom:1.5rem; line-height:1.6;">
+              Your account is active on the <strong id="successPlanName" style="color:var(--accent-crema);">Pro Plan</strong>. We've sent your verification magic link to <strong id="successUserEmail" style="color:var(--accent-amber-light);">you@example.com</strong>.
+            </p>
+
+            <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.25rem; width:100%; text-align:left; margin-bottom:1.75rem;">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:0.5rem;">Next Step: Your First Cup</div>
+              <p style="font-size:0.875rem; color:var(--text-secondary); margin-bottom:0.75rem;">
+                1. Grab your grinder and kettle.<br>
+                2. Log your coffee bean origin and roast date.<br>
+                3. Follow the pulse pour timer in your studio dashboard.
+              </p>
+              <div style="font-size:0.8rem; color:#79B995; font-weight:600;">✓ 14-Day Free Pro Access Activated</div>
+            </div>
+
+            <button class="btn btn-primary btn-lg" style="width:100%;" onclick="resetSignupForm()">
+              <span>Go to My Brew Journal</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand Info -->
+        <div class="footer-brand-col">
+          <a href="#hero" class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 3h16l-3 10a5 5 0 0 1-5 4 5 5 0 0 1-5-4L4 3z"></path>
+                <path d="M12 17v4"></path>
+                <path d="M8 21h8"></path>
+                <path d="M10 7h4"></path>
+              </svg>
+            </div>
+            <span class="brand-text">Brewlog<span>.</span></span>
+          </a>
+          <p class="footer-desc">
+            The sensory coffee dial-in platform built for home baristas, roasters, and competitors pursuing the perfect cup.
+          </p>
+          <div style="font-family:var(--font-mono); font-size:0.785rem; color:var(--accent-crema);">
+            ☕ Dialed in with water at 93.5°C
+          </div>
+        </div>
+
+        <!-- Product Links -->
+        <div>
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="#how-it-works" class="footer-link">How It Works</a></li>
+            <li><a href="#features" class="footer-link">Key Features</a></li>
+            <li><a href="#preview" class="footer-link">Interactive Studio</a></li>
+            <li><a href="#pricing" class="footer-link">Pricing Plans</a></li>
+            <li><a href="#signup" class="footer-link">14-Day Pro Trial</a></li>
+          </ul>
+        </div>
+
+        <!-- Brew Guides -->
+        <div>
+          <div class="footer-col-title">Brew Guides</div>
+          <ul class="footer-links-list">
+            <li><a href="#preview" class="footer-link" onclick="switchMethod('v60')">Hario V60 Method</a></li>
+            <li><a href="#preview" class="footer-link" onclick="switchMethod('espresso')">Espresso Dial-In</a></li>
+            <li><a href="#preview" class="footer-link" onclick="switchMethod('aeropress')">AeroPress Inverted</a></li>
+            <li><a href="#preview" class="footer-link" onclick="switchMethod('chemex')">Chemex Ratio Guide</a></li>
+            <li><a href="#faq" class="footer-link">Grinder Calibration Map</a></li>
+          </ul>
+        </div>
+
+        <!-- Company & Legal -->
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links-list">
+            <li><a href="#faq" class="footer-link">FAQ & Support</a></li>
+            <li><a href="#faq" class="footer-link">Privacy Policy</a></li>
+            <li><a href="#faq" class="footer-link">Terms of Service</a></li>
+            <li><a href="#faq" class="footer-link">Sensory Science</a></li>
+            <li><a href="mailto:hello@brewlog.app" class="footer-link">Contact Barista Team</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div>
+          © 2026 Brewlog Inc. All rights reserved. Crafted for the obsessive pursuit of coffee excellence.
+        </div>
+        <div class="social-links">
+          <a href="#" class="social-link-btn" aria-label="Brewlog on Twitter/X">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" class="social-link-btn" aria-label="Brewlog on Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-link-btn" aria-label="Brewlog on YouTube">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+          </a>
+          <a href="#" class="social-link-btn" aria-label="Brewlog on GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       INLINE JAVASCRIPT: LOGIC, VALIDATION, INTERACTIVITY
+       ======================================================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      /* ------------------------------------------------------------------------
+         1. Sticky Header Effect & Mobile Navigation
+         ------------------------------------------------------------------------ */
+      const header = document.getElementById('siteHeader');
+      const mobileToggle = document.getElementById('mobileToggle');
+      const navMenu = document.getElementById('navMenu');
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 30) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+
+      mobileToggle.addEventListener('click', () => {
+        const isOpen = navMenu.classList.toggle('open');
+        mobileToggle.setAttribute('aria-expanded', isOpen);
+        if (isOpen) {
+          mobileToggle.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          `;
+        } else {
+          mobileToggle.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          `;
+        }
+      });
+
+      // Close mobile nav when clicking any link
+      navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('open');
+          mobileToggle.setAttribute('aria-expanded', 'false');
+          mobileToggle.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          `;
+        });
+      });
+
+      /* ------------------------------------------------------------------------
+         2. Interactive App Studio: Method Profiles, Sliders, Timer, & Live Math
+         ------------------------------------------------------------------------ */
+      const methodPresets = {
+        v60: {
+          name: 'Hario V60 02',
+          title: 'Yirgacheffe Chelbesa',
+          roaster: 'Onyx Coffee Lab',
+          dose: 18.5,
+          ratio: 16.2,
+          grind: 19,
+          grindLabel: '19 Clicks (Comandante)',
+          tempC: 93.5,
+          timeEst: '2m 45s',
+          targetYield: 20.8,
+          tds: 1.38,
+          stashName: 'Onyx — Chelbesa Natural',
+          freshness: 75,
+          tags: ['🌸 Jasmine Floral', '🍑 White Peach', '🍋 Meyer Lemon', '🍯 Honey Blossom'],
+          tip: 'Settings are balanced. At 1:16.2 and 19 clicks, expect clean floral brightness with silky peach acidity.'
+        },
+        espresso: {
+          name: 'La Marzocco Linea Mini (18g Basket)',
+          title: 'Pink Bourbon Honey',
+          roaster: 'Sey Coffee Roasters',
+          dose: 19.0,
+          ratio: 2.2, // in espresso this represents 1:2.2 yield
+          grind: 11,
+          grindLabel: 'Fine #11 (Niche Zero 14.5)',
+          tempC: 93.0,
+          timeEst: '0m 29s',
+          targetYield: 21.2,
+          tds: 9.4,
+          stashName: 'Sey — Pink Bourbon Huila',
+          freshness: 85,
+          tags: ['🍓 Candied Strawberry', '🍯 Dark Honey', '🍫 Milk Chocolate', '🍊 Tangerine Oil'],
+          tip: 'Espresso profile loaded! 19g in : 41.8g out in 29 seconds yields creamy velvety sweetness with vibrant cherry punch.'
+        },
+        aeropress: {
+          name: 'AeroPress (Inverted Method)',
+          title: 'Nyeri Hill AA',
+          roaster: 'Tim Wendelboe',
+          dose: 15.0,
+          ratio: 15.0,
+          grind: 16,
+          grindLabel: 'Medium-Fine #16',
+          tempC: 90.0,
+          timeEst: '2m 10s',
+          targetYield: 20.1,
+          tds: 1.45,
+          stashName: 'Wendelboe — Nyeri Hill Kenya',
+          freshness: 60,
+          tags: ['🍇 Blackcurrant', '🍅 Savory Tomato Sweetness', '🍋 Grapefruit', '🍵 Black Tea'],
+          tip: 'Lower temperature of 90°C softens citric sharpness in intense Kenyan coffees while highlighting deep blackcurrant sweetness.'
+        },
+        chemex: {
+          name: 'Chemex 6-Cup (Bonded Square Filter)',
+          title: 'Gesha Village 1931',
+          roaster: 'Sweet Bloom Roasters',
+          dose: 30.0,
+          ratio: 16.6,
+          grind: 25,
+          grindLabel: 'Coarse #25 (Fellow Ode 5.2)',
+          tempC: 95.0,
+          timeEst: '4m 15s',
+          targetYield: 19.8,
+          tds: 1.28,
+          stashName: 'Sweet Bloom — Gesha Lot 74',
+          freshness: 90,
+          tags: ['🌸 Jasmine Blossom', '🥭 Mango Nectar', '🍋 Lemon Verbena', '🍯 Cane Sugar'],
+          tip: 'Thick Chemex paper filters require a coarser grind (25 clicks) to prevent stall during the 4-minute drawdown.'
+        }
+      };
+
+      let currentMethod = 'v60';
+      let currentTempUnit = 'C'; // 'C' or 'F'
+
+      const doseRange = document.getElementById('doseRange');
+      const ratioRange = document.getElementById('ratioRange');
+      const grindRange = document.getElementById('grindRange');
+      const tempRange = document.getElementById('tempRange');
+
+      const doseDisplay = document.getElementById('doseDisplay');
+      const ratioDisplay = document.getElementById('ratioDisplay');
+      const grindDisplay = document.getElementById('grindDisplay');
+      const tempDisplay = document.getElementById('tempDisplay');
+
+      const targetWaterDisplay = document.getElementById('targetWaterDisplay');
+      const timeEstDisplay = document.getElementById('timeEstDisplay');
+      const gaugeYield = document.getElementById('gaugeYield');
+      const gaugeStatus = document.getElementById('gaugeStatus');
+      const tdsDisplay = document.getElementById('tdsDisplay');
+      const bitternessDisplay = document.getElementById('bitternessDisplay');
+      const assistantTipText = document.getElementById('assistantTipText');
+      
+      const studioRecipeTitle = document.getElementById('studioRecipeTitle');
+      const studioMethodBadge = document.getElementById('studioMethodBadge');
+      const studioRoaster = document.getElementById('studioRoaster');
+      const stashBeanName = document.getElementById('stashBeanName');
+      const freshnessFill = document.getElementById('freshnessFill');
+
+      const unitC = document.getElementById('unitC');
+      const unitF = document.getElementById('unitF');
+
+      function updateCalculations() {
+        const dose = parseFloat(doseRange.value);
+        let ratio = parseFloat(ratioRange.value);
+        const grind = parseInt(grindRange.value);
+        let tempVal = parseFloat(tempRange.value);
+
+        doseDisplay.textContent = dose.toFixed(1) + 'g';
+
+        let waterOutGrams = 0;
+        if (currentMethod === 'espresso') {
+          // In espresso, ratio represents 1:2.0 etc
+          waterOutGrams = Math.round(dose * ratio);
+          ratioDisplay.textContent = `1:${ratio.toFixed(1)}`;
+          targetWaterDisplay.textContent = `${waterOutGrams}g Yield`;
+        } else {
+          waterOutGrams = Math.round(dose * ratio);
+          ratioDisplay.textContent = `1:${ratio.toFixed(1)}`;
+          targetWaterDisplay.textContent = `${waterOutGrams}g`;
+        }
+
+        grindDisplay.textContent = `${grind} Clicks`;
+
+        // Temperature display handling
+        if (currentTempUnit === 'C') {
+          tempDisplay.textContent = `${tempVal.toFixed(1)}°C`;
+        } else {
+          const fahr = (tempVal * 9/5) + 32;
+          tempDisplay.textContent = `${fahr.toFixed(1)}°F`;
+        }
+
+        // Realistic Extraction Yield & TDS math simulation
+        // Baseline yield influenced by grind size (finer = higher), temp (hotter = higher), and ratio
+        let baseYield = 18.0 + ((25 - grind) * 0.35) + ((tempVal - 90) * 0.45) + ((ratio - 15) * 0.15);
+        if (currentMethod === 'espresso') {
+          baseYield = 19.5 + ((15 - grind) * 0.4) + ((tempVal - 91) * 0.35);
+        }
+
+        // Clamp realistic yield
+        const calcYield = Math.max(16.5, Math.min(23.8, baseYield)).toFixed(1);
+        gaugeYield.textContent = `${calcYield}%`;
+
+        // Estimated TDS
+        let estimatedTDS = 1.35;
+        if (currentMethod === 'espresso') {
+          estimatedTDS = (calcYield * (dose / waterOutGrams)).toFixed(1);
+          tdsDisplay.textContent = `${estimatedTDS}% TDS`;
+        } else {
+          estimatedTDS = ((calcYield / 100) * (dose / (waterOutGrams * 0.88)) * 100).toFixed(2);
+          tdsDisplay.textContent = `${estimatedTDS}% TDS`;
+        }
+
+        // Extraction status classification
+        if (calcYield < 18.5) {
+          gaugeStatus.textContent = 'Under-Extracted (Sour/Hollow)';
+          gaugeStatus.style.color = '#F59E0B';
+          gaugeStatus.style.background = 'rgba(245, 158, 11, 0.18)';
+          bitternessDisplay.textContent = 'None (Acidic)';
+          bitternessDisplay.style.color = '#F59E0B';
+          assistantTipText.textContent = `Current yield (${calcYield}%) is low. Grind 1–2 clicks finer or raise water temperature to extract more sugars and sweetness.`;
+        } else if (calcYield <= 21.5) {
+          gaugeStatus.textContent = 'Optimal Golden Cup (Sweet & Balanced)';
+          gaugeStatus.style.color = '#79B995';
+          gaugeStatus.style.background = 'rgba(90, 130, 109, 0.18)';
+          bitternessDisplay.textContent = 'Optimal / Pleasant';
+          bitternessDisplay.style.color = '#79B995';
+          assistantTipText.textContent = `Balanced extraction (${calcYield}%). Acidity and body are in harmony with clear origin characteristics.`;
+        } else {
+          gaugeStatus.textContent = 'Over-Extracted (Dry/Astringent)';
+          gaugeStatus.style.color = '#FF8580';
+          gaugeStatus.style.background = 'rgba(217, 83, 79, 0.18)';
+          bitternessDisplay.textContent = 'High (Drying finish)';
+          bitternessDisplay.style.color = '#FF8580';
+          assistantTipText.textContent = `Warning: High extraction (${calcYield}%). Channeling or astringency likely. Grind coarser or lower brew temperature to soften bitterness.`;
+        }
+      }
+
+      // Slider Event Listeners
+      [doseRange, ratioRange, grindRange, tempRange].forEach(input => {
+        input.addEventListener('input', updateCalculations);
+      });
+
+      // Method Switcher function
+      window.switchMethod = function(methodKey) {
+        currentMethod = methodKey;
+        const p = methodPresets[methodKey];
+        if (!p) return;
+
+        // Update active tab buttons
+        document.querySelectorAll('.method-tab-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.method === methodKey);
+        });
+
+        // Update metadata
+        studioRecipeTitle.textContent = p.title;
+        studioMethodBadge.textContent = p.name;
+        studioRoaster.textContent = p.roaster;
+        stashBeanName.textContent = p.stashName;
+        freshnessFill.style.width = `${p.freshness}%`;
+        timeEstDisplay.textContent = p.timeEst;
+
+        // Adjust slider ranges and values per method
+        if (methodKey === 'espresso') {
+          doseRange.min = 14; doseRange.max = 22; doseRange.step = 0.5; doseRange.value = p.dose;
+          ratioRange.min = 1.5; ratioRange.max = 3.0; ratioRange.step = 0.1; ratioRange.value = p.ratio;
+          grindRange.min = 6; grindRange.max = 18; grindRange.step = 1; grindRange.value = p.grind;
+          document.getElementById('timerClock').textContent = '00:29';
+          document.getElementById('timerPhase').textContent = 'Espresso Extracted';
+        } else if (methodKey === 'aeropress') {
+          doseRange.min = 11; doseRange.max = 20; doseRange.step = 0.5; doseRange.value = p.dose;
+          ratioRange.min = 11; ratioRange.max = 17; ratioRange.step = 0.1; ratioRange.value = p.ratio;
+          grindRange.min = 10; grindRange.max = 24; grindRange.step = 1; grindRange.value = p.grind;
+          document.getElementById('timerClock').textContent = '02:10';
+          document.getElementById('timerPhase').textContent = 'Plunge Completed';
+        } else if (methodKey === 'chemex') {
+          doseRange.min = 20; doseRange.max = 45; doseRange.step = 1; doseRange.value = p.dose;
+          ratioRange.min = 14; ratioRange.max = 18; ratioRange.step = 0.1; ratioRange.value = p.ratio;
+          grindRange.min = 18; grindRange.max = 32; grindRange.step = 1; grindRange.value = p.grind;
+          document.getElementById('timerClock').textContent = '04:15';
+          document.getElementById('timerPhase').textContent = 'Drawdown Complete';
+        } else {
+          // V60 default
+          doseRange.min = 12; doseRange.max = 30; doseRange.step = 0.5; doseRange.value = p.dose;
+          ratioRange.min = 13; ratioRange.max = 18; ratioRange.step = 0.1; ratioRange.value = p.ratio;
+          grindRange.min = 12; grindRange.max = 28; grindRange.step = 1; grindRange.value = p.grind;
+          document.getElementById('timerClock').textContent = '02:48';
+          document.getElementById('timerPhase').textContent = 'Drawdown Complete';
+        }
+
+        tempRange.value = p.tempC;
+        updateCalculations();
+      };
+
+      document.querySelectorAll('.method-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchMethod(btn.dataset.method);
+        });
+      });
+
+      // Sidebar recipe selection list
+      const recButtons = [
+        { btn: document.getElementById('recItem1'), method: 'v60' },
+        { btn: document.getElementById('recItem2'), method: 'espresso' },
+        { btn: document.getElementById('recItem3'), method: 'aeropress' }
+      ];
+
+      recButtons.forEach(({ btn, method }) => {
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+          recButtons.forEach(b => b.btn.classList.remove('selected'));
+          btn.classList.add('selected');
+          switchMethod(method);
+        });
+      });
+
+      // Temperature Unit Switcher (°C vs °F)
+      unitC.addEventListener('click', () => {
+        currentTempUnit = 'C';
+        unitC.classList.add('active');
+        unitF.classList.remove('active');
+        document.getElementById('tempMinLabel').textContent = '86°C (Dark)';
+        document.getElementById('tempMaxLabel').textContent = '98°C (Light)';
+        updateCalculations();
+      });
+
+      unitF.addEventListener('click', () => {
+        currentTempUnit = 'F';
+        unitF.classList.add('active');
+        unitC.classList.remove('active');
+        document.getElementById('tempMinLabel').textContent = '187°F (Dark)';
+        document.getElementById('tempMaxLabel').textContent = '208°F (Light)';
+        updateCalculations();
+      });
+
+      // Simulated Brew Timer with interactive progression
+      const btnTimerToggle = document.getElementById('btnTimerToggle');
+      const btnTimerReset = document.getElementById('btnTimerReset');
+      const timerClock = document.getElementById('timerClock');
+      const timerPhase = document.getElementById('timerPhase');
+      const timerBtnText = document.getElementById('timerBtnText');
+      const playIconSvg = document.getElementById('playIconSvg');
+
+      let timerInterval = null;
+      let timerSeconds = 0;
+      let isTimerRunning = false;
+
+      function formatTime(totalSec) {
+        const m = Math.floor(totalSec / 60).toString().padStart(2, '0');
+        const s = (totalSec % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+      }
+
+      function updatePhaseLabel(sec) {
+        if (currentMethod === 'espresso') {
+          if (sec < 6) return 'Pre-infusion (3 bar)';
+          if (sec < 25) return 'Full 9-Bar Extraction';
+          return 'Target Yield Reached';
+        } else {
+          if (sec < 45) return 'Bloom Phase (Wet grounds)';
+          if (sec < 90) return 'First Continuous Pour (60%)';
+          if (sec < 140) return 'Second Spiral Pour (100%)';
+          return 'Drawdown & Flat Bed';
+        }
+      }
+
+      btnTimerToggle.addEventListener('click', () => {
+        if (isTimerRunning) {
+          // Pause
+          clearInterval(timerInterval);
+          isTimerRunning = false;
+          timerBtnText.textContent = 'Resume Pour';
+          playIconSvg.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+        } else {
+          // Start / Resume
+          isTimerRunning = true;
+          timerBtnText.textContent = 'Pause Timer';
+          playIconSvg.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+
+          timerInterval = setInterval(() => {
+            timerSeconds++;
+            timerClock.textContent = formatTime(timerSeconds);
+            timerPhase.textContent = updatePhaseLabel(timerSeconds);
+
+            // Auto finish limit
+            const finishSec = currentMethod === 'espresso' ? 32 : 180;
+            if (timerSeconds >= finishSec) {
+              clearInterval(timerInterval);
+              isTimerRunning = false;
+              timerBtnText.textContent = 'Brew Done';
+              timerPhase.textContent = 'Cup Complete! Ready to Taste.';
+            }
+          }, 1000);
+        }
+      });
+
+      btnTimerReset.addEventListener('click', () => {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        timerSeconds = 0;
+        timerClock.textContent = '00:00';
+        timerPhase.textContent = 'Ready to Bloom';
+        timerBtnText.textContent = 'Start Pour';
+        playIconSvg.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+      });
+
+      // Tasting Tags interactive chip toggles
+      document.querySelectorAll('.tasting-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          chip.classList.toggle('selected');
+        });
+      });
+
+      // Cup Rating Stars
+      const starBtns = document.querySelectorAll('.star-btn');
+      const cupRatingVal = document.getElementById('cupRatingVal');
+
+      starBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const ratingVal = parseInt(btn.dataset.val);
+          starBtns.forEach(b => {
+            b.classList.toggle('active', parseInt(b.dataset.val) <= ratingVal);
+          });
+          // Translate 1-5 to a refined 10-point cup score
+          const score = (7.0 + (ratingVal * 0.58)).toFixed(1);
+          cupRatingVal.textContent = Math.min(10.0, score);
+        });
+      });
+
+      // Initial calculations run
+      updateCalculations();
+
+      /* ------------------------------------------------------------------------
+         3. PRICING TOGGLE: Monthly vs Annual (with 17% savings calculation)
+         ------------------------------------------------------------------------ */
+      const billingToggle = document.getElementById('billingToggle');
+      const labelMonthly = document.getElementById('labelMonthly');
+      const labelYearly = document.getElementById('labelYearly');
+      const proPriceVal = document.getElementById('proPriceVal');
+      const proPricePeriod = document.getElementById('proPricePeriod');
+      const proBtnCta = document.getElementById('proBtnCta');
+      const formProPriceLabel = document.getElementById('formProPriceLabel');
+
+      let isYearlyBilling = false;
+
+      function updatePricingDisplay() {
+        if (isYearlyBilling) {
+          billingToggle.classList.add('yearly');
+          labelYearly.classList.add('active');
+          labelMonthly.classList.remove('active');
+          proPriceVal.textContent = '$60';
+          proPricePeriod.textContent = '/ year ($5/mo, 2 mos free)';
+          proBtnCta.textContent = 'Start 14-Day Free Annual Trial';
+          if (formProPriceLabel) formProPriceLabel.textContent = '$60/yr ($5/mo) after trial';
+        } else {
+          billingToggle.classList.remove('yearly');
+          labelMonthly.classList.add('active');
+          labelYearly.classList.remove('active');
+          proPriceVal.textContent = '$6';
+          proPricePeriod.textContent = '/ month';
+          proBtnCta.textContent = 'Start 14-Day Free Trial';
+          if (formProPriceLabel) formProPriceLabel.textContent = '$6/mo after trial';
+        }
+      }
+
+      billingToggle.addEventListener('click', () => {
+        isYearlyBilling = !isYearlyBilling;
+        billingToggle.setAttribute('aria-checked', isYearlyBilling);
+        updatePricingDisplay();
+      });
+
+      labelMonthly.addEventListener('click', () => {
+        isYearlyBilling = false;
+        billingToggle.setAttribute('aria-checked', 'false');
+        updatePricingDisplay();
+      });
+
+      labelYearly.addEventListener('click', () => {
+        isYearlyBilling = true;
+        billingToggle.setAttribute('aria-checked', 'true');
+        updatePricingDisplay();
+      });
+
+      // Function called when clicking plan CTA to pre-select in form
+      window.selectPlanInForm = function(planType) {
+        const freeRadio = document.querySelector('input[name="planSelect"][value="free"]');
+        const proRadio = document.querySelector('input[name="planSelect"][value="pro"]');
+        const freeChip = document.getElementById('chipFreeLabel');
+        const proChip = document.getElementById('chipProLabel');
+
+        if (planType === 'free') {
+          if (freeRadio) freeRadio.checked = true;
+          freeChip.classList.add('selected');
+          proChip.classList.remove('selected');
+        } else {
+          if (proRadio) proRadio.checked = true;
+          proChip.classList.add('selected');
+          freeChip.classList.remove('selected');
+        }
+      };
+
+      // Form chip click handlers
+      const chipFreeLabel = document.getElementById('chipFreeLabel');
+      const chipProLabel = document.getElementById('chipProLabel');
+
+      chipFreeLabel.addEventListener('click', () => selectPlanInForm('free'));
+      chipProLabel.addEventListener('click', () => selectPlanInForm('pro'));
+
+      /* ------------------------------------------------------------------------
+         4. FAQ ACCORDION INTERACTIVITY
+         ------------------------------------------------------------------------ */
+      const faqCards = document.querySelectorAll('.faq-card');
+
+      faqCards.forEach(card => {
+        const btn = card.querySelector('.faq-question-btn');
+        btn.addEventListener('click', () => {
+          const isOpen = card.classList.contains('open');
+          // Close others for neat single-expanded UX
+          faqCards.forEach(c => {
+            c.classList.remove('open');
+            c.querySelector('.faq-question-btn').setAttribute('aria-expanded', 'false');
+          });
+
+          if (!isOpen) {
+            card.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+
+      /* ------------------------------------------------------------------------
+         5. SIGN-UP FORM VALIDATION, PASSWORD STRENGTH, & SUCCESS STATE
+         ------------------------------------------------------------------------ */
+      const signupForm = document.getElementById('brewlogSignupForm');
+      const userNameInput = document.getElementById('userName');
+      const userEmailInput = document.getElementById('userEmail');
+      const userPasswordInput = document.getElementById('userPassword');
+      const agreeTerms = document.getElementById('agreeTerms');
+
+      const nameError = document.getElementById('nameError');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      const termsError = document.getElementById('termsError');
+
+      const strBars = [
+        document.getElementById('str1'),
+        document.getElementById('str2'),
+        document.getElementById('str3'),
+        document.getElementById('str4')
+      ];
+      const strengthLabel = document.getElementById('strengthLabel');
+      const strengthHint = document.getElementById('strengthHint');
+
+      // Live Password Strength Meter
+      userPasswordInput.addEventListener('input', () => {
+        const val = userPasswordInput.value;
+        let score = 0;
+
+        if (val.length >= 8) score++;
+        if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        // Reset bars
+        strBars.forEach(b => {
+          b.style.background = 'rgba(245, 235, 224, 0.1)';
+        });
+
+        if (val.length === 0) {
+          strengthLabel.textContent = 'Password strength';
+          strengthHint.textContent = 'Use 8+ chars & numbers';
+          return;
+        }
+
+        const colors = ['#FF8580', '#F59E0B', '#E28735', '#79B995'];
+        const labels = ['Weak Roast', 'Medium Roast', 'Rich Crema', 'Barista Reserve ★'];
+
+        for (let i = 0; i < score; i++) {
+          strBars[i].style.background = colors[score - 1];
+        }
+
+        strengthLabel.textContent = labels[score - 1] || 'Too short';
+        strengthLabel.style.color = colors[score - 1] || 'var(--text-muted)';
+        
+        if (score < 2) {
+          strengthHint.textContent = 'Add uppercase & numbers';
+        } else if (score < 4) {
+          strengthHint.textContent = 'Add a symbol (e.g. !#$)';
+        } else {
+          strengthHint.textContent = 'Strong & secure!';
+        }
+      });
+
+      // Validation Helper Functions
+      function validateName() {
+        const val = userNameInput.value.trim();
+        const valid = val.length >= 2;
+        nameError.classList.toggle('show', !valid);
+        userNameInput.classList.toggle('has-error', !valid);
+        return valid;
+      }
+
+      function validateEmail() {
+        const val = userEmailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+        const valid = emailRegex.test(val);
+        emailError.classList.toggle('show', !valid);
+        userEmailInput.classList.toggle('has-error', !valid);
+        return valid;
+      }
+
+      function validatePassword() {
+        const val = userPasswordInput.value;
+        const valid = val.length >= 8;
+        passwordError.classList.toggle('show', !valid);
+        userPasswordInput.classList.toggle('has-error', !valid);
+        return valid;
+      }
+
+      function validateTerms() {
+        const valid = agreeTerms.checked;
+        termsError.classList.toggle('show', !valid);
+        return valid;
+      }
+
+      // Input blur events for immediate helpful feedback
+      userNameInput.addEventListener('blur', validateName);
+      userEmailInput.addEventListener('blur', validateEmail);
+      userPasswordInput.addEventListener('blur', validatePassword);
+      agreeTerms.addEventListener('change', validateTerms);
+
+      // Form Submission
+      signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const isNameOk = validateName();
+        const isEmailOk = validateEmail();
+        const isPassOk = validatePassword();
+        const isTermsOk = validateTerms();
+
+        if (!isNameOk || !isEmailOk || !isPassOk || !isTermsOk) {
+          return;
+        }
+
+        // Simulate Submission Animation
+        const submitBtn = document.getElementById('submitBtn');
+        const submitBtnText = document.getElementById('submitBtnText');
+        submitBtn.disabled = true;
+        submitBtnText.innerHTML = `
+          <svg style="animation:spin 1s linear infinite; display:inline-block; margin-right:8px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+          Brewing Your Account...
+        `;
+
+        setTimeout(() => {
+          // Success Transition
+          const userName = userNameInput.value.trim();
+          const userEmail = userEmailInput.value.trim();
+          const selectedPlan = document.querySelector('input[name="planSelect"]:checked').value;
+
+          document.getElementById('signupFormContainer').style.display = 'none';
+          
+          const successScreen = document.getElementById('signupSuccessState');
+          successScreen.classList.add('active');
+
+          document.getElementById('successUserName').textContent = userName.split(' ')[0] || 'Brewer';
+          document.getElementById('successUserEmail').textContent = userEmail;
+          document.getElementById('successPlanName').textContent = selectedPlan === 'pro' 
+            ? (isYearlyBilling ? 'Pro Annual (14-Day Free Trial)' : 'Pro Monthly (14-Day Free Trial)')
+            : 'Free Plan';
+          
+          submitBtn.disabled = false;
+          submitBtnText.textContent = 'Create My Brewlog Account';
+        }, 850);
+      });
+
+      // Reset form to test again
+      window.resetSignupForm = function() {
+        signupForm.reset();
+        document.getElementById('signupFormContainer').style.display = 'block';
+        document.getElementById('signupSuccessState').classList.remove('active');
+        strBars.forEach(b => b.style.background = 'rgba(245, 235, 224, 0.1)');
+        strengthLabel.textContent = 'Password strength';
+        strengthLabel.style.color = 'var(--text-muted)';
+        strengthHint.textContent = 'Use 8+ chars & numbers';
+        selectPlanInForm('pro');
+      };
+    });
+  </script>
+</body>
+</html>

@@ -18,12 +18,18 @@ DENT is read by AI agents, so every line costs context and changes behavior. Con
 | Change | File(s) |
 |---|---|
 | Workflow, questions, effort levels | `skills/dent/SKILL.md` §1, `references/workflow-questions-and-effort.md` |
-| Universal rules, tokens, core components | `skills/dent/SKILL.md` §2–8 |
+| Laws, non-negotiables, gates, routing | `skills/dent/SKILL.md` |
+| Tokens and core components; interface motion | `references/foundations-and-components.md`; `references/modern-layer.md` |
 | A new aesthetic style | `references/styles/<name>.md` (from `_style-template.md`) + row in `_styles-index.md` |
 | A new topic | new `references/<topic>.md` + row in `SKILL.md` §9.2 + row in the workflow add-on routing table |
 | More components | `references/components-extended.md` |
 | Install instructions for an agent | `docs/INSTALL.md`, `README.md`, `scripts/install.*` |
-| Test scenarios | `evals/cases.md` |
+| Commands | `scripts/build_commands.py` (generated files), routing in `references/workflow/orchestration.md` |
+| Library, motion, audio, video catalogues | `references/catalog/`, `references/motion/motion-tech-catalog.md`, `references/audio/audio-tech-catalog.md`, `references/video/video-tools-and-pipeline.md` (row format in `references/catalog/README.md`) |
+| Creative directions, hero type, anti-slop | `references/creative/` |
+| Recipes (step-by-step procedures with gates) | `references/recipes/` |
+| Verification tools | `skills/dent/scripts/` + `evals/fixtures/` + `scripts/test_tools.py` |
+| Test scenarios | `evals/cases.md`, `evals/scenarios.md`, `evals/commands.md` |
 
 Keep `SKILL.md` lean: if something only matters for some tasks, it belongs in a reference file.
 
@@ -31,7 +37,7 @@ Keep `SKILL.md` lean: if something only matters for some tasks, it belongs in a 
 
 1. Fork and create a branch: `git checkout -b style/solarpunk`.
 2. Make the change.
-3. Run the validator: `python scripts/validate.py` (checks frontmatter, links between files and the styles index).
+3. Run the validator: `python scripts/validate.py` (frontmatter, every internal link, styles, commands, catalogue rows, versions) and, if you touched tools, `python scripts/test_tools.py`.
 4. Try it in at least one agent with a relevant prompt from `evals/cases.md` (or add a new case).
 5. Update `CHANGELOG.md` under "Unreleased".
 6. Open a PR describing **what** changed, **why**, and **how you tested** it.

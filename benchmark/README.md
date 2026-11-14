@@ -48,7 +48,7 @@ pip install playwright && python -m playwright install chromium
 python benchmark/screenshot.py path/to/brewlog-without-dent/index.html path/to/brewlog-with-dent/index.html --out benchmark/results/<your-run-name>
 ```
 
-It writes `without-390.png`, `without-1440.png`, `with-390.png` and `with-1440.png`, plus copies of both HTML files.
+It writes `without-390.jpg`, `without-1440.jpg`, `with-390.jpg` and `with-1440.jpg`, plus copies of both HTML files.
 
 Optional but valuable: run an accessibility audit (Lighthouse or axe DevTools) on both pages and note the accessibility score and the number of violations.
 

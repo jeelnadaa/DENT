@@ -6,6 +6,11 @@ This repository **is** a skill. If you're an AI agent editing it:
 - Label guidance **[Law]**, **[Rule]** or **[Convention]**. Never weaken a [Rule].
 - New style → `skills/dent/references/styles/<name>.md` from `_style-template.md` + a row in `_styles-index.md` + update the style count in `SKILL.md` frontmatter/§9.2 and `README.md`.
 - New reference file → add a row to `SKILL.md` §9.2 and to the add-on routing table in `references/workflow-questions-and-effort.md` §4.
-- Run `python scripts/validate.py` after every change; it must print `OK`.
+- Commands are generated: edit `COMMANDS` in `scripts/build_commands.py`, run it (writes `skills/dent/commands/`, root `commands/` and `docs/COMMANDS.md`), and add a routing row in `references/workflow/orchestration.md`. Never hand-edit generated files.
+- Catalogue rows need a link, licence and status (`✓ <date>` only after checking the official source, else `K`).
+- Changing `verify_page.py`? Add a case to `evals/fixtures/bad.html` and run `python scripts/test_tools.py` (needs Playwright).
+- README visuals come from `assets/build_assets.py`; regenerate, don't hand-edit the SVGs.
+- Architecture: `docs/ARCHITECTURE.md`. DENT 2.0 audit/plan/progress: `docs/dent-2/`.
+- Run `python scripts/validate.py` after every change; it must print `OK`. Keep SKILL.md under ~450 lines (router only).
 - Bump the version in `SKILL.md` metadata, `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` together, and add a `CHANGELOG.md` entry.
 - Don't put user-specific `DESIGN.md` files in this repo.

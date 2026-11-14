@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- DENT test fixture: should PASS every automated gate in verify_page.py. -->
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Good fixture</title>
+<style>
+  :root{--bg:#FBFAF6;--text:#141414;--muted:#55534E;--accent:#1F4FD8}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.6 system-ui,sans-serif;background:var(--bg);color:var(--text)}
+  main{max-width:40rem;margin:0 auto;padding:1.5rem}
+  h1{font-size:clamp(2rem,1rem + 5vw,4rem);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+  p{color:var(--muted)}
+  label{display:block;font-weight:600;margin:1rem 0 .4rem}
+  input{width:100%;min-height:44px;padding:0 .75rem;border:1px solid #6B6963;border-radius:8px;font:inherit}
+  button{margin-top:1rem;min-height:44px;padding:0 1.25rem;border:0;border-radius:8px;background:var(--accent);color:#fff;font:inherit;font-weight:600}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .dot{width:12px;height:12px;border-radius:50%;background:var(--accent)}
+  @media (prefers-reduced-motion:no-preference){.dot{animation:pulse 1.6s ease-in-out infinite}}
+  @keyframes pulse{50%{opacity:.4}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Good fixture</h1>
+  <p>Readable text with enough contrast on a warm paper background.</p>
+  <div class="dot" aria-hidden="true"></div>
+  <form>
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+    <button type="submit">Join the waitlist</button>
+  </form>
+  <button type="button" aria-label="Turn sound on" aria-pressed="false" id="snd">🔈</button>
+</main>
+<script>
+  // Audio only after an explicit user gesture
+  let ctx; document.getElementById('snd').addEventListener('click', e => {
+    ctx ??= new AudioContext(); ctx.resume(); e.currentTarget.setAttribute('aria-pressed', 'true');
+  });
+</script>
+</body>
+</html>

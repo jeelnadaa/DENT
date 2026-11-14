@@ -19,5 +19,15 @@ jobs:
         run: |
           python -m json.tool .claude-plugin/plugin.json > /dev/null
           python -m json.tool .claude-plugin/marketplace.json > /dev/null
+      - name: Commands are generated and in sync
+        run: |
+          python scripts/build_commands.py
+          git diff --exit-code -- commands skills/dent/commands docs/COMMANDS.md
+      - name: Install Playwright (for tool tests)
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Tool regression tests (verify_page.py, contrast.py)
+        run: python scripts/test_tools.py
       - name: Build package
         run: python scripts/package.py

@@ -1,6 +1,6 @@
 # Typography — Pairings, Scales and Font Stacks
 
-The type basics are in SKILL.md › Foundations › Typography, and the craft details in SKILL.md › Modern layer › Typography. This file adds what those don't cover: a font pairing library, scale ratios and fallback stacks. All fonts listed are free (Google Fonts or Fontshare) unless noted.
+The type basics are in `foundations-and-components.md` §3 (Typography), and the craft details in `modern-layer.md` §7.1. This file adds what those don't cover: a font pairing library, scale ratios and fallback stacks. All fonts listed are free (Google Fonts or Fontshare) unless noted.
 
 ---
 

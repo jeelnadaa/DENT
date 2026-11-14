@@ -137,7 +137,7 @@ Structure: **label → value → comparison → optional sparkline**.
 - Charts need accessible names/descriptions (`role="img"` + `aria-label` for static SVG, or accessible chart libraries).
 - Keyboard: interactive points/series must be focusable with visible focus and announced values.
 - Patterns or direct labels in addition to color.
-- Text in charts ≥ 12px; contrast as in SKILL.md.
+- Text in charts ≥ 12px; contrast as in `foundations-and-components.md` §3.
 
 ---
 

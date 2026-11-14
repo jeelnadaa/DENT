@@ -1,5 +1,7 @@
 # How DENT Works
 
+> DENT 2.0: the full system map (orchestration, commands, gates, catalogues, verification) is in [ARCHITECTURE.md](ARCHITECTURE.md). This page is the short conceptual tour.
+
 ## The idea
 
 A good designer doesn't start by drawing. They ask what the product is for, decide how far to go, pick a direction on purpose, build a system, design every state, check the work, and write it down. DENT turns that process into instructions an AI agent can follow every time.
@@ -58,7 +60,7 @@ All levels share a floor: tokens, component states, contrast, core laws, accessi
 
 ## Progressive disclosure
 
-`SKILL.md` (~800 lines) holds the workflow and everything that applies to every design. The 25 reference files and 41 style files are opened only when the task needs them — a dark-mode request reads the color file; a "make it look like Swiss design" request reads one style file. This keeps the agent's context small and focused.
+`SKILL.md` (~330 lines) is the router: it classifies the task, routes it, and lists the gates. 50+ reference files, 41 styles, 30 command files and 7 templates are opened only when the task needs them — a dark-mode request reads the color file; a "make it look like Swiss design" request reads one style file. This keeps the agent's context small and focused.
 
 ## Extending DENT
 

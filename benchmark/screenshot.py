@@ -51,8 +51,8 @@ def main() -> int:
                     "{ window.scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } window.scrollTo(0, 0); }"
                 )
                 page.wait_for_timeout(800)
-                target = args.out / f"{label}-{width}.png"
-                page.screenshot(path=str(target), full_page=True)
+                target = args.out / f"{label}-{width}.jpg"
+                page.screenshot(path=str(target), full_page=True, type="jpeg", quality=85)
                 page.close()
                 print(f"saved {target}")
         browser.close()

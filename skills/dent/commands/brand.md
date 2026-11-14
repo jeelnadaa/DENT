@@ -1,0 +1,25 @@
+# /dent:brand
+
+Create a mini brand / identity direction (logo direction, color, type, voice, sonic cue).
+
+**Usage:** `/dent:brand <product>` (also `/dent brand …` or `dent brand …`)
+**Default depth:** Standard/Advanced. Effort level and the gates in SKILL.md §3 always apply.
+
+## Load
+- `references/brand-identity.md`
+- `references/creative/directions-library.md`
+- `references/audio/sound-design.md §5 (sonic logo)`
+
+## Steps
+1. Concept + positioning in one line; category cliché named.
+2. Logo direction (wordmark/symbol), color system, type pairing, voice, optional sonic logo.
+3. Show applications (favicon, OG image, app icon, header).
+4. Record licences of fonts and any assets.
+
+## Output
+Brand sheet + assets + DESIGN.md brand section.
+
+## Never
+- Copy an existing brand's mark or style.
+
+Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8).
