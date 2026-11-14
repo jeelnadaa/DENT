@@ -1,0 +1,151 @@
+{
+  "target": "without/index.html",
+  "widths": {
+    "320": {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "offenders": []
+    },
+    "375": {
+      "viewport": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "offenders": []
+    },
+    "390": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "offenders": []
+    },
+    "768": {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "offenders": []
+    },
+    "1024": {
+      "viewport": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "offenders": []
+    },
+    "1440": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "offenders": []
+    }
+  },
+  "gates": {
+    "G2_layout": "Passed",
+    "G3_contrast_sample": "Failed",
+    "G4_operability_auto": "Passed",
+    "G10_reduced_motion": "Passed",
+    "G11_no_autoplay_audio": "Passed"
+  },
+  "a11y": {
+    "unlabeledHiddenControls": [],
+    "lang": "en",
+    "h1": 1,
+    "headingSkips": [
+      "h1->h4"
+    ],
+    "unlabeledControls": [],
+    "unnamedButtonsLinks": [],
+    "imagesWithoutAlt": [],
+    "deadLinks": [
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a"
+    ],
+    "autoplayMedia": []
+  },
+  "contrast_failures": [
+    {
+      "text": "New",
+      "ratio": 4.31,
+      "need": 4.5,
+      "fontSize": 12,
+      "color": "rgb(79, 115, 80)"
+    },
+    {
+      "text": "Start logging free",
+      "ratio": 4.43,
+      "need": 4.5,
+      "fontSize": 16,
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Free forever plan",
+      "ratio": 3.92,
+      "need": 4.5,
+      "fontSize": 14.4,
+      "color": "rgb(134, 117, 106)"
+    },
+    {
+      "text": "Thursday, 7:42 am",
+      "ratio": 4.24,
+      "need": 4.5,
+      "fontSize": 11.52,
+      "color": "rgb(134, 117, 106)"
+    },
+    {
+      "text": "MK",
+      "ratio": 3.36,
+      "need": 4.5,
+      "fontSize": 13.6,
+      "color": "rgb(184, 96, 42)"
+    },
+    {
+      "text": "How it works",
+      "ratio": 3.94,
+      "need": 4.5,
+      "fontSize": 12.8,
+      "color": "rgb(184, 96, 42)"
+    },
+    {
+      "text": "Natural \u00b7 12 days off roast",
+      "ratio": 3.88,
+      "need": 4.5,
+      "fontSize": 12.16,
+      "color": "rgb(134, 117, 106)"
+    },
+    {
+      "text": "Pricing",
+      "ratio": 3.55,
+      "need": 4.5,
+      "fontSize": 12.8,
+      "color": "rgb(184, 96, 42)"
+    },
+    {
+      "text": "Prices in USD. Taxes may apply. Switch o",
+      "ratio": 3.53,
+      "need": 4.5,
+      "fontSize": 14.4,
+      "color": "rgb(134, 117, 106)"
+    }
+  ],
+  "audio": {
+    "sourcesBeforeGesture": 0,
+    "ctxBeforeGesture": 0,
+    "runningCtx": 0,
+    "mediaPlayBeforeGesture": []
+  },
+  "motion": {
+    "running_normal": 2,
+    "running_reduced": 0,
+    "reduced_examples": []
+  },
+  "console_errors": [],
+  "note": "Automated checks find mechanical defects only. Inspect the screenshots, tab through the page, and test interactions yourself."
+}

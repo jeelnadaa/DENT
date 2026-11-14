@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tidal — direction tiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=Instrument+Sans:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Archivo:wght@400;700;900&family=Archivo+Narrow:wght@500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0}
+  body{font-family:system-ui,sans-serif;background:#ddd;padding:24px;color:#111}
+  h1{font:600 15px/1.3 system-ui;margin-bottom:16px;letter-spacing:.02em}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+  .tile{border-radius:4px;overflow:hidden;min-height:560px;display:flex;flex-direction:column}
+  .lbl{font:600 12px/1 system-ui;letter-spacing:.12em;text-transform:uppercase;padding:14px 18px;background:#111;color:#fff}
+  .sw{display:flex;gap:6px;margin-top:auto;padding-top:16px}
+  .sw i{width:34px;height:34px;border-radius:2px;display:block;border:1px solid rgba(0,0,0,.15)}
+  .note{font-size:13px;line-height:1.45;margin-top:12px}
+  /* A */
+  .a{background:#F3EEE4;color:#0E2A33;padding:28px;flex:1;display:flex;flex-direction:column}
+  .a .k{font:500 11px/1 'JetBrains Mono';letter-spacing:.1em;text-transform:uppercase;color:#4A6670}
+  .a h2{font:300 54px/0.95 'Fraunces';letter-spacing:-.03em;margin:14px 0 10px}
+  .a h2 em{font-style:italic;font-weight:500;color:#C2452D}
+  .a p{font:400 15px/1.5 'Instrument Sans'}
+  .a svg{margin:14px 0 4px}
+  .a .btn{display:inline-block;margin-top:12px;background:#0E2A33;color:#F3EEE4;font:600 14px 'Instrument Sans';padding:12px 18px;border-radius:999px}
+  /* B */
+  .b{background:#0F3B6E;color:#F5F9FF;padding:28px;flex:1;display:flex;flex-direction:column;background-image:linear-gradient(rgba(207,227,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(207,227,255,.08) 1px,transparent 1px);background-size:24px 24px}
+  .b .k{font:400 11px/1 'IBM Plex Mono';letter-spacing:.1em;color:#A9C3E6;text-transform:uppercase}
+  .b h2{font:700 44px/1 'Archivo';letter-spacing:-.02em;margin:14px 0 10px;text-transform:uppercase}
+  .b p{font:400 15px/1.5 'Archivo'}
+  .b .btn{display:inline-block;margin-top:12px;background:#FFD166;color:#0F3B6E;font:700 14px 'Archivo';padding:12px 18px;border-radius:0}
+  /* C */
+  .c{background:#F4F4F2;color:#0B0B0B;padding:28px;flex:1;display:flex;flex-direction:column}
+  .c .k{font:500 11px/1 'Archivo Narrow';letter-spacing:.14em;text-transform:uppercase}
+  .c .num{font:900 92px/0.85 'Archivo';letter-spacing:-.05em;margin:16px 0 6px;font-variant-numeric:tabular-nums}
+  .c .num span{color:#E2401C}
+  .c p{font:400 15px/1.5 'Archivo'}
+  .c .bars{display:flex;align-items:flex-end;gap:5px;height:90px;margin:14px 0 4px}
+  .c .bars b{flex:1;background:#0B0B0B}
+  .c .btn{display:inline-block;margin-top:12px;background:#E2401C;color:#fff;font:700 14px 'Archivo';padding:12px 18px}
+</style>
+</head>
+<body>
+<h1>Tidal — three directions (pick one, or combine)</h1>
+<div class="grid">
+  <section class="tile">
+    <div class="lbl">A · Tide Almanac (recommended)</div>
+    <div class="a">
+      <span class="k">Tide table · No. 01</span>
+      <h2>Your income comes in waves. <em>Pay yourself</em> like the tide.</h2>
+      <svg viewBox="0 0 300 70" width="100%" height="70" aria-hidden="true">
+        <path d="M0 50 L20 12 L34 58 L52 30 L64 62 L86 6 L100 56 L120 40 L134 64 L150 20" fill="none" stroke="#C2452D" stroke-width="2"/>
+        <path d="M150 40 C180 34 200 46 230 40 S280 34 300 40" fill="none" stroke="#0E2A33" stroke-width="2.5"/>
+        <line x1="150" y1="0" x2="150" y2="70" stroke="#0E2A33" stroke-dasharray="2 3" opacity=".4"/>
+      </svg>
+      <p>Editorial serif + mono tide figures, warm sand paper, deep-sea ink, one coral accent. The scroll story is a real tide chart: jagged swells pour into a harbour and leave as a steady line.</p>
+      <span class="btn">Join the waitlist</span>
+      <div class="sw"><i style="background:#F3EEE4"></i><i style="background:#0E2A33"></i><i style="background:#4A6670"></i><i style="background:#C2452D"></i><i style="background:#9CC3C1"></i></div>
+      <p class="note"><b>Feels:</b> calm, steady, honest. <b>Best if</b> you want Tidal to feel like relief, not a trading app.</p>
+    </div>
+  </section>
+  <section class="tile">
+    <div class="lbl">B · Waterworks Blueprint</div>
+    <div class="b">
+      <span class="k">Drawing 01 — Flow control</span>
+      <h2>Irregular in.<br>Regular out.</h2>
+      <svg viewBox="0 0 300 80" width="100%" height="80" aria-hidden="true">
+        <rect x="100" y="16" width="100" height="54" fill="none" stroke="#CFE3FF" stroke-width="1.5"/>
+        <rect x="101" y="40" width="98" height="29" fill="rgba(207,227,255,.25)"/>
+        <path d="M10 8 L40 30 M30 4 L55 34 M60 10 L80 30" stroke="#CFE3FF" stroke-width="1.5"/>
+        <line x1="200" y1="60" x2="295" y2="60" stroke="#FFD166" stroke-width="3"/>
+        <text x="215" y="54" fill="#FFD166" font-family="IBM Plex Mono" font-size="10">$4,200/mo</text>
+      </svg>
+      <p>Technical grotesk, engineering-drawing grid, annotation yellow. The scroll story is a cut-away reservoir: rain bursts fill the tank, a valve releases one even stream.</p>
+      <span class="btn">Join the waitlist</span>
+      <div class="sw"><i style="background:#0F3B6E"></i><i style="background:#CFE3FF"></i><i style="background:#A9C3E6"></i><i style="background:#FFD166"></i><i style="background:#F5F9FF"></i></div>
+      <p class="note" style="color:#F5F9FF"><b>Feels:</b> engineered, precise, mechanical. <b>Best if</b> your audience is technical freelancers who like to see the machinery.</p>
+    </div>
+  </section>
+  <section class="tile">
+    <div class="lbl">C · Monolith Numbers</div>
+    <div class="c">
+      <span class="k">March · April · May</span>
+      <div class="num">$0<span>→</span>$9k</div>
+      <div class="bars" aria-hidden="true"><b style="height:20%"></b><b style="height:95%"></b><b style="height:8%"></b><b style="height:60%"></b><b style="height:100%;background:#E2401C"></b><b style="height:42%"></b><b style="height:42%"></b><b style="height:42%"></b></div>
+      <p>Ultra-bold grotesk, giant tabular figures, black on off-white with one vermilion signal. The scroll story shaves the tall bars and pours the excess into the short ones until every month is level.</p>
+      <span class="btn">Join the waitlist</span>
+      <div class="sw"><i style="background:#F4F4F2"></i><i style="background:#0B0B0B"></i><i style="background:#6A6A6A"></i><i style="background:#E2401C"></i></div>
+      <p class="note"><b>Feels:</b> blunt, confident, loud. <b>Best if</b> you want a manifesto-style launch that stops the scroll.</p>
+    </div>
+  </section>
+</div>
+</body>
+</html>

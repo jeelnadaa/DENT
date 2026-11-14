@@ -1,0 +1,1580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checkout rebuild · Trace</title>
+<meta name="description" content="Sprint board for the Checkout rebuild project: kanban, burndown, command palette.">
+<meta name="theme-color" content="#ECE8DF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231C1B18'/%3E%3Cpath d='M7 25 L16 7 L25 25 Z' fill='none' stroke='%23EE6A1F' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ 1. Tokens ============ */
+:root{
+  --paper:#ECE8DF; --surface:#F5F2EA; --card:#FFFDF8;
+  --hair:#D6D0C3; --control:#8A8578; --grid:rgba(31,78,140,.07); --grid-major:rgba(31,78,140,.12);
+  --ink:#1C1B18; --ink-2:#57534A; --ink-3:#5E594F;
+  --signal:#EE6A1F; --on-signal:#1C1B18; --signal-ink:#A63D00; --signal-line:#C44A0B; --signal-wash:#FBE3D3;
+  --blue:#1F4E8C; --blue-wash:rgba(31,78,140,.08); --ok:#2F6B3A;
+  --font-sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-display:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+  --r-control:3px; --r-card:4px; --r-panel:6px;
+  --lift:0 14px 28px -8px rgba(28,27,24,.28), 0 2px 6px rgba(28,27,24,.10);
+  --panel-shadow:-24px 0 48px -12px rgba(28,27,24,.25);
+  --dur-1:120ms; --dur-2:220ms; --dur-3:340ms;
+  --ease-out:cubic-bezier(.2,0,0,1); --ease-drawer:cubic-bezier(.32,.72,0,1);
+  --gutter:16px; --topbar:56px;
+  color-scheme:light;
+}
+@media (min-width:768px){ :root{ --gutter:24px; } }
+@media (min-width:1440px){ :root{ --gutter:32px; } }
+@media (prefers-reduced-motion:reduce){ :root{ --dur-1:1ms; --dur-2:1ms; --dur-3:1ms; } }
+
+/* ============ 2. Base ============ */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+body{
+  margin:0; min-height:100dvh; font:400 15px/1.5 var(--font-sans); color:var(--ink);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid-major) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid-major) 1px,transparent 1px),
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+  background-position:-1px -1px;
+  overflow-x:hidden;
+}
+button,input,select,textarea{ font:inherit; color:inherit; }
+button{ cursor:pointer; }
+svg{ display:block; }
+.sr-only{ position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+.label{ font:500 11px/1.2 var(--font-mono); letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); }
+.num{ font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+.skip{ position:absolute; left:var(--gutter); top:-60px; z-index:100; background:var(--ink); color:var(--card); padding:10px 14px; border-radius:var(--r-control); text-decoration:none; }
+.skip:focus{ top:8px; }
+.i{ width:16px; height:16px; flex:none; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ============ 3. Buttons & controls ============ */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--s2);
+  min-height:40px; padding:0 var(--s4); border-radius:var(--r-control);
+  border:1px solid var(--control); background:var(--card); color:var(--ink);
+  font:500 13px/1 var(--font-mono); letter-spacing:.04em; text-transform:uppercase; white-space:nowrap;
+  transition:background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.btn:hover{ background:var(--surface); border-color:var(--ink-2); }
+.btn:active{ transform:translateY(1px); }
+.btn[disabled]{ opacity:.55; cursor:not-allowed; }
+.btn-primary{ background:var(--signal); border-color:var(--ink); color:var(--on-signal); box-shadow:inset 0 -2px 0 rgba(28,27,24,.22); }
+.btn-primary:hover{ background:#F27B35; border-color:var(--ink); }
+.btn-ghost{ border-color:transparent; background:transparent; }
+.btn-ghost:hover{ background:var(--blue-wash); border-color:transparent; }
+.btn-danger{ color:var(--signal-ink); border-color:var(--signal-line); }
+.btn-danger:hover{ background:var(--signal-wash); border-color:var(--signal-ink); }
+.icon-btn{ min-width:40px; padding:0; }
+@media (pointer:coarse){ .btn{ min-height:44px; } .icon-btn{ min-width:44px; } }
+kbd{
+  display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 5px;
+  font:500 11px/1 var(--font-mono); color:var(--ink-2); background:var(--surface);
+  border:1px solid var(--hair); border-bottom-width:2px; border-radius:3px;
+}
+.field{ display:grid; gap:6px; }
+.select,.input,.textarea{
+  width:100%; min-height:40px; padding:8px 10px; border-radius:var(--r-control);
+  border:1px solid var(--control); background:var(--card); color:var(--ink);
+  transition:border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
+}
+.select{ appearance:none; padding-right:32px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%2357534A' stroke-width='1.6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; background-size:14px; }
+.select:hover,.input:hover,.textarea:hover{ border-color:var(--ink-2); }
+.select:focus-visible,.input:focus-visible,.textarea:focus-visible{ outline:none; border-color:var(--blue); box-shadow:0 0 0 2px var(--blue); }
+.textarea{ resize:vertical; line-height:1.45; }
+.err{ margin:0; font-size:13px; color:var(--signal-ink); display:flex; gap:6px; align-items:center; }
+.err[hidden]{ display:none; }
+@media (pointer:coarse){ .select,.input{ min-height:44px; font-size:16px; } .textarea{ font-size:16px; } }
+
+/* ============ 4. Top bar ============ */
+.topbar{
+  position:sticky; top:0; z-index:30; height:var(--topbar);
+  display:flex; align-items:center; gap:var(--s3); padding:0 var(--gutter);
+  background:rgba(236,232,223,.92); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--hair);
+}
+.brand{ display:flex; align-items:center; gap:10px; font:700 18px/1 var(--font-display); letter-spacing:-.01em; color:var(--ink); text-decoration:none; }
+.brand-mark{ width:28px; height:28px; border-radius:4px; background:var(--ink); display:grid; place-items:center; }
+.crumbs{ display:none; align-items:center; gap:8px; min-width:0; color:var(--ink-2); font:500 13px/1 var(--font-mono); }
+.crumbs span:last-child{ color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.crumbs .sep{ color:var(--control); }
+.spacer{ flex:1; }
+.cmdk-btn{
+  display:inline-flex; align-items:center; gap:10px; height:40px; padding:0 8px 0 12px; min-width:40px;
+  border:1px solid var(--control); border-radius:var(--r-control); background:var(--card); color:var(--ink-2);
+  font:400 14px/1 var(--font-sans); transition:border-color var(--dur-1) var(--ease-out), background-color var(--dur-1);
+}
+.cmdk-btn:hover{ border-color:var(--ink-2); color:var(--ink); }
+.cmdk-btn .txt,.cmdk-btn kbd,.topbar .new-txt{ display:none; }
+@media (pointer:coarse){ .cmdk-btn{ height:44px; min-width:44px; } }
+@media (min-width:600px){ .crumbs{ display:flex; } .topbar .new-txt{ display:inline; } }
+@media (min-width:900px){ .cmdk-btn{ width:300px; } .cmdk-btn .txt{ display:inline; flex:1; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .cmdk-btn kbd{ display:inline-flex; } }
+
+/* ============ 5. Sheet header (title block) ============ */
+.sheet{ padding:var(--s5) var(--gutter) var(--s4); display:grid; gap:var(--s4); }
+@media (min-width:1024px){ .sheet{ grid-template-columns:minmax(0,1fr) auto; align-items:end; padding-top:var(--s6); } }
+.kicker{ display:flex; gap:var(--s3); flex-wrap:wrap; align-items:center; margin:0 0 var(--s2); }
+.kicker .dot{ width:6px; height:6px; background:var(--signal); border-radius:50%; }
+h1{
+  margin:0; font:700 clamp(34px,6.2vw,72px)/.95 var(--font-display); letter-spacing:-.025em; color:var(--ink);
+  text-wrap:balance;
+}
+h1 .rev{ font:500 .28em/1 var(--font-mono); letter-spacing:.04em; color:var(--signal-ink); vertical-align:top; margin-left:.3em; position:relative; top:.35em; }
+.titleblock{
+  display:grid; grid-template-columns:repeat(4,minmax(0,auto)); border:1px solid var(--ink); background:var(--card); border-radius:2px;
+  width:max-content; max-width:100%;
+}
+.titleblock > div{ padding:8px 14px; border-left:1px solid var(--hair); min-width:0; }
+.titleblock > div:first-child{ border-left:0; }
+.titleblock .v{ font:600 15px/1.3 var(--font-mono); font-variant-numeric:tabular-nums; white-space:nowrap; }
+@media (max-width:479px){ .titleblock{ grid-template-columns:repeat(2,minmax(0,1fr)); width:100%; } .titleblock > div:nth-child(3){ border-left:0; } .titleblock > div:nth-child(n+3){ border-top:1px solid var(--hair); } }
+
+.toolbar{ display:flex; flex-wrap:wrap; gap:var(--s3); align-items:center; padding:0 var(--gutter) var(--s4); }
+.people{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:0; padding:0; border:0; }
+.people legend{ float:left; margin-right:6px; padding:0; }
+.person{
+  display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 10px 0 4px; border-radius:18px;
+  border:1px solid var(--hair); background:var(--card); font:500 13px/1 var(--font-sans); color:var(--ink);
+  transition:background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+}
+.person:hover{ border-color:var(--ink-2); }
+.person[aria-pressed="true"]{ background:var(--ink); color:var(--card); border-color:var(--ink); }
+.person[aria-pressed="true"] .avatar{ box-shadow:0 0 0 2px var(--card); }
+@media (pointer:coarse){ .person{ height:44px; border-radius:22px; } }
+.clear-filter[hidden]{ display:none; }
+
+/* ============ 6. Workspace layout ============ */
+.workspace{ display:grid; gap:var(--s4); padding:0 var(--gutter) var(--s7); grid-template-columns:minmax(0,1fr); }
+.rail{ order:-1; min-width:0; }
+@media (min-width:1440px){
+  .workspace{ grid-template-columns:minmax(0,1fr) 340px; align-items:start; }
+  .rail{ order:0; position:sticky; top:calc(var(--topbar) + 16px); }
+}
+
+/* ============ 7. Burndown panel ============ */
+.panel{ background:var(--card); border:1px solid var(--ink); border-radius:2px; position:relative; }
+.panel::before,.panel::after{ content:""; position:absolute; width:9px; height:9px; border:1.5px solid var(--blue); pointer-events:none; }
+.panel::before{ top:-5px; left:-5px; border-right:0; border-bottom:0; }
+.panel::after{ bottom:-5px; right:-5px; border-left:0; border-top:0; }
+.panel-head{ display:flex; justify-content:space-between; align-items:center; gap:var(--s3); padding:10px 14px; border-bottom:1px solid var(--hair); }
+.panel-head h2{ margin:0; font:600 15px/1.2 var(--font-sans); }
+.burn{ display:grid; grid-template-columns:minmax(0,1fr); }
+.stats{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-bottom:1px solid var(--hair); }
+.stat{ padding:12px 14px; border-left:1px solid var(--hair); min-width:0; }
+.stat:first-child{ border-left:0; }
+.stat .big{ display:block; font:600 34px/1 var(--font-mono); font-variant-numeric:tabular-nums; letter-spacing:-.03em; margin-top:6px; }
+.stat .big small{ font-size:13px; letter-spacing:0; color:var(--ink-2); font-weight:500; margin-left:2px; }
+.stat:first-child .big{ color:var(--ink); }
+.chart-wrap{ padding:10px 10px 4px; min-width:0; }
+#chart{ width:100%; position:relative; }
+#chart svg{ width:100%; height:auto; overflow:visible; }
+#chart text{ font:500 11px var(--font-mono); fill:var(--ink-3); }
+#chart .today-lbl{ fill:var(--blue); font-weight:600; }
+.legend{ display:flex; flex-wrap:wrap; gap:6px 14px; padding:4px 14px 10px; list-style:none; margin:0; }
+.legend li{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-2); }
+.legend svg{ width:22px; height:8px; }
+.verdict{ margin:0; padding:10px 14px 12px; border-top:1px solid var(--hair); font-size:14px; color:var(--ink); display:flex; gap:8px; align-items:flex-start; }
+.verdict .i{ margin-top:3px; color:var(--signal-ink); }
+.data-table{ border-top:1px solid var(--hair); }
+.data-table summary{ cursor:pointer; padding:10px 14px; min-height:44px; display:flex; align-items:center; gap:8px; list-style:none; }
+.data-table summary::-webkit-details-marker{ display:none; }
+.data-table summary .i{ transition:transform var(--dur-2) var(--ease-out); }
+.data-table[open] summary .i{ transform:rotate(90deg); }
+.data-table table{ width:calc(100% - 28px); margin:0 14px 14px; border-collapse:collapse; font:400 12px/1.4 var(--font-mono); font-variant-numeric:tabular-nums; }
+.data-table th,.data-table td{ text-align:right; padding:4px 6px; border-bottom:1px solid var(--hair); }
+.data-table th:first-child,.data-table td:first-child{ text-align:left; }
+@media (min-width:768px) and (max-width:1439px){
+  .burn{ grid-template-columns:200px minmax(0,1fr); }
+  .stats{ grid-template-columns:1fr; border-bottom:0; border-right:1px solid var(--hair); }
+  .stat{ border-left:0; border-top:1px solid var(--hair); }
+  .stat:first-child{ border-top:0; }
+}
+.chart-toggle{ display:none; }
+@media (max-width:767px){
+  .chart-toggle{ display:inline-flex; }
+  .panel-head .label{ display:none; }
+  .burn-more.collapsed{ display:none; }
+}
+@media (max-width:420px){ .stat .big{ font-size:26px; } .stat{ padding:10px; } }
+
+/* ============ 8. Board ============ */
+.col-tabs{ display:none; }
+@media (max-width:767px){
+  .col-tabs{
+    display:flex; gap:4px; overflow-x:auto; scrollbar-width:none; margin:0 0 var(--s3);
+    padding:3px; border:1px solid var(--hair); border-radius:var(--r-control); background:var(--surface);
+  }
+  .col-tabs::-webkit-scrollbar{ display:none; }
+  .col-tab{ flex:1 0 auto; min-height:44px; padding:0 8px; border:0; border-radius:2px; background:transparent; color:var(--ink-2); font:500 13px/1 var(--font-sans); white-space:nowrap; transition:background-color var(--dur-2) var(--ease-out), color var(--dur-2); }
+  .col-tab[aria-current="true"]{ background:var(--ink); color:var(--card); }
+  .col-tab .tab-count{ font-size:11px; margin-left:2px; opacity:.85; }
+}
+.board-wrap{ min-width:0; }
+.board{
+  display:grid; grid-auto-flow:column; grid-auto-columns:minmax(220px,1fr); gap:12px; align-items:stretch;
+  overflow-x:auto; overscroll-behavior-x:contain; padding:2px 2px 12px; margin:-2px;
+  scrollbar-width:thin; scrollbar-color:var(--control) transparent;
+}
+@media (max-width:1023px){ .board{ grid-auto-columns:minmax(280px,1fr); scroll-snap-type:x mandatory; scroll-padding:0 var(--gutter); } .col{ scroll-snap-align:start; } }
+@media (max-width:767px){
+  .board{ grid-auto-columns:calc(100vw - 2*var(--gutter) - 28px); margin:0 calc(-1*var(--gutter)); padding:2px var(--gutter) 12px; gap:10px; }
+}
+.col{
+  background:var(--surface); border:1px solid var(--hair); border-radius:var(--r-panel); min-width:0;
+  display:flex; flex-direction:column; transition:border-color var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out), box-shadow var(--dur-2);
+}
+.col.is-over{ border-color:var(--blue); background:#EEF0F0; box-shadow:inset 0 0 0 1px var(--blue); }
+.col-head{ display:flex; align-items:center; gap:8px; padding:10px 8px 10px 12px; border-bottom:1px solid var(--hair); }
+.col-head h2{ margin:0; font:600 15px/1.2 var(--font-sans); display:flex; align-items:baseline; gap:8px; min-width:0; }
+.col-head .no{ font:500 11px/1 var(--font-mono); color:var(--ink-3); letter-spacing:.06em; }
+.col-head .count{ font:600 12px/1 var(--font-mono); background:var(--card); border:1px solid var(--hair); border-radius:10px; padding:3px 7px; color:var(--ink-2); font-variant-numeric:tabular-nums; }
+.col-head .pts-sum{ margin-left:auto; font:500 12px/1 var(--font-mono); color:var(--ink-3); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.col-head .btn{ min-height:32px; min-width:32px; }
+@media (pointer:coarse){ .col-head .btn{ min-height:44px; min-width:44px; } }
+.col[data-col="done"] .col-head .no::after{ content:""; }
+.cards{ list-style:none; margin:0; padding:8px; display:flex; flex-direction:column; gap:8px; min-height:96px; flex:1; }
+.col-empty{ margin:0 8px 8px; padding:16px 12px; border:1px dashed var(--control); border-radius:var(--r-card); color:var(--ink-2); font-size:13px; text-align:center; }
+.col-empty[hidden]{ display:none; }
+.col-empty .btn{ margin-top:8px; }
+
+/* Card */
+.slot{ position:relative; }
+.slot[hidden]{ display:none; }
+.card{
+  position:relative; background:var(--card); border:1px solid var(--hair); border-radius:var(--r-card);
+  padding:10px 12px 10px; cursor:grab; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none;
+  transition:border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out), background-color var(--dur-2);
+}
+.card::before{ content:""; position:absolute; left:-1px; top:10px; bottom:10px; width:3px; border-radius:0 2px 2px 0; background:transparent; }
+.card[data-prio="high"]::before{ background:var(--signal); }
+.card:hover{ border-color:var(--control); }
+.card:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+.card.is-grabbed{ transform:translateY(-2px) rotate(-1deg); box-shadow:var(--lift); border-color:var(--blue); cursor:grabbing; }
+.card.is-new{ animation:flash 1.4s var(--ease-out); }
+@keyframes flash{ 0%,30%{ background:var(--signal-wash); } 100%{ background:var(--card); } }
+.card-top{ display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.card-id{ font:500 11px/1 var(--font-mono); letter-spacing:.06em; color:var(--ink-3); }
+.pts{ margin-left:auto; font:600 12px/1 var(--font-mono); font-variant-numeric:tabular-nums; border:1px solid var(--ink); border-radius:2px; padding:3px 5px; min-width:22px; text-align:center; }
+.card-title{ margin:0 0 10px; font:500 14px/1.38 var(--font-sans); overflow-wrap:anywhere; }
+.slot[data-col="done"] .card-title{ color:var(--ink-2); }
+.card-meta{ display:flex; align-items:center; gap:10px; min-height:24px; font:500 11px/1 var(--font-mono); color:var(--ink-2); }
+.prio{ display:inline-flex; align-items:center; gap:4px; text-transform:uppercase; letter-spacing:.05em; }
+.prio svg{ width:10px; height:10px; }
+.prio-high{ color:var(--signal-ink); }
+.chk{ display:inline-flex; align-items:center; gap:4px; font-variant-numeric:tabular-nums; }
+.chk.all{ color:var(--ok); }
+.avatar{
+  width:24px; height:24px; border-radius:50%; flex:none; display:inline-grid; place-items:center;
+  background:var(--av,#E4DED2); color:var(--ink); font:600 10px/1 var(--font-mono); letter-spacing:.02em;
+}
+.card-meta .avatar{ margin-left:auto; }
+.grip{ display:grid; place-items:center; width:24px; height:24px; color:var(--ink-3); border-radius:2px; touch-action:none; margin-right:-4px; }
+@media (pointer:coarse){ .grip{ width:40px; height:40px; margin:-8px -10px -8px -4px; } }
+@media (pointer:fine){ .grip{ opacity:.0; transition:opacity var(--dur-1); } .card:hover .grip,.card:focus-visible .grip{ opacity:1; } }
+.done-tick{ color:var(--ok); }
+
+/* Drag states */
+.slot.is-placeholder .card{ background:var(--blue-wash); border:1.5px dashed var(--blue); box-shadow:none; }
+.slot.is-placeholder .card > *{ visibility:hidden; }
+.ghost{ position:fixed; left:0; top:0; z-index:60; pointer-events:none; margin:0; will-change:transform; }
+.ghost .card{ box-shadow:var(--lift); border-color:var(--blue); cursor:grabbing; }
+body.is-dragging, body.is-dragging *{ cursor:grabbing!important; }
+body.is-dragging{ user-select:none; -webkit-user-select:none; }
+
+/* Skeleton */
+.skel{ height:92px; border-radius:var(--r-card); background:linear-gradient(90deg,#EAE5DA 0%,#F4F0E8 50%,#EAE5DA 100%); background-size:200% 100%; animation:shimmer 1.3s linear infinite; }
+@keyframes shimmer{ to{ background-position:-200% 0; } }
+@media (prefers-reduced-motion:reduce){ .skel{ animation:none; } }
+
+/* Composer */
+.composer{ display:grid; gap:8px; padding:8px 8px 0; }
+.composer[hidden]{ display:none; }
+.composer .row{ display:flex; gap:8px; }
+.composer .btn{ min-height:36px; }
+
+/* Banner */
+.banner{ margin:0 var(--gutter) var(--s4); padding:10px 12px 10px 14px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; border:1px solid var(--signal-line); background:var(--signal-wash); border-radius:var(--r-control); font-size:14px; }
+.banner[hidden]{ display:none; }
+.banner p{ margin:0; flex:1 1 240px; }
+
+/* ============ 9. Dialogs (drawer, palette, help) ============ */
+dialog{ padding:0; border:0; color:var(--ink); background:transparent; }
+dialog::backdrop{ background:rgba(28,27,24,.38); }
+dialog[open]::backdrop{ animation:fade var(--dur-3) var(--ease-out); }
+dialog.closing::backdrop{ animation:fade var(--dur-2) var(--ease-out) reverse forwards; }
+@keyframes fade{ from{ opacity:0; } to{ opacity:1; } }
+
+/* Drawer */
+.drawer{
+  position:fixed; inset:0 0 0 auto; margin:0; width:min(480px,100vw); height:100dvh; max-height:100dvh; max-width:100vw;
+  background:var(--card); border-left:1px solid var(--ink); box-shadow:var(--panel-shadow);
+  display:flex; flex-direction:column;
+}
+.drawer:not([open]){ display:none; }
+.drawer[open]{ animation:slideIn var(--dur-3) var(--ease-drawer); }
+.drawer.closing{ animation:slideOut var(--dur-2) var(--ease-out) forwards; }
+@keyframes slideIn{ from{ transform:translateX(100%); } to{ transform:none; } }
+@keyframes slideOut{ from{ transform:none; } to{ transform:translateX(100%); } }
+.drawer-head{ display:flex; align-items:center; gap:10px; padding:10px 10px 10px 20px; border-bottom:1px solid var(--hair); background:var(--surface); }
+.drawer-head .label{ flex:1; }
+.drawer-body{ flex:1; overflow-y:auto; overscroll-behavior:contain; padding:20px; display:grid; gap:24px; align-content:start; }
+.drawer-body > *{ animation:rise var(--dur-3) var(--ease-out) both; }
+.drawer-body > *:nth-child(2){ animation-delay:40ms; } .drawer-body > *:nth-child(3){ animation-delay:80ms; } .drawer-body > *:nth-child(4){ animation-delay:120ms; } .drawer-body > *:nth-child(5){ animation-delay:160ms; }
+@keyframes rise{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion:reduce){ .drawer-body > *{ animation:none; } }
+.title-input{
+  width:100%; border:1px solid transparent; border-radius:var(--r-control); background:transparent; padding:4px 6px; margin:-5px -7px;
+  font:700 26px/1.15 var(--font-display); letter-spacing:-.015em; resize:none; overflow:hidden; field-sizing:content;
+}
+.title-input:hover{ border-color:var(--hair); }
+.title-input:focus-visible{ outline:none; border-color:var(--blue); box-shadow:0 0 0 2px var(--blue); background:var(--card); }
+.spec{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border:1px solid var(--ink); border-radius:2px; }
+.spec .field{ padding:10px 12px 12px; border-top:1px solid var(--hair); }
+.spec .field:nth-child(even){ border-left:1px solid var(--hair); }
+.spec .field:nth-child(-n+2){ border-top:0; }
+.spec .field label{ cursor:pointer; }
+.desc{ margin:0; color:var(--ink); max-width:60ch; }
+.section-h{ display:flex; justify-content:space-between; align-items:center; margin:0 0 10px; }
+.checklist{ list-style:none; margin:0; padding:0; display:grid; gap:2px; }
+.checklist label{ display:flex; gap:12px; align-items:flex-start; padding:8px 6px; min-height:44px; border-radius:var(--r-control); cursor:pointer; }
+.checklist label:hover{ background:var(--surface); }
+.checklist input{ appearance:none; width:20px; height:20px; flex:none; margin:1px 0 0; border:1.5px solid var(--control); border-radius:3px; background:var(--card); display:grid; place-items:center; transition:background-color var(--dur-1), border-color var(--dur-1); }
+.checklist input::after{ content:""; width:10px; height:6px; border:2px solid var(--card); border-top:0; border-right:0; transform:rotate(-45deg) scale(0); margin-top:-3px; transition:transform var(--dur-2) var(--ease-out); }
+.checklist input:checked{ background:var(--ok); border-color:var(--ok); }
+.checklist input:checked::after{ transform:rotate(-45deg) scale(1); }
+.checklist input:checked + span{ color:var(--ink-2); text-decoration:line-through; text-decoration-color:var(--control); }
+.checklist input:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+.meter{ height:4px; background:var(--hair); border-radius:2px; overflow:hidden; margin-bottom:8px; }
+.meter i{ display:block; height:100%; background:var(--ok); transform-origin:left; transition:transform var(--dur-3) var(--ease-out); }
+.activity{ list-style:none; margin:0; padding:0 0 0 14px; border-left:1px solid var(--hair); display:grid; gap:10px; font-size:14px; }
+.activity li{ position:relative; }
+.activity li::before{ content:""; position:absolute; left:-18px; top:8px; width:7px; height:7px; background:var(--paper); border:1.5px solid var(--ink-2); border-radius:50%; }
+.activity li.new::before{ background:var(--signal); border-color:var(--ink); }
+.activity .when{ font:500 11px/1 var(--font-mono); color:var(--ink-3); margin-left:6px; letter-spacing:.04em; }
+.drawer-foot{ display:flex; gap:8px; justify-content:space-between; padding:12px 20px calc(12px + env(safe-area-inset-bottom)); border-top:1px solid var(--hair); background:var(--surface); }
+
+/* Palette */
+.palette{
+  position:fixed; margin:0 auto; top:14vh; left:0; right:0; width:min(620px,calc(100vw - 24px)); max-height:min(560px,76vh);
+  background:var(--card); border:1px solid var(--ink); border-radius:var(--r-panel); box-shadow:0 30px 60px -20px rgba(28,27,24,.45);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.palette:not([open]){ display:none; }
+.palette[open]{ animation:pop var(--dur-2) var(--ease-out); }
+.palette.closing{ animation:pop var(--dur-1) var(--ease-out) reverse forwards; }
+@keyframes pop{ from{ opacity:0; transform:translateY(-8px) scale(.98); } to{ opacity:1; transform:none; } }
+@media (max-width:599px){ .palette{ top:8px; max-height:calc(100dvh - 16px); } }
+.pal-search{ display:flex; align-items:center; gap:8px; padding:0 14px; border-bottom:1px solid var(--hair); flex-wrap:wrap; }
+.pal-search > .i{ color:var(--ink-2); }
+.crumb{ display:inline-flex; align-items:center; gap:4px; font:500 12px/1 var(--font-mono); background:var(--ink); color:var(--card); padding:5px 8px; border-radius:2px; white-space:nowrap; }
+.pal-input{ flex:1; min-width:120px; height:56px; border:0; background:transparent; font-size:17px; outline:none; }
+.pal-input::placeholder{ color:var(--ink-3); }
+.pal-list{ list-style:none; margin:0; padding:6px; overflow-y:auto; overscroll-behavior:contain; flex:1; }
+.pal-group{ padding:10px 10px 4px; }
+.pal-opt{ display:flex; align-items:center; gap:12px; min-height:44px; padding:8px 10px; border-radius:var(--r-control); cursor:pointer; font-size:14px; scroll-margin:6px; }
+.pal-opt .i{ color:var(--ink-2); }
+.pal-opt .lbl{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pal-opt .lbl mark{ background:none; color:var(--signal-ink); font-weight:600; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:2px; }
+.pal-opt .hint{ font:500 11px/1 var(--font-mono); color:var(--ink-3); letter-spacing:.04em; white-space:nowrap; }
+.pal-opt[aria-selected="true"]{ background:var(--ink); color:var(--card); }
+.pal-opt[aria-selected="true"] .i,.pal-opt[aria-selected="true"] .hint{ color:#D6D0C3; }
+.pal-opt[aria-selected="true"] .lbl mark{ color:#FFB27F; }
+.pal-empty{ padding:28px 16px; text-align:center; color:var(--ink-2); }
+.pal-foot{ display:flex; gap:14px; flex-wrap:wrap; padding:8px 14px; border-top:1px solid var(--hair); background:var(--surface); font-size:12px; color:var(--ink-2); }
+.pal-foot span{ display:inline-flex; align-items:center; gap:5px; }
+@media (pointer:coarse){ .pal-foot{ display:none; } }
+
+/* Help */
+.help{
+  position:fixed; inset:0; margin:auto; width:min(440px,calc(100vw - 24px)); height:max-content; max-height:90dvh; overflow:auto;
+  background:var(--card); border:1px solid var(--ink); border-radius:var(--r-panel); box-shadow:0 30px 60px -20px rgba(28,27,24,.45);
+}
+.help:not([open]){ display:none; }
+.help[open]{ animation:pop var(--dur-2) var(--ease-out); }
+.help.closing{ animation:pop var(--dur-1) var(--ease-out) reverse forwards; }
+.help h2{ margin:0; font:700 22px/1.2 var(--font-display); }
+.help dl{ margin:0; padding:8px 20px 20px; display:grid; grid-template-columns:auto 1fr; gap:10px 16px; align-items:center; font-size:14px; }
+.help dt{ display:flex; gap:4px; justify-content:flex-end; }
+.help dd{ margin:0; color:var(--ink-2); }
+.help h3{ grid-column:1 / -1; margin:10px 0 0; }
+
+/* ============ 10. Toasts ============ */
+.toasts{ position:fixed; z-index:80; left:50%; bottom:calc(16px + env(safe-area-inset-bottom)); transform:translateX(-50%); display:grid; gap:8px; width:min(440px,calc(100vw - 24px)); pointer-events:none; }
+.toast{
+  pointer-events:auto; display:flex; align-items:center; gap:12px; padding:8px 8px 8px 14px; min-height:52px;
+  background:var(--ink); color:var(--card); border-radius:var(--r-panel); box-shadow:0 12px 30px -10px rgba(28,27,24,.5); font-size:14px;
+  animation:toastIn var(--dur-3) var(--ease-drawer);
+}
+.toast.out{ animation:toastOut var(--dur-2) var(--ease-out) forwards; }
+.toast p{ margin:0; flex:1; }
+.toast .btn{ background:transparent; color:#FFB27F; border-color:#6F695F; min-height:36px; }
+.toast .btn:hover{ background:#2E2C27; }
+.toast .x{ color:#D6D0C3; border:0; }
+@keyframes toastIn{ from{ opacity:0; transform:translateY(16px) scale(.98); } to{ opacity:1; transform:none; } }
+@keyframes toastOut{ to{ opacity:0; transform:translateY(8px); } }
+</style>
+</head>
+<body>
+<a class="skip" href="#board">Skip to board</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></symbol>
+    <symbol id="i-x" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></symbol>
+    <symbol id="i-grip" viewBox="0 0 16 16"><g fill="currentColor" stroke="none"><circle cx="6" cy="4" r="1.2"/><circle cx="10" cy="4" r="1.2"/><circle cx="6" cy="8" r="1.2"/><circle cx="10" cy="8" r="1.2"/><circle cx="6" cy="12" r="1.2"/><circle cx="10" cy="12" r="1.2"/></g></symbol>
+    <symbol id="i-check" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5"/><path d="M5.5 8.2 7.2 10l3.4-4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 16 16"><path d="M2.5 2.5v11h11"/><path d="M4.5 5l3 3 2-1.5 4 4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 16 16"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 13.5c.8-2.4 2.7-3.5 5-3.5s4.2 1.1 5 3.5"/></symbol>
+    <symbol id="i-col" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="4" height="11" rx="1"/><rect x="9.5" y="2.5" width="4" height="7" rx="1"/></symbol>
+    <symbol id="i-file" viewBox="0 0 16 16"><path d="M4 2.5h5l3 3v8H4z"/><path d="M9 2.5v3h3M6 9h4M6 11h3"/></symbol>
+    <symbol id="i-key" viewBox="0 0 16 16"><rect x="1.5" y="4" width="13" height="8" rx="1.5"/><path d="M4 7h1M7 7h1M10 7h2M5 9.5h6"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 16 16"><path d="M3 8a5 5 0 1 0 1.5-3.6"/><path d="M3 2.5v2.5h2.5"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 16 16"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 9h5.8l.6-9"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 16 16"><path d="M8 2.5 14 13H2z"/><path d="M8 6.5v3M8 11.2v.1"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 16 16"><path d="M2.5 3.5h11L9.5 8.5v4l-3 1v-5z"/></symbol>
+    <symbol id="i-help" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M6.3 6.3a1.8 1.8 0 1 1 2.4 1.7c-.5.2-.7.6-.7 1.1M8 11.2v.1"/></symbol>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Trace, reload board">
+    <span class="brand-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 15 9 3l6 12z" fill="none" stroke="#EE6A1F" stroke-width="2"/><path d="M6 15h6" stroke="#FFFDF8" stroke-width="1.5"/></svg></span>
+    Trace
+  </a>
+  <nav class="crumbs" aria-label="Breadcrumb"><span class="sep">/</span><span>Projects</span><span class="sep">/</span><span aria-current="page">Checkout rebuild</span></nav>
+  <span class="spacer"></span>
+  <button class="cmdk-btn" id="open-palette" type="button" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" aria-label="Search tasks or run a command">
+    <svg class="i"><use href="#i-search"/></svg><span class="txt">Search or run a command</span><kbd class="mod-key">Ctrl</kbd><kbd>K</kbd>
+  </button>
+  <button class="btn btn-ghost icon-btn" id="open-help" type="button" aria-haspopup="dialog" aria-label="Keyboard shortcuts" aria-keyshortcuts="Shift+?"><svg class="i"><use href="#i-help"/></svg></button>
+  <button class="btn btn-primary" id="new-task" type="button" aria-keyshortcuts="N" aria-label="New task"><svg class="i"><use href="#i-plus"/></svg><span class="new-txt" aria-hidden="true">New task</span></button>
+</header>
+
+<main id="main">
+  <section class="sheet" aria-labelledby="project-title">
+    <div>
+      <p class="kicker label"><span class="dot" aria-hidden="true"></span>Project 04 <span aria-hidden="true">·</span> Sprint 14 <span aria-hidden="true">·</span> Payments team</p>
+      <h1 id="project-title">Checkout rebuild<span class="rev" aria-hidden="true">REV 14</span></h1>
+    </div>
+    <div class="titleblock" role="group" aria-label="Sprint facts">
+      <div><div class="label">Sprint day</div><div class="v"><span id="tb-day">6</span> / 10</div></div>
+      <div><div class="label">Tasks</div><div class="v" id="tb-tasks">13</div></div>
+      <div><div class="label">Scope</div><div class="v"><span id="tb-scope">40</span> pt</div></div>
+      <div><div class="label">Done</div><div class="v"><span id="tb-done">40</span>%</div></div>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <fieldset class="people" id="people">
+      <legend class="label" style="line-height:36px">Assignee</legend>
+    </fieldset>
+    <button class="btn btn-ghost clear-filter" id="clear-filter" type="button" hidden><svg class="i"><use href="#i-x"/></svg>Clear filter</button>
+  </div>
+
+  <div class="banner" id="sync-banner" role="status" hidden>
+    <svg class="i" aria-hidden="true" style="color:var(--signal-ink)"><use href="#i-warn"/></svg>
+    <p><strong>Sync paused.</strong> We couldn't reach the server. Your changes are kept on this device and will sync when you retry.</p>
+    <button class="btn" type="button" id="retry-sync">Retry sync</button>
+  </div>
+
+  <div class="workspace">
+    <div class="board-wrap">
+      <nav class="col-tabs" id="col-tabs" aria-label="Jump to column"></nav>
+      <div class="board" id="board" tabindex="-1" aria-label="Sprint board"></div>
+    </div>
+
+    <aside class="rail" aria-labelledby="burn-title">
+      <section class="panel" id="burndown">
+        <div class="panel-head">
+          <h2 id="burn-title">Burndown</h2>
+          <span class="label">Story points · D1–D10</span>
+          <button class="btn btn-ghost chart-toggle" type="button" id="chart-toggle" aria-expanded="true" aria-controls="burn-more">Hide chart</button>
+        </div>
+        <div class="burn">
+          <div class="stats">
+            <div class="stat"><span class="label">Remaining</span><span class="big"><span id="st-rem" class="num">0</span><small>pt</small></span></div>
+            <div class="stat"><span class="label">Completed</span><span class="big"><span id="st-done" class="num">0</span><small>pt</small></span></div>
+            <div class="stat"><span class="label">Vs ideal</span><span class="big"><span id="st-delta" class="num">0</span><small>pt</small></span></div>
+          </div>
+          <div class="burn-more" id="burn-more">
+          <div class="chart-wrap">
+            <div id="chart"></div>
+            <ul class="legend" aria-hidden="true">
+              <li><svg viewBox="0 0 22 8"><path d="M1 4h20" stroke="#C44A0B" stroke-width="2.5"/></svg>Remaining</li>
+              <li><svg viewBox="0 0 22 8"><path d="M1 4h20" stroke="#57534A" stroke-width="1.5" stroke-dasharray="4 3"/></svg>Ideal</li>
+              <li><svg viewBox="0 0 22 8"><path d="M1 4h20" stroke="#C44A0B" stroke-width="1.5" stroke-dasharray="1 3" stroke-linecap="round"/></svg>Projection</li>
+            </ul>
+          </div>
+          <p class="verdict" id="verdict"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg><span id="verdict-txt"></span></p>
+          <details class="data-table">
+            <summary class="label"><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg>Show data as table</summary>
+            <table><caption class="sr-only">Remaining story points per sprint day</caption><thead><tr><th scope="col">Day</th><th scope="col">Remaining</th><th scope="col">Ideal</th></tr></thead><tbody id="burn-rows"></tbody></table>
+          </details>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<p id="dnd-hint" class="sr-only">Arrow keys move between cards. Enter opens details. Space picks the card up; then arrow keys move it, Space drops it and Escape cancels.</p>
+<div id="announcer" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<!-- Drawer -->
+<dialog class="drawer" id="drawer" aria-label="Task details">
+  <div class="drawer-head">
+    <span class="label" id="d-id">CHK-000</span>
+    <button class="btn btn-ghost icon-btn" type="button" id="d-close" aria-label="Close task details"><svg class="i"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div>
+      <label class="sr-only" id="d-title-label" for="d-title">Task title</label>
+      <textarea class="title-input" id="d-title" rows="1" spellcheck="true"></textarea>
+      <p class="err" id="d-title-err" hidden><svg class="i"><use href="#i-warn"/></svg>Give the task a title. The previous one was kept.</p>
+    </div>
+    <div class="spec">
+      <div class="field"><label class="label" for="d-status">Status</label><select class="select" id="d-status"></select></div>
+      <div class="field"><label class="label" for="d-who">Assignee</label><select class="select" id="d-who"></select></div>
+      <div class="field"><label class="label" for="d-pts">Story points</label><select class="select" id="d-pts"><option>1</option><option>2</option><option>3</option><option>5</option><option>8</option><option>13</option></select></div>
+      <div class="field"><label class="label" for="d-prio">Priority</label><select class="select" id="d-prio"><option value="high">High</option><option value="med">Medium</option><option value="low">Low</option></select></div>
+    </div>
+    <section aria-labelledby="d-desc-h">
+      <h3 class="label section-h" id="d-desc-h">Description</h3>
+      <p class="desc" id="d-desc"></p>
+    </section>
+    <section aria-labelledby="d-chk-h">
+      <div class="section-h"><h3 class="label" id="d-chk-h" style="margin:0">Checklist</h3><span class="label num" id="d-chk-count"></span></div>
+      <div class="meter" aria-hidden="true"><i id="d-meter"></i></div>
+      <ul class="checklist" id="d-checklist"></ul>
+    </section>
+    <section aria-labelledby="d-act-h">
+      <h3 class="label section-h" id="d-act-h">Activity</h3>
+      <ol class="activity" id="d-activity"></ol>
+    </section>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-danger" type="button" id="d-delete"><svg class="i"><use href="#i-trash"/></svg>Delete task</button>
+    <button class="btn" type="button" id="d-done">Done</button>
+  </div>
+</dialog>
+
+<!-- Command palette -->
+<dialog class="palette" id="palette" aria-label="Command palette">
+  <div class="pal-search">
+    <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
+    <span id="pal-crumbs" style="display:contents"></span>
+    <input class="pal-input" id="pal-input" type="text" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search tasks or type a command…" aria-label="Search tasks or type a command">
+  </div>
+  <ul class="pal-list" id="pal-list" role="listbox" aria-label="Results"></ul>
+  <div class="pal-foot" aria-hidden="true">
+    <span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> run</span><span><kbd>⌫</kbd> back</span><span><kbd>Esc</kbd> close</span>
+  </div>
+</dialog>
+
+<!-- Shortcuts -->
+<dialog class="help" id="help" aria-labelledby="help-h">
+  <div class="drawer-head" style="background:transparent"><h2 id="help-h" style="flex:1">Keyboard shortcuts</h2><button class="btn btn-ghost icon-btn" type="button" data-close aria-label="Close shortcuts"><svg class="i"><use href="#i-x"/></svg></button></div>
+  <dl>
+    <dt><kbd class="mod-key">Ctrl</kbd><kbd>K</kbd></dt><dd>Open the command palette</dd>
+    <dt><kbd>N</kbd></dt><dd>New task in Backlog</dd>
+    <dt><kbd>?</kbd></dt><dd>Show this list</dd>
+  </dl>
+  <h3 class="label" style="margin:0;padding:4px 20px 0">On a focused card</h3>
+  <dl>
+    <dt><kbd>Enter</kbd></dt><dd>Open task details</dd>
+    <dt><kbd>Space</kbd></dt><dd>Pick up / drop the card</dd>
+    <dt><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd></dt><dd>Move focus between cards; while picked up, move the card</dd>
+    <dt><kbd>Esc</kbd></dt><dd>Cancel a move in progress</dd>
+  </dl>
+</dialog>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduceMQ = matchMedia('(prefers-reduced-motion: reduce)');
+const motionOK = () => !reduceMQ.matches;
+const EASE = 'cubic-bezier(.2,0,0,1)';
+const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+if (isMac) $$('.mod-key').forEach(k => k.textContent = '⌘');
+
+/* ---------- Data ---------- */
+const COLS = [
+  { id: 'backlog', name: 'Backlog' },
+  { id: 'progress', name: 'In progress' },
+  { id: 'review', name: 'In review' },
+  { id: 'done', name: 'Done' },
+];
+const colName = id => COLS.find(c => c.id === id).name;
+const PEOPLE = {
+  ao: { name: 'Amara Osei', ini: 'AO', tone: '#F3D9C6' },
+  tr: { name: 'Tomás Ruiz', ini: 'TR', tone: '#D5E0EE' },
+  pk: { name: 'Priya Kapoor', ini: 'PK', tone: '#DCE7D3' },
+  lw: { name: 'Lena Weiss', ini: 'LW', tone: '#EADCEB' },
+  jh: { name: 'Jun Hayashi', ini: 'JH', tone: '#EFE6C2' },
+};
+const PRIO = { high: 'High', med: 'Medium', low: 'Low' };
+const SPRINT = { days: 10, today: 5, scope0: 40, history: [40, 40, 37, 34, 29] };
+
+const SEED = [
+  ['CHK-101','progress','Replace card form with hosted payment fields',5,'ao','high','Move card entry into the provider\'s hosted fields so raw card numbers never touch our servers. Keep the current layout and error positions.',[['Swap inputs for hosted iframes',1],['Map provider errors to our copy',1],['Style focus and error states',0],['Test with 3DS challenge cards',0]]],
+  ['CHK-110','progress','Accessibility pass on the checkout stepper',2,'lw','med','Stepper must announce the current step, keep focus on the step heading after navigation and pass contrast on the inactive steps.',[['Screen reader walk-through',1],['Focus moves to step heading',0],['Contrast fix on inactive steps',0]]],
+  ['CHK-102','review','Address autocomplete for EU postcodes',3,'tr','med','Suggest street and city after the postcode for DE, FR, NL and ES. Manual entry must always stay available.',[['DE and NL formats',1],['FR and ES formats',1],['Manual entry fallback',1]]],
+  ['CHK-104','review','Write error copy for declined payments',1,'lw','high','One message per decline reason we can safely expose. Say what happened and what to try next; never blame the customer.',[['List decline codes we expose',1],['Draft copy',1],['Review with support team',0]]],
+  ['CHK-106','backlog','Promo code field: validation and error states',2,'tr','low','Validate on apply, not on every keystroke. Show the discount in the summary once accepted.',[['Expired code message',0],['Already-used code message',0]]],
+  ['CHK-107','backlog','Load test the payment webhook',3,'ao','med','Simulate 5× peak traffic against the webhook endpoint and confirm retries stay idempotent.',[['Write the load script',0],['Run against staging',0],['Report p95 latency',0]]],
+  ['CHK-108','backlog','Saved addresses: edit and delete',5,'pk','med','Let signed-in customers edit or remove saved addresses from the address step without leaving checkout.',[['Edit sheet',0],['Delete with undo',0],['Default address toggle',0]]],
+  ['CHK-112','backlog','Wallet buttons placement on mobile',3,'ao','low','Decide where express wallet buttons sit on small screens so they don\'t push the order summary below the fold.',[['Two layout options',0],['Review with design',0]]],
+  ['CHK-105','done','Guest checkout: skip the account step',8,'jh','high','Customers can pay without creating an account; offer account creation on the confirmation page instead.',[['Remove account gate',1],['Confirmation page offer',1],['Analytics event',1]]],
+  ['CHK-103','done','Order summary collapses on mobile',2,'pk','med','Summary becomes a collapsible bar with the total always visible.',[['Collapsed bar',1],['Expanded state',1]]],
+  ['CHK-109','done','Shipping estimate: timeout fallback',3,'jh','med','If the carrier API takes longer than 2 s, show the standard range and refresh when it arrives.',[['Fallback range',1],['Late refresh',1]]],
+  ['CHK-111','done','Analytics events for step drop-off',2,'pk','low','Track entering and leaving each step so we can see where people stop.',[['Event schema',1],['Dashboard query',1]]],
+  ['CHK-113','done','Remove the legacy cart cookie',1,'jh','low','The old cart cookie is no longer read anywhere. Remove it and clear it on next visit.',[['Remove reads',1],['Clear on visit',1]]],
+];
+function seedState() {
+  const tasks = {}, order = { backlog: [], progress: [], review: [], done: [] };
+  SEED.forEach(([id, col, title, pts, who, prio, desc, chk], i) => {
+    tasks[id] = { id, title, pts, who, prio, desc,
+      checklist: chk.map(([t, d]) => ({ t, d: !!d })),
+      activity: [{ t: 'Created in Backlog', when: 'D1' }].concat(col !== 'backlog' ? [{ t: 'Moved to ' + colName(col), when: 'D' + (2 + (i % 4)) }] : []) };
+    order[col].push(id);
+  });
+  return { tasks, order, next: 114 };
+}
+
+const params = new URLSearchParams(location.search);
+const MODE = params.get('state'); // loading | empty | error (demo states)
+const STORE_KEY = 'trace-board-v1';
+function load() {
+  if (MODE === 'empty') return { tasks: {}, order: { backlog: [], progress: [], review: [], done: [] }, next: 101 };
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY));
+    if (s && s.tasks && s.order && COLS.every(c => Array.isArray(s.order[c.id]))) return s;
+  } catch (e) {}
+  return seedState();
+}
+function save() { if (MODE === 'empty') return; try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} }
+let state = load();
+const filter = new Set();
+
+const colOf = id => COLS.find(c => state.order[c.id].includes(id))?.id;
+const allIds = () => COLS.flatMap(c => state.order[c.id]);
+const sumPts = ids => ids.reduce((a, id) => a + (state.tasks[id]?.pts || 0), 0);
+const scope = () => sumPts(allIds());
+const remaining = () => scope() - sumPts(state.order.done);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const icon = n => `<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+
+/* ---------- Announcer & toasts ---------- */
+const announcer = $('#announcer');
+function announce(msg) { announcer.textContent = ''; setTimeout(() => announcer.textContent = msg, 40); }
+function toast(msg, action) {
+  const box = $('#toasts');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<p>${esc(msg)}</p>${action ? `<button class="btn" type="button">${esc(action.label)}</button>` : ''}<button class="btn btn-ghost icon-btn x" type="button" aria-label="Dismiss">${icon('x')}</button>`;
+  const kill = () => { if (!t.isConnected || t.classList.contains('out')) return; if (!motionOK()) return t.remove(); t.classList.add('out'); setTimeout(() => t.remove(), 240); };
+  if (action) t.querySelector('.btn:not(.x)').addEventListener('click', () => { action.run(); kill(); });
+  t.querySelector('.x').addEventListener('click', kill);
+  box.append(t);
+  while (box.children.length > 3) box.firstElementChild.remove();
+  let timer = setTimeout(kill, 6000);
+  t.addEventListener('pointerenter', () => clearTimeout(timer));
+  t.addEventListener('pointerleave', () => { timer = setTimeout(kill, 3000); });
+  t.addEventListener('focusin', () => clearTimeout(timer));
+}
+
+/* ---------- Undo ---------- */
+function snapshot() { return JSON.stringify(state); }
+function restore(snap, msg) {
+  flip(() => { state = JSON.parse(snap); renderBoard(); });
+  afterChange(false);
+  if (drawerId && !state.tasks[drawerId]) closeDialog(drawer);
+  else if (drawerId) fillDrawer();
+  announce(msg || 'Undone');
+}
+
+/* ---------- Animation helper: always finishes, even if the timeline stalls ---------- */
+function anim(el, keyframes, opts) {
+  const a = el.animate(keyframes, opts);
+  const total = (opts.duration || 0) + (opts.delay || 0) + 160;
+  setTimeout(() => { if (a.playState !== 'finished') { try { a.finish(); } catch (e) {} } }, total);
+  return a;
+}
+
+/* ---------- FLIP ---------- */
+function flip(mutate, scopeEls) {
+  const els = scopeEls || $$('.slot', board);
+  if (!motionOK()) { mutate(); return; }
+  const first = new Map(els.map(el => [el, el.getBoundingClientRect()]));
+  mutate();
+  const after = scopeEls || $$('.slot', board);
+  after.forEach(el => {
+    if (el.classList.contains('is-placeholder') && !scopeEls) return;
+    const a = first.get(el); const b = el.getBoundingClientRect();
+    if (!b.width) return;
+    if (!a || !a.width) {
+      anim(el, [{ opacity: 0, transform: 'scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 260, easing: EASE });
+      return;
+    }
+    const dx = a.left - b.left, dy = a.top - b.top;
+    if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+    anim(el, [{ transform: `translate(${dx}px,${dy}px)` }, { transform: 'none' }], { duration: 280, easing: EASE });
+  });
+}
+
+/* ---------- Board render ---------- */
+const board = $('#board');
+const slotEls = new Map();
+
+function buildColumns() {
+  board.innerHTML = '';
+  COLS.forEach((c, i) => {
+    const sec = document.createElement('section');
+    sec.className = 'col'; sec.dataset.col = c.id; sec.id = 'col-' + c.id;
+    sec.setAttribute('aria-labelledby', 'h-' + c.id);
+    sec.innerHTML = `
+      <div class="col-head">
+        <h2 id="h-${c.id}"><span class="no" aria-hidden="true">0${i + 1}</span>${c.name}</h2>
+        <span class="count" aria-label=""></span>
+        <span class="pts-sum"></span>
+        <button class="btn btn-ghost icon-btn add-btn" type="button" aria-label="Add task to ${c.name}">${icon('plus')}</button>
+      </div>
+      <form class="composer" hidden novalidate>
+        <label class="sr-only" for="new-${c.id}">New task title in ${c.name}</label>
+        <textarea class="textarea" id="new-${c.id}" rows="2" placeholder="What needs doing?" aria-describedby="err-${c.id}"></textarea>
+        <p class="err" id="err-${c.id}" hidden>${icon('warn')}Give the task a title first.</p>
+        <div class="row"><button class="btn btn-primary" type="submit">Add task</button><button class="btn btn-ghost" type="button" data-cancel>Cancel</button></div>
+      </form>
+      <ol class="cards" role="list" aria-labelledby="h-${c.id}"></ol>
+      <div class="col-empty" hidden></div>`;
+    board.append(sec);
+  });
+  const tabs = $('#col-tabs');
+  tabs.innerHTML = COLS.map(c => `<button class="col-tab" type="button" data-col="${c.id}">${c.name} <span class="num tab-count"></span></button>`).join('');
+}
+
+function cardInner(t, col) {
+  const p = PEOPLE[t.who] || PEOPLE.ao;
+  const done = t.checklist.filter(c => c.d).length, n = t.checklist.length;
+  const prioIcon = t.prio === 'high'
+    ? '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1 9.5 9h-9z" fill="currentColor"/></svg>'
+    : t.prio === 'med' ? '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9 8.5H1z" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>'
+    : '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 5h7" stroke="currentColor" stroke-width="1.6"/></svg>';
+  return `<div class="card-top"><span class="card-id">${t.id}</span>${col === 'done' ? `<span class="done-tick" aria-hidden="true">${icon('check')}</span>` : ''}<span class="pts" aria-hidden="true">${t.pts}</span></div>
+    <p class="card-title">${esc(t.title)}</p>
+    <div class="card-meta">
+      <span class="prio prio-${t.prio}">${prioIcon}${PRIO[t.prio]}</span>
+      ${n ? `<span class="chk${done === n ? ' all' : ''}">${icon('check')}${done}/${n}</span>` : ''}
+      <span class="avatar" style="--av:${p.tone}" title="${esc(p.name)}">${p.ini}</span>
+      <span class="grip" aria-hidden="true" title="Drag to move">${icon('grip')}</span>
+    </div>`;
+}
+function cardLabel(t, col) {
+  const p = PEOPLE[t.who] || PEOPLE.ao;
+  const list = state.order[col]; const pos = list.indexOf(t.id) + 1;
+  const done = t.checklist.filter(c => c.d).length;
+  return `${t.id}: ${t.title}. ${colName(col)}, ${pos} of ${list.length}. ${t.pts} points, ${PRIO[t.prio]} priority, ${p.name}${t.checklist.length ? `, checklist ${done} of ${t.checklist.length}` : ''}.`;
+}
+function getSlot(id) {
+  let li = slotEls.get(id);
+  if (!li) {
+    li = document.createElement('li');
+    li.className = 'slot'; li.dataset.id = id;
+    li.innerHTML = `<div class="card" tabindex="0" role="button" aria-roledescription="draggable task" aria-describedby="dnd-hint"></div>`;
+    slotEls.set(id, li);
+  }
+  return li;
+}
+function paintSlot(li, id, col) {
+  const t = state.tasks[id];
+  const card = li.firstElementChild;
+  const html = cardInner(t, col);
+  if (card._html !== html) { card.innerHTML = html; card._html = html; }
+  card.dataset.prio = t.prio;
+  card.setAttribute('aria-label', cardLabel(t, col));
+  li.dataset.col = col;
+  li.hidden = filter.size > 0 && !filter.has(t.who);
+}
+
+let rendering = false;
+function renderBoard() {
+  rendering = true;
+  const active = document.activeElement;
+  const keep = new Set(allIds());
+  for (const [id, el] of slotEls) if (!keep.has(id)) { el.remove(); slotEls.delete(id); }
+  COLS.forEach(c => {
+    const sec = $('#col-' + c.id), list = $('.cards', sec);
+    const ids = state.order[c.id];
+    ids.forEach((id, i) => {
+      const li = getSlot(id);
+      paintSlot(li, id, c.id);
+      if (list.children[i] !== li) list.insertBefore(li, list.children[i] || null);
+    });
+    while (list.children.length > ids.length) list.lastElementChild.remove();
+    const visible = ids.filter(id => !(filter.size && !filter.has(state.tasks[id].who)));
+    $('.count', sec).textContent = visible.length;
+    $('.count', sec).setAttribute('aria-label', `${visible.length} tasks`);
+    $('.pts-sum', sec).textContent = sumPts(visible) + ' pt';
+    const empty = $('.col-empty', sec);
+    if (!visible.length) {
+      empty.hidden = false;
+      if (!ids.length && !allIds().length && c.id === 'backlog') empty.innerHTML = `<strong>No tasks yet.</strong><br>Plan the sprint by adding the first task.<br><button class="btn btn-primary" type="button" data-add="backlog">${icon('plus')}Add first task</button>`;
+      else if (!ids.length) empty.innerHTML = c.id === 'done' ? 'Nothing finished yet. Drag a card here when it ships.' : `Nothing ${c.id === 'backlog' ? 'waiting' : c.id === 'review' ? 'to review' : 'in progress'}. Drag a card here.`;
+      else empty.innerHTML = `No tasks for ${[...filter].map(w => PEOPLE[w].name.split(' ')[0]).join(' or ')} here.`;
+    } else empty.hidden = true;
+    const tab = $(`.col-tab[data-col="${c.id}"] .tab-count`);
+    if (tab) tab.textContent = visible.length;
+  });
+  syncRoving();
+  if (active && active.classList?.contains('card') && active.isConnected && document.activeElement !== active) active.focus({ preventScroll: true });
+  rendering = false;
+}
+// Roving tabindex: the board is one Tab stop; arrow keys move between cards.
+let rovingId = null;
+function syncRoving() {
+  const vis = allIds().filter(id => slotEls.get(id) && !slotEls.get(id).hidden);
+  if (!vis.includes(rovingId)) rovingId = vis[0] || null;
+  for (const [id, li] of slotEls) li.firstElementChild.tabIndex = id === rovingId ? 0 : -1;
+}
+board.addEventListener('focusin', e => {
+  const c = e.target.closest('.card');
+  if (c && c.parentElement?.dataset.id && c.parentElement.dataset.id !== rovingId) { rovingId = c.parentElement.dataset.id; syncRoving(); }
+});
+
+/* ---------- Stats & chart ---------- */
+let shownRem = null;
+const chartBox = $('#chart');
+function idealAt(i) { return SPRINT.scope0 * (1 - i / (SPRINT.days - 1)); }
+let ready = false;
+function drawChart(rem, animateIn) {
+  if (!ready) return { projEnd: 0 };
+  $('.legend').hidden = !scope();
+  if (!scope()) {
+    chartBox.innerHTML = '<div class="col-empty" style="margin:8px 4px;padding:40px 16px">No story points in this sprint yet. The chart draws itself as soon as tasks are added.</div>';
+    return { projEnd: 0 };
+  }
+  const W = Math.max(260, Math.round(chartBox.clientWidth || 300));
+  const H = Math.round(Math.min(innerWidth >= 768 && innerWidth < 1440 ? 200 : 240, Math.max(170, W * 0.5)));
+  const m = { l: 30, r: 14, t: 14, b: 24 };
+  const vals = [...SPRINT.history, rem];
+  const sc = scope();
+  const ymax = Math.max(10, Math.ceil(Math.max(SPRINT.scope0, sc, ...vals) / 10) * 10);
+  const x = i => m.l + (W - m.l - m.r) * i / (SPRINT.days - 1);
+  const y = v => m.t + (H - m.t - m.b) * (1 - v / ymax);
+  const today = SPRINT.today;
+  const vel = (vals[0] - rem) / today;
+  const projEnd = Math.max(0, rem - vel * (SPRINT.days - 1 - today));
+  let g = '';
+  for (let v = 0; v <= ymax; v += 10) g += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="${v ? '#E3DED3' : '#8A8578'}" stroke-width="1"/><text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+  const every = W < 340 ? 2 : 1;
+  for (let i = 0; i < SPRINT.days; i++) if (i % every === 0 || i === today) g += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle"${i === today ? ' class="today-lbl"' : ''}>D${i + 1}</text>`;
+  const actual = vals.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('');
+  const dots = vals.map((v, i) => i === today
+    ? `<circle cx="${x(i)}" cy="${y(v)}" r="7" fill="#FBE3D3" stroke="#C44A0B" stroke-width="1.5"/><circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="#C44A0B"/>`
+    : `<circle cx="${x(i)}" cy="${y(v)}" r="2.8" fill="#FFFDF8" stroke="#C44A0B" stroke-width="1.5"/>`).join('');
+  const area = `${actual}L${x(today)},${y(0)}L${x(0)},${y(0)}Z`;
+  chartBox.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-labelledby="ch-t ch-d">
+    <title id="ch-t">Sprint 14 burndown</title>
+    <desc id="ch-d">Remaining story points went from ${vals[0]} on day 1 to ${Math.round(rem)} today, day ${today + 1} of ${SPRINT.days}. The ideal line is at ${idealAt(today).toFixed(1)} today.</desc>
+    <defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EE6A1F" stop-opacity=".16"/><stop offset="1" stop-color="#EE6A1F" stop-opacity="0"/></linearGradient></defs>
+    ${g}
+    <line x1="${x(today)}" x2="${x(today)}" y1="${m.t - 4}" y2="${y(0)}" stroke="#1F4E8C" stroke-width="1" stroke-dasharray="2 3"/>
+    <path d="M${x(0)},${y(SPRINT.scope0)}L${x(SPRINT.days - 1)},${y(0)}" stroke="#57534A" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+    <path d="${area}" fill="url(#ar)" class="${animateIn ? 'ch-fade' : ''}"/>
+    <path d="M${x(today)},${y(rem)}L${x(SPRINT.days - 1)},${y(projEnd)}" stroke="#C44A0B" stroke-width="1.6" stroke-dasharray="1 4" stroke-linecap="round" fill="none"/>
+    <path d="${actual}" stroke="#C44A0B" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round" class="${animateIn ? 'ch-draw' : ''}" pathLength="1"/>
+    <g class="${animateIn ? 'ch-fade' : ''}">${dots}</g>
+  </svg>`;
+  if (animateIn && motionOK()) {
+    const p = $('.ch-draw', chartBox);
+    anim(p, [{ strokeDasharray: '1 1', strokeDashoffset: 1 }, { strokeDasharray: '1 1', strokeDashoffset: 0 }], { duration: 1100, easing: 'cubic-bezier(.4,0,.2,1)' });
+    $$('.ch-fade', chartBox).forEach(el => anim(el, [{ opacity: 0 }, { opacity: 0, offset: .55 }, { opacity: 1 }], { duration: 1300, easing: 'ease-out' }));
+  }
+  return { projEnd };
+}
+let tweenRaf = 0;
+function updateStats(animateChart) {
+  const rem = remaining(), sc = scope(), done = sc - rem;
+  const ideal = idealAt(SPRINT.today);
+  const delta = rem - ideal;
+  const tasksN = allIds().length;
+  $('#tb-tasks').textContent = tasksN;
+  $('#tb-scope').textContent = sc;
+  $('#tb-done').textContent = sc ? Math.round(done / sc * 100) : 0;
+  $('#tb-day').textContent = SPRINT.today + 1;
+  setNum('#st-done', done);
+  if (!sc) setNum('#st-delta', '—');
+  else setNum('#st-delta', Math.round(Math.abs(delta)), delta > 0.5 ? '+' : delta < -0.5 ? '−' : '');
+  const from = shownRem == null ? rem : shownRem;
+  cancelAnimationFrame(tweenRaf);
+  const finish = r => {
+    const { projEnd } = drawChart(r, animateChart);
+    animateChart = false;
+    return projEnd;
+  };
+  if (!motionOK() || from === rem || document.hidden) { shownRem = rem; setNum('#st-rem', rem); writeVerdict(rem, delta, finish(rem)); }
+  else {
+    const t0 = performance.now(), D = 520;
+    const step = now => {
+      const k = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - k, 3);
+      const v = from + (rem - from) * e;
+      shownRem = v; $('#st-rem').textContent = Math.round(v);
+      const pe = finish(v);
+      if (k < 1) tweenRaf = requestAnimationFrame(step); else { shownRem = rem; writeVerdict(rem, delta, pe); }
+    };
+    tweenRaf = requestAnimationFrame(step);
+  }
+  $('#burn-rows').innerHTML = Array.from({ length: SPRINT.days }, (_, i) => {
+    const v = i < SPRINT.today ? SPRINT.history[i] : i === SPRINT.today ? rem : null;
+    return `<tr><td>D${i + 1}${i === SPRINT.today ? ' (today)' : ''}</td><td>${v == null ? '—' : v}</td><td>${idealAt(i).toFixed(1)}</td></tr>`;
+  }).join('');
+}
+function setNum(sel, v, prefix = '') { $(sel).textContent = prefix + v; }
+function writeVerdict(rem, delta, projEnd) {
+  let s;
+  if (!scope()) s = 'The burndown starts once the sprint has tasks with story points.';
+  else if (rem === 0) s = 'Everything is done. The sprint is complete.';
+  else {
+    const d = Math.round(Math.abs(delta));
+    const lead = delta > 0.5 ? `${d} pt behind the ideal line.` : delta < -0.5 ? `${d} pt ahead of the ideal line.` : 'Right on the ideal line.';
+    const pe = Math.round(projEnd);
+    s = `${lead} ${pe > 0 ? `At this pace about ${pe} pt carry over to the next sprint.` : 'At this pace the sprint finishes on time.'}`;
+  }
+  $('#verdict-txt').textContent = s;
+}
+
+function afterChange(persist = true, animateChart = false) {
+  updateStats(animateChart);
+  if (persist) save();
+}
+
+/* ---------- Mutations ---------- */
+function moveTask(id, toCol, toIndex, opts = {}) {
+  const from = colOf(id); if (!from) return;
+  const snap = snapshot();
+  const fromIdx = state.order[from].indexOf(id);
+  flip(() => {
+    state.order[from].splice(fromIdx, 1);
+    const list = state.order[toCol];
+    const idx = toIndex == null ? list.length : Math.max(0, Math.min(list.length, toIndex));
+    list.splice(idx, 0, id);
+    if (from !== toCol) state.tasks[id].activity.push({ t: `Moved to ${colName(toCol)}`, when: 'Today', fresh: true });
+    renderBoard();
+  });
+  afterChange();
+  if (from !== toCol && opts.toast !== false) toast(`${id} moved to ${colName(toCol)}`, { label: 'Undo', run: () => restore(snap, `${id} moved back to ${colName(from)}`) });
+  if (drawerId === id) fillDrawer();
+}
+function addTask(col, title) {
+  const id = 'CHK-' + state.next++;
+  const who = filter.size === 1 ? [...filter][0] : 'ao';
+  state.tasks[id] = { id, title, pts: 1, who, prio: 'med', desc: 'No description yet.', checklist: [], activity: [{ t: `Created in ${colName(col)}`, when: 'Today', fresh: true }] };
+  flip(() => { state.order[col].unshift(id); renderBoard(); });
+  afterChange();
+  const card = slotEls.get(id).firstElementChild;
+  card.classList.add('is-new'); setTimeout(() => card.classList.remove('is-new'), 1500);
+  toast(`${id} added to ${colName(col)}`, { label: 'Open', run: () => openDrawer(id) });
+  return id;
+}
+function deleteTask(id) {
+  const snap = snapshot(), col = colOf(id);
+  flip(() => { state.order[col] = state.order[col].filter(x => x !== id); delete state.tasks[id]; renderBoard(); });
+  afterChange();
+  toast(`${id} deleted`, { label: 'Undo', run: () => restore(snap, `${id} restored`) });
+}
+
+/* ---------- Composer ---------- */
+function openComposer(col) {
+  const sec = $('#col-' + col), form = $('.composer', sec);
+  scrollToCol(col);
+  form.hidden = false;
+  if (motionOK()) anim(form, [{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 200, easing: EASE });
+  const ta = $('textarea', form);
+  setTimeout(() => ta.focus({ preventScroll: false }), 30);
+}
+function closeComposer(form, refocus = true) {
+  form.hidden = true; $('textarea', form).value = ''; $('.err', form).hidden = true; $('textarea', form).removeAttribute('aria-invalid');
+  if (refocus) $('.add-btn', form.closest('.col')).focus();
+}
+board.addEventListener('submit', e => {
+  const form = e.target.closest('.composer'); if (!form) return;
+  e.preventDefault();
+  const ta = $('textarea', form), title = ta.value.trim().replace(/\s+/g, ' ');
+  if (!title) { $('.err', form).hidden = false; ta.setAttribute('aria-invalid', 'true'); ta.focus(); return; }
+  const col = form.closest('.col').dataset.col;
+  addTask(col, title);
+  ta.value = ''; $('.err', form).hidden = true; ta.removeAttribute('aria-invalid'); ta.focus();
+});
+board.addEventListener('keydown', e => {
+  const ta = e.target.closest('.composer textarea'); if (!ta) return;
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ta.form.requestSubmit(); }
+  if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeComposer(ta.form); }
+});
+board.addEventListener('input', e => { const ta = e.target.closest('.composer textarea'); if (ta && ta.value.trim()) { $('.err', ta.form).hidden = true; ta.removeAttribute('aria-invalid'); } });
+
+/* ---------- Board clicks ---------- */
+let suppressClick = false;
+board.addEventListener('click', e => {
+  if (e.target.closest('.add-btn')) return openComposer(e.target.closest('.col').dataset.col);
+  if (e.target.closest('[data-add]')) return openComposer(e.target.closest('[data-add]').dataset.add);
+  if (e.target.closest('[data-cancel]')) return closeComposer(e.target.closest('.composer'));
+  const card = e.target.closest('.card');
+  if (card && !suppressClick && !grabbed) openDrawer(card.parentElement.dataset.id);
+});
+
+/* ---------- Keyboard drag and drop ---------- */
+let grabbed = null; // { id, snap, fromCol }
+function visibleIds(col) { return state.order[col].filter(id => !(filter.size && !filter.has(state.tasks[id].who))); }
+function posText(id) { const c = colOf(id); const v = visibleIds(c); return `${colName(c)}, position ${v.indexOf(id) + 1} of ${v.length}`; }
+function focusCard(id) { const li = slotEls.get(id); if (li) { li.firstElementChild.focus({ preventScroll: true }); li.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: motionOK() ? 'smooth' : 'auto' }); } }
+function grab(id) {
+  grabbed = { id, snap: snapshot(), fromCol: colOf(id) };
+  slotEls.get(id).firstElementChild.classList.add('is-grabbed');
+  announce(`Picked up ${id}. ${posText(id)}. Use arrow keys to move, Space to drop, Escape to cancel.`);
+}
+function dropGrabbed(cancel) {
+  if (!grabbed) return;
+  const { id, snap, fromCol } = grabbed;
+  grabbed = null;
+  const card = slotEls.get(id)?.firstElementChild;
+  if (cancel) {
+    flip(() => { state = JSON.parse(snap); renderBoard(); });
+    afterChange(true);
+    announce(`Move cancelled. ${id} is back in ${posText(id)}.`);
+  } else {
+    const to = colOf(id);
+    if (to !== fromCol) {
+      state.tasks[id].activity.push({ t: `Moved to ${colName(to)}`, when: 'Today', fresh: true });
+      toast(`${id} moved to ${colName(to)}`, { label: 'Undo', run: () => restore(snap, `${id} moved back to ${colName(fromCol)}`) });
+    }
+    save();
+    announce(`Dropped ${id}. ${posText(id)}.`);
+  }
+  const c = slotEls.get(id)?.firstElementChild || card;
+  c?.classList.remove('is-grabbed');
+  if (c) { c.focus({ preventScroll: true }); c.setAttribute('aria-label', cardLabel(state.tasks[id], colOf(id))); }
+}
+function nudge(dir) {
+  const { id } = grabbed; const col = colOf(id); const ci = COLS.findIndex(c => c.id === col);
+  const list = state.order[col]; const vis = visibleIds(col); const vi = vis.indexOf(id);
+  let toCol = col, toIndex;
+  if (dir === 'up' || dir === 'down') {
+    const nb = vis[vi + (dir === 'up' ? -1 : 1)];
+    if (!nb) { announce(`${id} is already at the ${dir === 'up' ? 'top' : 'bottom'} of ${colName(col)}.`); return; }
+    const without = list.filter(x => x !== id);
+    toIndex = without.indexOf(nb) + (dir === 'down' ? 1 : 0);
+  } else {
+    const ni = ci + (dir === 'left' ? -1 : 1);
+    if (ni < 0 || ni >= COLS.length) { announce(`No column to the ${dir}.`); return; }
+    toCol = COLS[ni].id;
+    const tvis = visibleIds(toCol);
+    const target = tvis[Math.min(vi, tvis.length)];
+    toIndex = target ? state.order[toCol].indexOf(target) : state.order[toCol].length;
+  }
+  flip(() => {
+    state.order[col] = state.order[col].filter(x => x !== id);
+    state.order[toCol].splice(toIndex, 0, id);
+    renderBoard();
+  });
+  slotEls.get(id).firstElementChild.classList.add('is-grabbed');
+  focusCard(id);
+  updateStats(false);
+  announce(posText(id));
+}
+board.addEventListener('keydown', e => {
+  const card = e.target.closest('.card'); if (!card || e.target !== card) return;
+  const id = card.parentElement.dataset.id;
+  if (grabbed) {
+    const map = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
+    if (map[e.key]) { e.preventDefault(); nudge(map[e.key]); }
+    else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); dropGrabbed(false); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); dropGrabbed(true); }
+    else if (e.key === 'Tab') dropGrabbed(false);
+    return;
+  }
+  if (e.key === ' ') { e.preventDefault(); grab(id); }
+  else if (e.key === 'Enter') { e.preventDefault(); openDrawer(id); }
+  else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    const col = colOf(id), vis = visibleIds(col), nb = vis[vis.indexOf(id) + (e.key === 'ArrowDown' ? 1 : -1)];
+    if (nb) { e.preventDefault(); focusCard(nb); }
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    const ci = COLS.findIndex(c => c.id === colOf(id)) + (e.key === 'ArrowRight' ? 1 : -1);
+    for (let i = ci; i >= 0 && i < COLS.length; i += (e.key === 'ArrowRight' ? 1 : -1)) {
+      const v = visibleIds(COLS[i].id); if (v.length) { e.preventDefault(); focusCard(v[0]); break; }
+    }
+  }
+});
+board.addEventListener('focusout', e => {
+  if (!grabbed || rendering) return;
+  setTimeout(() => { if (grabbed && !rendering && !document.activeElement?.closest?.('.card')) dropGrabbed(false); }, 0);
+});
+
+/* ---------- Pointer drag and drop ---------- */
+let drag = null;
+board.addEventListener('pointerdown', e => {
+  if (e.button !== 0 || grabbed) return;
+  const li = e.target.closest('.slot'); if (!li) return;
+  if (e.target.closest('button, input, select, textarea, a')) return;
+  const onGrip = !!e.target.closest('.grip');
+  if (e.pointerType === 'touch' && !onGrip) return; // touch: drag from the grip, rest of card scrolls
+  drag = { li, id: li.dataset.id, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, active: false, pid: e.pointerId, snap: snapshot(), fromCol: colOf(li.dataset.id) };
+  if (onGrip) e.preventDefault();
+  window.addEventListener('pointermove', onPointerMove, { passive: false });
+  window.addEventListener('pointerup', onPointerUp);
+  window.addEventListener('pointercancel', onPointerCancel);
+  if (e.pointerType === 'touch') beginDrag();
+});
+function beginDrag() {
+  const { li } = drag;
+  const r = li.getBoundingClientRect();
+  drag.active = true; drag.ox = drag.x0 - r.left; drag.oy = drag.y0 - r.top;
+  const ghost = li.cloneNode(true);
+  ghost.classList.add('ghost'); ghost.removeAttribute('data-id');
+  ghost.querySelector('.card').removeAttribute('tabindex');
+  ghost.setAttribute('aria-hidden', 'true');
+  ghost.style.width = r.width + 'px';
+  document.body.append(ghost);
+  drag.ghost = ghost;
+  li.classList.add('is-placeholder');
+  document.body.classList.add('is-dragging');
+  if (navigator.vibrate) try { navigator.vibrate(8); } catch (e) {}
+  positionGhost(true);
+  announce(`Picked up ${drag.id}.`);
+  drag.raf = requestAnimationFrame(autoScroll);
+}
+function positionGhost(initial) {
+  const { ghost, x, y, ox, oy } = drag;
+  const tx = x - ox, ty = y - oy;
+  ghost.style.transform = `translate(${tx}px,${ty}px) rotate(${initial ? 0 : -1.5}deg) scale(${initial ? 1 : 1.02})`;
+  if (initial && motionOK()) ghost.style.transition = 'transform 120ms ' + EASE, setTimeout(() => drag && drag.ghost && (drag.ghost.style.transition = 'none'), 130);
+}
+function onPointerMove(e) {
+  if (!drag || e.pointerId !== drag.pid) return;
+  drag.x = e.clientX; drag.y = e.clientY;
+  if (!drag.active) {
+    if (Math.hypot(drag.x - drag.x0, drag.y - drag.y0) < 5) return;
+    beginDrag();
+  }
+  e.preventDefault();
+  positionGhost(false);
+  placePlaceholder();
+}
+function placePlaceholder() {
+  const { x, y, li } = drag;
+  const under = document.elementFromPoint(x, y);
+  let col = under?.closest?.('.col');
+  if (!col) { // pointer is in a gap or below the board: use the column under the pointer's x
+    const br = board.getBoundingClientRect();
+    if (y > br.top - 40) col = $$('.col', board).find(c => { const r = c.getBoundingClientRect(); return x >= r.left - 6 && x <= r.right + 6; });
+  }
+  $$('.col.is-over').forEach(c => c !== col && c.classList.remove('is-over'));
+  if (!col) return;
+  col.classList.add('is-over');
+  const list = $('.cards', col);
+  const items = $$('.slot', list).filter(s => s !== li && !s.hidden);
+  let ref = null;
+  for (const s of items) { const r = s.getBoundingClientRect(); if (y < r.top + r.height / 2) { ref = s; break; } }
+  if (!ref && items.length) ref = items[items.length - 1].nextElementSibling; // after last visible
+  if (li.parentElement === list && (li.nextElementSibling === ref || (ref === null && li === list.lastElementChild))) return;
+  if (ref === li) return;
+  const affected = [...new Set([...$$('.slot', li.parentElement), ...$$('.slot', list)])].filter(s => s !== li);
+  flip(() => list.insertBefore(li, ref), affected);
+  $$('.col').forEach(c => { const n = $$('.slot:not([hidden])', c).length; const empty = $('.col-empty', c); if (empty) empty.hidden = n > 0; });
+}
+function autoScroll() {
+  if (!drag || !drag.active) return;
+  const { x, y } = drag, edge = 56;
+  const br = board.getBoundingClientRect();
+  if (x < br.left + edge) board.scrollLeft -= Math.ceil((br.left + edge - x) / 4);
+  else if (x > br.right - edge) board.scrollLeft += Math.ceil((x - (br.right - edge)) / 4);
+  const vh = innerHeight;
+  if (y < 80 + edge) window.scrollBy(0, -Math.ceil((80 + edge - y) / 5));
+  else if (y > vh - edge) window.scrollBy(0, Math.ceil((y - (vh - edge)) / 5));
+  placePlaceholder();
+  drag.raf = requestAnimationFrame(autoScroll);
+}
+function endDrag(cancel) {
+  window.removeEventListener('pointermove', onPointerMove);
+  window.removeEventListener('pointerup', onPointerUp);
+  window.removeEventListener('pointercancel', onPointerCancel);
+  const d = drag; drag = null;
+  if (!d || !d.active) return;
+  cancelAnimationFrame(d.raf);
+  suppressClick = true; setTimeout(() => suppressClick = false, 0);
+  document.body.classList.remove('is-dragging');
+  $$('.col.is-over').forEach(c => c.classList.remove('is-over'));
+  const settle = () => { d.ghost.remove(); d.li.classList.remove('is-placeholder'); };
+  if (cancel) {
+    settle();
+    flip(() => { state = JSON.parse(d.snap); renderBoard(); });
+    announce('Move cancelled.');
+    return;
+  }
+  // commit DOM order to state
+  COLS.forEach(c => { state.order[c.id] = $$('.slot', $('#col-' + c.id)).map(s => s.dataset.id); });
+  const to = colOf(d.id);
+  const r = d.li.getBoundingClientRect();
+  if (motionOK()) {
+    const a = anim(d.ghost, [{ transform: d.ghost.style.transform }, { transform: `translate(${r.left}px,${r.top}px)` }], { duration: 200, easing: EASE, fill: 'forwards' });
+    a.finished.then(settle, settle);
+  } else settle();
+  if (to !== d.fromCol) {
+    state.tasks[d.id].activity.push({ t: `Moved to ${colName(to)}`, when: 'Today', fresh: true });
+    toast(`${d.id} moved to ${colName(to)}`, { label: 'Undo', run: () => restore(d.snap, `${d.id} moved back to ${colName(d.fromCol)}`) });
+  }
+  renderBoard();
+  afterChange();
+  announce(`Dropped ${d.id}. ${posText(d.id)}.`);
+}
+function onPointerUp(e) { if (drag && e.pointerId === drag.pid) endDrag(false); }
+function onPointerCancel(e) { if (drag && e.pointerId === drag.pid) endDrag(true); }
+window.addEventListener('keydown', e => { if (drag && drag.active && e.key === 'Escape') { e.preventDefault(); endDrag(true); } }, true);
+
+/* ---------- Dialog helpers ---------- */
+function showDialog(d) { d.classList.remove('closing'); if (!d.open) d.showModal(); }
+function closeDialog(d, after) {
+  if (!d.open) { after && after(); return; }
+  const done = () => { d.classList.remove('closing'); d.close(); after && after(); };
+  if (!motionOK()) return done();
+  d.classList.add('closing');
+  let fired = false;
+  const fin = () => { if (fired) return; fired = true; done(); };
+  d.addEventListener('animationend', fin, { once: true });
+  setTimeout(fin, 320);
+}
+$$('dialog').forEach(d => {
+  d.addEventListener('cancel', e => { e.preventDefault(); closeDialog(d); });
+  d.addEventListener('click', e => {
+    if (e.target !== d) return;
+    const r = d.getBoundingClientRect();
+    const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    if (!inside) closeDialog(d);
+  });
+});
+
+/* ---------- Drawer ---------- */
+const drawer = $('#drawer');
+let drawerId = null, drawerOpener = null;
+$('#d-status').innerHTML = COLS.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+$('#d-who').innerHTML = Object.entries(PEOPLE).map(([k, p]) => `<option value="${k}">${p.name}</option>`).join('');
+function openDrawer(id) {
+  if (!state.tasks[id]) return;
+  drawerOpener = slotEls.get(id)?.firstElementChild || document.activeElement;
+  drawerId = id;
+  fillDrawer();
+  $('#d-title-err').hidden = true;
+  showDialog(drawer);
+  autosize($('#d-title')); // measure only once the dialog is displayed
+  $('#d-close').focus();
+  if (motionOK()) $$('.drawer-body > *', drawer).forEach(el => { el.style.animation = 'none'; el.offsetWidth; el.style.animation = ''; });
+}
+function fillDrawer() {
+  const t = state.tasks[drawerId]; if (!t) return;
+  $('#d-id').textContent = `${t.id} · ${colName(colOf(t.id))}`;
+  drawer.setAttribute('aria-label', `Task ${t.id} details`);
+  const ti = $('#d-title'); if (document.activeElement !== ti) ti.value = t.title;
+  autosize(ti);
+  $('#d-status').value = colOf(t.id); $('#d-who').value = t.who; $('#d-pts').value = String(t.pts); $('#d-prio').value = t.prio;
+  $('#d-desc').textContent = t.desc;
+  renderChecklist();
+  $('#d-activity').innerHTML = t.activity.slice().reverse().map(a => `<li class="${a.fresh ? 'new' : ''}">${esc(a.t)}<span class="when">${esc(a.when)}</span></li>`).join('');
+}
+function renderChecklist() {
+  const t = state.tasks[drawerId];
+  const n = t.checklist.length, d = t.checklist.filter(c => c.d).length;
+  $('#d-chk-count').textContent = n ? `${d} of ${n}` : 'None';
+  $('#d-meter').style.transform = `scaleX(${n ? d / n : 0})`;
+  const ul = $('#d-checklist');
+  if (ul.children.length !== n || ul.dataset.for !== drawerId) {
+    ul.dataset.for = drawerId;
+    ul.innerHTML = n ? t.checklist.map((c, i) => `<li><label><input type="checkbox" data-i="${i}" ${c.d ? 'checked' : ''}><span>${esc(c.t)}</span></label></li>`).join('') : '<li class="desc" style="color:var(--ink-2)">No checklist items.</li>';
+  } else t.checklist.forEach((c, i) => { $(`input[data-i="${i}"]`, ul).checked = c.d; });
+}
+function autosize(ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+function closeDrawer() {
+  commitTitle();
+  closeDialog(drawer, () => {
+    const back = drawerId && slotEls.get(drawerId)?.firstElementChild;
+    drawerId = null;
+    (back && back.isConnected ? back : drawerOpener && drawerOpener.isConnected ? drawerOpener : $('#board')).focus({ preventScroll: false });
+  });
+}
+drawer.addEventListener('cancel', e => { e.preventDefault(); e.stopImmediatePropagation(); closeDrawer(); }, true);
+drawer.addEventListener('click', e => { if (e.target === drawer) { const r = drawer.getBoundingClientRect(); if (e.clientX < r.left) { e.stopImmediatePropagation(); closeDrawer(); } } }, true);
+$('#d-close').addEventListener('click', closeDrawer);
+$('#d-done').addEventListener('click', closeDrawer);
+function commitTitle() {
+  if (!drawerId || !state.tasks[drawerId]) return;
+  const ti = $('#d-title'); const v = ti.value.trim().replace(/\s+/g, ' ');
+  const t = state.tasks[drawerId];
+  if (!v) { ti.value = t.title; $('#d-title-err').hidden = false; autosize(ti); return; }
+  $('#d-title-err').hidden = true;
+  if (v !== t.title) { t.title = v; t.activity.push({ t: 'Renamed', when: 'Today', fresh: true }); renderBoard(); save(); fillDrawer(); }
+}
+$('#d-title').addEventListener('input', e => autosize(e.target));
+$('#d-title').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } });
+$('#d-title').addEventListener('blur', commitTitle);
+$('#d-status').addEventListener('change', e => moveTask(drawerId, e.target.value, 0));
+function editField(key, label, fmt) {
+  return e => {
+    const t = state.tasks[drawerId]; const val = key === 'pts' ? +e.target.value : e.target.value;
+    t[key] = val; t.activity.push({ t: `${label} set to ${fmt ? fmt(val) : val}`, when: 'Today', fresh: true });
+    flip(() => renderBoard()); afterChange(); fillDrawer();
+  };
+}
+$('#d-who').addEventListener('change', editField('who', 'Assignee', v => PEOPLE[v].name));
+$('#d-pts').addEventListener('change', editField('pts', 'Story points'));
+$('#d-prio').addEventListener('change', editField('prio', 'Priority', v => PRIO[v]));
+$('#d-checklist').addEventListener('change', e => {
+  const i = e.target.dataset.i; if (i == null) return;
+  const t = state.tasks[drawerId]; t.checklist[i].d = e.target.checked;
+  renderChecklist(); renderBoard(); save();
+});
+$('#d-delete').addEventListener('click', () => {
+  const id = drawerId;
+  closeDialog(drawer, () => { drawerId = null; deleteTask(id); $('#board').focus({ preventScroll: true }); });
+});
+
+/* ---------- Command palette ---------- */
+const pal = $('#palette'), palInput = $('#pal-input'), palList = $('#pal-list');
+let palStack = [], palItems = [], palActive = 0, palCtx = null, palOpener = null;
+function focusedTaskId() {
+  const c = document.activeElement?.closest?.('.card');
+  if (c && c.parentElement?.dataset.id) return c.parentElement.dataset.id;
+  return drawerId;
+}
+function openPalette() {
+  if (pal.open) { palInput.select(); return; }
+  if (grabbed) dropGrabbed(false);
+  palCtx = focusedTaskId();
+  palOpener = document.activeElement;
+  if (drawer.open) { drawer.classList.remove('closing'); drawer.close(); }
+  palStack = []; palInput.value = '';
+  showDialog(pal);
+  renderPalette();
+  palInput.focus();
+}
+function closePalette(refocus = true) {
+  closeDialog(pal, () => { if (refocus && palOpener && palOpener.isConnected) palOpener.focus({ preventScroll: true }); });
+}
+function rootItems() {
+  const items = [];
+  const ctx = palCtx && state.tasks[palCtx];
+  if (ctx) {
+    const cur = colOf(ctx.id);
+    items.push({ group: `Selected: ${ctx.id}`, label: `Open ${ctx.id} details`, icon: 'file', run: () => openDrawer(ctx.id) });
+    COLS.filter(c => c.id !== cur).forEach(c => items.push({ group: `Selected: ${ctx.id}`, label: `Move ${ctx.id} to ${c.name}`, icon: 'arrow', run: () => { moveTask(ctx.id, c.id, 0); focusCard(ctx.id); } }));
+  }
+  items.push({ group: 'Actions', label: 'Create task in Backlog', icon: 'plus', hint: 'N', run: () => openComposer('backlog') });
+  items.push({ group: 'Actions', label: 'Move a task to…', icon: 'arrow', kw: 'status column change', children: () => ({ crumb: 'Move', placeholder: 'Which task?', items: taskItems(t => ({ children: () => ({ crumb: t.id, placeholder: `Move ${t.id} to…`, items: COLS.filter(c => c.id !== colOf(t.id)).map(c => ({ group: 'Columns', label: c.name, icon: 'col', run: () => { moveTask(t.id, c.id, 0); focusCard(t.id); } })) }) })) }) });
+  items.push({ group: 'Actions', label: 'Show burndown chart', icon: 'chart', kw: 'progress points sprint', run: () => { setChartOpen(true); const b = $('#burndown'); b.scrollIntoView({ behavior: motionOK() ? 'smooth' : 'auto', block: 'center' }); b.setAttribute('tabindex', '-1'); b.focus({ preventScroll: true }); } });
+  Object.entries(PEOPLE).forEach(([k, p]) => items.push({ group: 'Filter by assignee', label: `${filter.has(k) ? 'Remove filter' : 'Show only'}: ${p.name}`, icon: 'user', kw: 'filter assignee person ' + p.ini, run: () => toggleFilter(k) }));
+  if (filter.size) items.push({ group: 'Filter by assignee', label: 'Clear filter', icon: 'x', run: clearFilter });
+  COLS.forEach(c => items.push({ group: 'Go to', label: `Go to ${c.name}`, icon: 'col', kw: 'column jump', run: () => goToCol(c.id) }));
+  items.push({ group: 'Help', label: 'Keyboard shortcuts', icon: 'key', hint: '?', run: () => showDialog($('#help')) });
+  items.push({ group: 'Help', label: 'Reset demo data', icon: 'reset', kw: 'restore sample', run: resetData });
+  return items;
+}
+function taskItems(mapFn) {
+  return allIds().map(id => { const t = state.tasks[id]; return Object.assign({ group: 'Tasks', label: t.title, hint: `${t.id} · ${colName(colOf(id))}`, icon: 'file', kw: t.id + ' ' + PEOPLE[t.who].name, run: () => openDrawer(id) }, mapFn ? mapFn(t) : {}); });
+}
+function fuzzy(q, text) {
+  const s = text.toLowerCase(); q = q.toLowerCase();
+  const at = s.indexOf(q);
+  if (at >= 0) return { score: 100 - at + (at === 0 || s[at - 1] === ' ' ? 30 : 0), hits: Array.from({ length: q.length }, (_, i) => at + i) };
+  const hits = []; let j = 0, gaps = 0, last = -1;
+  for (let i = 0; i < s.length && j < q.length; i++) if (s[i] === q[j]) { if (last >= 0) gaps += i - last - 1; hits.push(i); last = i; j++; }
+  if (j < q.length) return null;
+  return { score: 40 - gaps, hits };
+}
+function hl(text, hits) {
+  if (!hits || !hits.length) return esc(text);
+  const set = new Set(hits); let out = '';
+  [...text].forEach((ch, i) => out += set.has(i) ? `<mark>${esc(ch)}</mark>` : esc(ch));
+  return out.replace(/<\/mark><mark>/g, '');
+}
+function renderPalette() {
+  const q = palInput.value.trim();
+  const level = palStack[palStack.length - 1];
+  let base = level ? level.items : rootItems();
+  if (!level && q) base = base.concat(taskItems());
+  let list;
+  if (!q) {
+    list = level ? base : base.concat(taskItems().filter(it => { const c = colOf(it.hint.split(' ')[0]); return c === 'progress' || c === 'review'; }).map(it => ({ ...it, group: 'Active tasks' })));
+    list = list.map(it => ({ it, hits: null, score: 0 }));
+  } else {
+    list = base.map(it => {
+      const m = fuzzy(q, it.label); const k = !m && fuzzy(q, (it.hint || '') + ' ' + (it.kw || ''));
+      return m ? { it, hits: m.hits, score: m.score } : k ? { it, hits: null, score: k.score - 30 } : null;
+    }).filter(Boolean).sort((a, b) => b.score - a.score).slice(0, 40);
+    if (!level) list.push({ it: { group: 'Create', label: `Create task “${q}”`, icon: 'plus', hint: 'Backlog', run: () => { const id = addTask('backlog', q); focusCard(id); } }, hits: null, score: -999 });
+  }
+  // group, keeping group order by first appearance
+  const groups = new Map();
+  list.forEach(r => { if (!groups.has(r.it.group)) groups.set(r.it.group, []); groups.get(r.it.group).push(r); });
+  palItems = [];
+  let html = '';
+  groups.forEach((rows, g) => {
+    const gid = 'pg-' + palItems.length;
+    html += `<li role="presentation" class="pal-group label" id="${gid}">${esc(g)}</li>`;
+    rows.forEach(r => {
+      const i = palItems.length; palItems.push(r.it);
+      html += `<li role="option" id="po-${i}" class="pal-opt" data-i="${i}" aria-selected="false" aria-describedby="${gid}">${icon(r.it.icon || 'arrow')}<span class="lbl">${hl(r.it.label, r.hits)}</span>${r.it.hint ? `<span class="hint">${esc(r.it.hint)}</span>` : ''}${r.it.children ? icon('chev') : ''}</li>`;
+    });
+  });
+  palList.innerHTML = palItems.length ? html : `<li class="pal-empty" role="presentation">No matches for “${esc(q)}”. Try a task ID like CHK-104.</li>`;
+  $('#pal-crumbs').innerHTML = palStack.map(s => `<span class="crumb">${esc(s.crumb)}</span>`).join('');
+  palInput.placeholder = level ? level.placeholder : 'Search tasks or type a command…';
+  setActive(0);
+}
+function setActive(i) {
+  if (!palItems.length) { palInput.removeAttribute('aria-activedescendant'); return; }
+  palActive = (i + palItems.length) % palItems.length;
+  $$('.pal-opt', palList).forEach(o => o.setAttribute('aria-selected', String(+o.dataset.i === palActive)));
+  const el = $('#po-' + palActive);
+  palInput.setAttribute('aria-activedescendant', 'po-' + palActive);
+  el && el.scrollIntoView({ block: 'nearest' });
+}
+function runItem(i) {
+  const it = palItems[i]; if (!it) return;
+  if (it.children) {
+    palStack.push(it.children()); palInput.value = ''; renderPalette();
+    if (motionOK()) anim(palList, [{ opacity: 0, transform: 'translateX(8px)' }, { opacity: 1, transform: 'none' }], { duration: 180, easing: EASE });
+    return;
+  }
+  closeDialog(pal, () => it.run()); // run after the dialog has closed so the command controls focus
+}
+palInput.addEventListener('input', renderPalette);
+palInput.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); setActive(palActive + 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(palActive - 1); }
+  else if (e.key === 'Home' && e.ctrlKey) { e.preventDefault(); setActive(0); }
+  else if (e.key === 'Enter') { e.preventDefault(); runItem(palActive); }
+  else if (e.key === 'Backspace' && !palInput.value && palStack.length) { e.preventDefault(); palStack.pop(); renderPalette(); }
+});
+palList.addEventListener('pointermove', e => { const o = e.target.closest('.pal-opt'); if (o && +o.dataset.i !== palActive) setActive(+o.dataset.i); });
+palList.addEventListener('click', e => { const o = e.target.closest('.pal-opt'); if (o) runItem(+o.dataset.i); });
+pal.addEventListener('cancel', e => { e.preventDefault(); e.stopImmediatePropagation(); closePalette(); }, true);
+
+/* ---------- Filters ---------- */
+const peopleBox = $('#people');
+peopleBox.insertAdjacentHTML('beforeend', Object.entries(PEOPLE).map(([k, p]) =>
+  `<button class="person" type="button" data-who="${k}" aria-pressed="false" title="Show only ${esc(p.name)}'s tasks"><span class="avatar" style="--av:${p.tone}" aria-hidden="true">${p.ini}</span>${esc(p.name.split(' ')[0])}<span class="sr-only"> ${esc(p.name.split(' ')[1])}</span></button>`).join(''));
+peopleBox.addEventListener('click', e => { const b = e.target.closest('.person'); if (b) toggleFilter(b.dataset.who); });
+function syncFilterUI() {
+  $$('.person', peopleBox).forEach(b => b.setAttribute('aria-pressed', String(filter.has(b.dataset.who))));
+  $('#clear-filter').hidden = !filter.size;
+}
+function toggleFilter(k) {
+  filter.has(k) ? filter.delete(k) : filter.add(k);
+  flip(() => renderBoard()); syncFilterUI();
+  const n = allIds().filter(id => !filter.size || filter.has(state.tasks[id].who)).length;
+  announce(filter.size ? `Showing ${n} tasks for ${[...filter].map(w => PEOPLE[w].name).join(' and ')}.` : 'Filter cleared. Showing all tasks.');
+}
+function clearFilter() { filter.clear(); flip(() => renderBoard()); syncFilterUI(); announce('Filter cleared. Showing all tasks.'); }
+$('#clear-filter').addEventListener('click', () => { clearFilter(); peopleBox.querySelector('.person').focus(); });
+
+/* ---------- Columns nav (phone) ---------- */
+function scrollToCol(col) {
+  const sec = $('#col-' + col);
+  if (board.scrollWidth > board.clientWidth + 2) board.scrollTo({ left: sec.offsetLeft - board.offsetLeft - (innerWidth < 768 ? parseFloat(getComputedStyle(board).paddingLeft) : 0), behavior: motionOK() ? 'smooth' : 'auto' });
+}
+function goToCol(col) {
+  scrollToCol(col);
+  const v = visibleIds(col);
+  if (v.length) setTimeout(() => focusCard(v[0]), motionOK() ? 250 : 0);
+  else { const b = $('.add-btn', $('#col-' + col)); b.focus({ preventScroll: true }); }
+}
+$('#col-tabs').addEventListener('click', e => { const t = e.target.closest('.col-tab'); if (t) scrollToCol(t.dataset.col); });
+function syncTabs() {
+  const br = board.getBoundingClientRect();
+  let best = null, bestD = 1e9;
+  $$('.col', board).forEach(c => { const d = Math.abs(c.getBoundingClientRect().left - br.left - 16); if (d < bestD) { bestD = d; best = c.dataset.col; } });
+  $$('.col-tab').forEach(t => t.setAttribute('aria-current', String(t.dataset.col === best)));
+}
+board.addEventListener('scroll', () => requestAnimationFrame(syncTabs), { passive: true });
+
+/* ---------- Global shortcuts ---------- */
+document.addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if ((e.metaKey || e.ctrlKey) && k === 'k') { e.preventDefault(); pal.open ? closePalette() : openPalette(); return; }
+  const typing = e.target.closest?.('input, textarea, select, [contenteditable]');
+  if (typing || e.metaKey || e.ctrlKey || e.altKey || document.querySelector('dialog[open]') || grabbed) return;
+  if (k === 'n') { e.preventDefault(); openComposer('backlog'); }
+  else if (e.key === '?') { e.preventDefault(); showDialog($('#help')); }
+});
+$('#open-palette').addEventListener('click', openPalette);
+$('#open-help').addEventListener('click', () => showDialog($('#help')));
+$('#help [data-close]').addEventListener('click', () => closeDialog($('#help')));
+$('#new-task').addEventListener('click', () => openComposer('backlog'));
+
+function resetData() {
+  const snap = snapshot();
+  flip(() => { state = seedState(); filter.clear(); syncFilterUI(); renderBoard(); });
+  shownRem = null; afterChange(true, true);
+  toast('Demo data restored', { label: 'Undo', run: () => restore(snap, 'Reset undone') });
+}
+
+/* ---------- Sync banner (demo error state) ---------- */
+$('#retry-sync').addEventListener('click', e => {
+  const b = e.currentTarget; b.disabled = true; b.textContent = 'Retrying…';
+  setTimeout(() => { $('#sync-banner').hidden = true; b.disabled = false; b.textContent = 'Retry sync'; toast('Back in sync. All changes saved.'); }, 900);
+});
+
+/* ---------- Chart toggle (phone) ---------- */
+const chartToggle = $('#chart-toggle'), burnMore = $('#burn-more');
+function setChartOpen(open) {
+  burnMore.classList.toggle('collapsed', !open);
+  chartToggle.setAttribute('aria-expanded', String(open));
+  chartToggle.textContent = open ? 'Hide chart' : 'Show chart';
+  if (open) { drawChart(remaining(), motionOK()); }
+}
+chartToggle.addEventListener('click', () => setChartOpen(chartToggle.getAttribute('aria-expanded') !== 'true'));
+if (matchMedia('(max-width:767px)').matches) setChartOpen(false);
+
+/* ---------- Init ---------- */
+buildColumns();
+syncFilterUI();
+let lastW = 0;
+new ResizeObserver(() => { const w = chartBox.clientWidth; if (Math.abs(w - lastW) > 2) { lastW = w; if (!tweenRaf || shownRem === remaining()) drawChart(remaining(), false); } }).observe(chartBox);
+function start() {
+  ready = true;
+  renderBoard();
+  if (motionOK()) {
+    const intro = $$('.slot', board).map((el, i) => anim(el, [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: 40 + Math.min(i, 12) * 22, easing: EASE, fill: 'backwards' }));
+    setTimeout(() => intro.forEach(a => { try { a.finish(); } catch (e) {} }), 1200); // content never waits on a stalled animation
+  }
+  updateStats(true);
+  syncTabs();
+  if (MODE === 'error') $('#sync-banner').hidden = false;
+}
+if (MODE === 'loading') {
+  $$('.cards', board).forEach((l, i) => { l.setAttribute('aria-busy', 'true'); l.innerHTML = '<li class="skel"></li>'.repeat(3 - (i % 2)); });
+  $('#chart').innerHTML = '<div class="skel" style="height:180px"></div>';
+  ['#st-rem', '#st-done', '#st-delta', '#tb-tasks', '#tb-scope', '#tb-done'].forEach(s => $(s).textContent = '—');
+  $('#verdict-txt').textContent = 'Loading sprint data…';
+  announce('Loading the board…');
+  setTimeout(() => { $$('.cards', board).forEach(l => { l.innerHTML = ''; l.removeAttribute('aria-busy'); }); start(); }, 1600);
+} else start();
+})();
+</script>
+</body>
+</html>

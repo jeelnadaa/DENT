@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Black, white and 3–5 greys. **No hue** — except semantic colors for errors/success when functionally needed (keep them muted). Optional single accent used extremely rarely. |
-| Typography | Strong type is the hero: big grotesk or serif display with dramatic size contrast (Inter Tight, "Neue Montreal"-like, "Instrument Serif", "PP Editorial"-like). |
+| Typography | Strong type is the hero: big grotesk or serif display with dramatic size contrast (Switzer, Cabinet Grotesk, Inter Tight, "Neue Montreal"-like, "Instrument Serif", "PP Editorial"-like). |
 | Spacing / layout | Large, cinematic layouts; full-bleed imagery; alternating black and white sections. |
 | Radius | 0–4px. |
 | Borders | 1px lines in grey or white/black. |
@@ -42,7 +42,7 @@
 :root{
   --bg:#F7F7F7; --bg-inverse:#0D0D0D; --text:#0D0D0D; --text-2:#4D4D4D; --text-inverse:#F2F2F2; --border:#1A1A1A;
   --accent:#0D0D0D; --on-accent:#F7F7F7; --error:#A12622;
-  --font-sans:"Inter Tight",system-ui,sans-serif; --font-serif:"Instrument Serif",serif;
+  --font-sans:"Switzer",system-ui,sans-serif; --font-serif:"Instrument Serif",serif;
   --radius-control:0; --radius-container:0;
   --dur:350ms; --ease:cubic-bezier(.65,0,.35,1);
 }

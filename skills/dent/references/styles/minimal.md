@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Mostly neutrals (white/off-white + near-black + 2–3 greys). **One** accent color used only for primary actions/links. No gradients. |
-| Typography | One sans-serif family (e.g. Inter, Geist, Manrope, Satoshi) in 2–3 weights. Hierarchy from size and weight, not color. Generous line-height. |
+| Typography | One sans-serif family (e.g. Satoshi, General Sans, Switzer, Geist, Manrope) in 2–3 weights. Hierarchy from size and weight, not color. Generous line-height. |
 | Spacing / layout | **More whitespace than feels comfortable** — step up the spacing scale one level everywhere (e.g. card padding 24 → 32, section gaps 64 → 96–128). Strict grid alignment. |
 | Radius | Small and consistent (4–8px), or 0 for a stricter look. |
 | Borders | Hairline 1px, very light grey; often no borders at all — spacing separates. |
@@ -43,7 +43,7 @@
 :root{
   --bg:#FFFFFF; --surface:#FAFAFA; --text:#111111; --text-2:#5C5C5C; --border:#E6E6E6;
   --accent:#2F5BEA; --on-accent:#FFFFFF;
-  --font-sans:"Inter",system-ui,sans-serif;
+  --font-sans:"Satoshi","Manrope",system-ui,sans-serif;
   --radius-control:6px; --radius-container:10px;
   --shadow-1:0 1px 2px rgb(0 0 0 / .04);
   --dur:200ms; --ease:cubic-bezier(.2,0,0,1);

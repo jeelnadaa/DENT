@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | White + black + **one strong primary** (often red #E30613 or similar). Sometimes fully black and white. |
-| Typography | Neo-grotesque sans (Helvetica Neue, Inter Display, Neue Haas, Arimo, "Archivo"). **Flush-left, ragged-right** text, never centered. Very large headlines (8–15vw on web heroes) next to small body text — extreme size contrast. |
+| Typography | Neo-grotesque sans (Switzer, Helvetica Neue, Neue Haas, Geist, "Archivo"). **Flush-left, ragged-right** text, never centered. Very large headlines (8–15vw on web heroes) next to small body text — extreme size contrast. |
 | Spacing / layout | **Visible, strict column grid** (12 cols or a modular grid). Asymmetric compositions: content placed off-center but locked to columns. |
 | Radius | **0** everywhere. |
 | Borders | Thin black rules (1–2px) to divide sections, like a printed page. |
@@ -42,7 +42,7 @@
 ```css
 :root{
   --bg:#FFFFFF; --text:#000000; --text-2:#3D3D3D; --rule:#000000; --accent:#E30613; --on-accent:#FFFFFF;
-  --font-sans:"Inter Tight","Helvetica Neue",Arial,sans-serif;
+  --font-sans:"Switzer","Helvetica Neue",Arial,sans-serif;
   --radius-control:0; --radius-container:0;
   --h1:clamp(3rem,2rem + 8vw,10rem); --tracking-h1:-0.04em;
   --dur:180ms; --ease:cubic-bezier(.2,0,0,1);

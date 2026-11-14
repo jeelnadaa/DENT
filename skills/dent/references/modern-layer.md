@@ -47,7 +47,7 @@ body { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); }
 - **[Rule]** Always include a `rem` part so text still scales with the user's zoom/font settings (WCAG 1.4.4). Never pure `vw`.
 
 **Font loading**
-- Use `font-display: swap` (or `optional` for non-critical fonts), preload the 1–2 critical files, subset to needed characters, and set fallback font metrics (`size-adjust`) so text doesn't jump when the font loads (layout shift).
+- Use `font-display: swap` (or `optional` for non-critical fonts), preload the 1–2 critical files, subset to needed characters (OFL fonts only; the ITF/Fontshare licence forbids subsetting), and set fallback font metrics (`size-adjust`) so text doesn't jump when the font loads (layout shift).
 
 **Typography as a visual element**
 - Oversized headings, outline or mixed-weight words, text masked over images, and kinetic (animated) type can be hero moments. Use for **one** headline per page, never for body content, and keep it readable.

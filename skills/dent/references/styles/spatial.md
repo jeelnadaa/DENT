@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Mostly neutral glass (white/grey translucency) over the environment or a photo/gradient; color comes from content. White text. Accent rarely (system blue). |
-| Typography | System-like sans with **heavier weights** for legibility on glass (SF Pro-like: Inter, "Geist") — medium for body, bold for titles. Larger sizes than flat UI. |
+| Typography | System-like sans with **heavier weights** for legibility on glass (SF Pro-like: Satoshi, General Sans, "Geist") — medium for body, bold for titles. Larger sizes than flat UI. |
 | Spacing / layout | Content in floating windows/panels with generous padding (24–32px); tab bars and toolbars float outside the window edges ("ornaments"). |
 | Radius | **Very large and continuous:** windows 32–46px, buttons pill/circle. |
 | Borders | Subtle light edge (gradient border, brighter top). |
@@ -44,7 +44,7 @@
   --env:linear-gradient(160deg,#4B6A88 0%,#2C3E50 100%);
   --glass:rgb(128 128 128 / .30); --glass-strong:rgb(255 255 255 / .18); --edge:linear-gradient(180deg,rgb(255 255 255 / .5),rgb(255 255 255 / .08));
   --text:#FFFFFF; --text-2:rgb(255 255 255 / .82); --accent:#0A84FF; --on-accent:#FFFFFF;
-  --font-sans:"Inter",system-ui,-apple-system,sans-serif;
+  --font-sans:"Satoshi","Manrope",system-ui,-apple-system,sans-serif;
   --radius-control:999px; --radius-container:40px;
   --blur:blur(40px) saturate(150%);
   --shadow-float:0 30px 60px rgb(0 0 0 / .25);

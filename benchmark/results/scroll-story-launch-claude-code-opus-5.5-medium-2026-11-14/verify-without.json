@@ -1,0 +1,95 @@
+{
+  "target": "without/index.html",
+  "widths": {
+    "320": {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "offenders": []
+    },
+    "375": {
+      "viewport": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "offenders": []
+    },
+    "390": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "offenders": []
+    },
+    "768": {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "offenders": []
+    },
+    "1024": {
+      "viewport": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "offenders": []
+    },
+    "1440": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "offenders": []
+    }
+  },
+  "gates": {
+    "G2_layout": "Passed",
+    "G3_contrast_sample": "Failed",
+    "G4_operability_auto": "Passed",
+    "G10_reduced_motion": "Failed",
+    "G11_no_autoplay_audio": "Passed"
+  },
+  "a11y": {
+    "unlabeledHiddenControls": [],
+    "lang": "en",
+    "h1": 1,
+    "headingSkips": [],
+    "unlabeledControls": [],
+    "unnamedButtonsLinks": [],
+    "imagesWithoutAlt": [],
+    "deadLinks": [],
+    "autoplayMedia": []
+  },
+  "contrast_failures": [
+    {
+      "text": "01",
+      "ratio": 1.32,
+      "need": 3,
+      "fontSize": 54.4,
+      "color": "rgb(234, 223, 203)"
+    },
+    {
+      "text": "6",
+      "ratio": 3.11,
+      "need": 4.5,
+      "fontSize": 15.2,
+      "color": "rgb(236, 106, 80)"
+    }
+  ],
+  "audio": {
+    "sourcesBeforeGesture": 0,
+    "ctxBeforeGesture": 0,
+    "runningCtx": 0,
+    "mediaPlayBeforeGesture": []
+  },
+  "motion": {
+    "running_normal": 5,
+    "running_reduced": 1,
+    "reduced_examples": [
+      {
+        "name": "cue",
+        "target": "i",
+        "iterations": "Infinity",
+        "duration": 2000
+      }
+    ]
+  },
+  "console_errors": [],
+  "note": "Automated checks find mechanical defects only. Inspect the screenshots, tab through the page, and test interactions yourself."
+}

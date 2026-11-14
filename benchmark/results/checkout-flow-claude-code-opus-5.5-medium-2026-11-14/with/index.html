@@ -1,0 +1,1815 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checkout · Aangan &amp; Oak</title>
+<meta name="description" content="Checkout for Aangan & Oak, a fictional furniture store (demo, no real payment).">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F5F1EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E1C1A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%234F5640'/%3E%3Cpath d='M8 16 16 9l8 7v8H8z' fill='none' stroke='%23F5F1EA' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>
+  // Set the theme before first paint so there is no flash of the wrong theme.
+  (function () {
+    try {
+      var t = localStorage.getItem('ao-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Manrope:wght@400..700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Tokens (light). Every colour pair is contrast-checked; see DESIGN.md.
+   ========================================================= */
+:root {
+  --bg: #F5F1EA;            /* rice paper */
+  --surface: #FBF8F3;
+  --surface-2: #ECE5D9;     /* linen */
+  --text: #2E2B28;          /* charcoal 12.5:1 on bg */
+  --muted: #5E5850;         /* 6.2:1 on bg */
+  --line: #DED5C7;          /* decorative hairline */
+  --line-strong: #8C8478;   /* input borders 3.3:1 */
+  --primary: #4F5640;       /* moss 6.8:1 on bg */
+  --primary-hover: #3F4533;
+  --on-primary: #FFFFFF;
+  --primary-soft: #E4E6D9;
+  --danger: #9C4A2E;        /* rust 5.4:1 on bg */
+  --danger-soft: #F7E6DE;
+  --warn-soft: #F3EBD6;
+  --focus: #4F5640;
+  --illus-stroke: #2E2B28;
+  --illus-fill: #E6DCCB;
+  --illus-fill-2: #F3EDE3;
+  --wood: #A47A4E;
+  --shadow: 0 1px 2px rgba(46,43,40,.06), 0 8px 24px rgba(46,43,40,.06);
+
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-ui: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s7: 32px; --s8: 40px; --s9: 56px; --s10: 72px;
+  --r-sm: 4px; --r-md: 8px; --r-lg: 14px;
+  --t-xs: .8125rem; --t-sm: .875rem; --t-md: 1rem; --t-lg: 1.125rem;
+  --t-h1: clamp(2rem, 1.5rem + 2.4vw, 3.25rem);
+  --t-h2: 1.375rem;
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --d-fast: 160ms; --d-mid: 280ms; --d-slow: 520ms;
+  --tap: 48px;
+  --container: 1180px;
+}
+:root[data-theme="dark"] {
+  --bg: #1E1C1A; --surface: #262320; --surface-2: #2E2A26;
+  --text: #EDE7DD; --muted: #B5AC9F; --line: #3A3530; --line-strong: #7A7268;
+  --primary: #A9B38F; --primary-hover: #BAC3A2; --on-primary: #1E1C1A; --primary-soft: #2F3328;
+  --danger: #E59A80; --danger-soft: #3A2620; --warn-soft: #36301F; --focus: #A9B38F;
+  --illus-stroke: #D9D1C4; --illus-fill: #3A342D; --illus-fill-2: #2E2A26; --wood: #C49A6C;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1E1C1A; --surface: #262320; --surface-2: #2E2A26;
+    --text: #EDE7DD; --muted: #B5AC9F; --line: #3A3530; --line-strong: #7A7268;
+    --primary: #A9B38F; --primary-hover: #BAC3A2; --on-primary: #1E1C1A; --primary-soft: #2F3328;
+    --danger: #E59A80; --danger-soft: #3A2620; --warn-soft: #36301F; --focus: #A9B38F;
+    --illus-stroke: #D9D1C4; --illus-fill: #3A342D; --illus-fill-2: #2E2A26; --wood: #C49A6C;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 16px; scroll-padding-bottom: 140px; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 var(--t-md)/1.55 var(--font-ui);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+[hidden] { display: none !important; }
+h1, h2, h3 { margin: 0; font-weight: 400; }
+p { margin: 0; }
+a { color: inherit; }
+button, input, select { font: inherit; color: inherit; }
+img, svg { display: block; }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 50; background: var(--primary); color: var(--on-primary); padding: 10px 16px; border-radius: var(--r-sm); text-decoration: none; font-weight: 600; }
+.skip:focus { top: 12px; }
+
+/* =========================================================
+   Header
+   ========================================================= */
+.top {
+  max-width: var(--container); margin: 0 auto; padding: var(--s3) var(--s4);
+  display: flex; align-items: center; gap: var(--s3);
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; min-height: var(--tap); }
+.brand svg { width: 28px; height: 28px; flex: none; }
+.brand-name { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: -.01em; font-variation-settings: "opsz" 40; white-space: nowrap; }
+.secure { display: none; align-items: center; gap: 6px; color: var(--muted); font-size: var(--t-sm); }
+.secure svg { width: 16px; height: 16px; }
+.icon-btn {
+  width: var(--tap); height: var(--tap); flex: none; border-radius: 50%; border: 1px solid transparent; background: transparent;
+  display: inline-grid; place-items: center; cursor: pointer; color: var(--text);
+  transition: background var(--d-fast) var(--ease), border-color var(--d-fast) var(--ease);
+}
+.icon-btn:hover { background: var(--surface-2); }
+.icon-btn svg { width: 22px; height: 22px; }
+.icon-btn[aria-pressed="true"] { background: var(--primary-soft); border-color: var(--line-strong); }
+.demo-note {
+  max-width: var(--container); margin: 0 auto; padding: 0 var(--s4);
+  color: var(--muted); font-size: var(--t-xs);
+}
+.demo-note span { display: inline-block; border: 1px dashed var(--line-strong); border-radius: 999px; padding: 2px 10px; }
+
+/* =========================================================
+   Path home (progress)
+   ========================================================= */
+.path { max-width: var(--container); margin: 0 auto; padding: var(--s5) var(--s4) var(--s2); }
+.path-track { position: relative; }
+.path ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); position: relative; z-index: 1; }
+.path-track::before, .path .path-fill {
+  content: ""; position: absolute; left: 10%; right: 10%; top: 13px; height: 2px; background: var(--line);
+}
+.path .path-fill {
+  background: var(--primary); right: auto; width: 80%; transform-origin: left center;
+  transform: scaleX(var(--progress, 0)); transition: transform var(--d-slow) var(--ease);
+}
+.path li { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 1; }
+.path .node {
+  width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--bg); border: 2px solid var(--line-strong); color: var(--muted);
+  transition: background var(--d-mid) var(--ease), border-color var(--d-mid) var(--ease), transform var(--d-mid) var(--ease);
+}
+.path .node svg { width: 14px; height: 14px; }
+.path .node .house { width: 16px; height: 16px; }
+.path .label { margin-top: 6px; font-size: var(--t-xs); color: var(--muted); line-height: 1.25; }
+.path .state { display: block; }
+.path li[data-state="done"] .node { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.path li[data-state="current"] .node { border-color: var(--primary); color: var(--primary); transform: scale(1.12); box-shadow: 0 0 0 5px var(--primary-soft); }
+.path li[data-state="current"] .label { color: var(--text); font-weight: 700; }
+.path li[data-state="done"] .label { color: var(--text); }
+.path a.step-link { text-decoration: none; display: flex; flex-direction: column; align-items: center; min-width: var(--tap); min-height: var(--tap); border-radius: var(--r-sm); }
+.path a.step-link:hover .label { text-decoration: underline; text-underline-offset: 3px; }
+
+/* =========================================================
+   Layout
+   ========================================================= */
+.layout {
+  max-width: var(--container); margin: 0 auto; padding: var(--s3) var(--s4) var(--s10);
+  display: grid; gap: var(--s5); grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "summary" "main";
+}
+main { grid-area: main; min-width: 0; }
+.summary { grid-area: summary; min-width: 0; }
+
+/* Step header */
+.step { animation: stepIn var(--d-mid) var(--ease); }
+@keyframes stepIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.kicker { font-size: var(--t-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.step h1 {
+  font-family: var(--font-display); font-size: var(--t-h1); line-height: 1.05; letter-spacing: -.025em;
+  font-weight: 350; font-variation-settings: "opsz" 144; margin: 10px 0 10px; text-wrap: balance;
+}
+.step h1:focus { outline: none; }
+.step h1:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.lead { color: var(--muted); max-width: 52ch; margin-bottom: var(--s6); }
+.step h2 { font-family: var(--font-display); font-size: var(--t-h2); letter-spacing: -.01em; font-variation-settings: "opsz" 48; margin-bottom: var(--s3); }
+
+/* =========================================================
+   Cart
+   ========================================================= */
+.items { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.item {
+  display: grid; grid-template-columns: 88px minmax(0,1fr); gap: var(--s3) var(--s4);
+  padding: var(--s5) 0; border-bottom: 1px solid var(--line);
+}
+.thumb { width: 88px; height: 88px; border-radius: var(--r-md); background: var(--surface-2); display: grid; place-items: center; overflow: hidden; }
+.thumb svg { width: 78%; height: 78%; }
+.item-name { font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.item-meta { color: var(--muted); font-size: var(--t-sm); margin-top: 2px; }
+.item-unit { color: var(--muted); font-size: var(--t-sm); margin-top: 4px; }
+.item-controls { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; }
+.item-total { margin-left: auto; font-weight: 700; font-size: var(--t-lg); }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line-strong); border-radius: var(--r-sm); background: var(--surface); }
+.stepper button { width: var(--tap); height: 44px; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center; border-radius: var(--r-sm); }
+.stepper button:hover:not(:disabled) { background: var(--surface-2); }
+.stepper button:disabled { color: var(--line-strong); cursor: not-allowed; }
+.stepper button svg { width: 16px; height: 16px; }
+.stepper output { min-width: 32px; text-align: center; font-weight: 700; }
+.link-btn {
+  background: none; border: 0; padding: 0 var(--s2); min-height: 44px; cursor: pointer; color: var(--text);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-strong); font-size: var(--t-sm);
+}
+.link-btn:hover { text-decoration-color: currentColor; }
+.qty-note { grid-column: 1 / -1; font-size: var(--t-sm); color: var(--muted); }
+.empty { text-align: center; padding: var(--s8) var(--s4); border: 1px dashed var(--line-strong); border-radius: var(--r-lg); }
+.empty svg { width: 180px; height: auto; margin: 0 auto var(--s4); }
+.empty p { color: var(--muted); margin: var(--s2) auto var(--s5); max-width: 40ch; }
+
+/* =========================================================
+   Forms
+   ========================================================= */
+form { margin: 0; }
+.fields { display: grid; gap: var(--s5); grid-template-columns: minmax(0,1fr); }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label, .legend { font-weight: 600; font-size: var(--t-sm); }
+.opt { font-weight: 400; color: var(--muted); }
+.hint { font-size: var(--t-sm); color: var(--muted); }
+.input, select.input {
+  width: 100%; min-height: var(--tap); padding: 10px 14px; border-radius: var(--r-sm);
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--text);
+  transition: border-color var(--d-fast) var(--ease), box-shadow var(--d-fast) var(--ease);
+  font-size: 1rem; /* 16px avoids iOS zoom */
+}
+.input::placeholder { color: var(--muted); opacity: .75; }
+.input:hover { border-color: var(--text); }
+.input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft), 0 0 0 1px var(--primary); }
+select.input { appearance: none; padding-right: 40px; background-image: linear-gradient(45deg, transparent 50%, var(--text) 50%), linear-gradient(135deg, var(--text) 50%, transparent 50%); background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+.input[aria-invalid="true"] { border-color: var(--danger); border-width: 2px; padding: 9px 13px; }
+.input[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px var(--danger-soft), 0 0 0 1px var(--danger); }
+.err { display: flex; gap: 6px; align-items: flex-start; color: var(--danger); font-size: var(--t-sm); font-weight: 600; }
+.err svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+.prefix-wrap { display: flex; }
+.prefix { display: grid; place-items: center; padding: 0 12px; border: 1px solid var(--line-strong); border-right: 0; border-radius: var(--r-sm) 0 0 var(--r-sm); background: var(--surface-2); color: var(--muted); font-weight: 600; }
+.prefix-wrap .input { border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+.pin-status { font-size: var(--t-sm); color: var(--muted); min-height: 1.4em; display: flex; gap: 6px; align-items: center; }
+.pin-status.ok { color: var(--primary); font-weight: 600; }
+.pin-status svg { width: 16px; height: 16px; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { padding: 0; }
+.group { border-top: 1px solid var(--line); padding-top: var(--s5); margin-top: var(--s2); }
+.group > legend { font-family: var(--font-display); font-size: var(--t-h2); letter-spacing: -.01em; font-variation-settings: "opsz" 48; margin-bottom: var(--s1); float: left; width: 100%; }
+.group > legend + * { clear: both; }
+.chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.chip span {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px;
+  border: 1px solid var(--line-strong); background: var(--surface); font-weight: 600; font-size: var(--t-sm);
+  transition: background var(--d-fast) var(--ease), border-color var(--d-fast) var(--ease);
+}
+.chip input:checked + span { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.chip input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 3px; }
+.error-summary {
+  border: 2px solid var(--danger); background: var(--danger-soft); border-radius: var(--r-md);
+  padding: var(--s4) var(--s5); margin-bottom: var(--s6);
+}
+.error-summary h2 { font-family: var(--font-ui); font-size: var(--t-md); font-weight: 700; color: var(--danger); margin: 0 0 var(--s2); display: flex; gap: 8px; align-items: center; }
+.error-summary h2 svg { width: 20px; height: 20px; }
+.error-summary h2:focus { outline: none; }
+.error-summary ul { margin: 0; padding-left: 1.25rem; }
+.error-summary a { color: var(--text); font-weight: 600; text-underline-offset: 3px; line-height: 2; }
+
+/* =========================================================
+   Delivery
+   ========================================================= */
+.dates { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: var(--s2); }
+.date, .window, .method { position: relative; }
+.date input, .window input, .method input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; width: 100%; height: 100%; }
+.date input:disabled, .window input:disabled, .method input:disabled { cursor: not-allowed; }
+.date .card {
+  display: grid; justify-items: center; gap: 0; padding: 10px 4px; border-radius: var(--r-md);
+  border: 1px solid var(--line-strong); background: var(--surface); line-height: 1.2; min-height: 84px; align-content: center;
+  transition: background var(--d-fast) var(--ease), border-color var(--d-fast) var(--ease), transform var(--d-fast) var(--ease);
+}
+.date .dow { font-size: var(--t-xs); color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.date .dom { font-family: var(--font-display); font-size: 1.6rem; font-variation-settings: "opsz" 72; }
+.date .mon { font-size: var(--t-xs); color: var(--muted); }
+.date .full-tag { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.date input:hover:not(:disabled) + .card, .window input:hover:not(:disabled) + .card, .method input:hover:not(:disabled) + .card { border-color: var(--text); }
+.date input:checked + .card { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.date input:checked + .card .dow, .date input:checked + .card .mon { color: var(--on-primary); }
+.date input:disabled + .card { background: transparent; border-style: dashed; color: var(--muted); }
+.date input:focus-visible + .card, .window input:focus-visible + .card, .method input:focus-visible + .card { outline: 2px solid var(--focus); outline-offset: 3px; }
+.windows { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s2); }
+.window .card {
+  display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: var(--r-md); min-height: 64px;
+  border: 1px solid var(--line-strong); background: var(--surface); justify-content: center;
+}
+.window .time { font-weight: 700; }
+.window .sub { font-size: var(--t-sm); color: var(--muted); }
+.window input:checked + .card { border: 2px solid var(--primary); padding: 11px 13px; background: var(--primary-soft); }
+.window input:disabled + .card { border-style: dashed; background: transparent; }
+.window input:disabled + .card .time { color: var(--muted); font-weight: 600; text-decoration: line-through; }
+.check-row {
+  display: grid; grid-template-columns: 24px minmax(0,1fr) auto; gap: var(--s3); align-items: start;
+  border: 1px solid var(--line-strong); border-radius: var(--r-md); padding: var(--s4); background: var(--surface); cursor: pointer;
+}
+.check-row input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--primary); cursor: pointer; }
+.check-row b { display: block; }
+.check-row .hint { display: block; margin-top: 2px; }
+.check-row:has(input:checked) { border: 2px solid var(--primary); padding: calc(var(--s4) - 1px); background: var(--primary-soft); }
+.note { display: flex; gap: var(--s3); align-items: flex-start; background: var(--surface-2); border-radius: var(--r-md); padding: var(--s3) var(--s4); font-size: var(--t-sm); color: var(--text); }
+.note svg { width: 18px; height: 18px; flex: none; margin-top: 2px; color: var(--primary); }
+
+/* =========================================================
+   Payment
+   ========================================================= */
+.review { display: grid; gap: 0; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); margin-bottom: var(--s6); }
+.review-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: var(--s3); padding: var(--s3) var(--s4); align-items: start; }
+.review-row + .review-row { border-top: 1px solid var(--line); }
+.review-row dt { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700; }
+.review-row dd { margin: 2px 0 0; font-size: var(--t-sm); overflow-wrap: anywhere; }
+.review-row .link-btn { align-self: center; }
+.methods { display: grid; gap: var(--s2); }
+.method .card {
+  display: grid; grid-template-columns: 22px 28px minmax(0,1fr); gap: var(--s3); align-items: center;
+  padding: 14px var(--s4); border: 1px solid var(--line-strong); border-radius: var(--r-md); background: var(--surface); min-height: 64px;
+}
+.method .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-strong); display: grid; place-items: center; }
+.method .radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); transform: scale(0); transition: transform var(--d-fast) var(--ease); }
+.method input:checked + .card { border: 2px solid var(--primary); padding: 13px calc(var(--s4) - 1px); }
+.method input:checked + .card .radio { border-color: var(--primary); }
+.method input:checked + .card .radio::after { transform: scale(1); }
+.method .m-icon { width: 28px; height: 28px; color: var(--text); }
+.method b { display: block; }
+.method .sub { font-size: var(--t-sm); color: var(--muted); }
+.method input:disabled + .card { border-style: dashed; background: transparent; }
+.method input:disabled + .card b { color: var(--muted); }
+.pay-panel { border: 1px solid var(--line); border-top: 0; border-radius: 0 0 var(--r-md) var(--r-md); padding: var(--s5) var(--s4); margin-top: calc(-1 * var(--s2)); background: var(--surface); }
+.method.open .card { border-radius: var(--r-md) var(--r-md) 0 0; }
+.card-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: var(--s4); align-items: start; }
+.brand-tag { font-size: var(--t-xs); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); min-height: 1.2em; }
+.alert {
+  border-radius: var(--r-md); padding: var(--s4) var(--s5); margin-bottom: var(--s5); border: 2px solid var(--danger); background: var(--danger-soft);
+}
+.alert h2 { font-family: var(--font-ui); font-size: var(--t-md); font-weight: 700; color: var(--danger); display: flex; gap: 8px; align-items: center; margin-bottom: 4px; }
+.alert h2 svg { width: 20px; height: 20px; flex: none; }
+.alert h2:focus { outline: none; }
+.alert p { font-size: var(--t-sm); }
+.alert .alert-actions { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s3); }
+.alert.info { border-color: var(--line-strong); background: var(--warn-soft); }
+.alert.info h2 { color: var(--text); }
+.test-panel { margin-top: var(--s6); border: 1px dashed var(--line-strong); border-radius: var(--r-md); background: transparent; }
+.test-panel summary { cursor: pointer; padding: 12px var(--s4); font-weight: 600; font-size: var(--t-sm); min-height: var(--tap); display: flex; align-items: center; gap: 8px; list-style: none; }
+.test-panel summary::-webkit-details-marker { display: none; }
+.test-panel summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform var(--d-fast) var(--ease); }
+.test-panel[open] summary::before { transform: rotate(45deg); }
+.test-list { list-style: none; margin: 0; padding: 0 var(--s4) var(--s4); display: grid; gap: var(--s2); font-size: var(--t-sm); }
+.test-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px var(--s3); justify-content: space-between; border-top: 1px solid var(--line); padding-top: var(--s2); }
+.test-list code { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: .85rem; background: var(--surface-2); padding: 2px 6px; border-radius: 3px; }
+.waiting { text-align: center; padding: var(--s6) var(--s4); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
+.waiting h2 { margin-bottom: var(--s2); }
+.waiting p { color: var(--muted); font-size: var(--t-sm); }
+.waiting .clock { font-family: var(--font-display); font-size: 2rem; font-variation-settings: "opsz" 72; margin: var(--s3) 0; }
+.pulse { width: 56px; height: 56px; margin: 0 auto var(--s3); border-radius: 50%; border: 2px solid var(--primary); display: grid; place-items: center; color: var(--primary); animation: breathe 2.4s var(--ease) infinite; }
+.pulse svg { width: 26px; height: 26px; }
+@keyframes breathe { 0%,100% { box-shadow: 0 0 0 0 var(--primary-soft); } 50% { box-shadow: 0 0 0 12px var(--primary-soft); } }
+.secure-line { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: var(--t-sm); margin-top: var(--s4); }
+.secure-line svg { width: 16px; height: 16px; flex: none; }
+
+/* =========================================================
+   Buttons + sticky actions
+   ========================================================= */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 0 var(--s6); border-radius: var(--r-sm); border: 1px solid transparent;
+  font-weight: 700; font-size: var(--t-md); cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background var(--d-fast) var(--ease), border-color var(--d-fast) var(--ease), transform var(--d-fast) var(--ease);
+}
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn-primary { background: var(--primary); color: var(--on-primary); }
+.btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+.btn-secondary { background: transparent; border-color: var(--line-strong); color: var(--text); }
+.btn-secondary:hover:not(:disabled) { border-color: var(--text); background: var(--surface-2); }
+.btn-small { min-height: 44px; padding: 0 var(--s4); font-size: var(--t-sm); }
+.btn:disabled { cursor: progress; opacity: .85; }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.actions {
+  position: sticky; bottom: 0; z-index: 5; margin: var(--s7) calc(-1 * var(--s4)) 0;
+  padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
+  display: grid; gap: var(--s2);
+}
+.actions-total { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--t-sm); color: var(--muted); }
+.actions-total strong { font-family: var(--font-display); font-weight: 450; font-size: 1.35rem; color: var(--text); font-variation-settings: "opsz" 48; }
+.actions-btns { display: flex; gap: var(--s2); }
+.actions-btns .btn-primary { flex: 1; }
+.actions-btns .btn-secondary { padding: 0 var(--s4); }
+.processing-note { font-size: var(--t-sm); color: var(--muted); text-align: center; }
+
+/* =========================================================
+   Summary
+   ========================================================= */
+.summary-box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.summary-toggle {
+  width: 100%; display: flex; align-items: center; gap: var(--s3); padding: var(--s3) var(--s4); min-height: 56px;
+  background: none; border: 0; cursor: pointer; text-align: left; border-radius: var(--r-lg);
+}
+.summary-toggle .chev { width: 18px; height: 18px; transition: transform var(--d-mid) var(--ease); }
+.summary-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.summary-toggle .tt { font-weight: 600; margin-right: auto; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-strong); }
+.summary-toggle .tv { font-family: var(--font-display); font-size: 1.3rem; font-variation-settings: "opsz" 48; }
+.summary-body { padding: 0 var(--s4) var(--s4); }
+.summary-title { display: none; }
+.s-items { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); border-top: 1px solid var(--line); padding-top: var(--s4); }
+.s-item { display: grid; grid-template-columns: 52px minmax(0,1fr) auto; gap: var(--s3); align-items: center; }
+.s-thumb { width: 52px; height: 52px; border-radius: var(--r-sm); background: var(--surface-2); position: relative; display: grid; place-items: center; }
+.s-thumb svg { width: 80%; height: 80%; }
+.s-qty { position: absolute; top: -6px; right: -6px; min-width: 22px; height: 22px; border-radius: 11px; background: var(--text); color: var(--bg); font-size: 12px; font-weight: 700; display: grid; place-items: center; padding: 0 6px; }
+.s-name { font-size: var(--t-sm); font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.s-price { font-size: var(--t-sm); font-weight: 600; }
+.lines { margin: var(--s4) 0 0; padding: var(--s4) 0 0; border-top: 1px solid var(--line); display: grid; gap: var(--s2); }
+.lines div { display: flex; justify-content: space-between; gap: var(--s3); font-size: var(--t-sm); }
+.lines dt { color: var(--muted); }
+.lines dd { margin: 0; font-weight: 600; text-align: right; }
+.lines .total { border-top: 1px solid var(--line); padding-top: var(--s3); margin-top: var(--s1); align-items: baseline; }
+.lines .total dt { color: var(--text); font-weight: 700; font-size: var(--t-md); }
+.lines .total dd { font-family: var(--font-display); font-weight: 450; font-size: 1.6rem; font-variation-settings: "opsz" 72; }
+.lines .gst { font-size: var(--t-xs); color: var(--muted); justify-content: flex-end; }
+.s-plan { margin-top: var(--s4); padding-top: var(--s4); border-top: 1px solid var(--line); display: grid; gap: var(--s3); font-size: var(--t-sm); }
+.s-plan div { display: grid; grid-template-columns: 20px minmax(0,1fr); gap: var(--s2); }
+.s-plan svg { width: 18px; height: 18px; color: var(--muted); margin-top: 2px; }
+.s-plan b { display: block; font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.s-trust { margin-top: var(--s4); display: grid; gap: var(--s2); font-size: var(--t-sm); color: var(--muted); }
+.s-trust div { display: flex; gap: 8px; align-items: flex-start; }
+.s-trust svg { width: 16px; height: 16px; flex: none; margin-top: 3px; }
+
+/* =========================================================
+   Confirmation
+   ========================================================= */
+.room { background: var(--surface-2); border-radius: var(--r-lg); overflow: hidden; margin-bottom: var(--s6); }
+.room svg { width: 100%; height: auto; }
+.arrive { opacity: 0; transform: translateX(-36px); animation: arrive var(--d-slow) var(--ease) forwards; }
+.arrive.a2 { animation-delay: 160ms; } .arrive.a3 { animation-delay: 320ms; }
+@keyframes arrive { to { opacity: 1; transform: none; } }
+.order-no { display: inline-flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: var(--s2) var(--s4); margin-bottom: var(--s6); }
+.order-no span { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700; }
+.order-no strong { font-family: ui-monospace, Consolas, monospace; font-size: 1.05rem; letter-spacing: .04em; }
+.confirm-grid { display: grid; gap: var(--s4); grid-template-columns: minmax(0,1fr); margin-bottom: var(--s6); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: var(--s4) var(--s5); }
+.panel h2 { font-size: 1.15rem; }
+.panel p { font-size: var(--t-sm); overflow-wrap: anywhere; }
+.panel p + p { margin-top: 4px; }
+.next-steps { list-style: none; margin: 0; padding: 0; counter-reset: n; display: grid; gap: var(--s3); }
+.next-steps li { counter-increment: n; display: grid; grid-template-columns: 32px minmax(0,1fr); gap: var(--s3); font-size: var(--t-sm); align-items: start; }
+.next-steps li::before { content: counter(n); width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line-strong); display: grid; place-items: center; font-weight: 700; font-size: var(--t-xs); }
+.next-steps li > span { min-width: 0; overflow-wrap: anywhere; }
+.confirm-actions { display: grid; gap: var(--s2); margin-top: var(--s6); }
+@media (min-width: 600px) { .confirm-actions { display: flex; flex-wrap: wrap; } }
+
+/* Toast */
+.toasts { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(150px + env(safe-area-inset-bottom)); z-index: 40; width: min(440px, calc(100% - 32px)); display: grid; gap: var(--s2); pointer-events: none; }
+.toast {
+  pointer-events: auto; display: flex; align-items: center; gap: var(--s3); padding: 8px 8px 8px var(--s4);
+  background: var(--text); color: var(--bg); border-radius: var(--r-md); box-shadow: var(--shadow); font-size: var(--t-sm);
+  animation: stepIn var(--d-mid) var(--ease);
+}
+.toast p { margin-right: auto; }
+.toast button { background: transparent; color: var(--bg); border: 1px solid color-mix(in srgb, var(--bg) 55%, transparent); border-radius: var(--r-sm); min-height: 44px; padding: 0 14px; font-weight: 700; cursor: pointer; }
+.toast button:focus-visible { outline-color: var(--bg); }
+
+/* SVG illustration classes */
+.ill-f { fill: var(--illus-fill); stroke: var(--illus-stroke); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.ill-f2 { fill: var(--illus-fill-2); stroke: var(--illus-stroke); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.ill-s { fill: none; stroke: var(--illus-stroke); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ill-w { fill: none; stroke: var(--wood); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.ill-thin { fill: none; stroke: var(--illus-stroke); stroke-width: 1.25; stroke-linecap: round; opacity: .7; }
+
+footer.foot { max-width: var(--container); margin: 0 auto; padding: 0 var(--s4) var(--s8); color: var(--muted); font-size: var(--t-xs); }
+
+/* =========================================================
+   Breakpoints
+   ========================================================= */
+@media (min-width: 420px) {
+  .secure { display: inline-flex; }
+}
+@media (min-width: 600px) {
+  .item { grid-template-columns: 112px minmax(0,1fr) auto; align-items: start; }
+  .thumb { width: 112px; height: 112px; }
+  .item-controls { grid-column: 2 / -1; }
+  .windows { grid-template-columns: repeat(4, minmax(0,1fr)); }
+  .row-2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: var(--s5); }
+  .confirm-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+  .path .label { font-size: var(--t-sm); }
+}
+@media (min-width: 768px) {
+  .top, .path, .layout, .demo-note, footer.foot { padding-left: var(--s7); padding-right: var(--s7); }
+  .actions { margin-left: calc(-1 * var(--s7)); margin-right: calc(-1 * var(--s7)); padding-left: var(--s7); padding-right: var(--s7); }
+  .actions { grid-template-columns: auto minmax(0,1fr); align-items: center; gap: var(--s5); }
+  .actions-total { flex-direction: column; gap: 0; }
+  .actions-btns { justify-content: flex-end; }
+  .actions-btns .btn-primary { flex: 0 1 auto; min-width: 280px; }
+  .dates { grid-template-columns: repeat(7, minmax(0,1fr)); }
+  .layout { max-width: 820px; }
+  .top, .path, .demo-note, footer.foot { max-width: 820px; }
+}
+@media (min-width: 1024px) {
+  .top, .path, .demo-note, footer.foot, .layout { max-width: var(--container); }
+  .layout { grid-template-columns: minmax(0, 1fr) 380px; grid-template-areas: "main summary"; gap: var(--s9); padding-top: var(--s5); }
+  .path { padding-top: var(--s7); }
+  .path-track { max-width: 760px; }
+  main { max-width: 680px; }
+  .summary { position: sticky; top: var(--s5); align-self: start; }
+  .summary-toggle { display: none; }
+  .summary-body[hidden] { display: block !important; }
+  .summary-body { padding: var(--s6); }
+  .summary-title { display: block; font-family: var(--font-display); font-size: var(--t-h2); font-variation-settings: "opsz" 48; margin-bottom: var(--s4); }
+  .s-items { border-top: 0; padding-top: 0; }
+  .s-item { grid-template-columns: 64px minmax(0,1fr) auto; }
+  .s-thumb { width: 64px; height: 64px; }
+  .actions { position: static; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; margin: var(--s8) 0 0; padding: var(--s6) 0 0; grid-template-columns: 1fr; }
+  .actions-total { display: none; }
+  .actions-btns { justify-content: space-between; }
+  .actions-btns .btn-primary { flex: 0 1 auto; min-width: 300px; margin-left: auto; }
+  .toasts { bottom: 32px; }
+}
+@media (min-width: 1440px) {
+  :root { --container: 1240px; }
+}
+
+/* Reduced motion: no movement, instant state changes */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; animation-delay: 0ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
+  .pulse { animation: none; }
+  .spinner { animation: none; border-right-color: currentColor; opacity: .6; }
+}
+
+/* Print: a clean receipt */
+@media print {
+  :root { --bg: #fff; --surface: #fff; --surface-2: #f3f3f3; --text: #000; --muted: #333; --line: #bbb; }
+  .top .icon-btn, .demo-note, .path, .summary, .actions, .confirm-actions, .toasts, .skip, footer.foot, .room { display: none !important; }
+  .layout { display: block; padding: 0; }
+  .step { animation: none; }
+  body { font-size: 12pt; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to checkout</a>
+
+<!-- SVG sprite: original line illustrations and icons (drawn for this page) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="ill-sofa" viewBox="0 0 160 100">
+      <path class="ill-f" d="M24 52V36c0-8 6-13 13-13h86c7 0 13 5 13 13v16"/>
+      <path class="ill-thin" d="M80 25v26"/>
+      <rect class="ill-f" x="8" y="46" width="24" height="36" rx="10"/>
+      <rect class="ill-f" x="128" y="46" width="24" height="36" rx="10"/>
+      <path class="ill-f2" d="M30 58h100c2 0 3 1 3 3v19H27V61c0-2 1-3 3-3z"/>
+      <path class="ill-thin" d="M63 60v19M97 60v19"/>
+      <path class="ill-w" d="M20 82l-3 9M140 82l3 9M48 82v8M112 82v8" style="stroke-width:3"/>
+    </symbol>
+    <symbol id="ill-chair" viewBox="0 0 120 100">
+      <path class="ill-w" d="M30 92l12-40M92 92L82 52M40 58h46M26 40l10-30" />
+      <path class="ill-f" d="M36 14c3-4 9-5 13-3l16 8c3 2 4 5 3 8l-8 26H38z" transform="rotate(-4 50 30)"/>
+      <path class="ill-f2" d="M34 52h56c3 0 5 2 5 5v4c0 3-2 5-5 5H34c-3 0-5-2-5-5v-4c0-3 2-5 5-5z"/>
+      <path class="ill-w" d="M22 50h22M80 50h22" style="stroke-width:3.5"/>
+    </symbol>
+    <symbol id="ill-lamp" viewBox="0 0 100 100">
+      <path class="ill-s" d="M50 2v26"/>
+      <path class="ill-f" d="M18 66c0-20 14-36 32-36s32 16 32 36z"/>
+      <path class="ill-thin" d="M26 50h48M22 58h56M34 38c-3 8-4 18-4 28M50 30v36M66 38c3 8 4 18 4 28"/>
+      <path class="ill-s" d="M14 66h72"/>
+      <circle cx="50" cy="74" r="6" fill="var(--wood)" opacity=".55"/>
+    </symbol>
+    <symbol id="ill-empty" viewBox="0 0 180 110">
+      <path class="ill-s" d="M10 96h160"/>
+      <rect class="ill-f2" x="112" y="18" width="44" height="52" rx="2"/>
+      <path class="ill-thin" d="M134 18v52M112 44h44"/>
+      <path class="ill-s" d="M48 96c0-14 12-22 26-22s26 8 26 22" stroke-dasharray="4 6"/>
+      <path class="ill-thin" d="M30 6v18"/><circle class="ill-f" cx="30" cy="30" r="7"/>
+    </symbol>
+    <symbol id="i-house" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 20v-5h4v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="16.6" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sound-off" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m17 9 5 6M22 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-sound-on" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 18h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 9.5h19M6 15h4" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9 12 4l9 5M4 20h16M6 10v7M10 10v7M14 10v7M18 10v7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cash" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2.5 6h11v10h-11zM13.5 10h4l3 3v3h-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="7" cy="17.5" r="1.8" fill="var(--bg)" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="17.5" r="1.8" fill="var(--bg)" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-return" viewBox="0 0 24 24"><path d="M9 7 4 12l5 5M4 12h11a5 5 0 0 1 0 10h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 -3)"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.4" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <a class="brand" href="#cart" aria-label="Aangan &amp; Oak, back to cart">
+    <svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="var(--primary)"/><path d="M7 14.5 14 8l7 6.5V21H7z" fill="none" stroke="var(--bg)" stroke-width="2" stroke-linejoin="round"/></svg>
+    <span class="brand-name">Aangan &amp; Oak</span>
+  </a>
+  <span class="secure"><svg aria-hidden="true"><use href="#i-lock"/></svg>Secure checkout</span>
+  <button class="icon-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Sound effects">
+    <svg aria-hidden="true"><use href="#i-sound-off"/></svg>
+  </button>
+  <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch to dark theme">
+    <svg aria-hidden="true"><use href="#i-moon"/></svg>
+  </button>
+</header>
+<p class="demo-note"><span>Demo store with sample products. No real payment is taken.</span></p>
+
+<nav class="path" aria-label="Checkout progress">
+  <div class="path-track" id="pathTrack">
+    <span class="path-fill" aria-hidden="true"></span>
+    <ol id="pathList"></ol>
+  </div>
+</nav>
+
+<div class="layout">
+  <!-- Order summary: collapsible on phones/tablets, sticky sidebar on desktop -->
+  <aside class="summary" aria-labelledby="summaryTitle">
+    <div class="summary-box">
+      <button class="summary-toggle" id="summaryToggle" type="button" aria-expanded="false" aria-controls="summaryBody">
+        <span class="tt" id="summaryToggleText">Show order summary</span>
+        <span class="tv num" data-total></span>
+        <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>
+      </button>
+      <div class="summary-body" id="summaryBody" hidden>
+        <h2 class="summary-title" id="summaryTitle">Order summary</h2>
+        <ul class="s-items" id="summaryItems"></ul>
+        <dl class="lines" id="summaryLines"></dl>
+        <div class="s-plan" id="summaryPlan" hidden></div>
+        <div class="s-trust">
+          <div><svg aria-hidden="true"><use href="#i-truck"/></svg><span>Free delivery to your room of choice, carried by a two-person team.</span></div>
+          <div><svg aria-hidden="true"><use href="#i-lock"/></svg><span>Card details are never stored on this page.</span></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main id="main" tabindex="-1">
+
+    <!-- STEP 1: CART -->
+    <section class="step" id="step-cart" data-step="cart" aria-labelledby="h-cart" hidden>
+      <p class="kicker">Step 1 of 5 · Cart</p>
+      <h1 id="h-cart" tabindex="-1">Almost home.</h1>
+      <p class="lead">Check your pieces and quantities. Prices include GST, and delivery is free.</p>
+      <ul class="items" id="cartItems"></ul>
+      <div class="empty" id="cartEmpty" hidden>
+        <svg viewBox="0 0 180 110" aria-hidden="true"><use href="#ill-empty"/></svg>
+        <h2>Your cart is empty</h2>
+        <p>The room is ready, but there's nothing to deliver yet. This demo can put the sample pieces back for you.</p>
+        <button class="btn btn-secondary" type="button" id="restoreCart">Put the sample pieces back</button>
+      </div>
+      <div class="actions">
+        <div class="actions-total"><span>Total incl. GST</span><strong class="num" data-total></strong></div>
+        <div class="actions-btns">
+          <button class="btn btn-primary" type="button" id="toAddress">Continue to address</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: ADDRESS -->
+    <section class="step" id="step-address" data-step="address" aria-labelledby="h-address" hidden>
+      <p class="kicker">Step 2 of 5 · Address</p>
+      <h1 id="h-address" tabindex="-1">Where should we bring it?</h1>
+      <p class="lead">We'll call this number before we arrive. Fields are required unless marked optional.</p>
+      <form id="addressForm" novalidate>
+        <div class="error-summary" id="addressErrors" hidden tabindex="-1" role="alert" aria-labelledby="addressErrorsTitle">
+          <h2 id="addressErrorsTitle"><svg aria-hidden="true"><use href="#i-alert"/></svg><span></span></h2>
+          <ul></ul>
+        </div>
+        <div class="fields">
+          <div class="field">
+            <label for="f-name">Full name</label>
+            <input class="input" id="f-name" name="name" autocomplete="name" autocapitalize="words" aria-describedby="f-name-err">
+            <p class="err" id="f-name-err" hidden></p>
+          </div>
+          <div class="row-2 fields">
+            <div class="field">
+              <label for="f-phone">Mobile number</label>
+              <div class="prefix-wrap"><span class="prefix" aria-hidden="true">+91</span>
+                <input class="input num" id="f-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" aria-describedby="f-phone-hint f-phone-err" placeholder="98765 43210"></div>
+              <p class="hint" id="f-phone-hint">10 digits. India (+91) only.</p>
+              <p class="err" id="f-phone-err" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input class="input" id="f-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" aria-describedby="f-email-hint f-email-err">
+              <p class="hint" id="f-email-hint">We'll send your receipt here.</p>
+              <p class="err" id="f-email-err" hidden></p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-pin">PIN code</label>
+            <input class="input num" id="f-pin" name="pin" inputmode="numeric" autocomplete="postal-code" maxlength="7" aria-describedby="f-pin-status f-pin-err" style="max-width: 12rem">
+            <p class="pin-status" id="f-pin-status" aria-live="polite"></p>
+            <p class="err" id="f-pin-err" hidden></p>
+          </div>
+          <div class="field">
+            <label for="f-line1">Flat, house no., building</label>
+            <input class="input" id="f-line1" name="line1" autocomplete="address-line1" aria-describedby="f-line1-err">
+            <p class="err" id="f-line1-err" hidden></p>
+          </div>
+          <div class="field">
+            <label for="f-line2">Area, street, sector</label>
+            <input class="input" id="f-line2" name="line2" autocomplete="address-line2" aria-describedby="f-line2-err">
+            <p class="err" id="f-line2-err" hidden></p>
+          </div>
+          <div class="field">
+            <label for="f-landmark">Landmark <span class="opt">(optional)</span></label>
+            <input class="input" id="f-landmark" name="landmark" autocomplete="off" aria-describedby="f-landmark-hint">
+            <p class="hint" id="f-landmark-hint">For example: opposite the park gate.</p>
+          </div>
+          <div class="row-2 fields">
+            <div class="field">
+              <label for="f-city">City</label>
+              <input class="input" id="f-city" name="city" autocomplete="address-level2" aria-describedby="f-city-err">
+              <p class="err" id="f-city-err" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-state">State or union territory</label>
+              <select class="input" id="f-state" name="state" autocomplete="address-level1" aria-describedby="f-state-err"></select>
+              <p class="err" id="f-state-err" hidden></p>
+            </div>
+          </div>
+
+          <fieldset class="group">
+            <legend>Getting it inside</legend>
+            <p class="hint" style="margin-bottom: var(--s4)">Our team carries every piece to the room you choose. This tells us how many people to send.</p>
+            <div class="fields">
+              <div class="field">
+                <label for="f-floor">Floor</label>
+                <select class="input" id="f-floor" name="floor" style="max-width: 16rem"></select>
+              </div>
+              <fieldset class="field" id="liftGroup" aria-describedby="f-lift-err">
+                <legend class="legend">Is there a lift that fits a sofa?</legend>
+                <div class="chips" style="margin-top: 4px">
+                  <label class="chip"><input type="radio" name="lift" value="yes"><span>Yes</span></label>
+                  <label class="chip"><input type="radio" name="lift" value="no"><span>No, stairs only</span></label>
+                  <label class="chip"><input type="radio" name="lift" value="unsure"><span>Not sure</span></label>
+                </div>
+                <p class="err" id="f-lift-err" hidden></p>
+                <p class="hint" id="liftNote" hidden>No problem. We'll send a third person at no extra cost.</p>
+              </fieldset>
+            </div>
+          </fieldset>
+        </div>
+        <div class="actions">
+          <div class="actions-total"><span>Total incl. GST</span><strong class="num" data-total></strong></div>
+          <div class="actions-btns">
+            <button class="btn btn-secondary" type="button" data-back>Back</button>
+            <button class="btn btn-primary" type="submit">Continue to delivery</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- STEP 3: DELIVERY -->
+    <section class="step" id="step-delivery" data-step="delivery" aria-labelledby="h-delivery" hidden>
+      <p class="kicker">Step 3 of 5 · Delivery</p>
+      <h1 id="h-delivery" tabindex="-1">When will you be home?</h1>
+      <p class="lead">Pick a day and a three-hour window. Someone needs to be home to receive the pieces.</p>
+      <form id="deliveryForm" novalidate>
+        <div class="error-summary" id="deliveryErrors" hidden tabindex="-1" role="alert" aria-labelledby="deliveryErrorsTitle">
+          <h2 id="deliveryErrorsTitle"><svg aria-hidden="true"><use href="#i-alert"/></svg><span></span></h2>
+          <ul></ul>
+        </div>
+        <fieldset id="dateGroup" aria-describedby="f-date-err">
+          <legend class="sr-only">Delivery date</legend>
+          <h2 aria-hidden="true">Day</h2>
+          <p class="err" id="f-date-err" hidden style="margin-bottom: var(--s3)"></p>
+          <div class="dates" id="dates"></div>
+        </fieldset>
+        <fieldset id="windowGroup" style="margin-top: var(--s7)" aria-describedby="windowHint f-window-err">
+          <legend class="sr-only">Time window</legend>
+          <h2 aria-hidden="true">Time window</h2>
+          <p class="hint" id="windowHint" style="margin-bottom: var(--s3)">Choose a day first.</p>
+          <p class="err" id="f-window-err" hidden style="margin-bottom: var(--s3)"></p>
+          <div class="windows" id="windows"></div>
+        </fieldset>
+        <div style="margin-top: var(--s7)">
+          <h2>Assembly</h2>
+          <label class="check-row" for="f-assembly">
+            <input type="checkbox" id="f-assembly" name="assembly">
+            <span><b>Assemble it for me</b><span class="hint">We put the sofa legs on, set up the chair, hang the lamp hook and take all packaging away.</span></span>
+            <span class="num" style="font-weight:700" id="assemblyPrice"></span>
+          </label>
+        </div>
+        <div class="note" style="margin-top: var(--s5)"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>We'll send a reminder the day before and call about 30 minutes before we arrive.</span></div>
+        <div class="actions">
+          <div class="actions-total"><span>Total incl. GST</span><strong class="num" data-total></strong></div>
+          <div class="actions-btns">
+            <button class="btn btn-secondary" type="button" data-back>Back</button>
+            <button class="btn btn-primary" type="submit">Continue to payment</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- STEP 4: PAYMENT -->
+    <section class="step" id="step-payment" data-step="payment" aria-labelledby="h-payment" hidden>
+      <p class="kicker">Step 4 of 5 · Payment</p>
+      <h1 id="h-payment" tabindex="-1">How would you like to pay?</h1>
+      <p class="lead">Check the details below, then choose a payment method. You won't be charged until you press Pay.</p>
+
+      <dl class="review" id="review"></dl>
+
+      <div class="alert" id="payAlert" hidden tabindex="-1" role="alert" aria-labelledby="payAlertTitle">
+        <h2 id="payAlertTitle"><svg aria-hidden="true"><use href="#i-alert"/></svg><span></span></h2>
+        <p id="payAlertBody"></p>
+        <div class="alert-actions" id="payAlertActions"></div>
+      </div>
+
+      <div id="upiWaiting" class="waiting" hidden>
+        <div class="pulse" aria-hidden="true"><svg><use href="#i-phone"/></svg></div>
+        <h2 tabindex="-1" id="upiWaitTitle">Approve the payment in your UPI app</h2>
+        <p>We sent a request for <strong class="num" data-total></strong> to <strong id="upiWaitId"></strong>.</p>
+        <p class="clock num" id="upiClock" aria-hidden="true">5:00</p>
+        <p class="sr-only" id="upiClockSr"></p>
+        <p>Keep this page open. Nothing is charged until you approve.</p>
+        <button class="btn btn-secondary btn-small" type="button" id="upiCancel" style="margin-top: var(--s4)">Cancel request</button>
+      </div>
+
+      <form id="paymentForm" novalidate>
+        <div class="error-summary" id="paymentErrors" hidden tabindex="-1" role="alert" aria-labelledby="paymentErrorsTitle">
+          <h2 id="paymentErrorsTitle"><svg aria-hidden="true"><use href="#i-alert"/></svg><span></span></h2>
+          <ul></ul>
+        </div>
+        <fieldset>
+          <legend class="sr-only">Payment method</legend>
+          <div class="methods" id="methods">
+            <div class="method" data-method="upi">
+              <input type="radio" name="method" value="upi" id="m-upi" aria-describedby="m-upi-sub">
+              <label class="card" for="m-upi"><span class="radio" aria-hidden="true"></span><svg class="m-icon" aria-hidden="true"><use href="#i-phone"/></svg><span><b>UPI</b><span class="sub" id="m-upi-sub">Approve in any UPI app</span></span></label>
+            </div>
+            <div class="pay-panel" id="panel-upi" hidden>
+              <div class="field">
+                <label for="f-upi">UPI ID</label>
+                <input class="input" id="f-upi" name="upi" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="email" placeholder="yourname@bank" aria-describedby="f-upi-hint f-upi-err">
+                <p class="hint" id="f-upi-hint">Looks like name@okaxis or 98765xxxxx@ybl.</p>
+                <p class="err" id="f-upi-err" hidden></p>
+              </div>
+            </div>
+
+            <div class="method" data-method="card">
+              <input type="radio" name="method" value="card" id="m-card" aria-describedby="m-card-sub">
+              <label class="card" for="m-card"><span class="radio" aria-hidden="true"></span><svg class="m-icon" aria-hidden="true"><use href="#i-card"/></svg><span><b>Credit or debit card</b><span class="sub" id="m-card-sub">Visa, Mastercard, RuPay, American Express</span></span></label>
+            </div>
+            <div class="pay-panel" id="panel-card" hidden>
+              <div class="fields">
+                <div class="field">
+                  <label for="f-cc">Card number</label>
+                  <input class="input num" id="f-cc" name="cc" inputmode="numeric" autocomplete="cc-number" maxlength="23" aria-describedby="f-cc-brand f-cc-err" placeholder="1234 5678 9012 3456">
+                  <p class="brand-tag" id="f-cc-brand" aria-live="polite"></p>
+                  <p class="err" id="f-cc-err" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="f-ccname">Name on card</label>
+                  <input class="input" id="f-ccname" name="ccname" autocomplete="cc-name" autocapitalize="words" aria-describedby="f-ccname-err">
+                  <p class="err" id="f-ccname-err" hidden></p>
+                </div>
+                <div class="card-row">
+                  <div class="field">
+                    <label for="f-exp">Expiry (MM/YY)</label>
+                    <input class="input num" id="f-exp" name="exp" inputmode="numeric" autocomplete="cc-exp" maxlength="7" placeholder="MM/YY" aria-describedby="f-exp-err">
+                    <p class="err" id="f-exp-err" hidden></p>
+                  </div>
+                  <div class="field">
+                    <label for="f-cvv">Security code</label>
+                    <input class="input num" id="f-cvv" name="cvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" aria-describedby="f-cvv-hint f-cvv-err">
+                    <p class="hint" id="f-cvv-hint">3 digits on the back (4 on the front for Amex).</p>
+                    <p class="err" id="f-cvv-err" hidden></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="method" data-method="netbanking">
+              <input type="radio" name="method" value="netbanking" id="m-nb" aria-describedby="m-nb-sub">
+              <label class="card" for="m-nb"><span class="radio" aria-hidden="true"></span><svg class="m-icon" aria-hidden="true"><use href="#i-bank"/></svg><span><b>Net banking</b><span class="sub" id="m-nb-sub">Pay from your bank's website</span></span></label>
+            </div>
+            <div class="pay-panel" id="panel-netbanking" hidden>
+              <div class="field">
+                <label for="f-bank">Your bank</label>
+                <select class="input" id="f-bank" name="bank" aria-describedby="f-bank-err">
+                  <option value="">Choose your bank</option>
+                  <option>State Bank of India</option><option>HDFC Bank</option><option>ICICI Bank</option><option>Axis Bank</option>
+                  <option>Kotak Mahindra Bank</option><option>Bank of Baroda</option><option>Punjab National Bank</option><option>Canara Bank</option><option>Union Bank of India</option><option>IDFC FIRST Bank</option>
+                </select>
+                <p class="err" id="f-bank-err" hidden></p>
+              </div>
+            </div>
+
+            <div class="method" data-method="cod">
+              <input type="radio" name="method" value="cod" id="m-cod" aria-describedby="m-cod-sub">
+              <label class="card" for="m-cod"><span class="radio" aria-hidden="true"></span><svg class="m-icon" aria-hidden="true"><use href="#i-cash"/></svg><span><b>Pay on delivery</b><span class="sub" id="m-cod-sub"></span></span></label>
+            </div>
+            <div class="pay-panel" id="panel-cod" hidden>
+              <p class="hint" style="color: var(--text)">Pay by cash or UPI when the team arrives. Please keep the exact amount ready.</p>
+            </div>
+          </div>
+        </fieldset>
+        <p class="err" id="f-method-err" hidden style="margin-top: var(--s3)"></p>
+
+        <p class="secure-line"><svg aria-hidden="true"><use href="#i-lock"/></svg>Payments are encrypted. Card details never touch our servers.</p>
+
+        <details class="test-panel">
+          <summary>Test payment values (demo)</summary>
+          <ul class="test-list">
+            <li><span>Card that works: <code>4111 1111 1111 1111</code></span><button class="btn btn-secondary btn-small" type="button" data-fill="ok">Use this card</button></li>
+            <li><span>Card the bank declines: <code>4000 0000 0000 0002</code></span><button class="btn btn-secondary btn-small" type="button" data-fill="decline">Use this card</button></li>
+            <li><span>Bank doesn't respond: <code>4000 0000 0000 0119</code></span><button class="btn btn-secondary btn-small" type="button" data-fill="error">Use this card</button></li>
+            <li><span>UPI that works: any ID, e.g. <code>asha@okaxis</code>. Declined: <code>decline@okaxis</code></span></li>
+            <li><span>Any future expiry date and any 3-digit security code work.</span></li>
+          </ul>
+        </details>
+
+        <div class="actions">
+          <div class="actions-total"><span>Total incl. GST</span><strong class="num" data-total></strong></div>
+          <div class="actions-btns">
+            <button class="btn btn-secondary" type="button" data-back>Back</button>
+            <button class="btn btn-primary" type="submit" id="payBtn"><svg aria-hidden="true"><use href="#i-lock"/></svg><span id="payLabel">Pay</span></button>
+          </div>
+          <p class="processing-note" id="processingNote" hidden aria-live="polite">Processing your payment. Please don't close or refresh this page.</p>
+        </div>
+      </form>
+    </section>
+
+    <!-- STEP 5: CONFIRMATION -->
+    <section class="step" id="step-done" data-step="done" aria-labelledby="h-done" hidden>
+      <div class="room" id="room"></div>
+      <p class="kicker">Order placed</p>
+      <h1 id="h-done" tabindex="-1">It's on its way home.</h1>
+      <p class="lead" id="doneLead"></p>
+      <p class="order-no"><span>Order number</span><strong id="orderNo"></strong></p>
+      <div class="confirm-grid">
+        <div class="panel">
+          <h2>Delivery</h2>
+          <p id="doneSlot"></p>
+          <p id="doneAddress"></p>
+          <p id="doneAccess"></p>
+        </div>
+        <div class="panel">
+          <h2>Payment</h2>
+          <p id="donePaid"></p>
+          <p id="doneItems"></p>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>What happens next</h2>
+        <ol class="next-steps" id="nextSteps"></ol>
+      </div>
+      <div class="confirm-actions">
+        <button class="btn btn-primary" type="button" id="icsBtn"><svg aria-hidden="true"><use href="#i-cal"/></svg>Add delivery to calendar</button>
+        <button class="btn btn-secondary" type="button" id="printBtn">Print receipt</button>
+        <button class="btn btn-secondary" type="button" id="newOrderBtn">Start a new order</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="foot">
+  <p>Aangan &amp; Oak is a fictional store made for this checkout demo. Products, prices and order numbers are sample data.</p>
+</footer>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="sr-only" id="announcer" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------------------------------------------------------
+   Data
+   --------------------------------------------------------- */
+const PRODUCTS = [
+  { id: 'sofa',  name: 'Tanpura three-seat sofa', variant: 'Oat linen, sheesham legs', dims: 'W 214 × D 92 × H 80 cm', price: 64500, ill: 'sofa' },
+  { id: 'chair', name: 'Jharokha lounge chair', variant: 'Oiled sheesham, moss cushion', dims: 'W 72 × D 80 × H 78 cm', price: 18900, ill: 'chair' },
+  { id: 'lamp',  name: 'Bunai cane pendant lamp', variant: 'Hand-woven cane, 40 cm', dims: 'Ø 40 × H 28 cm', price: 4200, ill: 'lamp' },
+];
+const SAMPLE_CART = [ { id: 'sofa', qty: 1 }, { id: 'chair', qty: 1 }, { id: 'lamp', qty: 2 } ];
+const MAX_QTY = 5;
+const ASSEMBLY = 1499;
+const COD_LIMIT = 50000;
+const GST_RATE = 0.18;
+const STEPS = [
+  { id: 'cart', label: 'Cart' },
+  { id: 'address', label: 'Address' },
+  { id: 'delivery', label: 'Delivery' },
+  { id: 'payment', label: 'Payment' },
+  { id: 'done', label: 'Home' },
+];
+const STATES = ['Andaman and Nicobar Islands','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chandigarh','Chhattisgarh','Dadra and Nagar Haveli and Daman and Diu','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jammu and Kashmir','Jharkhand','Karnataka','Kerala','Ladakh','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Puducherry','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal'];
+// Small demo lookup; any other valid PIN is accepted and the shopper types city/state.
+const PINS = {
+  '110001': ['New Delhi', 'Delhi'], '400001': ['Mumbai', 'Maharashtra'], '560001': ['Bengaluru', 'Karnataka'],
+  '560034': ['Bengaluru', 'Karnataka'], '600001': ['Chennai', 'Tamil Nadu'], '700001': ['Kolkata', 'West Bengal'],
+  '500001': ['Hyderabad', 'Telangana'], '411001': ['Pune', 'Maharashtra'], '380001': ['Ahmedabad', 'Gujarat'],
+  '302001': ['Jaipur', 'Rajasthan'], '682001': ['Kochi', 'Kerala'], '226001': ['Lucknow', 'Uttar Pradesh'],
+  '160017': ['Chandigarh', 'Chandigarh'], '403001': ['Panaji', 'Goa'],
+};
+const WINDOWS = [
+  { id: 'w1', from: 9, to: 12, label: '9 am – 12 pm', sub: 'Morning' },
+  { id: 'w2', from: 12, to: 15, label: '12 – 3 pm', sub: 'Afternoon' },
+  { id: 'w3', from: 15, to: 18, label: '3 – 6 pm', sub: 'Late afternoon' },
+  { id: 'w4', from: 18, to: 21, label: '6 – 9 pm', sub: 'Evening' },
+];
+
+const inr = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+const money = n => inr.format(n);
+const fmtDay = new Intl.DateTimeFormat('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+const fmtDow = new Intl.DateTimeFormat('en-IN', { weekday: 'short' });
+const fmtMon = new Intl.DateTimeFormat('en-IN', { month: 'short' });
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/* ---------------------------------------------------------
+   State (persisted in sessionStorage; card number and CVV never are)
+   --------------------------------------------------------- */
+const KEY = 'ao-checkout-v1';
+const blank = () => ({
+  step: 'cart', reached: 0,
+  cart: SAMPLE_CART.map(x => ({ ...x })),
+  address: { name: '', phone: '', email: '', pin: '', line1: '', line2: '', landmark: '', city: '', state: '', floor: '0', lift: '' },
+  slot: { date: '', window: '' }, assembly: false,
+  pay: { method: '', upi: '', bank: '', ccname: '' },
+  order: null,
+});
+let S = load();
+function load() {
+  try { const raw = sessionStorage.getItem(KEY); if (raw) return Object.assign(blank(), JSON.parse(raw)); } catch (e) {}
+  return blank();
+}
+function save() { try { sessionStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+const product = id => PRODUCTS.find(p => p.id === id);
+function totals() {
+  const subtotal = S.cart.reduce((a, l) => a + product(l.id).price * l.qty, 0);
+  const assembly = S.assembly && S.cart.length ? ASSEMBLY : 0;
+  const total = subtotal + assembly;
+  const gst = Math.round(total - total / (1 + GST_RATE));
+  const count = S.cart.reduce((a, l) => a + l.qty, 0);
+  return { subtotal, assembly, total, gst, count };
+}
+
+/* ---------------------------------------------------------
+   Sound (opt-in, synthesised with Web Audio; no files)
+   --------------------------------------------------------- */
+const Sound = {
+  on: false, ctx: null,
+  init() { try { this.on = localStorage.getItem('ao-sound') === 'on'; } catch (e) {} this.paint(); },
+  ensure() { if (!this.ctx) { const C = window.AudioContext || window.webkitAudioContext; if (C) this.ctx = new C(); } if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); return this.ctx; },
+  toggle() {
+    this.on = !this.on;
+    try { localStorage.setItem('ao-sound', this.on ? 'on' : 'off'); } catch (e) {}
+    this.paint();
+    if (this.on) { this.ensure(); this.play('tick'); }
+    toast(this.on ? 'Sound effects on.' : 'Sound effects off.');
+  },
+  paint() {
+    const b = $('#soundBtn');
+    b.setAttribute('aria-pressed', String(this.on));
+    b.setAttribute('aria-label', this.on ? 'Sound effects: on' : 'Sound effects: off');
+    b.title = this.on ? 'Turn sound effects off' : 'Turn sound effects on';
+    $('use', b).setAttribute('href', this.on ? '#i-sound-on' : '#i-sound-off');
+  },
+  tone(freq, start, dur, type = 'sine', peak = 0.06) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain(), f = c.createBiquadFilter();
+    f.type = 'lowpass'; f.frequency.value = 2400;
+    o.type = type; o.frequency.setValueAtTime(freq, c.currentTime + start);
+    g.gain.setValueAtTime(0.0001, c.currentTime + start);
+    g.gain.exponentialRampToValueAtTime(peak, c.currentTime + start + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + start + dur);
+    o.connect(f); f.connect(g); g.connect(c.destination);
+    o.start(c.currentTime + start); o.stop(c.currentTime + start + dur + 0.05);
+  },
+  play(kind) {
+    if (!this.on || !this.ensure()) return;
+    if (kind === 'tick') { this.tone(740, 0, 0.09, 'triangle', 0.05); }
+    if (kind === 'chime') { this.tone(523.25, 0, 0.9, 'sine', 0.07); this.tone(659.25, 0.12, 0.9, 'sine', 0.06); this.tone(783.99, 0.24, 1.2, 'sine', 0.055); }
+    if (kind === 'soft-error') { this.tone(330, 0, 0.35, 'sine', 0.05); this.tone(262, 0.16, 0.5, 'sine', 0.045); }
+  },
+};
+
+/* ---------------------------------------------------------
+   Theme
+   --------------------------------------------------------- */
+const sysDark = window.matchMedia('(prefers-color-scheme: dark)');
+function currentTheme() { return document.documentElement.getAttribute('data-theme') || (sysDark.matches ? 'dark' : 'light'); }
+function paintTheme() {
+  const t = currentTheme(), b = $('#themeBtn');
+  b.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  b.title = b.getAttribute('aria-label');
+  $('use', b).setAttribute('href', t === 'dark' ? '#i-sun' : '#i-moon');
+}
+$('#themeBtn').addEventListener('click', () => {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('ao-theme', next); } catch (e) {}
+  paintTheme();
+});
+sysDark.addEventListener('change', paintTheme);
+
+/* ---------------------------------------------------------
+   Helpers: announcer, toast, illustration
+   --------------------------------------------------------- */
+function announce(msg) { const a = $('#announcer'); a.textContent = ''; setTimeout(() => { a.textContent = msg; }, 60); }
+function toast(msg, actionLabel, onAction, ms = 8000) {
+  const wrap = $('#toasts');
+  const t = document.createElement('div'); t.className = 'toast';
+  const p = document.createElement('p'); p.textContent = msg; t.appendChild(p);
+  let timer, done = false;
+  const close = () => { if (done) return; done = true; clearTimeout(timer); t.remove(); };
+  if (actionLabel) {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = actionLabel;
+    b.addEventListener('click', () => { onAction(); close(); }); t.appendChild(b);
+  }
+  // Pause the timer while the toast is hovered or focused (WCAG 2.2.1).
+  const start = () => { clearTimeout(timer); timer = setTimeout(close, ms); };
+  t.addEventListener('mouseenter', () => clearTimeout(timer)); t.addEventListener('mouseleave', start);
+  t.addEventListener('focusin', () => clearTimeout(timer)); t.addEventListener('focusout', start);
+  wrap.replaceChildren(t); start();
+}
+const ill = (name, vb) => `<svg viewBox="${vb}" aria-hidden="true" focusable="false"><use href="#ill-${name}"/></svg>`;
+const VB = { sofa: '0 0 160 100', chair: '0 0 120 100', lamp: '0 0 100 100' };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ---------------------------------------------------------
+   Progress: the path home
+   --------------------------------------------------------- */
+function renderPath() {
+  const idx = STEPS.findIndex(s => s.id === S.step);
+  const ol = $('#pathList');
+  $$('li', ol).forEach(li => li.remove());
+  STEPS.forEach((s, i) => {
+    const li = document.createElement('li');
+    const state = i < idx || S.order ? 'done' : i === idx ? 'current' : 'todo';
+    li.dataset.state = (S.order && s.id === 'done') ? 'current' : state;
+    const icon = s.id === 'done' ? '<svg class="house" aria-hidden="true"><use href="#i-house"/></svg>'
+      : state === 'done' ? '<svg aria-hidden="true"><use href="#i-check"/></svg>' : '';
+    const stateText = li.dataset.state === 'done' ? 'completed' : li.dataset.state === 'current' ? 'current step' : 'not started';
+    const inner = `<span class="node">${icon}</span><span class="label">${s.label}<span class="sr-only">, ${stateText}</span></span>`;
+    // Completed steps are links (before an order is placed); others are plain text.
+    if (state === 'done' && !S.order && i <= S.reached) {
+      li.innerHTML = `<a class="step-link" href="#${s.id}">${inner}</a>`;
+    } else {
+      li.innerHTML = inner;
+      if (li.dataset.state === 'current') li.setAttribute('aria-current', 'step');
+    }
+    ol.appendChild(li);
+  });
+  const progress = S.order ? 1 : idx / (STEPS.length - 1);
+  $('#pathTrack').style.setProperty('--progress', progress);
+}
+
+/* ---------------------------------------------------------
+   Summary
+   --------------------------------------------------------- */
+function renderSummary() {
+  const t = totals();
+  $$('[data-total]').forEach(el => el.textContent = money(t.total));
+  $('#summaryItems').innerHTML = S.cart.map(l => {
+    const p = product(l.id);
+    return `<li class="s-item"><span class="s-thumb">${ill(p.ill, VB[p.ill])}<span class="s-qty" aria-hidden="true">${l.qty}</span></span>
+      <span class="s-name">${esc(p.name)}<span class="sr-only">, quantity ${l.qty}</span></span><span class="s-price num">${money(p.price * l.qty)}</span></li>`;
+  }).join('') || '<li class="hint">No items yet.</li>';
+  $('#summaryLines').innerHTML = `
+    <div><dt>Items (${t.count})</dt><dd class="num">${money(t.subtotal)}</dd></div>
+    <div><dt>Delivery and carry-in</dt><dd>Free</dd></div>
+    ${S.assembly && S.cart.length ? `<div><dt>Assembly</dt><dd class="num">${money(ASSEMBLY)}</dd></div>` : ''}
+    <div class="total"><dt>Total</dt><dd class="num">${money(t.total)}</dd></div>
+    <div class="gst"><dd>Includes ${money(t.gst)} GST</dd></div>`;
+  const plan = $('#summaryPlan');
+  const rows = [];
+  const a = S.address;
+  if (S.reached >= 2 && a.line1) rows.push(`<div><svg aria-hidden="true"><use href="#i-pin"/></svg><span><b>Delivering to</b>${esc(a.name)}, ${esc(a.city)} ${esc(a.pin)}</span></div>`);
+  if (S.reached >= 3 && S.slot.date) rows.push(`<div><svg aria-hidden="true"><use href="#i-cal"/></svg><span><b>Arriving</b>${slotText()}</span></div>`);
+  plan.innerHTML = rows.join(''); plan.hidden = !rows.length;
+  const tog = $('#summaryToggle');
+  $('#summaryToggleText').textContent = (tog.getAttribute('aria-expanded') === 'true' ? 'Hide' : 'Show') + ' order summary';
+}
+$('#summaryToggle').addEventListener('click', e => {
+  const b = e.currentTarget, open = b.getAttribute('aria-expanded') !== 'true';
+  b.setAttribute('aria-expanded', String(open));
+  $('#summaryBody').hidden = !open;
+  $('#summaryToggleText').textContent = (open ? 'Hide' : 'Show') + ' order summary';
+});
+
+/* ---------------------------------------------------------
+   Step 1: Cart
+   --------------------------------------------------------- */
+let lastRemoved = null;
+function renderCart() {
+  const list = $('#cartItems');
+  list.innerHTML = S.cart.map(l => {
+    const p = product(l.id);
+    return `<li class="item" data-id="${p.id}">
+      <div class="thumb">${ill(p.ill, VB[p.ill])}</div>
+      <div>
+        <p class="item-name">${esc(p.name)}</p>
+        <p class="item-meta">${esc(p.variant)}</p>
+        <p class="item-meta">${esc(p.dims)}</p>
+        <p class="item-unit num">${money(p.price)} each</p>
+      </div>
+      <div class="item-controls">
+        <div class="stepper" role="group" aria-label="Quantity of ${esc(p.name)}">
+          <button type="button" data-dec aria-label="Decrease quantity of ${esc(p.name)}" ${l.qty <= 1 ? 'disabled' : ''}><svg aria-hidden="true"><use href="#i-minus"/></svg></button>
+          <output class="num" aria-live="off">${l.qty}</output>
+          <button type="button" data-inc aria-label="Increase quantity of ${esc(p.name)}" ${l.qty >= MAX_QTY ? 'disabled' : ''}><svg aria-hidden="true"><use href="#i-plus"/></svg></button>
+        </div>
+        <button type="button" class="link-btn" data-remove>Remove<span class="sr-only"> ${esc(p.name)}</span></button>
+        <span class="item-total num" aria-label="Line total ${money(p.price * l.qty)}">${money(p.price * l.qty)}</span>
+      </div>
+      ${l.qty >= MAX_QTY ? `<p class="qty-note">Up to ${MAX_QTY} per order. For more, our team can arrange a bulk delivery.</p>` : ''}
+    </li>`;
+  }).join('');
+  const empty = !S.cart.length;
+  $('#cartEmpty').hidden = !empty;
+  list.hidden = empty;
+  $('#toAddress').disabled = empty;
+  $('#toAddress').setAttribute('aria-disabled', String(empty));
+}
+$('#cartItems').addEventListener('click', e => {
+  const li = e.target.closest('.item'); if (!li) return;
+  const id = li.dataset.id, line = S.cart.find(l => l.id === id), p = product(id);
+  if (e.target.closest('[data-inc]') && line.qty < MAX_QTY) { line.qty++; afterQty(id, p, line, 'inc'); }
+  else if (e.target.closest('[data-dec]') && line.qty > 1) { line.qty--; afterQty(id, p, line, 'dec'); }
+  else if (e.target.closest('[data-remove]')) {
+    const index = S.cart.indexOf(line);
+    lastRemoved = { line: { ...line }, index };
+    S.cart.splice(index, 1); save(); renderCart(); renderSummary();
+    toast(`Removed ${p.name}.`, 'Undo', () => {
+      if (!lastRemoved) return;
+      S.cart.splice(Math.min(lastRemoved.index, S.cart.length), 0, lastRemoved.line); lastRemoved = null;
+      save(); renderCart(); renderSummary(); announce(`${p.name} is back in your cart.`);
+      const btn = $(`.item[data-id="${id}"] [data-remove]`); if (btn) btn.focus();
+    });
+    // Keep focus somewhere sensible.
+    const next = $$('#cartItems [data-remove]')[Math.min(index, S.cart.length - 1)];
+    (next || $('#restoreCart')).focus();
+  }
+});
+function afterQty(id, p, line, which) {
+  save(); renderCart(); renderSummary();
+  const btn = $(`.item[data-id="${id}"] [data-${which}]`);
+  if (btn && !btn.disabled) btn.focus(); else { const o = $(`.item[data-id="${id}"] [data-${which === 'inc' ? 'dec' : 'inc'}]`); if (o) o.focus(); }
+  announce(`${p.name}: quantity ${line.qty}. Total ${money(totals().total)}.`);
+}
+$('#restoreCart').addEventListener('click', () => {
+  S.cart = SAMPLE_CART.map(x => ({ ...x })); save(); renderCart(); renderSummary();
+  announce('Sample pieces are back in your cart.'); $('#toAddress').focus();
+});
+$('#toAddress').addEventListener('click', () => { if (S.cart.length) go('address', true); });
+
+/* ---------------------------------------------------------
+   Validation
+   --------------------------------------------------------- */
+const digits = v => String(v || '').replace(/\D/g, '');
+const normPhone = v => { let d = digits(v); if (d.length === 12 && d.startsWith('91')) d = d.slice(2); if (d.length === 11 && d.startsWith('0')) d = d.slice(1); return d; };
+const RULES = {
+  name: v => !v.trim() ? 'Enter your full name' : v.trim().length < 2 ? 'Enter your full name, at least 2 letters' : '',
+  phone: v => { const d = normPhone(v); return !d ? 'Enter your mobile number' : !/^[6-9]\d{9}$/.test(d) ? 'Enter a 10-digit mobile number starting with 6, 7, 8 or 9' : ''; },
+  email: v => !v.trim() ? 'Enter your email address' : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? 'Enter an email address like name@example.com' : '',
+  pin: v => { const d = digits(v); return !d ? 'Enter your PIN code' : !/^[1-8]\d{5}$/.test(d) ? 'Enter a 6-digit PIN code, for example 560001' : ''; },
+  line1: v => !v.trim() ? 'Enter your flat or house number and building' : '',
+  line2: v => !v.trim() ? 'Enter your area or street' : '',
+  city: v => !v.trim() ? 'Enter your city' : '',
+  state: v => !v ? 'Choose your state or union territory' : '',
+  upi: v => { const t = v.trim(); return !t ? 'Enter your UPI ID' : !/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(t) ? 'Enter a UPI ID like name@okaxis (no spaces)' : ''; },
+  cc: v => { const d = digits(v); if (!d) return 'Enter your card number'; const b = cardBrand(d); const len = b === 'amex' ? 15 : 16; if (d.length < len) return `Card number is too short. It should have ${len} digits`; if (!luhn(d)) return 'This card number has a typo. Check the digits and try again'; return ''; },
+  ccname: v => !v.trim() ? 'Enter the name shown on the card' : '',
+  exp: v => {
+    const d = digits(v); if (!d) return 'Enter the expiry date';
+    if (d.length < 4) return 'Enter the expiry as MM/YY, for example 08/29';
+    const m = +d.slice(0, 2), y = 2000 + +d.slice(2, 4);
+    if (m < 1 || m > 12) return 'The month should be between 01 and 12';
+    const now = new Date(); if (y < now.getFullYear() || (y === now.getFullYear() && m < now.getMonth() + 1)) return 'This card has expired. Use a different card';
+    return '';
+  },
+  cvv: v => { const d = digits(v); const need = cardBrand(digits($('#f-cc').value)) === 'amex' ? 4 : 3; return !d ? 'Enter the security code' : d.length !== need ? `The security code should be ${need} digits` : ''; },
+  bank: v => !v ? 'Choose your bank' : '',
+};
+function luhn(num) { let s = 0, alt = false; for (let i = num.length - 1; i >= 0; i--) { let n = +num[i]; if (alt) { n *= 2; if (n > 9) n -= 9; } s += n; alt = !alt; } return s % 10 === 0; }
+function cardBrand(d) {
+  if (/^3[47]/.test(d)) return 'amex';
+  if (/^4/.test(d)) return 'visa';
+  if (/^(5[1-5]|2(2[2-9]|[3-6]\d|7[01]|720))/.test(d)) return 'mastercard';
+  if (/^(60|65|81|82|508)/.test(d)) return 'rupay';
+  return '';
+}
+const BRAND_NAMES = { visa: 'Visa', mastercard: 'Mastercard', rupay: 'RuPay', amex: 'American Express' };
+
+const errIcon = '<svg aria-hidden="true"><use href="#i-alert"/></svg>';
+function setError(name, msg) {
+  const input = document.getElementById('f-' + name) || null;
+  const err = document.getElementById('f-' + name + '-err');
+  if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  if (err) { err.innerHTML = msg ? errIcon + '<span>' + esc(msg) + '</span>' : ''; err.hidden = !msg; }
+  // Keep a visible error summary honest: drop fixed items, hide it when nothing is left.
+  if (!msg) $$('.error-summary').forEach(box => {
+    const li = $(`li[data-field="${name}"]`, box); if (!li) return;
+    li.parentNode.removeChild(li);
+    const left = $$('li', box).length;
+    if (!left) box.hidden = true; else $('h2 span', box).textContent = countText(left);
+  });
+}
+const countText = n => n === 1 ? 'There is 1 thing to fix' : `There are ${n} things to fix`;
+const touched = new Set();
+function wireField(name, getVal) {
+  const el = document.getElementById('f-' + name);
+  el.addEventListener('input', () => { touched.add(name); if (el.getAttribute('aria-invalid') === 'true') setError(name, RULES[name](getVal ? getVal() : el.value)); });
+  el.addEventListener('blur', e => {
+    // If focus is moving to a submit button, let the submit report errors.
+    // Showing the message now would push the button down mid-click and swallow the click.
+    if (e.relatedTarget && e.relatedTarget.type === 'submit') return;
+    if (touched.has(name) && el.value !== '') setError(name, RULES[name](getVal ? getVal() : el.value));
+  });
+  el.addEventListener('change', () => { touched.add(name); if (el.tagName === 'SELECT') setError(name, RULES[name](el.value)); });
+}
+function showSummary(boxId, errors) {
+  const box = document.getElementById(boxId);
+  if (!errors.length) { box.hidden = true; return; }
+  $('h2 span', box).textContent = countText(errors.length);
+  $('ul', box).innerHTML = errors.map(e => `<li data-field="${e.field}"><a href="#${e.target}" data-focus="${e.target}">${esc(e.msg)}</a></li>`).join('');
+  box.hidden = false;
+  box.focus({ preventScroll: true });
+  box.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  Sound.play('soft-error');
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[data-focus]'); if (!a) return;
+  e.preventDefault(); const t = document.getElementById(a.dataset.focus); if (!t) return;
+  t.focus(); t.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
+});
+
+/* ---------------------------------------------------------
+   Step 2: Address
+   --------------------------------------------------------- */
+const af = $('#addressForm');
+$('#f-state').innerHTML = '<option value="">Choose</option>' + STATES.map(s => `<option>${s}</option>`).join('');
+$('#f-floor').innerHTML = ['Ground floor', ...Array.from({ length: 14 }, (_, i) => `${ordinal(i + 1)} floor`), '15th floor or higher'].map((t, i) => `<option value="${i}">${t}</option>`).join('');
+function ordinal(n) { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+['name', 'phone', 'email', 'pin', 'line1', 'line2', 'city', 'state'].forEach(n => wireField(n));
+
+function fillAddress() {
+  const a = S.address;
+  ['name', 'phone', 'email', 'pin', 'line1', 'line2', 'landmark', 'city', 'state', 'floor'].forEach(k => { const el = $('#f-' + k); if (el) el.value = a[k] || (k === 'floor' ? '0' : ''); });
+  $$('input[name="lift"]').forEach(r => r.checked = r.value === a.lift);
+  syncLift(); pinLookup(false);
+}
+function readAddress() {
+  const a = S.address;
+  ['name', 'phone', 'email', 'pin', 'line1', 'line2', 'landmark', 'city', 'state', 'floor'].forEach(k => { a[k] = $('#f-' + k).value; });
+  const lift = $('input[name="lift"]:checked'); a.lift = lift ? lift.value : '';
+  save();
+}
+af.addEventListener('input', () => { readAddress(); });
+af.addEventListener('change', () => { readAddress(); syncLift(); });
+function syncLift() {
+  const floor = +$('#f-floor').value;
+  $('#liftGroup').hidden = floor === 0;
+  const lift = $('input[name="lift"]:checked');
+  $('#liftNote').hidden = !(lift && lift.value === 'no' && floor >= 2);
+  if (lift) setError('lift', '');
+}
+// PIN lookup: fills city/state when known; always leaves them editable.
+$('#f-pin').addEventListener('input', () => pinLookup(true));
+function pinLookup(fromTyping) {
+  const d = digits($('#f-pin').value), st = $('#f-pin-status');
+  st.className = 'pin-status'; st.innerHTML = '';
+  if (d.length !== 6 || RULES.pin(d)) return;
+  const hit = PINS[d];
+  if (hit) {
+    if (fromTyping || !$('#f-city').value) { $('#f-city').value = hit[0]; setError('city', ''); }
+    if (fromTyping || !$('#f-state').value) { $('#f-state').value = hit[1]; setError('state', ''); }
+    st.className = 'pin-status ok';
+    st.innerHTML = `<svg aria-hidden="true"><use href="#i-check"/></svg><span>${hit[0]}, ${hit[1]}. We deliver here.</span>`;
+    readAddress();
+  } else if (fromTyping) {
+    st.innerHTML = `<svg aria-hidden="true"><use href="#i-info"/></svg><span>We'll check this PIN with our courier. Please type your city and state below.</span>`;
+  }
+}
+af.addEventListener('submit', e => {
+  e.preventDefault(); readAddress();
+  const order = ['name', 'phone', 'email', 'pin', 'line1', 'line2', 'city', 'state'];
+  const errors = [];
+  order.forEach(n => { const m = RULES[n]($('#f-' + n).value); setError(n, m); touched.add(n); if (m) errors.push({ field: n, target: 'f-' + n, msg: m }); });
+  if (+$('#f-floor').value > 0 && !$('input[name="lift"]:checked')) {
+    const m = 'Tell us whether there is a lift'; setError('lift', m); errors.push({ field: 'lift', target: 'liftGroup', msg: m });
+    $('#liftGroup').setAttribute('tabindex', '-1');
+  } else setError('lift', '');
+  if (errors.length) return showSummary('addressErrors', errors);
+  $('#addressErrors').hidden = true;
+  // Postel: store clean values.
+  S.address.phone = normPhone(S.address.phone).replace(/^(\d{5})(\d{5})$/, '$1 $2');
+  S.address.pin = digits(S.address.pin);
+  S.address.email = S.address.email.trim();
+  save(); go('delivery', true);
+});
+
+/* ---------------------------------------------------------
+   Step 3: Delivery
+   --------------------------------------------------------- */
+function iso(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+function parseIso(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+function deliveryDays() {
+  const days = []; const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + 2);
+  while (days.length < 14) { if (d.getDay() !== 0) days.push(new Date(d)); d.setDate(d.getDate() + 1); }
+  return days;
+}
+// Deterministic demo availability: one fully booked day, a few full windows.
+function windowFull(dayIndex, d, wi) {
+  if (dayIndex === 2) return true;
+  return ((d.getDate() * 7 + wi * 5 + d.getMonth()) % 6) === 0 || (dayIndex === 0 && wi === 0);
+}
+function dayFull(i, d) { return WINDOWS.every((w, wi) => windowFull(i, d, wi)); }
+let DAYS = deliveryDays();
+function renderDates() {
+  DAYS = deliveryDays();
+  if (S.slot.date && !DAYS.some(d => iso(d) === S.slot.date)) { S.slot = { date: '', window: '' }; save(); }
+  $('#dates').innerHTML = DAYS.map((d, i) => {
+    const full = dayFull(i, d), id = 'd-' + iso(d);
+    return `<div class="date"><input type="radio" name="date" id="${id}" value="${iso(d)}" ${full ? 'disabled' : ''} ${S.slot.date === iso(d) ? 'checked' : ''}
+      aria-label="${fmtDay.format(d)}${full ? ', fully booked' : ''}">
+      <label class="card" for="${id}" aria-hidden="true"><span class="dow">${fmtDow.format(d)}</span><span class="dom num">${d.getDate()}</span>${full ? '<span class="full-tag">Full</span>' : `<span class="mon">${fmtMon.format(d)}</span>`}</label></div>`;
+  }).join('');
+  renderWindows();
+}
+function renderWindows() {
+  const host = $('#windows');
+  if (!S.slot.date) { host.innerHTML = ''; $('#windowHint').hidden = false; return; }
+  $('#windowHint').hidden = true;
+  const i = DAYS.findIndex(d => iso(d) === S.slot.date), d = DAYS[i];
+  host.innerHTML = WINDOWS.map((w, wi) => {
+    const full = windowFull(i, d, wi);
+    if (full && S.slot.window === w.id) S.slot.window = '';
+    return `<div class="window"><input type="radio" name="timeslot" id="w-${w.id}" value="${w.id}" ${full ? 'disabled' : ''} ${S.slot.window === w.id ? 'checked' : ''}
+      aria-label="${w.label}, ${full ? 'full' : w.sub.toLowerCase()}">
+      <label class="card" for="w-${w.id}" aria-hidden="true"><span class="time">${w.label}</span><span class="sub">${full ? 'Full' : w.sub}</span></label></div>`;
+  }).join('');
+}
+$('#dates').addEventListener('change', e => {
+  if (e.target.name !== 'date') return;
+  S.slot.date = e.target.value; S.slot.window = ''; save(); renderWindows(); setError('date', '');
+  announce(`${fmtDay.format(parseIso(S.slot.date))} selected. Now choose a time window.`);
+  renderSummary();
+});
+$('#windows').addEventListener('change', e => {
+  if (e.target.name !== 'timeslot') return;
+  S.slot.window = e.target.value; save(); setError('window', ''); renderSummary();
+});
+$('#f-assembly').addEventListener('change', e => { S.assembly = e.target.checked; save(); renderSummary(); announce(`Assembly ${S.assembly ? 'added' : 'removed'}. Total ${money(totals().total)}.`); });
+$('#assemblyPrice').textContent = '+ ' + money(ASSEMBLY);
+function slotText(long) {
+  if (!S.slot.date) return '';
+  const w = WINDOWS.find(x => x.id === S.slot.window);
+  return `${fmtDay.format(parseIso(S.slot.date))}${w ? ', ' + w.label : ''}`;
+}
+$('#deliveryForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const errors = [];
+  if (!S.slot.date) { const m = 'Choose a delivery day'; setError('date', m); errors.push({ field: 'date', target: firstEnabled('date'), msg: m }); }
+  else setError('date', '');
+  if (!S.slot.window) { const m = S.slot.date ? 'Choose a time window' : 'Choose a time window (pick a day first)'; setError('window', m); errors.push({ field: 'window', target: S.slot.date ? firstEnabled('timeslot') : firstEnabled('date'), msg: m }); }
+  else setError('window', '');
+  if (errors.length) return showSummary('deliveryErrors', errors);
+  $('#deliveryErrors').hidden = true;
+  go('payment', true);
+});
+function firstEnabled(name) { const r = $(`input[name="${name}"]:not(:disabled)`); return r ? r.id : ''; }
+
+/* ---------------------------------------------------------
+   Step 4: Payment
+   --------------------------------------------------------- */
+const pf = $('#paymentForm');
+let paying = false, upiTimer = null, upiCountdown = null, attempts = 0;
+['upi', 'cc', 'ccname', 'exp', 'cvv', 'bank'].forEach(n => wireField(n));
+function renderReview() {
+  const a = S.address;
+  const access = +a.floor === 0 ? 'Ground floor' : `${$('#f-floor').options[+a.floor].text}, ${a.lift === 'yes' ? 'lift available' : a.lift === 'no' ? 'stairs only' : 'lift not confirmed'}`;
+  $('#review').innerHTML = `
+    <div class="review-row"><div><dt>Deliver to</dt><dd>${esc(a.name)}, +91 ${esc(a.phone)}<br>${esc(a.line1)}, ${esc(a.line2)}${a.landmark ? ', ' + esc(a.landmark) : ''}, ${esc(a.city)}, ${esc(a.state)} ${esc(a.pin)}<br>${esc(access)}</dd></div>
+      <a class="link-btn" href="#address">Change<span class="sr-only"> address</span></a></div>
+    <div class="review-row"><div><dt>Delivery</dt><dd>${slotText()}${S.assembly ? '<br>With assembly' : ''}</dd></div>
+      <a class="link-btn" href="#delivery">Change<span class="sr-only"> delivery time</span></a></div>`;
+  const t = totals(), codOk = t.total <= COD_LIMIT;
+  const cod = $('#m-cod');
+  cod.disabled = !codOk;
+  $('#m-cod-sub').textContent = codOk ? 'Cash or UPI when it arrives' : `Available for orders up to ${money(COD_LIMIT)}. This order is ${money(t.total)}.`;
+  if (!codOk && S.pay.method === 'cod') S.pay.method = '';
+  $$('input[name="method"]').forEach(r => r.checked = r.value === S.pay.method);
+  $('#f-upi').value = S.pay.upi || ''; $('#f-bank').value = S.pay.bank || ''; $('#f-ccname').value = S.pay.ccname || S.address.name || '';
+  syncMethod(false); payLabel();
+}
+function payLabel() {
+  const t = totals();
+  $('#payLabel').textContent = S.pay.method === 'cod' ? `Place order, pay ${money(t.total)} on delivery` : S.pay.method === 'netbanking' ? `Continue to bank to pay ${money(t.total)}` : `Pay ${money(t.total)}`;
+}
+function syncMethod(focusFirst) {
+  ['upi', 'card', 'netbanking', 'cod'].forEach(m => {
+    const open = S.pay.method === m;
+    $('#panel-' + m).hidden = !open;
+    $(`.method[data-method="${m}"]`).classList.toggle('open', open);
+  });
+  if (S.pay.method) setError('method', '');
+  payLabel();
+  if (focusFirst) { const f = $(`#panel-${S.pay.method} .input`); if (f && window.matchMedia('(pointer: fine)').matches) f.focus(); }
+}
+// Jump into the method's first field only after a pointer pick; arrow-key users stay in the radio group.
+let pickedByPointer = false;
+$('#methods').addEventListener('pointerdown', () => { pickedByPointer = true; });
+$('#methods').addEventListener('keydown', () => { pickedByPointer = false; });
+$('#methods').addEventListener('change', e => {
+  if (e.target.name === 'method') { S.pay.method = e.target.value; save(); syncMethod(pickedByPointer); hideAlert(); pickedByPointer = false; }
+});
+pf.addEventListener('input', e => {
+  if (e.target.id === 'f-upi') S.pay.upi = e.target.value.trim();
+  if (e.target.id === 'f-ccname') S.pay.ccname = e.target.value;
+  save();
+});
+$('#f-bank').addEventListener('change', e => { S.pay.bank = e.target.value; save(); });
+// Card number: group digits as you type, detect brand.
+$('#f-cc').addEventListener('input', e => {
+  const el = e.target, atEnd = el.selectionStart === el.value.length;
+  const d = digits(el.value).slice(0, 19), b = cardBrand(d);
+  const groups = b === 'amex' ? [4, 6, 5] : [4, 4, 4, 4, 3];
+  let out = '', i = 0; for (const g of groups) { if (i >= d.length) break; out += (out ? ' ' : '') + d.slice(i, i + g); i += g; }
+  el.value = out; if (atEnd) el.setSelectionRange(out.length, out.length);
+  $('#f-cc-brand').textContent = b ? BRAND_NAMES[b] : '';
+});
+$('#f-exp').addEventListener('input', e => {
+  const el = e.target; let d = digits(el.value).slice(0, 4);
+  if (d.length === 1 && +d > 1) d = '0' + d;
+  el.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
+});
+$('#f-cvv').addEventListener('input', e => { e.target.value = digits(e.target.value).slice(0, 4); });
+$('#f-pin').addEventListener('beforeinput', e => { if (e.data && /\D/.test(e.data.replace(/\s/g, ''))) e.preventDefault(); });
+// Test values
+$$('[data-fill]').forEach(b => b.addEventListener('click', () => {
+  const map = { ok: '4111111111111111', decline: '4000000000000002', error: '4000000000000119' };
+  S.pay.method = 'card'; $('#m-card').checked = true; syncMethod(false);
+  const cc = $('#f-cc'); cc.value = map[b.dataset.fill]; cc.dispatchEvent(new Event('input'));
+  const d = new Date(); $('#f-exp').value = String(d.getMonth() + 1).padStart(2, '0') + '/' + String((d.getFullYear() + 3) % 100).padStart(2, '0');
+  if (!$('#f-ccname').value) $('#f-ccname').value = S.address.name || 'Asha Rao';
+  $('#f-cvv').value = '123';
+  ['cc', 'ccname', 'exp', 'cvv'].forEach(n => setError(n, ''));
+  hideAlert(); $('#paymentErrors').hidden = true;
+  announce('Test card filled in. Press Pay to try it.');
+  $('#payBtn').focus();
+}));
+
+function hideAlert() { $('#payAlert').hidden = true; }
+function showAlert(kind, title, body, actions) {
+  const box = $('#payAlert');
+  box.className = 'alert' + (kind === 'info' ? ' info' : '');
+  $('#payAlertTitle span').textContent = title;
+  $('#payAlertBody').textContent = body;
+  const host = $('#payAlertActions'); host.innerHTML = '';
+  actions.forEach(([label, fn, primary]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn-small ' + (primary ? 'btn-primary' : 'btn-secondary'); b.textContent = label;
+    b.addEventListener('click', fn); host.appendChild(b);
+  });
+  box.hidden = false;
+  box.focus({ preventScroll: true });
+  box.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
+  if (kind !== 'info') Sound.play('soft-error');
+}
+function switchTo(method) {
+  hideAlert(); S.pay.method = method; save();
+  $$('input[name="method"]').forEach(r => r.checked = r.value === method); syncMethod(false);
+  const f = $(`#panel-${method} .input`) || $('#m-' + (method === 'netbanking' ? 'nb' : method)); f.focus();
+}
+function setPaying(on) {
+  paying = on;
+  const b = $('#payBtn');
+  b.disabled = on; b.setAttribute('aria-busy', String(on));
+  const ic = b.querySelector('.spinner, svg');
+  if (ic) ic.outerHTML = on ? '<span class="spinner" aria-hidden="true"></span>' : '<svg aria-hidden="true"><use href="#i-lock"/></svg>';
+  if (on) $('#payLabel').textContent = 'Processing…'; else payLabel();
+  $('#processingNote').hidden = !on;
+  $$('#paymentForm input, #paymentForm select, #paymentForm [data-back], #paymentForm [data-fill]').forEach(el => el.disabled = on || (el.id === 'm-cod' && totals().total > COD_LIMIT));
+  $$('#review a').forEach(a => { if (on) a.setAttribute('aria-disabled', 'true'); else a.removeAttribute('aria-disabled'); a.style.pointerEvents = on ? 'none' : ''; });
+}
+const wait = ms => new Promise(r => setTimeout(r, ms));
+// Simulated gateway. Outcomes are decided by the test values in the demo panel.
+async function gateway(method) {
+  if (!navigator.onLine) return { ok: false, code: 'offline' };
+  await wait(1600);
+  if (method === 'card') {
+    const d = digits($('#f-cc').value);
+    if (d === '4000000000000002') return { ok: false, code: 'declined' };
+    if (d === '4000000000000119') return { ok: false, code: 'bank_error' };
+    return { ok: true, ref: `${BRAND_NAMES[cardBrand(d)] || 'Card'} ending ${d.slice(-4)}` };
+  }
+  if (method === 'netbanking') return { ok: true, ref: `Net banking, ${S.pay.bank}` };
+  if (method === 'cod') return { ok: true, ref: 'Pay on delivery', cod: true };
+  return { ok: true };
+}
+pf.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (paying) return; // no double submits
+  hideAlert();
+  const errors = [];
+  const m = S.pay.method;
+  if (!m) { const msg = 'Choose how you would like to pay'; setError('method', msg); errors.push({ field: 'method', target: 'm-upi', msg }); }
+  const fields = m === 'upi' ? ['upi'] : m === 'card' ? ['cc', 'ccname', 'exp', 'cvv'] : m === 'netbanking' ? ['bank'] : [];
+  fields.forEach(n => { const msg = RULES[n]($('#f-' + n).value); setError(n, msg); touched.add(n); if (msg) errors.push({ field: n, target: 'f-' + n, msg }); });
+  if (errors.length) return showSummary('paymentErrors', errors);
+  $('#paymentErrors').hidden = true;
+  attempts++;
+  if (m === 'upi') return startUpi();
+  setPaying(true);
+  const res = await gateway(m);
+  setPaying(false);
+  if (res.ok) return placeOrder(res);
+  handleFailure(res.code, m);
+});
+function handleFailure(code, m) {
+  if (code === 'declined') {
+    $('#f-cvv').value = '';
+    showAlert('error', 'Your bank declined this card',
+      'Nothing was charged. Banks often decline large online payments or cards with a low limit. Your order and details are saved. You can try another card, or pay by UPI or net banking instead.',
+      [['Use a different card', () => { hideAlert(); const c = $('#f-cc'); c.value = ''; $('#f-cc-brand').textContent = ''; $('#f-cvv').value = ''; c.focus(); }, true],
+       ['Pay by UPI', () => switchTo('upi')], ['Pay by net banking', () => switchTo('netbanking')]]);
+    announceFail();
+  } else if (code === 'bank_error') {
+    showAlert('error', "Your bank didn't respond",
+      'Nothing was charged. This is usually a short outage at the bank. Your details are saved, so you can try again in a moment.',
+      [['Try again', () => { hideAlert(); $('#payBtn').focus(); pf.requestSubmit(); }, true], ['Pay by UPI', () => switchTo('upi')]]);
+  } else if (code === 'offline') {
+    showAlert('error', "You're offline",
+      "Nothing was charged. Check your internet connection, then press Pay again. Everything you've entered is saved.",
+      [['Try again', () => { hideAlert(); pf.requestSubmit(); }, true]]);
+  } else if (code === 'upi_declined') {
+    showAlert('error', 'The UPI payment was declined',
+      'Nothing was charged. The request was declined in the UPI app or the daily UPI limit was reached. Check the UPI ID, or pay another way.',
+      [['Check UPI ID and retry', () => { hideAlert(); $('#f-upi').focus(); $('#f-upi').select(); }, true], ['Pay by card', () => switchTo('card')], ['Pay by net banking', () => switchTo('netbanking')]]);
+  } else if (code === 'upi_cancelled') {
+    showAlert('info', 'Payment request cancelled', 'Nothing was charged. Your order is still here whenever you are ready.',
+      [['Send the request again', () => { hideAlert(); pf.requestSubmit(); }, true], ['Pay another way', () => { hideAlert(); $('#m-upi').focus(); }]]);
+  }
+}
+function announceFail() { /* alert role already announces; keep hook for analytics */ }
+
+function startUpi() {
+  const id = $('#f-upi').value.trim();
+  pf.hidden = true; hideAlert();
+  $('#upiWaiting').hidden = false; $('#upiWaitId').textContent = id;
+  $('#upiWaitTitle').focus();
+  let left = 300;
+  const tick = () => { const m = Math.floor(left / 60), s = String(left % 60).padStart(2, '0'); $('#upiClock').textContent = `${m}:${s}`; if (left % 60 === 0) $('#upiClockSr').textContent = `${m} minutes left to approve.`; left--; if (left < 0) endUpi('upi_cancelled'); };
+  tick(); upiCountdown = setInterval(tick, 1000);
+  paying = true;
+  upiTimer = setTimeout(() => {
+    if (!navigator.onLine) return endUpi('offline');
+    if (/^decline@/i.test(id)) return endUpi('upi_declined');
+    endUpi(null, { ok: true, ref: `UPI, ${id}` });
+  }, 3800);
+}
+function endUpi(code, res) {
+  clearTimeout(upiTimer); clearInterval(upiCountdown); paying = false;
+  $('#upiWaiting').hidden = true; pf.hidden = false;
+  if (res && res.ok) return placeOrder(res);
+  handleFailure(code, 'upi');
+}
+$('#upiCancel').addEventListener('click', () => endUpi('upi_cancelled'));
+
+function placeOrder(res) {
+  const t = totals();
+  S.order = {
+    no: 'AO-' + String(Math.floor(100000 + Math.random() * 900000)),
+    total: t.total, gst: t.gst, assembly: S.assembly, cod: !!res.cod, ref: res.ref || '', placedAt: Date.now(),
+    cart: S.cart.map(x => ({ ...x })), address: { ...S.address }, slot: { ...S.slot },
+  };
+  S.pay = { method: '', upi: '', bank: '', ccname: '' };
+  ['f-cc', 'f-cvv', 'f-exp'].forEach(id => $('#' + id).value = '');
+  save(); Sound.play('chime'); go('done', true);
+}
+
+/* ---------------------------------------------------------
+   Step 5: Confirmation
+   --------------------------------------------------------- */
+function renderDone() {
+  const o = S.order; if (!o) return;
+  const a = o.address, w = WINDOWS.find(x => x.id === o.slot.window);
+  const day = fmtDay.format(parseIso(o.slot.date));
+  $('#orderNo').textContent = o.no;
+  $('#doneLead').textContent = `Thank you, ${a.name.split(' ')[0]}. We'll bring everything on ${day}, between ${w.label}.`;
+  $('#doneSlot').innerHTML = `<strong>${day}</strong>, ${w.label}${o.assembly ? ', with assembly' : ''}`;
+  $('#doneAddress').textContent = `${a.line1}, ${a.line2}${a.landmark ? ', ' + a.landmark : ''}, ${a.city}, ${a.state} ${a.pin}`;
+  $('#doneAccess').textContent = +a.floor === 0 ? 'Ground floor' : `${$('#f-floor').options[+a.floor].text}, ${a.lift === 'yes' ? 'lift available' : a.lift === 'no' ? 'stairs only' : 'lift to be confirmed on the call'}`;
+  $('#donePaid').innerHTML = o.cod ? `<strong>${money(o.total)}</strong> to pay on delivery (cash or UPI)` : `<strong>${money(o.total)}</strong> paid${o.ref ? ' by ' + esc(o.ref) : ''}`;
+  $('#doneItems').textContent = o.cart.map(l => `${product(l.id).name}${l.qty > 1 ? ' × ' + l.qty : ''}`).join(', ') + `. Includes ${money(o.gst)} GST.`;
+  $('#nextSteps').innerHTML = [
+    `We've emailed your receipt to <strong>${esc(a.email)}</strong>.`,
+    `The day before, we'll text <strong>+91 ${esc(a.phone)}</strong> to confirm the ${w.label} window.`,
+    `About 30 minutes before arriving, our team calls. They carry everything to your room${o.assembly ? ', assemble it' : ''} and take the packaging away.`,
+  ].map(x => `<li><span>${x}</span></li>`).join('');
+  // Room scene: the pieces that were ordered arrive.
+  const has = id => o.cart.some(l => l.id === id);
+  $('#room').innerHTML = `<svg viewBox="0 0 400 190" role="img" aria-label="Illustration: your new pieces in a sunlit room">
+    <rect x="0" y="0" width="400" height="190" fill="var(--surface-2)"/>
+    <rect class="ill-f2" x="262" y="22" width="78" height="92" rx="2"/>
+    <path class="ill-thin" d="M301 22v92M262 68h78"/>
+    <path d="M262 114 L230 170 L372 170 L340 114Z" fill="var(--surface)" opacity=".55"/>
+    <path class="ill-s" d="M0 162h400"/>
+    <ellipse cx="170" cy="168" rx="120" ry="9" fill="var(--illus-fill)" opacity=".7"/>
+    ${has('lamp') ? `<g class="arrive a3"><path class="ill-s" d="M120 0v10"/><use href="#ill-lamp" x="95" y="0" width="50" height="50"/></g>` : ''}
+    ${has('sofa') ? `<g class="arrive"><use href="#ill-sofa" x="60" y="72" width="150" height="94"/></g>` : ''}
+    ${has('chair') ? `<g class="arrive a2"><use href="#ill-chair" x="214" y="94" width="78" height="66"/></g>` : ''}
+  </svg>`;
+}
+$('#printBtn').addEventListener('click', () => window.print());
+$('#newOrderBtn').addEventListener('click', () => {
+  const keep = { ...S.address };
+  S = blank(); S.address = keep; save();
+  toast('Started a new order with the sample pieces. Your address is kept.');
+  go('cart', true);
+});
+$('#icsBtn').addEventListener('click', () => {
+  const o = S.order; if (!o) return;
+  const w = WINDOWS.find(x => x.id === o.slot.window), [y, m, d] = o.slot.date.split('-').map(Number);
+  // Times are IST (UTC+5:30); convert to UTC for the calendar file.
+  const utc = h => { const t = new Date(Date.UTC(y, m - 1, d, h, 0) - 330 * 60000); return t.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
+  const a = o.address;
+  const loc = `${a.line1}, ${a.line2}, ${a.city}, ${a.state} ${a.pin}`.replace(/,/g, '\\,');
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Aangan & Oak demo//Checkout//EN', 'BEGIN:VEVENT',
+    `UID:${o.no}@aangan-oak.example`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`,
+    `DTSTART:${utc(w.from)}`, `DTEND:${utc(w.to)}`, `SUMMARY:Furniture delivery (${o.no})`,
+    `LOCATION:${loc}`, `DESCRIPTION:Aangan & Oak delivery. The team will call about 30 minutes before arriving.`,
+    'BEGIN:VALARM', 'TRIGGER:-PT1H', 'ACTION:DISPLAY', 'DESCRIPTION:Furniture delivery in 1 hour', 'END:VALARM',
+    'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  const link = document.createElement('a'); link.href = url; link.download = `delivery-${o.no}.ics`; document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  toast('Calendar file downloaded. Open it to add the delivery to your calendar.');
+});
+
+/* ---------------------------------------------------------
+   Router
+   --------------------------------------------------------- */
+const idxOf = id => STEPS.findIndex(s => s.id === id);
+function go(id, push) {
+  if (push) { if (location.hash !== '#' + id) { location.hash = id; return; } }
+  show(id);
+}
+function allowed(id) {
+  if (S.order) return 'done';
+  const i = idxOf(id);
+  if (i < 0 || id === 'done') return allowed(STEPS[Math.min(S.reached, 3)].id);
+  // Can't skip ahead; also can't continue without items.
+  // A step opens only when every earlier step is complete (no skipping ahead).
+  for (let k = 1; k <= i; k++) if (!canEnter(STEPS[k].id)) return STEPS[k - 1].id;
+  return id;
+}
+function canEnter(id) {
+  if (id === 'address') return S.cart.length > 0;
+  if (id === 'delivery') return !['name', 'phone', 'email', 'pin', 'line1', 'line2', 'city', 'state'].some(n => RULES[n](S.address[n] || ''));
+  if (id === 'payment') return !!(S.slot.date && S.slot.window);
+  return false;
+}
+let firstShow = true;
+function show(want) {
+  if (paying) { history.replaceState(null, '', '#payment'); return; }
+  const id = allowed(want);
+  if (id !== want) { history.replaceState(null, '', '#' + id); }
+  const prev = S.step;
+  if (prev !== id) $('#toasts').replaceChildren();
+  S.step = id; S.reached = Math.max(S.reached, idxOf(id)); save();
+  $$('.step').forEach(s => s.hidden = s.dataset.step !== id);
+  if (id === 'cart') renderCart();
+  if (id === 'address') fillAddress();
+  if (id === 'delivery') { renderDates(); $('#f-assembly').checked = S.assembly; }
+  if (id === 'payment') renderReview();
+  if (id === 'done') renderDone();
+  renderPath(); renderSummary();
+  const sec = document.getElementById('step-' + id);
+  sec.style.animation = 'none'; void sec.offsetWidth; sec.style.animation = '';
+  if (!firstShow) {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    $('h1', sec).focus({ preventScroll: true });
+    const i = idxOf(id);
+    announce(id === 'done' ? `Order placed. ${$('#h-done').textContent}` : `Step ${i + 1} of 5: ${STEPS[i].label}`);
+    if (prev !== id && id !== 'done') Sound.play('tick');
+  }
+  document.title = (id === 'done' ? 'Order placed' : `${STEPS[idxOf(id)].label} (step ${idxOf(id) + 1} of 5)`) + ' · Aangan & Oak';
+  firstShow = false;
+}
+window.addEventListener('hashchange', () => show(location.hash.slice(1) || 'cart'));
+$$('[data-back]').forEach(b => b.addEventListener('click', () => { const i = idxOf(S.step); if (i > 0) go(STEPS[i - 1].id, true); }));
+window.addEventListener('beforeunload', e => { if (paying) { e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------------------------------------------------------
+   Init
+   --------------------------------------------------------- */
+$('#soundBtn').addEventListener('click', () => Sound.toggle());
+Sound.init(); paintTheme();
+show((location.hash.slice(1)) || S.step || 'cart');
+})();
+</script>
+</body>
+</html>

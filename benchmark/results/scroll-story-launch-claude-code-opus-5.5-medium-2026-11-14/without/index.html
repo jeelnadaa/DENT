@@ -1,0 +1,1116 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.remove('no-js')</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tidal — Irregular income. Regular paycheck.</title>
+<meta name="description" content="Tidal catches every invoice the moment it lands, sets aside your taxes, and pays you the same amount every month. Built for freelancers.">
+<meta name="theme-color" content="#0A1C26">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%230A1C26'/%3E%3Cpath d='M6.5 14.5l3.2-5 2.6 6.2 3.2-8.2 3 8 2.6-3.6 3.6 2.6' fill='none' stroke='%23F3A73B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M6.5 21.5c3.2-1.6 6.3-1.6 9.5 0s6.3 1.6 9.5 0' fill='none' stroke='%235FD4BF' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A1C26; --ink-2:#0F2836; --ink-3:#163A4D; --ink-line:rgba(221,241,234,.14);
+  --paper:#FBF8F2; --sand:#F4EDE1; --sand-2:#EADFCB; --line:rgba(10,28,38,.12);
+  --text:#0A1C26; --muted:#4A5F6B; --foam:#DDF1EA; --foam-dim:rgba(221,241,234,.72);
+  --tide:#2CB5A0; --tide-2:#5FD4BF; --deep:#0E6B60;
+  --sun:#F3A73B; --coral:#EC6A50; --violet:#9C8CFF;
+  --serif:"Fraunces", "Iowan Old Style", Georgia, serif;
+  --sans:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r:22px; --maxw:1200px; --gut:clamp(16px,4vw,40px);
+  --shadow:0 1px 2px rgba(10,28,38,.06),0 12px 40px -12px rgba(10,28,38,.22);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--tide);outline-offset:3px;border-radius:6px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+.skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;transition:top .2s}
+.skip:focus{top:12px}
+.eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--deep);margin:0 0 14px}
+h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-.02em;line-height:1.04;margin:0;font-variation-settings:"opsz" 144}
+h2{font-size:clamp(2rem,4.6vw,3.6rem)}
+em{font-style:italic;font-weight:400}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;min-height:48px;padding:0 22px;border-radius:999px;border:0;font-weight:600;font-size:1rem;text-decoration:none;transition:transform .2s cubic-bezier(.2,.8,.2,1),background .2s,box-shadow .2s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--ink);color:var(--paper);box-shadow:0 8px 24px -10px rgba(10,28,38,.6)}
+.btn-primary:hover{background:var(--ink-3);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn-tide{background:var(--tide-2);color:var(--ink)}
+.btn-tide:hover{background:#7fe0cf;transform:translateY(-1px)}
+.btn svg{width:18px;height:18px}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:transform .35s cubic-bezier(.2,.8,.2,1),background .3s,box-shadow .3s;padding-top:env(safe-area-inset-top)}
+.nav.is-scrolled{background:rgba(251,248,242,.82);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);box-shadow:0 1px 0 var(--line)}
+.nav.is-hidden{transform:translateY(-110%)}
+.nav-in{display:flex;align-items:center;gap:24px;height:68px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--serif);font-size:1.45rem;font-weight:600;letter-spacing:-.02em}
+.logo svg{width:32px;height:32px}
+.nav-links{display:flex;gap:28px;margin-left:auto;font-size:.95rem;font-weight:500}
+.nav-links a{text-decoration:none;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav .btn{min-height:42px;padding:0 18px;font-size:.92rem}
+@media (max-width:820px){.nav-links{display:none}.nav .btn{margin-left:auto}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:calc(120px + env(safe-area-inset-top)) 0 0;background:radial-gradient(1200px 600px at 85% 10%,rgba(95,212,191,.20),transparent 60%),radial-gradient(900px 500px at 0% 0%,rgba(243,167,59,.16),transparent 60%),var(--paper);overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,5vw,72px);align-items:center;position:relative;z-index:2}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:6px 14px 6px 8px;border-radius:999px;background:#fff;box-shadow:var(--shadow);font-size:.85rem;font-weight:500;color:var(--muted);margin-bottom:26px}
+.pill b{background:var(--ink);color:var(--paper);font-weight:600;border-radius:999px;padding:2px 10px;font-size:.75rem;letter-spacing:.04em}
+.hero h1{font-size:clamp(2.9rem,8vw,6.4rem);line-height:.95;letter-spacing:-.035em;font-weight:450}
+.hero h1 .spiky{color:var(--sun);font-style:normal;display:inline-block}
+.hero h1 em{color:var(--deep)}
+.hero-lede{font-size:clamp(1.05rem,1.6vw,1.25rem);color:var(--muted);max-width:33ch;margin:26px 0 34px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.hero-proof{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:40px;font-size:.9rem;color:var(--muted)}
+.hero-proof span{display:flex;align-items:center;gap:8px}
+.hero-proof svg{width:18px;height:18px;color:var(--tide)}
+.hero-waves{position:relative;height:clamp(140px,20vw,240px);margin-top:clamp(20px,5vw,60px);z-index:1}
+.hero-waves svg{position:absolute;inset:0;width:100%;height:100%}
+.hero-waves .lbl{position:absolute;bottom:58%;font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.hero-waves .lbl-l{left:var(--gut);color:#b97316}
+.hero-waves .lbl-r{right:var(--gut);color:var(--deep);bottom:40%}
+
+/* phone */
+.phone-wrap{position:relative;justify-self:center;width:min(340px,86vw)}
+.phone{position:relative;aspect-ratio:9/19;border-radius:48px;background:#0b141a;padding:11px;box-shadow:0 50px 100px -30px rgba(10,28,38,.55),0 0 0 1.5px rgba(255,255,255,.08) inset;transform:rotate(2.5deg);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.phone:hover{transform:rotate(0)}
+.phone::before{content:"";position:absolute;top:21px;left:50%;width:90px;height:26px;border-radius:20px;background:#000;transform:translateX(-50%);z-index:3}
+.screen{position:relative;height:100%;border-radius:38px;overflow:hidden;background:linear-gradient(180deg,#0F2836 0%,#0A1C26 100%);color:var(--foam);padding:54px 16px 16px;display:flex;flex-direction:column;gap:10px;font-size:12px}
+.sc-top{display:flex;justify-content:space-between;align-items:center;position:absolute;top:16px;left:30px;right:26px;font-weight:600;font-size:12px}
+.sc-hello{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.sc-hello p{margin:0;font-family:var(--serif);font-size:17px}
+.sc-ava{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--sun),var(--coral))}
+.card{background:rgba(221,241,234,.06);border:1px solid var(--ink-line);border-radius:18px;padding:12px 14px;position:relative;overflow:hidden}
+.card .k{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--foam-dim);margin:0}
+.pay-amt{font-family:var(--serif);font-size:34px;line-height:1.05;margin:4px 0 2px;color:#fff;font-variant-numeric:tabular-nums}
+.pay-amt span{font-size:18px;color:var(--foam-dim)}
+.pay-sub{margin:0;color:var(--tide-2);font-size:11px}
+.minibars{display:flex;gap:4px;align-items:flex-end;height:26px;margin-top:10px}
+.minibars i{flex:1;height:60%;background:var(--tide-2);border-radius:3px;opacity:.85}
+.minibars i:nth-child(12){opacity:.35}
+.pool-card{height:96px}
+.pool-card .k,.pool-card .pool-amt,.pool-card .pool-sub{position:relative;z-index:2}
+.pool-amt{font-family:var(--serif);font-size:24px;color:#fff;margin:2px 0 0}
+.pool-sub{margin:0;font-size:11px;color:var(--foam-dim)}
+.pool-water{position:absolute;left:0;right:0;bottom:0;height:52%;z-index:1}
+.pool-water svg{position:absolute;bottom:0;left:0;width:200%;height:100%;animation:drift 6s linear infinite}
+.pool-water svg+svg{animation-duration:9s;opacity:.5}
+@keyframes drift{to{transform:translateX(-50%)}}
+.sc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sc-row .card p{margin:0}
+.mini-amt{font-family:var(--serif);font-size:18px;color:#fff;margin-top:2px!important}
+.ok{color:var(--tide-2);font-size:10.5px}
+.feed{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.feed-i{display:flex;gap:10px;align-items:center;padding:4px 2px}
+.feed-i .dot{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:rgba(243,167,59,.15);color:var(--sun);flex:none;font-weight:700}
+.feed-i p{margin:0;line-height:1.3}
+.feed-i small{color:var(--foam-dim);font-size:10px}
+.feed-i b{margin-left:auto;color:#fff;font-weight:600}
+.toast{position:absolute;left:-14%;top:38%;width:min(250px,70vw);background:#fff;color:var(--ink);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);font-size:.82rem;line-height:1.35;display:flex;gap:10px;align-items:flex-start;z-index:4;animation:toast 7s cubic-bezier(.2,.8,.2,1) infinite}
+.toast .ic{width:32px;height:32px;flex:none;border-radius:10px;background:var(--ink);display:grid;place-items:center}
+.toast .ic svg{width:20px;height:20px}
+.toast b{display:block;font-size:.88rem}
+.toast .split{display:flex;gap:6px;margin-top:6px}
+.toast .split span{font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px}
+.toast .t1{background:rgba(44,181,160,.16);color:var(--deep)}
+.toast .t2{background:rgba(156,140,255,.18);color:#5b4bd1}
+@keyframes toast{0%,6%{opacity:0;transform:translateY(14px) scale(.96)}12%,80%{opacity:1;transform:none}88%,100%{opacity:0;transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.toast,.pool-water svg{animation:none}}
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:1fr}
+  .phone-wrap{margin-top:40px;width:min(310px,78vw)}
+  .toast{left:-8%;top:auto;bottom:18%}
+}
+
+/* ---------- logos strip ---------- */
+.made{background:var(--ink);color:var(--foam-dim);padding:22px 0;font-size:.9rem;overflow:hidden}
+.made-track{display:flex;gap:44px;white-space:nowrap;animation:marquee 40s linear infinite;width:max-content}
+.made-track span{display:inline-flex;align-items:center;gap:44px}
+.made-track span::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--tide)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.made-track{animation:none}}
+
+/* ---------- story ---------- */
+.story-intro{background:var(--ink);color:var(--foam);padding:clamp(80px,12vw,150px) 0 clamp(40px,6vw,70px);text-align:center;position:relative}
+.story-intro .eyebrow{color:var(--tide-2)}
+.story-intro h2{color:#fff;max-width:16ch;margin:0 auto}
+.story-intro p{color:var(--foam-dim);max-width:52ch;margin:22px auto 0;font-size:1.08rem}
+.scroll-cue{display:inline-flex;flex-direction:column;align-items:center;gap:10px;margin-top:44px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--foam-dim)}
+.scroll-cue i{width:2px;height:46px;background:linear-gradient(var(--tide-2),transparent);border-radius:2px;animation:cue 2s ease-in-out infinite;transform-origin:top}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.skip-story{display:inline-block;margin-top:18px;color:var(--foam-dim);font-size:.85rem}
+
+#story{position:relative;height:760vh;background:var(--ink);color:var(--foam)}
+.story-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(900px 700px at 70% 60%,rgba(44,181,160,.14),transparent 70%),radial-gradient(700px 500px at 20% 0%,rgba(243,167,59,.08),transparent 70%),var(--ink)}
+#storyCanvas{position:absolute;inset:0;width:100%;height:100%}
+.hud{position:absolute;top:calc(16px + env(safe-area-inset-top));left:16px;right:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;z-index:3}
+.hud div{background:rgba(221,241,234,.05);border:1px solid var(--ink-line);border-radius:14px;padding:8px 10px;min-width:0}
+.hud dt{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--foam-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.hud dt::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
+.hud dd{margin:2px 0 0;font-family:var(--serif);font-size:clamp(.95rem,3.6vw,1.45rem);color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.captions{position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));display:grid;z-index:3;background:rgba(10,28,38,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--ink-line);border-radius:20px;padding:14px 16px 16px}
+.rail{display:flex;gap:6px;margin-bottom:12px;grid-area:1/1;align-self:start}
+.rail button{flex:1;height:18px;border:0;background:none;padding:0;position:relative}
+.rail button::before,.rail button::after{content:"";position:absolute;left:0;top:7px;height:4px;border-radius:4px}
+.rail button::before{right:0;background:rgba(221,241,234,.16)}
+.rail button::after{width:calc(var(--f,0)*100%);background:var(--tide-2)}
+.caps{grid-area:1/1;display:grid;margin-top:30px}
+.cap{grid-area:1/1;opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.cap.is-on{opacity:1;transform:none}
+.cap .kick{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--sun);margin:0 0 8px}
+.cap h3{color:#fff;font-size:clamp(1.3rem,5vw,1.6rem);line-height:1.1}
+.cap p{margin:8px 0 0;color:var(--foam-dim);font-size:.93rem;line-height:1.5}
+.cap .num{color:#fff;font-weight:600}
+.cap .k-tax{color:var(--violet)} .cap .k-tide{color:var(--tide-2)} .cap .k-coral{color:var(--coral)}
+@media (min-width:900px), (min-width:640px) and (min-aspect-ratio:5/4){
+  .captions{left:max(var(--gut),calc((100vw - var(--maxw))/2 + var(--gut)));right:auto;top:50%;bottom:auto;transform:translateY(-50%);width:clamp(270px,32vw,430px);background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0}
+  .caps{margin-top:40px}
+  .cap h3{font-size:clamp(1.6rem,3vw,2.6rem)}
+  .cap p{font-size:clamp(.95rem,1.25vw,1.1rem);margin-top:14px}
+  .cap .kick{font-size:.78rem;margin-bottom:14px}
+  .hud{right:auto;gap:10px}
+  .hud div{padding:10px 14px}
+  .hud dt{font-size:.68rem}
+}
+@media (min-width:640px) and (max-height:540px) and (min-aspect-ratio:5/4){
+  .cap h3{font-size:1.35rem}.cap p{font-size:.85rem;margin-top:8px}.caps{margin-top:26px}
+  .hud div{padding:6px 10px}.hud dd{font-size:1rem}
+}
+
+/* ---------- sections ---------- */
+.section{padding:clamp(80px,11vw,150px) 0}
+.sec-head{max-width:720px;margin-bottom:clamp(40px,6vw,70px)}
+.sec-head p:not(.eyebrow){color:var(--muted);font-size:1.12rem;margin:20px 0 0;max-width:56ch}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.step{background:#fff;border-radius:var(--r);padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.step-n{font-family:var(--serif);font-size:3.4rem;line-height:1;color:var(--sand-2);font-weight:400}
+.step h3{font-size:1.55rem;margin:18px 0 10px}
+.step p{margin:0;color:var(--muted)}
+.step-vis{height:90px;margin:20px 0 4px}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+
+/* calc */
+.calc-sec{background:var(--sand)}
+.calc{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}
+.calc-board{background:var(--ink);border-radius:var(--r);padding:clamp(18px,3vw,32px);color:var(--foam);position:relative}
+.calc-hint{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.85rem;color:var(--foam-dim);margin-bottom:16px;flex-wrap:wrap}
+.calc-hint b{color:#fff;font-weight:600}
+.calc-legend{display:flex;gap:14px}
+.calc-legend span{display:inline-flex;align-items:center;gap:6px}
+.calc-legend i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.calc-chart{position:relative;height:clamp(220px,34vw,320px);display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(4px,1vw,10px);touch-action:none;user-select:none;-webkit-user-select:none;border-bottom:1px solid var(--ink-line);cursor:ns-resize}
+.calc-chart::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to top,transparent 0,transparent calc(20% - 1px),rgba(221,241,234,.07) calc(20% - 1px),rgba(221,241,234,.07) 20%);pointer-events:none}
+.cbar{position:relative;height:100%;display:flex;align-items:flex-end;border-radius:8px 8px 0 0;outline-offset:2px}
+.cbar-fill{width:100%;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#ffc56b,var(--sun));transition:height .12s ease-out,background .3s;min-height:3px}
+.cbar.is-low .cbar-fill{background:linear-gradient(180deg,#ff8f77,var(--coral))}
+.cbar-tip{position:absolute;left:50%;transform:translate(-50%,-6px);bottom:var(--h);font-size:.7rem;font-weight:600;color:#fff;background:var(--ink-3);padding:2px 6px;border-radius:6px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;z-index:2}
+.cbar:hover .cbar-tip,.cbar:focus-visible .cbar-tip,.cbar.is-drag .cbar-tip{opacity:1}
+.calc-line{position:absolute;left:-6px;right:-6px;height:0;border-top:2.5px solid var(--tide-2);bottom:0;transition:bottom .35s cubic-bezier(.2,.8,.2,1);pointer-events:none;box-shadow:0 0 18px rgba(95,212,191,.6);z-index:3}
+.calc-line span{position:absolute;right:6px;bottom:6px;font-size:.75rem;font-weight:700;color:var(--ink);background:var(--tide-2);padding:3px 9px;border-radius:999px;white-space:nowrap}
+.calc-months{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(4px,1vw,10px);margin-top:8px;font-size:.72rem;color:var(--foam-dim);text-align:center}
+.calc-panel{background:#fff;border-radius:var(--r);padding:clamp(22px,3vw,34px);box-shadow:var(--shadow);display:flex;flex-direction:column}
+.calc-k{margin:0;font-size:.85rem;color:var(--muted);font-weight:500}
+.calc-big{font-family:var(--serif);font-size:clamp(3rem,6vw,4.6rem);line-height:1;margin:8px 0 2px;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.calc-unit{margin:0 0 22px;color:var(--deep);font-weight:600}
+.seg{display:flex;background:var(--sand);border-radius:999px;padding:4px;gap:4px;margin-bottom:22px}
+.seg button{flex:1;border:0;background:none;border-radius:999px;min-height:38px;font-weight:600;font-size:.9rem;color:var(--muted);transition:background .2s,color .2s}
+.seg button[aria-checked="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(10,28,38,.12)}
+.seg-label{font-size:.8rem;color:var(--muted);margin:0 0 8px;font-weight:500}
+.calc-stats{margin:0 0 24px;display:grid;gap:0}
+.calc-stats div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line);font-size:.95rem}
+.calc-stats dt{color:var(--muted)}
+.calc-stats dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.calc-stats .strike{color:var(--coral);text-decoration:line-through;font-weight:500;margin-right:6px}
+.calc-actions{display:flex;gap:10px;margin-top:auto;flex-wrap:wrap}
+.calc-actions .btn{flex:1;min-height:44px;font-size:.92rem}
+@media (max-width:900px){.calc{grid-template-columns:1fr}}
+
+/* features */
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+.feat article{background:var(--paper);padding:clamp(24px,3vw,36px);transition:background .3s}
+.feat article:hover{background:#fff}
+.feat .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--bg);color:var(--fg);margin-bottom:22px}
+.feat .ic svg{width:24px;height:24px}
+.feat h3{font-size:1.35rem;margin-bottom:8px}
+.feat p{margin:0;color:var(--muted);font-size:.98rem}
+@media (max-width:900px){.feat{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.feat{grid-template-columns:1fr}}
+
+/* quotes */
+.quotes-sec{background:var(--ink);color:var(--foam)}
+.quotes-sec .eyebrow{color:var(--tide-2)}
+.quotes-sec h2{color:#fff}
+.quotes{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:20px}
+.quote{background:rgba(221,241,234,.05);border:1px solid var(--ink-line);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;gap:22px;margin:0}
+.quote blockquote{margin:0;font-family:var(--serif);font-size:1.25rem;line-height:1.35;color:#fff;font-weight:400}
+.quote.big blockquote{font-size:clamp(1.4rem,2.2vw,1.85rem)}
+.quote figcaption{display:flex;align-items:center;gap:12px;margin-top:auto;font-size:.9rem;color:var(--foam-dim)}
+.quote figcaption b{display:block;color:#fff;font-weight:600}
+.av{width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;color:var(--ink);background:var(--c)}
+.spark{height:46px;margin:0}
+@media (max-width:900px){.quotes{grid-template-columns:1fr}}
+
+/* pricing */
+.price-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px);align-items:center}
+.price{background:#fff;border-radius:28px;padding:clamp(26px,4vw,44px);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.price::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(95,212,191,.35),transparent 70%)}
+.price .tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:5px 12px;border-radius:999px}
+.price .amt{font-family:var(--serif);font-size:clamp(3.4rem,7vw,5rem);line-height:1;margin:20px 0 4px;letter-spacing:-.03em}
+.price .amt small{font-size:1.1rem;color:var(--muted);font-family:var(--sans);letter-spacing:0}
+.price ul{list-style:none;padding:0;margin:24px 0 30px;display:grid;gap:12px}
+.price li{display:flex;gap:12px;align-items:flex-start}
+.price li svg{width:20px;height:20px;flex:none;color:var(--tide);margin-top:3px}
+.price .btn{width:100%}
+.price-note{font-size:.85rem;color:var(--muted);margin:14px 0 0;text-align:center}
+@media (max-width:860px){.price-wrap{grid-template-columns:1fr}}
+
+/* faq */
+.faq{max-width:820px}
+.faq details{border-top:1px solid var(--line)}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-family:var(--serif);font-size:clamp(1.15rem,2vw,1.4rem);font-weight:500}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{width:30px;height:30px;flex:none;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);position:relative;transition:transform .3s,background .3s}
+.faq summary i::before,.faq summary i::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.8px;background:var(--ink);transform:translate(-50%,-50%)}
+.faq summary i::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .3s}
+.faq details[open] summary i{background:var(--ink)}
+.faq details[open] summary i::before,.faq details[open] summary i::after{background:#fff}
+.faq details[open] summary i::after{transform:translate(-50%,-50%) rotate(0)}
+.faq details p{margin:0 0 24px;color:var(--muted);max-width:64ch}
+
+/* cta */
+.cta{background:var(--ink);color:var(--foam);position:relative;overflow:hidden;text-align:center}
+.cta h2{color:#fff;max-width:14ch;margin:0 auto}
+.cta p.lead{color:var(--foam-dim);max-width:46ch;margin:22px auto 36px;font-size:1.1rem}
+.cta-bg{position:absolute;left:0;bottom:0;width:100%;max-width:none;height:60%;pointer-events:none;opacity:.9}
+.cta .wrap{position:relative;z-index:2}
+.form{display:flex;gap:10px;max-width:520px;margin:0 auto;background:rgba(221,241,234,.08);border:1px solid var(--ink-line);border-radius:999px;padding:6px}
+.form input{flex:1;min-width:0;background:none;border:0;color:#fff;font:inherit;padding:0 18px;min-height:48px}
+.form input::placeholder{color:rgba(221,241,234,.5)}
+.form input:focus{outline:none}
+.form:focus-within{border-color:var(--tide-2);box-shadow:0 0 0 4px rgba(95,212,191,.18)}
+.form-msg{min-height:1.6em;margin:14px 0 0;font-size:.92rem;color:var(--foam-dim)}
+.form-msg.err{color:#ff9f8a}
+.form-done{display:none;max-width:520px;margin:0 auto;padding:22px;border-radius:22px;background:rgba(95,212,191,.12);border:1px solid rgba(95,212,191,.35)}
+.form-done b{display:block;font-family:var(--serif);font-size:1.5rem;color:#fff;font-weight:500;margin-bottom:6px}
+.is-done .form,.is-done .form-msg{display:none}
+.is-done .form-done{display:block;animation:pop .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:scale(.95)}}
+@media (max-width:520px){.form{flex-direction:column;border-radius:22px}.form input{min-height:50px;text-align:center}.form .btn{width:100%}}
+
+footer{background:var(--ink);color:var(--foam-dim);padding:40px 0 calc(40px + env(safe-area-inset-bottom));font-size:.88rem;border-top:1px solid var(--ink-line)}
+.foot{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+.foot .logo{color:#fff;font-size:1.2rem}
+.foot nav{display:flex;gap:22px;flex-wrap:wrap}
+.foot a{text-decoration:none}.foot a:hover{color:#fff}
+.fine{margin:26px 0 0;font-size:.78rem;max-width:80ch;opacity:.7}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+.no-js .rv{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#0A1C26"/><path d="M6.5 14.5l3.2-5 2.6 6.2 3.2-8.2 3 8 2.6-3.6 3.6 2.6" fill="none" stroke="#F3A73B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 21.5c3.2-1.6 6.3-1.6 9.5 0s6.3 1.6 9.5 0" fill="none" stroke="#5FD4BF" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="currentColor" opacity=".15"/><path d="M6 10.3l2.6 2.6L14 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label="Tidal home"><svg aria-hidden="true"><use href="#logo"/></svg>Tidal</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#story-intro">How it flows</a>
+      <a href="#try">Try it</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary" href="#waitlist">Get early access</a>
+  </div>
+</header>
+
+<main id="main">
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="pill"><b>NEW</b> Early access for freelancers is open</p>
+      <h1>Irregular income.<br><em>Regular</em> paycheck.</h1>
+      <p class="hero-lede">Tidal catches every invoice the moment it lands, sets your taxes aside, and pays you the same amount on the 1st of every month. Feast or famine, smoothed out.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#waitlist">Get early access</a>
+        <a class="btn btn-ghost" href="#story-intro">See how it flows
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12m0 0l-5-5m5 5l5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="hero-proof">
+        <span><svg aria-hidden="true"><use href="#check"/></svg>One paycheck, every month</span>
+        <span><svg aria-hidden="true"><use href="#check"/></svg>Taxes set aside automatically</span>
+        <span><svg aria-hidden="true"><use href="#check"/></svg>Works with the bank you have</span>
+      </div>
+    </div>
+
+    <div class="phone-wrap" aria-label="Tidal app preview" role="img">
+      <div class="phone" aria-hidden="true">
+        <div class="screen">
+          <div class="sc-top"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="sc-hello"><p>Morning, Maya</p><i class="sc-ava"></i></div>
+          <div class="card">
+            <p class="k">Next paycheck</p>
+            <p class="pay-amt">$3,000<span>.00</span></p>
+            <p class="pay-sub">Lands Mon, Dec 1 · same as always</p>
+            <div class="minibars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="card pool-card">
+            <p class="k">Tidal pool</p>
+            <p class="pool-amt">$9,240</p>
+            <p class="pool-sub">3.1 months of calm saved</p>
+            <div class="pool-water">
+              <svg viewBox="0 0 400 50" preserveAspectRatio="none"><path d="M0 14 C 50 4, 50 4, 100 14 S 150 24, 200 14 S 250 4, 300 14 S 350 24, 400 14 V50 H0Z" fill="rgba(44,181,160,.55)"/></svg>
+              <svg viewBox="0 0 400 50" preserveAspectRatio="none"><path d="M0 20 C 50 10, 50 10, 100 20 S 150 30, 200 20 S 250 10, 300 20 S 350 30, 400 20 V50 H0Z" fill="rgba(95,212,191,.6)"/></svg>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="card"><p class="k">Tax jar</p><p class="mini-amt">$4,180</p><p class="ok">✓ Q4 covered</p></div>
+            <div class="card"><p class="k">Runway</p><p class="mini-amt">94 days</p><p class="ok">✓ All calm</p></div>
+          </div>
+          <div class="feed">
+            <div class="feed-i"><span class="dot">+</span><p>Northwind Studio<br><small>Split → pool &amp; tax</small></p><b>$8,800</b></div>
+            <div class="feed-i"><span class="dot">+</span><p>Halcyon Co.<br><small>Split → pool &amp; tax</small></p><b>$2,400</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="toast" aria-hidden="true">
+        <span class="ic"><svg viewBox="0 0 32 32"><use href="#logo"/></svg></span>
+        <div><b>$8,800 just landed</b>Caught it. Here's where it went:
+          <div class="split"><span class="t1">$6,600 pool</span><span class="t2">$2,200 tax</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-waves" aria-hidden="true">
+    <svg id="heroWaves" preserveAspectRatio="none"></svg>
+    <span class="lbl lbl-l">What clients pay</span>
+    <span class="lbl lbl-r">What you get</span>
+  </div>
+</section>
+
+<div class="made" aria-label="Built for every kind of freelancer">
+  <div class="made-track" aria-hidden="true">
+    <span>Designers</span><span>Developers</span><span>Writers</span><span>Photographers</span><span>Video editors</span><span>Consultants</span><span>Illustrators</span><span>Translators</span><span>Musicians</span><span>Coaches</span>
+    <span>Designers</span><span>Developers</span><span>Writers</span><span>Photographers</span><span>Video editors</span><span>Consultants</span><span>Illustrators</span><span>Translators</span><span>Musicians</span><span>Coaches</span>
+  </div>
+  <p class="sr-only">Built for designers, developers, writers, photographers, video editors, consultants, illustrators, translators, musicians and coaches.</p>
+</div>
+
+<!-- ================= STORY ================= -->
+<section class="story-intro" id="story-intro">
+  <div class="wrap">
+    <p class="eyebrow rv">The story of one freelance year</p>
+    <h2 class="rv">Watch twelve wild months turn into <em>a salary.</em></h2>
+    <p class="rv">This is Maya, an independent designer. She earned $52,800 last year — just never when rent was due. Scroll to follow her money.</p>
+    <div class="scroll-cue" aria-hidden="true">Scroll<i></i></div><br>
+    <a class="skip-story" href="#how">Skip the story</a>
+  </div>
+</section>
+
+<section id="story" aria-label="Scroll story: from spiky income to a steady paycheck">
+  <div class="story-pin">
+    <canvas id="storyCanvas" aria-hidden="true"></canvas>
+    <dl class="hud" id="hud" aria-hidden="true">
+      <div style="--c:var(--sun)"><dt>Earned</dt><dd id="hEarn">$0</dd></div>
+      <div style="--c:var(--violet)"><dt>Tax jar</dt><dd id="hTax">$0</dd></div>
+      <div style="--c:var(--tide)"><dt>Pool</dt><dd id="hPool">$0</dd></div>
+      <div style="--c:var(--tide-2)"><dt>Paid to you</dt><dd id="hPaid">$0</dd></div>
+    </dl>
+    <div class="captions" id="captions">
+      <div class="rail" id="rail" role="group" aria-label="Story chapters">
+        <button type="button" aria-label="Chapter 1: The spikes"></button>
+        <button type="button" aria-label="Chapter 2: The gaps"></button>
+        <button type="button" aria-label="Chapter 3: Catch every wave"></button>
+        <button type="button" aria-label="Chapter 4: Tax, handled"></button>
+        <button type="button" aria-label="Chapter 5: The steady part"></button>
+        <button type="button" aria-label="Chapter 6: Calm water"></button>
+      </div>
+      <div class="caps">
+        <article class="cap is-on"><p class="kick">01 · The spikes</p><h3>Freelance income doesn't trickle in. It crashes in.</h3><p>A year of Maya's invoices: <span class="num">$52,800</span> in total, from <span class="num">$13,200</span> in October to <span class="num">nothing at all</span> in February and July.</p></article>
+        <article class="cap"><p class="kick k-coral">02 · The gaps</p><h3>Rent doesn't care that the client pays net&#8209;60.</h3><p>Her life costs <span class="num">$2,800</span> a month. Measured against that, <span class="num k-coral">6 of 12 months</span> come up short — even though the year as a whole is fine.</p></article>
+        <article class="cap"><p class="kick k-tide">03 · Catch every wave</p><h3>Every payment lands in your Tidal pool first.</h3><p>Big invoices don't get spent the week they clear. They pour into a buffer that's yours — a separate account that earns interest while it waits.</p></article>
+        <article class="cap"><p class="kick k-tax">04 · Tax, handled</p><h3>One in every four dollars goes straight to the tax jar.</h3><p>Tidal sets aside <span class="num k-tax">25%</span> as money arrives — <span class="num">$13,200</span> this year — so quarterly estimates are already paid for.</p></article>
+        <article class="cap"><p class="kick k-tide">05 · The steady part</p><h3>Then it pays you. Same amount. Every month.</h3><p><span class="num">$3,000</span> on the 1st, like clockwork — whether that month brought in $13,200 or nothing.</p></article>
+        <article class="cap"><p class="kick k-tide">06 · Calm water</p><h3>Same year. Completely different life.</h3><p>Twelve identical paychecks, every one above the rent line. Taxes covered, and <span class="num">$3,600</span> still in the pool for next year's dry spells.</p></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW ================= -->
+<section class="section" id="how">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow rv">How it works</p>
+      <h2 class="rv">Three moves. Then it runs itself.</h2>
+      <p class="rv">Set it up in about four minutes. After that, Tidal quietly does the budgeting you keep promising yourself you'll do.</p>
+    </header>
+    <div class="steps">
+      <article class="step rv">
+        <span class="step-n">01</span>
+        <svg class="step-vis" viewBox="0 0 300 90" fill="none" aria-hidden="true"><rect x="10" y="20" width="80" height="50" rx="10" stroke="#0A1C26" stroke-opacity=".2" stroke-width="2"/><rect x="210" y="20" width="80" height="50" rx="10" fill="#0A1C26"/><path d="M98 45h104" stroke="#2CB5A0" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/><circle cx="150" cy="45" r="14" fill="#5FD4BF"/><path d="M144 45l4 4 8-8" stroke="#0A1C26" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M226 38h48M226 52h30" stroke="#5FD4BF" stroke-width="4" stroke-linecap="round"/><path d="M26 38h48M26 52h30" stroke="#0A1C26" stroke-opacity=".25" stroke-width="4" stroke-linecap="round"/></svg>
+        <h3>Point your invoices at Tidal</h3>
+        <p>Connect your bank and swap the payout details on your invoices. Stripe, PayPal, Wise and direct transfers all work.</p>
+      </article>
+      <article class="step rv">
+        <span class="step-n">02</span>
+        <svg class="step-vis" viewBox="0 0 300 90" fill="none" aria-hidden="true"><path d="M20 70l20-40 16 30 22-50 18 46 16-22 14 26" stroke="#F3A73B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M150 45h22" stroke="#0A1C26" stroke-opacity=".3" stroke-width="2" stroke-linecap="round"/><rect x="188" y="18" width="96" height="58" rx="14" stroke="#0A1C26" stroke-opacity=".2" stroke-width="2"/><path d="M190 52c12-6 22 6 32 0s22-6 32 0 18 4 28 0v14a10 10 0 01-10 10h-72a10 10 0 01-10-10z" fill="#2CB5A0"/></svg>
+        <h3>Tidal catches every wave</h3>
+        <p>Each payment is split the moment it lands: your tax share into the jar, the rest into your pool. You never have to decide.</p>
+      </article>
+      <article class="step rv">
+        <span class="step-n">03</span>
+        <svg class="step-vis" viewBox="0 0 300 90" fill="none" aria-hidden="true"><g fill="#5FD4BF"><rect x="20" y="40" width="24" height="36" rx="5"/><rect x="54" y="40" width="24" height="36" rx="5"/><rect x="88" y="40" width="24" height="36" rx="5"/><rect x="122" y="40" width="24" height="36" rx="5"/><rect x="156" y="40" width="24" height="36" rx="5"/><rect x="190" y="40" width="24" height="36" rx="5"/><rect x="224" y="40" width="24" height="36" rx="5"/><rect x="258" y="40" width="24" height="36" rx="5" opacity=".35"/></g><path d="M12 32h278" stroke="#0E6B60" stroke-width="2" stroke-dasharray="4 6"/></svg>
+        <h3>Get paid like you have a job</h3>
+        <p>On the 1st, a fixed paycheck hits your everyday account. Tidal recalculates it each quarter, and only ever nudges it gently.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CALCULATOR ================= -->
+<section class="section calc-sec" id="try">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow rv">Try it</p>
+      <h2 class="rv">Draw your year. See&nbsp;your&nbsp;paycheck.</h2>
+      <p class="rv">Drag the bars to match your last twelve months (or swipe across them). Tidal's line shows what you'd be paid, every single month.</p>
+    </header>
+    <div class="calc rv">
+      <div class="calc-board">
+        <div class="calc-hint">
+          <span><b>Monthly income</b> · drag or use arrow keys</span>
+          <span class="calc-legend"><span style="--c:var(--sun)"><i></i>Above paycheck</span><span style="--c:var(--coral)"><i></i>Below</span></span>
+        </div>
+        <div class="calc-chart" id="calcChart">
+          <div class="calc-line" id="calcLine"><span id="calcLineLabel">$3,000 / mo</span></div>
+        </div>
+        <div class="calc-months" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+      </div>
+      <aside class="calc-panel" aria-live="polite">
+        <p class="calc-k">Your Tidal paycheck</p>
+        <p class="calc-big" id="calcPay">$3,000</p>
+        <p class="calc-unit">every month, on the 1st</p>
+        <p class="seg-label" id="taxLbl">Tax set-aside</p>
+        <div class="seg" role="radiogroup" aria-labelledby="taxLbl" id="taxSeg">
+          <button type="button" role="radio" aria-checked="false" data-v=".15">15%</button>
+          <button type="button" role="radio" aria-checked="true" data-v=".25">25%</button>
+          <button type="button" role="radio" aria-checked="false" data-v=".30">30%</button>
+        </div>
+        <dl class="calc-stats">
+          <div><dt>Earned this year</dt><dd id="cEarn">$52,800</dd></div>
+          <div><dt>Into the tax jar</dt><dd id="cTax">$13,200</dd></div>
+          <div><dt>Left in your pool</dt><dd id="cLeft">$3,600</dd></div>
+          <div><dt>Months below paycheck</dt><dd id="cLow"><span class="strike">6</span>0</dd></div>
+        </dl>
+        <div class="calc-actions">
+          <button class="btn btn-primary" type="button" id="calcRand">Shuffle a year</button>
+          <button class="btn btn-ghost" type="button" id="calcReset">Reset</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section class="section" id="features">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow rv">Features</p>
+      <h2 class="rv">Everything a payroll department would do for you.</h2>
+    </header>
+    <div class="feat rv">
+      <article><div class="ic" style="--bg:rgba(44,181,160,.14);--fg:var(--deep)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 15c3-2 6 2 9 0s6-2 9 0M3 19c3-2 6 2 9 0s6-2 9 0"/><path d="M12 3v8m0 0l-3-3m3 3l3-3"/></svg></div><h3>Smart paycheck</h3><p>Sized from your trailing twelve months and your buffer, so it stays sustainable — not optimistic.</p></article>
+      <article><div class="ic" style="--bg:rgba(156,140,255,.16);--fg:#5b4bd1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10M8 4v3a4 4 0 01-2 3.5V18a2 2 0 002 2h8a2 2 0 002-2v-7.5A4 4 0 0116 7V4"/><path d="M9 14h6"/></svg></div><h3>Tax jar</h3><p>Set-aside rates tuned to your bracket, with reminders two weeks before every quarterly deadline.</p></article>
+      <article><div class="ic" style="--bg:rgba(243,167,59,.16);--fg:#b26a0b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 00-6 6c0 5-2 6-2 6h16s-2-1-2-6a6 6 0 00-6-6zM10 19a2 2 0 004 0"/></svg></div><h3>Dry-spell radar</h3><p>See how many months of calm you have saved. Tidal warns you weeks early if a long gap would dent your paycheck.</p></article>
+      <article><div class="ic" style="--bg:rgba(236,106,80,.14);--fg:#c2432b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></div><h3>Invoice tracker</h3><p>Know what's owed, what's late and what's coming. Overdue invoices get a polite, automatic nudge.</p></article>
+      <article><div class="ic" style="--bg:rgba(10,28,38,.08);--fg:var(--ink)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6M5 10v8M19 10v8M9 10v8M15 10v8M3 20h18"/></svg></div><h3>Keep your bank</h3><p>Your paycheck lands in the account you already use. No new cards, no switching, no drama.</p></article>
+      <article><div class="ic" style="--bg:rgba(95,212,191,.18);--fg:var(--deep)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></div><h3>Bonus month</h3><p>Pool overflowing? Tidal suggests a one-off bonus, a raise, or an extra pension contribution. Your call.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUOTES ================= -->
+<section class="section quotes-sec">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow rv">From the beta</p>
+      <h2 class="rv">“I stopped checking my balance at 2am.”</h2>
+    </header>
+    <div class="quotes">
+      <figure class="quote big rv">
+        <svg class="spark" viewBox="0 0 200 46" fill="none" aria-hidden="true"><path d="M2 40 18 12 30 36 44 6 58 40 70 28 84 40 96 18 108 40" stroke="#F3A73B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M114 30h84" stroke="#5FD4BF" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <blockquote>My income still looks like a heart monitor. My bank account finally looks like a flat line — in the good way.</blockquote>
+        <figcaption><span class="av" style="--c:var(--sun)">PR</span><span><b>Priya R.</b>Brand designer, 6 years freelance</span></figcaption>
+      </figure>
+      <figure class="quote rv">
+        <blockquote>The tax jar alone paid for itself. First April in a decade without a panic loan.</blockquote>
+        <figcaption><span class="av" style="--c:var(--violet)">DO</span><span><b>Dami O.</b>Backend contractor</span></figcaption>
+      </figure>
+      <figure class="quote rv">
+        <blockquote>I took a month off in August and still got paid on the 1st. That's never happened before.</blockquote>
+        <figcaption><span class="av" style="--c:var(--tide-2)">LK</span><span><b>Lena K.</b>Documentary editor</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="section" id="pricing">
+  <div class="wrap price-wrap">
+    <div>
+      <p class="eyebrow rv">Pricing</p>
+      <h2 class="rv">One plan. No cut of your income. Ever.</h2>
+      <p class="rv" style="color:var(--muted);font-size:1.12rem;margin-top:20px;max-width:44ch">We charge a flat monthly fee, not a percentage — because your best month shouldn't cost you more.</p>
+    </div>
+    <div class="price rv">
+      <span class="tag">Early access</span>
+      <p class="amt">$8<small> / month</small></p>
+      <p style="margin:0;color:var(--muted)">First 3 months free. Cancel anytime.</p>
+      <ul>
+        <li><svg aria-hidden="true"><use href="#check"/></svg>Automatic monthly paycheck</li>
+        <li><svg aria-hidden="true"><use href="#check"/></svg>Tax jar with quarterly reminders</li>
+        <li><svg aria-hidden="true"><use href="#check"/></svg>Interest-earning pool account</li>
+        <li><svg aria-hidden="true"><use href="#check"/></svg>Invoice tracking &amp; late-payment nudges</li>
+        <li><svg aria-hidden="true"><use href="#check"/></svg>Unlimited payment sources</li>
+      </ul>
+      <a class="btn btn-primary" href="#waitlist">Claim early access</a>
+      <p class="price-note">Your money stays yours. Withdraw from the pool any time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="section" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head"><p class="eyebrow rv">Questions</p><h2 class="rv">Good questions, straight answers.</h2></header>
+    <div class="faq rv">
+      <details><summary>How does Tidal decide my paycheck?<i aria-hidden="true"></i></summary><p>It looks at what you've earned over the last twelve months, takes out your tax set-aside, keeps a small slice to grow your buffer, and divides the rest by twelve. It recalculates every quarter and only moves the number gradually, so you never get whiplash.</p></details>
+      <details><summary>What happens if I hit a really long dry spell?<i aria-hidden="true"></i></summary><p>Your paycheck keeps coming from the pool. If the pool would run low within the next few months, Tidal tells you early and suggests a gentle step down — you approve any change before it happens.</p></details>
+      <details><summary>Can I get at my money whenever I want?<i aria-hidden="true"></i></summary><p>Yes. The pool is your money. Withdraw any amount at any time, or pay yourself a one-off bonus. Tidal just recalculates your runway afterwards.</p></details>
+      <details><summary>Is Tidal a bank?<i aria-hidden="true"></i></summary><p>No. Tidal is a money app. Your pool and tax jar are held in accounts at partner banks, and your paycheck goes to whichever everyday account you choose.</p></details>
+      <details><summary>Is the tax jar tax advice?<i aria-hidden="true"></i></summary><p>It's a smart savings habit, not advice. Tidal suggests a rate from what you tell us, and you can change it anytime. For anything complicated, your accountant is still your best friend.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="section cta" id="waitlist">
+  <svg class="cta-bg" id="ctaWaves" preserveAspectRatio="none" aria-hidden="true"></svg>
+  <div class="wrap">
+    <p class="eyebrow rv" style="color:var(--tide-2)">Early access</p>
+    <h2 class="rv">Make every month feel like <em>payday.</em></h2>
+    <p class="lead rv">We're letting freelancers in batch by batch. Add your email and we'll send your invite as soon as your spot opens.</p>
+    <div class="rv" id="formBox">
+      <form class="form" id="waitForm" novalidate>
+        <label class="sr-only" for="email">Email address</label>
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@studio.com" required>
+        <button class="btn btn-tide" type="submit">Join the waitlist</button>
+      </form>
+      <p class="form-msg" id="formMsg" role="status">No spam. One email when it's your turn.</p>
+      <div class="form-done" role="status" tabindex="-1" id="formDone"><b>You're on the list.</b>We'll email <span id="doneEmail"></span> when your invite is ready. Calmer months ahead.</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a class="logo" href="#top"><svg aria-hidden="true"><use href="#logo"/></svg>Tidal</a>
+      <nav aria-label="Footer"><a href="#story-intro">How it flows</a><a href="#try">Try it</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></nav>
+      <span>© 2026 Tidal</span>
+    </div>
+    <p class="fine">Tidal is not a bank. The figures in the story and calculator are illustrative examples, not a promise of returns or a guaranteed paycheck amount. Tax set-aside suggestions are not tax advice.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)');
+const clamp=(v,a=0,b=1)=>v<a?a:v>b?b:v;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const easeOut=t=>1-Math.pow(1-t,3);
+const money=v=>'$'+Math.round(v).toLocaleString('en-US');
+const kfmt=v=>v===0?'$0':v>=1000?'$'+(v/1000).toFixed(1).replace(/\.0$/,'')+'k':'$'+v;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ============ NAV ============ */
+const nav=document.getElementById('nav');
+const storyEl=document.getElementById('story');
+let lastY=scrollY;
+function onNav(){
+  const y=scrollY, r=storyEl.getBoundingClientRect();
+  const inStory=r.top<=1 && r.bottom>=innerHeight-1;
+  nav.classList.toggle('is-scrolled',y>12);
+  nav.classList.toggle('is-hidden',inStory || (y>lastY && y>240));
+  lastY=y;
+}
+addEventListener('scroll',onNav,{passive:true}); onNav();
+
+/* ============ REVEAL ============ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)*70+'ms';io.observe(el)});
+
+/* ============ WAVE LINES (hero + CTA) ============ */
+function waveField(svg,opts){
+  const NS='http://www.w3.org/2000/svg';
+  const layers=opts.layers.map(l=>{const p=document.createElementNS(NS,'path');p.setAttribute('fill','none');p.setAttribute('stroke',l.color);p.setAttribute('stroke-width',l.w);p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-linejoin','round');p.setAttribute('vector-effect','non-scaling-stroke');svg.appendChild(p);return {p,...l}});
+  let w=0,h=0,visible=true;
+  function size(){const r=svg.getBoundingClientRect();w=r.width;h=r.height;svg.setAttribute('viewBox',`0 0 ${w} ${h}`)}
+  function draw(t){
+    if(!w||!h)return;
+    layers.forEach((L,li)=>{
+      let d='';const step=Math.max(4,w/220);
+      for(let x=0;x<=w+step;x+=step){
+        const u=x/w;
+        const spikeAmt=opts.spike(u);
+        const s1=Math.sin(x*0.021+t*1.1+li*1.7), s2=Math.sin(x*0.057-t*0.8+li), s3=Math.sin(x*0.009+t*0.4);
+        const spike=Math.pow(Math.max(0,s1*s2),0.7)*h*0.62*spikeAmt;
+        const calm=Math.sin(x*0.012+t*0.9+li*0.9)*h*0.025*(1+li*.5);
+        const y=h*L.base - spike*(1-li*0.22) + calm*(1-spikeAmt*0.6) + s3*h*0.02*spikeAmt;
+        d+=(x?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);
+      }
+      L.p.setAttribute('d',d);
+    });
+  }
+  size(); draw(0);
+  new ResizeObserver(()=>{size();draw(RM.matches?0:performance.now()/1000)}).observe(svg);
+  new IntersectionObserver(es=>{visible=es[0].isIntersecting}).observe(svg);
+  (function loop(now){ if(visible && !RM.matches) draw(now/1000); requestAnimationFrame(loop)})(0);
+}
+waveField(document.getElementById('heroWaves'),{
+  spike:u=>Math.pow(clamp(1-u*1.35),1.6),
+  layers:[{color:'rgba(243,167,59,.95)',w:2.5,base:.78},{color:'rgba(44,181,160,.75)',w:2,base:.82},{color:'rgba(14,107,96,.35)',w:1.5,base:.87}]
+});
+waveField(document.getElementById('ctaWaves'),{
+  spike:u=>0.08,
+  layers:[{color:'rgba(95,212,191,.5)',w:2,base:.6},{color:'rgba(44,181,160,.3)',w:1.5,base:.72},{color:'rgba(221,241,234,.12)',w:1.2,base:.84}]
+});
+
+/* ============ SCROLL STORY ============ */
+const DATA=[6400,0,1600,11600,800,3200,0,8800,2400,13200,400,4400];
+const MONTHS='JFMAMJJASOND'.split('');
+const BILLS=2800, PAY=3000, UNIT=100, MAXV=13200, POOL_CAP=44000, JAR_CAP=15000;
+const SUN=[243,167,59], CORAL=[236,106,80], TIDE=[44,181,160], TIDE2=[95,212,191], VIOLET=[156,140,255], FOAM=[221,241,234];
+const rgba=(c,a)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+const mixc=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];
+
+const rand=mulberry32(7);
+const inP=[];  // income particles
+DATA.forEach((amt,i)=>{const n=amt/UNIT;for(let j=0;j<n;j++)inP.push({i,j,n,tax:j%4===3,jx:rand()-.5,tx:rand(),ty:rand(),lift:rand()})});
+const outP=[]; // payout particles
+for(let m=0;m<12;m++)for(let q=0;q<PAY/UNIT;q++)outP.push({m,q,n:PAY/UNIT,jx:rand()-.5,lift:rand()});
+
+const canvas=document.getElementById('storyCanvas'), ctx=canvas.getContext('2d');
+const capsEl=document.getElementById('captions'), hud=document.getElementById('hud');
+const caps=[...document.querySelectorAll('.cap')], railBtns=[...document.querySelectorAll('#rail button')];
+const H_EARN=document.getElementById('hEarn'),H_TAX=document.getElementById('hTax'),H_POOL=document.getElementById('hPool'),H_PAID=document.getElementById('hPaid');
+const WIDE_Q=matchMedia('(min-width:900px), (min-width:640px) and (min-aspect-ratio:5/4)');
+const CH=[0,.13,.27,.42,.54,.80,1]; // chapter boundaries
+let W=0,H=0,DPR=1,S={x:0,y:0,w:0,h:0},wide=false,fs=12;
+let pTarget=0,pShown=0,storyVisible=false,activeCap=0;
+
+function layout(){
+  const pin=canvas.parentElement.getBoundingClientRect();
+  W=pin.width;H=pin.height;DPR=Math.min(2,devicePixelRatio||1);
+  canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);
+  wide=WIDE_Q.matches;
+  const cr=capsEl.getBoundingClientRect();
+  if(wide){
+    const gap=clamp(W*.05,28,90);
+    let x=cr.right-pin.left+gap, w=W-x-clamp(W*.04,20,56);
+    if(w>980){x+= (w-980)/2; w=980}
+    hud.style.left=x+'px'; hud.style.width=Math.min(w,620)+'px';
+    const hr=hud.getBoundingClientRect();
+    const y=hr.bottom-pin.top+clamp(H*.04,14,40);
+    S={x,y,w,h:Math.max(160,H-y-clamp(H*.05,16,48))};
+  }else{
+    hud.style.left='';hud.style.width='';
+    const hr=hud.getBoundingClientRect();
+    const y=hr.bottom-pin.top+14;
+    S={x:16,y,w:W-32,h:Math.max(150,cr.top-pin.top-14-y)};
+  }
+  fs=clamp(S.w/62,10,13);
+}
+
+function rr(x,y,w,h,r){ // rounded rect path (top radii r, bottom radii small)
+  r=Math.min(r,w/2,Math.abs(h)/2);
+  ctx.beginPath();
+  if(ctx.roundRect){ctx.roundRect(x,y,w,h,[r,r,Math.min(2,r),Math.min(2,r)]);return}
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+function vesselPath(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x,y);ctx.lineTo(x,y+h-r);ctx.quadraticCurveTo(x,y+h,x+r,y+h);ctx.lineTo(x+w-r,y+h);ctx.quadraticCurveTo(x+w,y+h,x+w,y+h-r);ctx.lineTo(x+w,y);
+}
+function text(str,x,y,{size=fs,weight=500,color='rgba(221,241,234,.7)',align='left',base='alphabetic',font='Inter'}={}){
+  ctx.font=`${weight} ${size}px ${font==='serif'?'Fraunces, Georgia, serif':'Inter, system-ui, sans-serif'}`;
+  ctx.fillStyle=color;ctx.textAlign=align;ctx.textBaseline=base;ctx.fillText(str,x,y);
+}
+function quad(a,c,b,t){const u=1-t;return [u*u*a[0]+2*u*t*c[0]+t*t*b[0],u*u*a[1]+2*u*t*c[1]+t*t*b[1]]}
+
+function drawVessel(x,y,w,h,amount,cap,colA,colB,t,agit,alpha,label,glow){
+  if(alpha<=0)return;
+  ctx.save();ctx.globalAlpha=alpha;
+  const r=Math.min(18,h*.25);
+  if(glow>0){ctx.shadowColor=rgba(colB,.6*glow);ctx.shadowBlur=30*glow}
+  vesselPath(x,y,w,h,r);ctx.strokeStyle=rgba(FOAM,.28);ctx.lineWidth=1.5;ctx.stroke();
+  ctx.shadowBlur=0;
+  const lvl=clamp(amount/cap);
+  if(lvl>0.001){
+    const sy=y+h-lvl*h;
+    ctx.save();vesselPath(x,y,w,h,r);ctx.closePath();ctx.clip();
+    const amp=(1.2+agit*5)*Math.min(1,lvl*8);
+    ctx.beginPath();ctx.moveTo(x,y+h+2);
+    for(let xx=x;xx<=x+w+6;xx+=6){
+      const yy=sy+Math.sin(xx*.045+t*1.7)*amp+Math.sin(xx*.11-t*2.4)*amp*.5;
+      ctx.lineTo(xx,yy);
+    }
+    ctx.lineTo(x+w,y+h+2);ctx.closePath();
+    const g=ctx.createLinearGradient(0,sy,0,y+h);g.addColorStop(0,rgba(colB,.95));g.addColorStop(1,rgba(colA,.55));
+    ctx.fillStyle=g;ctx.fill();
+    // highlight line
+    ctx.beginPath();
+    for(let xx=x;xx<=x+w+6;xx+=6){const yy=sy+Math.sin(xx*.045+t*1.7)*amp+Math.sin(xx*.11-t*2.4)*amp*.5;xx===x?ctx.moveTo(xx,yy):ctx.lineTo(xx,yy)}
+    ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1.2;ctx.stroke();
+    ctx.restore();
+  }
+  text(label,x+12,y+fs+8,{size:fs*.9,weight:600,color:'rgba(221,241,234,.75)'});
+  text(money(amount),x+12,y+fs*2.6+10,{size:fs*1.6,weight:500,color:'#fff',font:'serif'});
+  ctx.restore();
+}
+
+let lastHud='';
+function render(now){
+  const t=RM.matches?0:now/1000;
+  const p=pShown;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  ctx.clearRect(0,0,W,H);
+
+  const {x:sx,y:sy,w:sw,h:sh}=S;
+  const slot=sw/12, barW=Math.min(slot*.62,46), scale=sh*.30/MAXV;
+  const mx=i=>sx+slot*(i+.5);
+  // stage locals
+  const a=clamp(p/.11);
+  const b=ease(clamp((p-.14)/.08));
+  const tr=ease(clamp((p-.25)/.05));
+  const c=clamp((p-.30)/.22);
+  const taxGlow=clamp((p-.42)/.03)*(1-clamp((p-.52)/.03));
+  const payA=ease(clamp((p-.48)/.06));
+  const d=clamp((p-.54)/.26);
+  const e=ease(clamp((p-.81)/.12));
+
+  const yOff=(1-tr)*sh*.27;
+  const base=sy+sh*.38+yOff;
+  const pool={x:sx+sw*.02,y:sy+sh*.48,w:sw*.64,h:sh*.2};
+  const jar={x:sx+sw*.72,y:sy+sh*.48,w:sw*.26,h:sh*.2};
+  const payBase=sy+sh*.95;
+  const spout=[pool.x+pool.w/2,pool.y+pool.h];
+
+  // ---- income chart ----
+  const bLine=base-BILLS*scale;
+  // chart title
+  text(e>0?'Before Tidal · income as it arrived':'Income, as it arrives',sx,base-MAXV*scale-fs*1.4,{size:fs,weight:600,color:'rgba(221,241,234,.6)'});
+  // baseline
+  ctx.strokeStyle='rgba(221,241,234,.18)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(sx,base+.5);ctx.lineTo(sx+sw,base+.5);ctx.stroke();
+
+  const FLY=.6, span=1-11*.045;
+  const drain=DATA.map((_,i)=>clamp((c-i*.045)/span));
+  DATA.forEach((amt,i)=>{
+    const grow=easeOut(clamp(a*1.6-i*.055));
+    const dr=clamp(drain[i]*(1+FLY));
+    const v=amt*grow*(1-dr);
+    const short=amt<BILLS;
+    const col=short?mixc(SUN,CORAL,b):SUN;
+    const x=mx(i)-barW/2, h=v*scale;
+    // gap fill (shortfall)
+    if(short && b>0 && grow>0){
+      const ga=b*(1-tr*.85)*(1-e);
+      ctx.fillStyle=rgba(CORAL,.16*ga);
+      ctx.fillRect(x,bLine,barW,base-h-bLine);
+      ctx.setLineDash([3,3]);ctx.strokeStyle=rgba(CORAL,.55*ga);ctx.strokeRect(x+.5,bLine+.5,barW-1,base-h-bLine-1);ctx.setLineDash([]);
+    }
+    if(h>.5){
+      const g=ctx.createLinearGradient(0,base-h,0,base);
+      g.addColorStop(0,rgba(mixc(col,[255,255,255],.25),1));g.addColorStop(1,rgba(col,.75));
+      ctx.fillStyle=g;rr(x,base-h,barW,h,Math.min(6,barW/3));ctx.fill();
+    }else if(grow>0 && amt===0){
+      ctx.fillStyle=rgba(b>0?CORAL:SUN,.8*(1-tr));ctx.fillRect(x,base-2,barW,2);
+    }
+    // ghost outline in final stage
+    if(e>0 && amt>0){
+      ctx.setLineDash([4,4]);ctx.strokeStyle=rgba(SUN,.45*e);ctx.lineWidth=1.2;
+      rr(x,base-amt*scale,barW,amt*scale,Math.min(6,barW/3));ctx.stroke();ctx.setLineDash([]);
+    }
+    // value label
+    const la=grow*(1-dr)*(slot>=34?1:(amt===MAXV||amt===0?1:0));
+    if(la>0.02) text(kfmt(amt),mx(i),base-h-6,{size:fs*.85,weight:600,align:'center',color:rgba(short&&b>0?CORAL:[255,255,255],.85*la)});
+    // month letter
+    text(MONTHS[i],mx(i),base+fs+6,{size:fs*.85,align:'center',color:'rgba(221,241,234,.45)'});
+  });
+  // bills line
+  const billA=Math.max(b*(1-tr*.75),0)*(1-e);
+  if(billA>0){
+    ctx.setLineDash([6,5]);ctx.strokeStyle=rgba(FOAM,.7*billA);ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(sx,bLine);ctx.lineTo(sx+sw*b,bLine);ctx.stroke();ctx.setLineDash([]);
+    ctx.font=`600 ${fs*.85}px Inter, system-ui, sans-serif`;
+    const lw=ctx.measureText('$2,800 / month to live').width;
+    ctx.fillStyle=`rgba(10,28,38,${.85*billA})`;rr(sx+sw-lw-10,bLine-fs*.85-12,lw+10,fs*.85+9,6);ctx.fill();
+    text('$2,800 / month to live',sx+sw-5,bLine-7,{size:fs*.85,weight:600,align:'right',color:rgba(FOAM,.85*billA)});
+    const sa=b*(1-tr);
+    if(sa>0){
+      text('6 of 12 months fall short',sx,base-MAXV*scale+fs*.4,{size:fs*1.25,weight:500,font:'serif',color:rgba(CORAL,sa)});
+    }
+  }
+
+  // ---- vessels ----
+  let poolIn=0,taxIn=0;const flying=[];
+  for(const P of inP){
+    const g=drain[P.i]; if(g<=0)continue;
+    const r=(P.n-1-P.j)/P.n+.5/P.n;
+    const f=clamp((g*(1+FLY)-r)/FLY);
+    if(f<=0)continue;
+    if(f>=1){P.tax?taxIn+=UNIT:poolIn+=UNIT;continue}
+    flying.push([P,f]);
+  }
+  let paidOut=0,paid=0;const paidM=new Array(12).fill(0);const flyOut=[];
+  const FLY2=.5;
+  for(const P of outP){
+    const h=clamp((d-P.m*.06)/.34); if(h<=0)continue;
+    const f=clamp((h*(1+FLY2)-P.q/P.n)/FLY2);
+    if(f<=0)continue;
+    paidOut+=UNIT;
+    if(f>=1){paid+=UNIT;paidM[P.m]+=UNIT;continue}
+    flyOut.push([P,f]);
+  }
+  const poolAmt=Math.max(0,poolIn-paidOut);
+  const vesA=tr;
+  const agitPool=Math.min(1,flying.length/40)+Math.min(1,flyOut.length/12)*.5;
+  drawVessel(pool.x,pool.y,pool.w,pool.h,poolAmt,POOL_CAP,TIDE,TIDE2,t,agitPool,vesA,e>0?'Buffer carried into next year':'Tidal pool',0);
+  drawVessel(jar.x,jar.y,jar.w,jar.h,taxIn,JAR_CAP,[110,96,220],VIOLET,t+1,Math.min(1,flying.length/80),vesA,'Tax jar',taxGlow);
+  if(taxGlow>0){
+    text('25%',jar.x+jar.w/2,jar.y-8,{size:fs*1.1,weight:700,align:'center',color:rgba(VIOLET,taxGlow)});
+  }
+  // spout
+  if(payA>0){
+    ctx.fillStyle=rgba(TIDE2,.8*payA);
+    ctx.beginPath();ctx.arc(spout[0],spout[1],3.5,0,Math.PI*2);ctx.fill();
+  }
+
+  // ---- pay row ----
+  if(payA>0){
+    ctx.save();ctx.globalAlpha=payA;
+    const pTop=payBase-PAY*scale;
+    text(e>0.02?'After Tidal · $3,000, every month':'Your paycheck',sx,pTop-fs*1.2-e*(Math.min(barW*.32,8)*2+10),{size:fs,weight:600,color:e>0.02?rgba(TIDE2,.95):'rgba(221,241,234,.6)'});
+    ctx.strokeStyle='rgba(221,241,234,.18)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(sx,payBase+.5);ctx.lineTo(sx+sw,payBase+.5);ctx.stroke();
+    for(let m=0;m<12;m++){
+      const x=mx(m)-barW/2,h=paidM[m]*scale;
+      // slot ghost
+      ctx.strokeStyle='rgba(221,241,234,.12)';ctx.setLineDash([3,4]);rr(x,pTop,barW,PAY*scale,Math.min(6,barW/3));ctx.stroke();ctx.setLineDash([]);
+      if(h>.5){
+        const g=ctx.createLinearGradient(0,payBase-h,0,payBase);g.addColorStop(0,rgba([150,236,220],1));g.addColorStop(1,rgba(TIDE,.8));
+        ctx.fillStyle=g;
+        if(e>0){ctx.shadowColor=rgba(TIDE2,.7*e);ctx.shadowBlur=14*e}
+        rr(x,payBase-h,barW,h,Math.min(6,barW/3));ctx.fill();ctx.shadowBlur=0;
+      }
+      text(MONTHS[m],mx(m),payBase+fs+6,{size:fs*.85,align:'center',color:'rgba(221,241,234,.45)'});
+      // check pops
+      const ck=easeOut(clamp(e*1.6-m*.05));
+      if(ck>0){
+        const cx=mx(m),cy=pTop-fs*.2-4,rad=Math.min(barW*.32,8)*ck;
+        ctx.fillStyle=rgba(TIDE2,ck);ctx.beginPath();ctx.arc(cx,cy-rad,rad,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='#0A1C26';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(cx-rad*.45,cy-rad);ctx.lineTo(cx-rad*.1,cy-rad*.6);ctx.lineTo(cx+rad*.5,cy-rad*1.4);ctx.stroke();
+      }
+    }
+    // bills line on pay row (final)
+    if(e>0){
+      const y=payBase-BILLS*scale;
+      ctx.setLineDash([6,5]);ctx.strokeStyle=rgba(FOAM,.6*e);ctx.lineWidth=1.3;
+      ctx.beginPath();ctx.moveTo(sx,y);ctx.lineTo(sx+sw*e,y);ctx.stroke();ctx.setLineDash([]);
+    }
+    ctx.restore();
+  }
+
+  // ---- particles ----
+  ctx.save();ctx.globalCompositeOperation='lighter';
+  const pr=clamp(barW*.09,1.6,3.2);
+  const poolSurf=pool.y+pool.h-clamp(poolAmt/POOL_CAP)*pool.h;
+  const jarSurf=jar.y+jar.h-clamp(taxIn/JAR_CAP)*jar.h;
+  for(const [P,f] of flying){
+    const amt=DATA[P.i];
+    const start=[mx(P.i)+P.jx*barW*.8,base-(P.j+.5)*(amt/P.n)*scale];
+    const V=P.tax?jar:pool;
+    const surf=P.tax?jarSurf:poolSurf;
+    const end=[V.x+V.w*(.12+P.tx*.76),Math.min(V.y+V.h-4,surf+4+P.ty*8)];
+    const ctrl=[lerp(start[0],end[0],.5),Math.min(start[1],end[1])-sh*(.04+P.lift*.08)];
+    const k=ease(f);
+    const [x,y]=quad(start,ctrl,end,k);
+    const [x2,y2]=quad(start,ctrl,end,Math.max(0,k-.06));
+    const col=P.tax?VIOLET:mixc(SUN,TIDE2,clamp(k*1.3));
+    ctx.strokeStyle=rgba(col,.35);ctx.lineWidth=pr*1.2;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x,y);ctx.stroke();
+    ctx.fillStyle=rgba(col,.18);ctx.beginPath();ctx.arc(x,y,pr*2.6,0,6.283);ctx.fill();
+    ctx.fillStyle=rgba(col,.95);ctx.beginPath();ctx.arc(x,y,pr,0,6.283);ctx.fill();
+  }
+  for(const [P,f] of flyOut){
+    const end=[mx(P.m)+P.jx*barW*.6,payBase-(P.q+.5)*UNIT*scale];
+    const start=[spout[0],spout[1]];
+    const ctrl=[lerp(start[0],end[0],.55),start[1]+(end[1]-start[1])*.15];
+    const k=ease(f);
+    const [x,y]=quad(start,ctrl,end,k);
+    const [x2,y2]=quad(start,ctrl,end,Math.max(0,k-.08));
+    ctx.strokeStyle=rgba(TIDE2,.35);ctx.lineWidth=pr*1.1;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x,y);ctx.stroke();
+    ctx.fillStyle=rgba(TIDE2,.2);ctx.beginPath();ctx.arc(x,y,pr*2.4,0,6.283);ctx.fill();
+    ctx.fillStyle=rgba([170,245,230],.95);ctx.beginPath();ctx.arc(x,y,pr*.9,0,6.283);ctx.fill();
+  }
+  ctx.restore();
+
+  // ---- HUD ----
+  const earned=DATA.reduce((s,v,i)=>s+v*easeOut(clamp(a*1.6-i*.055)),0);
+  const hs=[money(Math.round(earned/100)*100),money(taxIn),money(poolAmt),money(paid)].join('|');
+  if(hs!==lastHud){const v=hs.split('|');H_EARN.textContent=v[0];H_TAX.textContent=v[1];H_POOL.textContent=v[2];H_PAID.textContent=v[3];lastHud=hs}
+
+  // ---- captions & rail ----
+  let idx=0;for(let i=0;i<6;i++)if(p>=CH[i])idx=i;
+  if(idx!==activeCap){caps[activeCap].classList.remove('is-on');caps[idx].classList.add('is-on');activeCap=idx}
+  railBtns.forEach((bt,i)=>bt.style.setProperty('--f',clamp((p-CH[i])/(CH[i+1]-CH[i])).toFixed(3)));
+}
+
+function readScroll(){
+  const r=storyEl.getBoundingClientRect();
+  const total=r.height-innerHeight;
+  pTarget=clamp(-r.top/total);
+}
+function tick(now){
+  if(storyVisible){
+    readScroll();
+    const k=RM.matches?1:0.14;
+    pShown+= (pTarget-pShown)*k;
+    if(Math.abs(pTarget-pShown)<.0005)pShown=pTarget;
+    render(now);
+  }
+  requestAnimationFrame(tick);
+}
+new IntersectionObserver(es=>{storyVisible=es[0].isIntersecting;if(storyVisible){readScroll();}},{rootMargin:'100px 0px'}).observe(storyEl);
+railBtns.forEach((bt,i)=>bt.addEventListener('click',()=>{
+  const total=storyEl.offsetHeight-innerHeight;
+  const target=storyEl.getBoundingClientRect().top+scrollY+(CH[i]+.02)*total;
+  scrollTo({top:target,behavior:RM.matches?'auto':'smooth'});
+}));
+let rz;function onResize(){layout();readScroll();pShown=pTarget;render(performance.now())}
+addEventListener('resize',()=>{cancelAnimationFrame(rz);rz=requestAnimationFrame(onResize)});
+WIDE_Q.addEventListener&&WIDE_Q.addEventListener('change',onResize);
+layout();readScroll();pShown=pTarget;render(0);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{layout();render(performance.now())});
+requestAnimationFrame(tick);
+
+/* ============ CALCULATOR ============ */
+const chart=document.getElementById('calcChart'),line=document.getElementById('calcLine'),lineLbl=document.getElementById('calcLineLabel');
+const CMAX=15000, FULL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let vals=DATA.slice(), taxRate=.25;
+const bars=vals.map((v,i)=>{
+  const el=document.createElement('div');el.className='cbar';el.tabIndex=0;el.setAttribute('role','slider');
+  el.setAttribute('aria-label',FULL[i]+' income');el.setAttribute('aria-valuemin','0');el.setAttribute('aria-valuemax',CMAX);
+  el.innerHTML='<span class="cbar-tip"></span><span class="cbar-fill"></span>';
+  chart.appendChild(el);
+  el.addEventListener('keydown',ev=>{
+    const st={ArrowUp:100,ArrowRight:100,ArrowDown:-100,ArrowLeft:-100,PageUp:1000,PageDown:-1000}[ev.key];
+    if(ev.key==='Home'){vals[i]=0}else if(ev.key==='End'){vals[i]=CMAX}else if(st){vals[i]=clamp(vals[i]+st,0,CMAX)}else return;
+    ev.preventDefault();update();
+  });
+  return el;
+});
+function update(){
+  const sum=vals.reduce((a,b)=>a+b,0);
+  const net=sum*(1-taxRate);
+  const pay=Math.max(0,Math.floor(net*.92/12/50)*50);
+  const low=vals.filter(v=>v<pay).length;
+  bars.forEach((el,i)=>{
+    const h=vals[i]/CMAX*100;
+    el.querySelector('.cbar-fill').style.height=h+'%';
+    el.style.setProperty('--h',h+'%');
+    el.querySelector('.cbar-tip').textContent=money(vals[i]);
+    el.classList.toggle('is-low',vals[i]<pay);
+    el.setAttribute('aria-valuenow',vals[i]);el.setAttribute('aria-valuetext',money(vals[i]));
+  });
+  line.style.bottom=(pay/CMAX*100)+'%';
+  lineLbl.textContent=money(pay)+' / mo';
+  document.getElementById('calcPay').textContent=money(pay);
+  document.getElementById('cEarn').textContent=money(sum);
+  document.getElementById('cTax').textContent=money(sum*taxRate);
+  document.getElementById('cLeft').textContent=money(net-pay*12);
+  document.getElementById('cLow').innerHTML=(low?'<span class="strike">'+low+'</span>':'')+'0';
+}
+let dragging=false,dragBar=null;
+function setFromPointer(ev){
+  const r=chart.getBoundingClientRect();
+  const i=clamp(Math.floor((ev.clientX-r.left)/r.width*12),0,11);
+  const v=Math.round(clamp(1-(ev.clientY-r.top)/r.height)*CMAX/100)*100;
+  vals[i]=v;
+  if(dragBar!==bars[i]){dragBar&&dragBar.classList.remove('is-drag');dragBar=bars[i];dragBar.classList.add('is-drag')}
+  update();
+}
+chart.addEventListener('pointerdown',ev=>{dragging=true;chart.setPointerCapture(ev.pointerId);setFromPointer(ev);ev.preventDefault()});
+chart.addEventListener('pointermove',ev=>{if(dragging)setFromPointer(ev)});
+const endDrag=()=>{dragging=false;dragBar&&dragBar.classList.remove('is-drag');dragBar=null};
+chart.addEventListener('pointerup',endDrag);chart.addEventListener('pointercancel',endDrag);
+document.querySelectorAll('#taxSeg button').forEach(bt=>bt.addEventListener('click',()=>{
+  document.querySelectorAll('#taxSeg button').forEach(o=>o.setAttribute('aria-checked',o===bt));
+  taxRate=parseFloat(bt.dataset.v);update();
+}));
+document.getElementById('taxSeg').addEventListener('keydown',ev=>{
+  const btns=[...document.querySelectorAll('#taxSeg button')];const cur=btns.findIndex(o=>o.getAttribute('aria-checked')==='true');
+  const dir={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[ev.key];if(!dir)return;ev.preventDefault();
+  const n=btns[(cur+dir+btns.length)%btns.length];n.click();n.focus();
+});
+document.getElementById('calcRand').addEventListener('click',()=>{
+  vals=vals.map(()=>Math.random()<.18?0:Math.round(Math.pow(Math.random(),1.9)*14000/100)*100);update();
+});
+document.getElementById('calcReset').addEventListener('click',()=>{vals=DATA.slice();update()});
+update();
+
+/* ============ WAITLIST ============ */
+const form=document.getElementById('waitForm'),msg=document.getElementById('formMsg');
+form.addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const v=form.email.value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){msg.textContent='That email looks off. Mind checking it?';msg.classList.add('err');form.email.focus();return}
+  try{localStorage.setItem('tidal-waitlist',v)}catch(e){}
+  document.getElementById('doneEmail').textContent=v;
+  document.getElementById('formBox').classList.add('is-done');
+  document.getElementById('formDone').focus();
+});
+form.email.addEventListener('input',()=>{if(msg.classList.contains('err')){msg.classList.remove('err');msg.textContent="No spam. One email when it's your turn."}});
+})();
+</script>
+</body>
+</html>

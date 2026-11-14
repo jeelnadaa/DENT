@@ -1,0 +1,1170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Store Analytics · Fernhill Ceramics (sample data)</title>
+<meta name="description" content="Analytics dashboard for a small online store: net sales, orders, top products, traffic sources and recent orders.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23161616'/%3E%3Crect x='6' y='18' width='4' height='8' fill='%23F2F1EE'/%3E%3Crect x='14' y='12' width='4' height='14' fill='%23F2F1EE'/%3E%3Crect x='22' y='6' width='4' height='20' fill='%23FF5A14'/%3E%3C/svg%3E">
+<style>
+/* ============ 1. Tokens (Utilitarian base, DENT styles/utilitarian.md) ============ */
+:root{
+  --bg:#E8E6E1; --surface:#F4F3F0; --surface-2:#ECEAE5; --rule:#C9C6BE; --rule-strong:#76736B;
+  --text:#161616; --text-2:#55554F; --text-3:#6A6862;
+  --signal:#E5480B; --signal-fill:#FF5A14; --on-signal:#161616; --signal-text:#B23A06; --signal-wash:rgba(229,72,11,.12);
+  --pos:#1D6B3A; --neg:#B42318; --warn:#8A5A00;
+  --focus:#1659D6;
+  --skeleton:#DEDBD4; --skeleton-hi:#ECEAE5;
+  --font-sans:"Inter Tight","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono","IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --label-size:11px; --label-tracking:.08em;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+  --r-control:2px; --r-container:0;
+  --dur-fast:100ms; --dur:180ms; --dur-data:420ms; --ease:cubic-bezier(.2,0,0,1);
+  --gutter:16px; --max:1440px;
+  --tap:44px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121211; --surface:#1B1B19; --surface-2:#232320; --rule:#34332F; --rule-strong:#86837B;
+    --text:#EDEBE6; --text-2:#B3B0A8; --text-3:#9C9991;
+    --signal:#FF6A2B; --signal-fill:#FF6A2B; --on-signal:#121211; --signal-text:#FF9161; --signal-wash:rgba(255,106,43,.16);
+    --pos:#6CC58E; --neg:#FF8A7E; --warn:#E8B04B; --focus:#7FA8FF;
+    --skeleton:#262624; --skeleton-hi:#302F2C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121211; --surface:#1B1B19; --surface-2:#232320; --rule:#34332F; --rule-strong:#86837B;
+  --text:#EDEBE6; --text-2:#B3B0A8; --text-3:#9C9991;
+  --signal:#FF6A2B; --signal-fill:#FF6A2B; --on-signal:#121211; --signal-text:#FF9161; --signal-wash:rgba(255,106,43,.16);
+  --pos:#6CC58E; --neg:#FF8A7E; --warn:#E8B04B; --focus:#7FA8FF;
+  --skeleton:#262624; --skeleton-hi:#302F2C;
+}
+@media (min-width:640px){ :root{ --gutter:24px; } }
+@media (min-width:1024px){ :root{ --gutter:32px; } }
+
+/* ============ 2. Base ============ */
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.5 var(--font-sans);font-feature-settings:"tnum" 1,"cv11" 1;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-weight:600;line-height:1.15;letter-spacing:-.01em}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.label{font:500 var(--label-size)/1.3 var(--font-mono);letter-spacing:var(--label-tracking);text-transform:uppercase;color:var(--text-2)}
+.mono{font-family:var(--font-mono)}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+.skip{position:absolute;left:8px;top:-60px;background:var(--text);color:var(--bg);padding:10px 14px;z-index:50;text-decoration:none;font-weight:600}
+.skip:focus{top:8px}
+
+/* ============ 3. Controls ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:36px;padding:0 var(--s3);border:1px solid var(--rule-strong);background:var(--surface);border-radius:var(--r-control);font:500 12px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease);white-space:nowrap;text-decoration:none;color:var(--text)}
+.btn:hover{background:var(--surface-2)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.btn.primary{background:var(--signal-fill);border-color:var(--signal-fill);color:var(--on-signal)}
+.btn.primary:hover{filter:brightness(.95)}
+.btn svg{width:16px;height:16px;flex:none}
+.icon-btn{width:36px;padding:0}
+.seg{display:inline-flex;border:1px solid var(--rule-strong);border-radius:var(--r-control);background:var(--surface);padding:2px;gap:2px}
+.seg button{min-height:30px;min-width:44px;padding:0 var(--s3);border:0;background:transparent;font:500 12px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-radius:1px;color:var(--text-2);transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease)}
+.seg button:hover{background:var(--surface-2);color:var(--text)}
+.seg button[aria-pressed="true"]{background:var(--signal-fill);color:var(--on-signal)}
+.field{position:relative;display:flex;align-items:center}
+.field svg{position:absolute;left:10px;width:16px;height:16px;color:var(--text-2);pointer-events:none}
+.input,.select{min-height:36px;border:1px solid var(--rule-strong);background:var(--surface);border-radius:var(--r-control);padding:0 var(--s3);font-size:14px;width:100%}
+.input{padding-left:34px;padding-right:36px}
+.input::placeholder{color:var(--text-3)}
+.select{appearance:none;-webkit-appearance:none;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 15px) 50%,calc(100% - 10px) 50%;background-size:5px 5px;background-repeat:no-repeat;cursor:pointer}
+.clear-btn{position:absolute;right:2px;width:32px;height:32px;border:0;background:transparent;cursor:pointer;color:var(--text-2);display:grid;place-items:center;border-radius:var(--r-control)}
+.clear-btn:hover{color:var(--text);background:var(--surface-2)}
+.clear-btn svg{position:static}
+@media (pointer:coarse){
+  .btn,.input,.select{min-height:var(--tap)} .icon-btn{width:var(--tap)}
+  .seg button{min-height:40px} .clear-btn{width:40px;height:40px}
+}
+
+/* ============ 4. Top bar ============ */
+.topbar{border-bottom:1px solid var(--rule);background:var(--bg)}
+.topbar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3) var(--s4);padding-top:var(--s4);padding-bottom:var(--s4)}
+.brand{display:flex;align-items:center;gap:var(--s3);margin-right:auto;min-width:0}
+.brand-mark{width:36px;height:36px;flex:none;background:var(--text);display:grid;place-items:end center;padding:6px 6px 7px;grid-template-columns:repeat(3,1fr);gap:3px}
+.brand-mark i{display:block;width:100%;background:var(--bg)}
+.brand-mark i:nth-child(1){height:35%}.brand-mark i:nth-child(2){height:60%}.brand-mark i:nth-child(3){height:90%;background:var(--signal-fill)}
+.brand h1{font-size:18px}
+.sync{display:flex;align-items:center;gap:var(--s2);font:500 12px/1.2 var(--font-mono);color:var(--text-2);letter-spacing:.02em}
+.led{width:8px;height:8px;border-radius:50%;background:var(--text-3);flex:none;box-shadow:0 0 0 2px var(--surface)}
+.sync[data-state="live"] .led{background:var(--pos)}
+.sync[data-state="loading"] .led{background:var(--warn);animation:blink 1s steps(2,start) infinite}
+.sync[data-state="error"] .led{background:var(--neg)}
+@keyframes blink{to{opacity:.25}}
+.top-controls{display:flex;align-items:center;gap:var(--s2)}
+@media (max-width:639px){
+  .topbar .wrap{gap:var(--s3)}
+  .brand{order:0}
+  .top-controls{order:1}
+  .range-mobile{order:2}
+  .sync{order:3;width:100%}
+  .top-controls .seg-wrap{display:none}
+}
+.range-mobile{display:none}
+@media (max-width:639px){ .range-mobile{display:flex;margin-top:var(--s3)} .range-mobile .seg{width:100%} .range-mobile .seg button{flex:1;min-height:40px} }
+
+.demo-strip{background:var(--surface-2);border-bottom:1px solid var(--rule)}
+.demo-strip .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2) var(--s4);padding-top:var(--s2);padding-bottom:var(--s2);font-size:13px;color:var(--text-2)}
+.demo-strip strong{color:var(--text);font-weight:600}
+.demo-strip label{display:flex;align-items:center;gap:var(--s2)}
+.demo-strip .select{width:auto;min-width:200px;min-height:32px;font-size:13px}
+@media (pointer:coarse){ .demo-strip .select{min-height:var(--tap)} }
+
+/* ============ 5. Banner ============ */
+.banner{margin-top:var(--s5);border:1px solid var(--neg);border-left-width:4px;background:var(--surface);padding:var(--s4);display:flex;flex-wrap:wrap;gap:var(--s3) var(--s5);align-items:center}
+.banner .msg{flex:1 1 320px}
+.banner h2{font-size:16px;margin-bottom:2px}
+.banner p{color:var(--text-2);font-size:14px}
+
+/* ============ 6. Sections & ruled grid ============ */
+main{padding-bottom:var(--s7)}
+.section{margin-top:var(--s6)}
+.section-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s2) var(--s3);margin-bottom:var(--s3)}
+.section-head h2{font-size:20px;display:flex;align-items:baseline;gap:var(--s3)}
+.section-head .idx{font:500 12px/1 var(--font-mono);color:var(--signal-text);letter-spacing:.04em}
+.section-head .meta{margin-left:auto}
+.ruled{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.cell{background:var(--surface);padding:var(--s4);min-width:0;position:relative}
+@media (min-width:640px){ .cell{padding:var(--s5)} }
+.cell-head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s3)}
+.cell-head h3{font-size:15px}
+
+/* Overview */
+.overview{grid-template-columns:1fr}
+@media (min-width:640px){ .overview{grid-template-columns:repeat(3,1fr)} .overview .hero{grid-column:1/-1} }
+@media (min-width:1024px){ .overview{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr);grid-template-rows:repeat(3,auto)} .overview .hero{grid-column:1;grid-row:1/4} }
+.hero-value{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s2) var(--s4);margin:var(--s2) 0 var(--s4)}
+.big{font:600 clamp(40px,7vw,64px)/1 var(--font-sans);letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.delta{font:500 13px/1.3 var(--font-mono);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.delta.up{color:var(--pos)} .delta.down{color:var(--neg)} .delta.flat{color:var(--text-2)}
+.delta .vs{color:var(--text-2)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);font:500 12px/1.3 var(--font-mono);color:var(--text-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .sw{width:18px;height:0;border-top:2px solid var(--signal)}
+.legend .sw.prev{border-top:2px dashed var(--text-3)}
+
+.kpi{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:var(--s2) var(--s3)}
+.kpi .label{grid-column:1/-1}
+.kpi .val{font:600 clamp(28px,4vw,36px)/1.05 var(--font-sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.kpi .spark{width:112px;height:40px;color:var(--text-2)}
+.kpi .delta{grid-column:1/-1}
+.kpi .note{grid-column:1/-1;font-size:12px;color:var(--text-2)}
+.kpi .delta{white-space:normal;flex-wrap:wrap;column-gap:6px}
+@media (min-width:640px) and (max-width:1023px){ .kpi{grid-template-columns:1fr} .kpi .spark{width:100%;max-width:180px} }
+td.c-date{white-space:nowrap}
+
+/* Chart */
+.chart{position:relative;outline:none;border-radius:var(--r-control)}
+.chart svg{display:block;width:100%;overflow:visible;touch-action:pan-y}
+.chart:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+.chart .grid line{stroke:var(--rule);stroke-width:1}
+.chart .axis text{fill:var(--text-2);font:500 11px var(--font-mono)}
+.chart .area{fill:var(--signal-wash)}
+.chart .line{fill:none;stroke:var(--signal);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .prev{fill:none;stroke:var(--text-3);stroke-width:1.5;stroke-dasharray:4 4}
+.chart .cross{stroke:var(--text);stroke-width:1}
+.chart .dot{fill:var(--surface);stroke:var(--signal);stroke-width:2}
+.tip{position:absolute;top:0;left:0;pointer-events:none;background:var(--text);color:var(--bg);padding:8px 10px;font:500 12px/1.45 var(--font-mono);white-space:nowrap;border-radius:var(--r-control);opacity:0;transition:opacity var(--dur-fast) var(--ease);z-index:3}
+.tip.show{opacity:1}
+.tip b{font-weight:600}
+.chart-hint{margin-top:var(--s2);font-size:12px;color:var(--text-2)}
+details.data-table{margin-top:var(--s3);font-size:13px}
+details.data-table summary{cursor:pointer;color:var(--text-2);font:500 12px/1 var(--font-mono);letter-spacing:.04em;text-transform:uppercase;padding:var(--s2) 0;display:inline-block;min-height:24px}
+details.data-table summary:hover{color:var(--text)}
+.dt-scroll{max-height:260px;overflow:auto;border:1px solid var(--rule);margin-top:var(--s2)}
+.dt-scroll table{width:100%;border-collapse:collapse}
+.dt-scroll th,.dt-scroll td{padding:6px 10px;text-align:right;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+.dt-scroll th:first-child,.dt-scroll td:first-child{text-align:left}
+.dt-scroll thead th{position:sticky;top:0;background:var(--surface-2);font:500 11px var(--font-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--text-2)}
+
+/* Ranked lists (products, traffic) */
+.split{grid-template-columns:1fr}
+@media (min-width:900px){ .split{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)} }
+.rank{list-style:none;margin:0;padding:0}
+.rank li{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:2px var(--s3);padding:var(--s3) 0;border-top:1px solid var(--rule);align-items:baseline}
+.rank li:first-child{border-top:0}
+.rank .pos{font:500 12px/1.4 var(--font-mono);color:var(--text-2)}
+.rank .name{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank .fig{font:500 14px/1.4 var(--font-sans);font-variant-numeric:tabular-nums;text-align:right}
+.rank .sub{grid-column:2/-1;display:flex;flex-wrap:wrap;align-items:center;gap:4px var(--s3);font:400 12px/1.4 var(--font-mono);color:var(--text-2)}
+.bar{flex:1 1 90px;height:6px;background:var(--surface-2);position:relative;min-width:40px}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--text-2);transform-origin:left;transition:width var(--dur-data) var(--ease)}
+.rank li:first-child .bar i{background:var(--signal)}
+.sub .meta{white-space:nowrap}
+.traffic-total{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);margin-bottom:var(--s3)}
+.traffic-total div{display:flex;flex-direction:column;gap:2px}
+.traffic-total .v{font:600 22px/1.1 var(--font-sans);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+/* ============ 7. Orders table ============ */
+.toolbar{display:grid;gap:var(--s3);grid-template-columns:1fr;margin-bottom:var(--s3)}
+@media (min-width:760px){ .toolbar{grid-template-columns:minmax(220px,1fr) auto auto;align-items:center} }
+.chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin-bottom:var(--s3)}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 var(--s3);border:1px solid var(--rule-strong);border-radius:var(--r-control);background:var(--surface);cursor:pointer;font:500 12px/1 var(--font-mono);letter-spacing:.04em;color:var(--text-2);transition:background var(--dur-fast) var(--ease)}
+.chip:hover{background:var(--surface-2);color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.chip .count{opacity:.8}
+.chip .tick{width:12px;height:12px;display:none}
+.chip[aria-pressed="true"] .tick{display:block}
+@media (pointer:coarse){ .chip{min-height:var(--tap)} }
+.toolbar-right{display:flex;gap:var(--s2);flex-wrap:wrap}
+.toolbar-right .select{width:auto;min-width:170px}
+.sort-mobile{display:none}
+.result-line{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s2);align-items:center;margin-bottom:var(--s2);font:500 12px/1.4 var(--font-mono);color:var(--text-2)}
+.link-btn{border:0;background:none;padding:6px 0;cursor:pointer;color:var(--signal-text);font:500 12px/1 var(--font-mono);text-decoration:underline;text-underline-offset:3px;min-height:24px}
+.table-shell{border:1px solid var(--rule);background:var(--surface);overflow-x:auto}
+table.orders{width:100%;border-collapse:collapse;font-size:14px}
+table.orders th{position:sticky;top:0;background:var(--surface-2);text-align:left;font:500 11px/1.2 var(--font-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--text-2);padding:0;border-bottom:1px solid var(--rule-strong);white-space:nowrap}
+table.orders th.r{text-align:right}
+table.orders th>span{display:block;padding:12px 14px}
+.sort-btn{display:flex;align-items:center;gap:6px;width:100%;padding:12px 14px;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;cursor:pointer;text-align:inherit;min-height:40px}
+th.r .sort-btn{justify-content:flex-end}
+.sort-btn:hover{color:var(--text);background:var(--surface)}
+.sort-btn svg{width:10px;height:10px;opacity:.35;flex:none}
+th[aria-sort="ascending"] .sort-btn,th[aria-sort="descending"] .sort-btn{color:var(--text)}
+th[aria-sort] .sort-btn svg{opacity:1}
+th[aria-sort="ascending"] .sort-btn svg{transform:rotate(180deg)}
+table.orders td{padding:12px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+table.orders tbody tr{transition:background var(--dur-fast) var(--ease)}
+table.orders tbody tr:hover{background:var(--surface-2)}
+table.orders tbody tr:last-child td{border-bottom:0}
+td.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td .id{font:500 13px var(--font-mono)}
+td .muted,.muted{color:var(--text-2);font-size:13px}
+td .items{max-width:280px}
+mark{background:var(--signal-wash);color:inherit;padding:0 1px}
+.status{display:inline-flex;align-items:center;gap:6px;font:500 12px/1.2 var(--font-mono);white-space:nowrap}
+.status::before{content:"";width:8px;height:8px;flex:none;border:1.5px solid currentColor;border-radius:50%}
+.status.paid{color:var(--text)} .status.paid::before{background:currentColor}
+.status.fulfilled{color:var(--pos)} .status.fulfilled::before{background:currentColor;border-radius:1px}
+.status.pending{color:var(--warn)}
+.status.refunded{color:var(--neg)} .status.refunded::before{border-style:dashed}
+.status.cancelled{color:var(--text-2)} .status.cancelled::before{background:linear-gradient(45deg,transparent 42%,currentColor 42%,currentColor 58%,transparent 58%)}
+.pager{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s3);margin-top:var(--s3)}
+.pager .pages{display:flex;gap:var(--s1);flex-wrap:wrap}
+.pager .pages button{min-width:36px}
+.pager .pages button[aria-current="page"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+@media (pointer:coarse){ .pager .pages button{min-width:var(--tap)} }
+
+/* Phone: table becomes stacked cards */
+@media (max-width:759px){
+  .sort-mobile{display:flex;flex:1 1 0;min-width:0}
+  .toolbar-right{flex-wrap:nowrap}
+  .toolbar-right>.select{flex:1 1 0;min-width:0}
+  .sort-mobile .select{min-width:0}
+  .table-shell{border:0;background:transparent;overflow:visible}
+  table.orders,table.orders tbody{display:block}
+  table.orders thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.orders tbody tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px var(--s3);background:var(--surface);border:1px solid var(--rule);padding:var(--s3) var(--s4);margin-bottom:var(--s2)}
+  table.orders tbody tr:hover{background:var(--surface)}
+  table.orders td{display:block;padding:0;border:0}
+  table.orders td.c-id{grid-column:1;grid-row:1}
+  table.orders td.c-total{grid-column:2;grid-row:1;font-weight:600;font-size:16px}
+  table.orders td.c-cust{grid-column:1;grid-row:2;font-weight:500}
+  table.orders td.c-status{grid-column:2;grid-row:2;text-align:right}
+  table.orders td.c-items{grid-column:1/-1;grid-row:3}
+  table.orders td.c-date{grid-column:1;grid-row:4;font-size:13px;color:var(--text-2)}
+  table.orders td.c-chan{grid-column:2;grid-row:4;font-size:13px;color:var(--text-2);text-align:right}
+  table.orders td.c-items .muted:last-child{display:none}
+  table.orders td.c-chan::before{content:"via ";}
+  td .items{max-width:none}
+  table.orders tr.state-row{display:block;padding:0;border:0;background:transparent}
+}
+@media (min-width:760px) and (max-width:1023px){ .hide-md{display:none} }
+
+/* ============ 8. States: skeleton, empty, error ============ */
+.sk{display:block;background:var(--skeleton);border-radius:1px;position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--skeleton-hi),transparent);transform:translateX(-100%);animation:shimmer 1.3s var(--ease) infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.state{display:flex;flex-direction:column;align-items:flex-start;gap:var(--s2);padding:var(--s5) 0}
+.state .state-icon{width:40px;height:40px;border:1px solid var(--rule-strong);display:grid;place-items:center;color:var(--text-2);margin-bottom:var(--s1)}
+.state .state-icon svg{width:20px;height:20px}
+.state h4{margin:0;font-size:15px;font-weight:600}
+.state p{color:var(--text-2);font-size:14px;max-width:46ch}
+.state .btn{margin-top:var(--s2)}
+.state.err .state-icon{border-color:var(--neg);color:var(--neg)}
+.table-state{padding:var(--s6) var(--s5);background:var(--surface)}
+.table-state .state{padding:0}
+
+footer{border-top:1px solid var(--rule);padding:var(--s5) 0 var(--s7);color:var(--text-2);font-size:13px}
+footer dl{display:grid;grid-template-columns:1fr;gap:var(--s3) var(--s5);margin:0}
+@media (min-width:768px){ footer dl{grid-template-columns:repeat(3,1fr)} }
+footer dt{margin-bottom:2px}
+footer dd{margin:0}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,12px);background:var(--text);color:var(--bg);padding:10px 16px;font:500 13px/1.4 var(--font-mono);opacity:0;pointer-events:none;transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);z-index:40;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+.fade-in{animation:fadeIn var(--dur) var(--ease)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .sk::after{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to dashboard</a>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div>
+        <p class="label">Store analytics</p>
+        <h1>Fernhill Ceramics</h1>
+      </div>
+    </div>
+    <div class="sync" id="sync" data-state="loading" role="status" aria-live="polite">
+      <span class="led" aria-hidden="true"></span><span id="syncText">Loading store data…</span>
+    </div>
+    <div class="top-controls">
+      <div class="seg-wrap">
+        <div class="seg" role="group" aria-label="Date range" data-range-group>
+          <button type="button" data-range="7" aria-pressed="false">7D</button>
+          <button type="button" data-range="30" aria-pressed="true">30D</button>
+          <button type="button" data-range="90" aria-pressed="false">90D</button>
+        </div>
+      </div>
+      <button type="button" class="btn icon-btn" id="refreshBtn" aria-label="Refresh data" title="Refresh data">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.5v3h-3"/></svg>
+      </button>
+      <button type="button" class="btn icon-btn" id="themeBtn" aria-label="Switch to dark theme" title="Switch theme">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 2.5v11" /><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <div class="range-mobile" style="width:100%">
+      <div class="seg" role="group" aria-label="Date range" data-range-group>
+        <button type="button" data-range="7" aria-pressed="false">7 days</button>
+        <button type="button" data-range="30" aria-pressed="true">30 days</button>
+        <button type="button" data-range="90" aria-pressed="false">90 days</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="demo-strip">
+  <div class="wrap">
+    <p><strong>Sample data.</strong> Every figure is generated for this demo; it is not a real store.</p>
+    <label for="scenario"><span class="label">Preview state</span>
+      <select id="scenario" class="select">
+        <option value="live">Live data</option>
+        <option value="slow">Slow connection</option>
+        <option value="empty">New store, no orders</option>
+        <option value="error">Network error (retry works)</option>
+        <option value="partial">Orders failed to load</option>
+      </select>
+    </label>
+  </div>
+</div>
+
+<main id="main" class="wrap" tabindex="-1" aria-busy="true">
+  <div id="banner" class="banner" role="alert" hidden>
+    <div class="msg">
+      <h2>We couldn't load your store data</h2>
+      <p id="bannerText">The analytics service didn't respond within 10 seconds. Your store and orders are not affected; only this report is unavailable.</p>
+    </div>
+    <button type="button" class="btn primary" id="retryAll">Try again</button>
+  </div>
+
+  <section class="section" aria-labelledby="h-overview">
+    <div class="section-head">
+      <h2 id="h-overview"><span class="idx">01</span>Overview</h2>
+      <p class="label meta" id="rangeLabel">Last 30 days</p>
+    </div>
+    <div class="ruled overview">
+      <article class="cell hero" aria-labelledby="h-rev">
+        <div class="cell-head">
+          <div>
+            <h3 id="h-rev" class="label">Net sales</h3>
+          </div>
+          <div class="legend" id="revLegend" aria-hidden="true">
+            <span><i class="sw"></i>This period</span>
+            <span><i class="sw prev"></i><span id="prevLegendText">Previous 30 days</span></span>
+          </div>
+        </div>
+        <div id="revBody"></div>
+      </article>
+      <article class="cell kpi" id="kpiOrders" aria-labelledby="h-orders"></article>
+      <article class="cell kpi" id="kpiAov" aria-labelledby="h-aov"></article>
+      <article class="cell kpi" id="kpiConv" aria-labelledby="h-conv"></article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-selling">
+    <div class="section-head">
+      <h2 id="h-selling"><span class="idx">02</span>What's selling and where buyers come from</h2>
+    </div>
+    <div class="ruled split">
+      <article class="cell" aria-labelledby="h-products">
+        <div class="cell-head">
+          <h3 id="h-products">Top products</h3>
+          <div class="seg" role="group" aria-label="Rank products by">
+            <button type="button" data-metric="revenue" aria-pressed="true">Sales</button>
+            <button type="button" data-metric="units" aria-pressed="false">Units</button>
+          </div>
+        </div>
+        <div id="productsBody"></div>
+      </article>
+      <article class="cell" aria-labelledby="h-traffic">
+        <div class="cell-head">
+          <h3 id="h-traffic">Traffic sources</h3>
+          <p class="label">Sessions</p>
+        </div>
+        <div id="trafficBody"></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-orders-table">
+    <div class="section-head">
+      <h2 id="h-orders-table"><span class="idx">03</span>Recent orders</h2>
+      <p class="label meta" id="ordersRangeLabel">Last 30 days</p>
+    </div>
+    <div class="toolbar">
+      <div class="field">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+        <label for="q" class="sr-only">Search orders</label>
+        <input id="q" class="input" type="search" placeholder="Search order #, customer or product" autocomplete="off" spellcheck="false">
+        <button type="button" class="clear-btn" id="qClear" aria-label="Clear search" hidden>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg>
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <label for="channel" class="sr-only">Filter by traffic source</label>
+        <select id="channel" class="select"><option value="all">All sources</option></select>
+        <div class="sort-mobile">
+          <label for="sortMobile" class="sr-only">Sort orders</label>
+          <select id="sortMobile" class="select">
+            <option value="date:desc">Newest first</option>
+            <option value="date:asc">Oldest first</option>
+            <option value="total:desc">Highest total</option>
+            <option value="total:asc">Lowest total</option>
+            <option value="customer:asc">Customer A–Z</option>
+            <option value="status:asc">Status A–Z</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" class="btn" id="exportBtn">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0-3-3m3 3 3-3M3 13h10"/></svg>
+        Export CSV
+      </button>
+    </div>
+    <div class="chips" role="group" aria-label="Filter by order status" id="chips"></div>
+    <div class="result-line">
+      <p id="resultText" aria-live="polite">&nbsp;</p>
+      <button type="button" class="link-btn" id="clearFilters" hidden>Clear all filters</button>
+    </div>
+    <div class="table-shell">
+      <table class="orders" id="ordersTable">
+        <caption class="sr-only">Recent orders. Column headers with buttons can be sorted.</caption>
+        <thead>
+          <tr>
+            <th scope="col" data-key="id"><span>Order</span></th>
+            <th scope="col" data-key="date" aria-sort="descending"><button type="button" class="sort-btn" data-sort="date">Date<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3h8L5 8z" fill="currentColor"/></svg></button></th>
+            <th scope="col" data-key="customer"><button type="button" class="sort-btn" data-sort="customer">Customer<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3h8L5 8z" fill="currentColor"/></svg></button></th>
+            <th scope="col"><span>Items</span></th>
+            <th scope="col" class="hide-md"><span>Source</span></th>
+            <th scope="col" data-key="status"><button type="button" class="sort-btn" data-sort="status">Status<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3h8L5 8z" fill="currentColor"/></svg></button></th>
+            <th scope="col" class="r" data-key="total"><button type="button" class="sort-btn" data-sort="total">Total<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3h8L5 8z" fill="currentColor"/></svg></button></th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+    <nav class="pager" aria-label="Orders pages" id="pager"></nav>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <dl>
+      <div><dt class="label">Net sales</dt><dd>Order totals including shipping, excluding refunded and cancelled orders. Compared with the same number of days just before.</dd></div>
+      <div><dt class="label">Orders · Avg. order value</dt><dd>Orders placed in the period, excluding cancelled. Average order value is net sales divided by orders that still count toward sales.</dd></div>
+      <div><dt class="label">Conversion</dt><dd>Orders divided by store sessions in the same period. Sessions are visits, so one person can count more than once.</dd></div>
+    </dl>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+"use strict";
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const money0 = new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", maximumFractionDigits:0 });
+const money2 = new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", minimumFractionDigits:2, maximumFractionDigits:2 });
+const int = new Intl.NumberFormat("en-US");
+const compactMoney = (v) => v >= 10000 ? "$" + (v/1000).toFixed(v >= 100000 ? 0 : 1).replace(/\.0$/,"") + "k" : money0.format(v);
+const dShort = new Intl.DateTimeFormat("en-US", { month:"short", day:"numeric" });
+const dDay = new Intl.DateTimeFormat("en-US", { weekday:"short", month:"short", day:"numeric" });
+const dWk = new Intl.DateTimeFormat("en-US", { weekday:"short" });
+const tTime = new Intl.DateTimeFormat("en-US", { hour:"numeric", minute:"2-digit" });
+const DAY = 864e5;
+const startOfDay = (d) => { const x = new Date(d); x.setHours(0,0,0,0); return x; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const icon = {
+  empty:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7h14l-1.5 9h-11z"/><path d="M7 7V5a3 3 0 0 1 6 0v2"/></svg>',
+  error:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 3 2 17h16z"/><path d="M10 8v4M10 14.5v.5"/></svg>',
+  search:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="9" r="5"/><path d="m13 13 4 4"/></svg>'
+};
+const tick = '<svg class="tick" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m2.5 6.5 2.5 2.5 4.5-6"/></svg>';
+
+function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function pickW(r, items){ const tot = items.reduce((a, b) => a + b.w, 0); let x = r() * tot; for (const it of items){ if ((x -= it.w) <= 0) return it; } return items[items.length-1]; }
+
+/* ---------- sample dataset (seeded, internally consistent) ---------- */
+const PRODUCTS = [
+  { id:"mug",     name:"Speckled stoneware mug",      price:28, w:22 },
+  { id:"drip",    name:"Pour-over dripper",           price:42, w:12 },
+  { id:"bowls",   name:"Nesting bowl set (3)",        price:96, w:7 },
+  { id:"vase",    name:"Bud vase, small",             price:24, w:14 },
+  { id:"platter", name:"Oval serving platter",        price:68, w:6 },
+  { id:"teapot",  name:"Matte black teapot",          price:84, w:5 },
+  { id:"cups",    name:"Espresso cups, pair",         price:36, w:9 },
+  { id:"planter", name:"Ridged planter, medium",      price:46, w:8 },
+  { id:"plates",  name:"Side plates, set of 4",       price:58, w:6 },
+  { id:"gift",    name:"Gift card",                   price:50, w:3 }
+];
+const SOURCES = [
+  { id:"organic",  name:"Organic search", w:31, conv:.021 },
+  { id:"instagram",name:"Instagram",      w:24, conv:.012 },
+  { id:"direct",   name:"Direct",         w:18, conv:.034 },
+  { id:"email",    name:"Email newsletter", w:14, conv:.046 },
+  { id:"paid",     name:"Paid search",    w:8,  conv:.017 },
+  { id:"referral", name:"Referral sites", w:5,  conv:.025 }
+];
+const FIRST = ["Amara","Jonas","Priya","Mateo","Hana","Liam","Sofia","Kwame","Elena","Noah","Yuki","Fatima","Oscar","Leila","Tomás","Ines","Rafael","Mei","Aiden","Zara","Lucas","Nadia","Felix","Chloé","Omar","Greta","Ravi","Isla","Diego","Anya","Theo","Maya","Ezra","Lina","Samir","Clara","Kai","Rosa","Ibrahim","Wren"];
+const LAST = ["O.","B.","K.","S.","N.","M.","L.","R.","D.","T.","H.","V.","P.","A.","W.","G.","F.","C.","E.","Z."];
+const STATUSES = [
+  { id:"pending",   name:"Pending" },
+  { id:"paid",      name:"Paid" },
+  { id:"fulfilled", name:"Fulfilled" },
+  { id:"refunded",  name:"Refunded" },
+  { id:"cancelled", name:"Cancelled" }
+];
+const COUNTS_TO_SALES = new Set(["pending","paid","fulfilled"]);
+const DAYS = 180;
+
+function buildDataset(kind){
+  const r = rng(20261114);
+  const now = new Date();
+  const today = startOfDay(now);
+  const dayFrac = Math.max(.08, (now - today) / DAY);
+  const days = [];
+  const orders = [];
+  let seq = 0;
+  for (let i = DAYS - 1; i >= 0; i--){
+    const d = addDays(today, -i);
+    const dow = d.getDay();
+    const trend = 1 + ((DAYS - 1 - i) / DAYS) * 0.28;
+    const weekly = [1.3, .82, .88, .94, 1.0, 1.08, 1.36][dow];
+    const promo = (i % 47 === 12) ? 1.9 : 1;            // an occasional newsletter push
+    let expected = 10.5 * trend * weekly * promo * (.82 + r() * .36);
+    if (i === 0) expected *= dayFrac;
+    const n = kind === "empty" ? 0 : Math.max(0, Math.round(expected + (r() - .5) * 3));
+    const perSource = Object.fromEntries(SOURCES.map(s => [s.id, 0]));
+    for (let k = 0; k < n; k++){
+      const src = promo > 1 && r() < .45 ? SOURCES[3] : pickW(r, SOURCES);
+      perSource[src.id]++;
+      const lines = [];
+      const nLines = r() < .62 ? 1 : (r() < .75 ? 2 : 3);
+      for (let l = 0; l < nLines; l++){
+        const p = pickW(r, PRODUCTS);
+        const ex = lines.find(x => x.p.id === p.id);
+        const qty = r() < .85 ? 1 : 2;
+        if (ex) ex.qty += qty; else lines.push({ p, qty });
+      }
+      const subtotal = lines.reduce((a, x) => a + x.p.price * x.qty, 0);
+      const shipping = subtotal >= 75 ? 0 : 6.5;
+      const hourMax = i === 0 ? Math.max(1, now.getHours() + now.getMinutes()/60 - .1) : 23.9;
+      const hour = Math.min(hourMax, 7 + Math.pow(r(), .9) * (hourMax - 7 > 0 ? hourMax - 7 : hourMax));
+      const date = new Date(d.getTime() + hour * 3600e3);
+      const age = (now - date) / DAY;
+      let status;
+      const x = r();
+      if (x < .022) status = "cancelled";
+      else if (x < .05 && age > 2) status = "refunded";
+      else if (age < 1) status = r() < .45 ? "pending" : "paid";
+      else if (age < 4) status = r() < .4 ? "paid" : "fulfilled";
+      else status = "fulfilled";
+      orders.push({
+        id: 0, date, customer: FIRST[Math.floor(r()*FIRST.length)] + " " + LAST[Math.floor(r()*LAST.length)],
+        lines, total: Math.round((subtotal + shipping) * 100) / 100, source: src.id, status
+      });
+      seq++;
+    }
+    // sessions: orders implied by each source's conversion, plus browsing noise
+    const sessions = {};
+    for (const s of SOURCES){
+      const base = (10.5 * trend * weekly * (s.w / 100)) / s.conv;
+      let v = Math.round((perSource[s.id] ? perSource[s.id] / s.conv : base) * (.55 + r() * .25) + base * .35);
+      if (kind === "empty") v = Math.round(base * .12 * (.6 + r() * .8));
+      if (i === 0) v = Math.round(v * dayFrac);
+      sessions[s.id] = Math.max(v, perSource[s.id]);
+    }
+    days.push({ date: d, sessions });
+  }
+  orders.sort((a, b) => a.date - b.date);
+  orders.forEach((o, i) => o.id = 1041 + i);
+  return { days, orders, fetchedAt: new Date() };
+}
+
+/* Simulated API: returns the dataset or fails, like a network call would. */
+function fetchStore(scenario){
+  const delay = scenario === "slow" ? 3200 : 650 + Math.random() * 350;
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (scenario === "error") return reject(new Error("timeout"));
+      const data = buildDataset(scenario === "empty" ? "empty" : "live");
+      data.ordersFailed = scenario === "partial";
+      resolve(data);
+    }, delay);
+  });
+}
+
+/* ---------- state ---------- */
+const params = new URLSearchParams(location.search);
+const state = {
+  scenario: ["live","slow","empty","error","partial"].includes(params.get("state")) ? params.get("state") : "live",
+  range: [7,30,90].includes(+params.get("range")) ? +params.get("range") : 30,
+  status: "loading",   // loading | ready | error
+  data: null,
+  productMetric: "revenue",
+  table: { q:"", statuses:new Set(), source:"all", sort:"date", dir:"desc", page:1, per:10 },
+  chartIndex: null,
+  lastKpi: {}
+};
+let loadToken = 0;
+
+/* ---------- aggregation ---------- */
+function periodBounds(range){
+  const today = startOfDay(new Date());
+  const start = addDays(today, -(range - 1));
+  const prevStart = addDays(start, -range);
+  return { start, end: addDays(today, 1), prevStart, prevEnd: start };
+}
+function summarize(data, range){
+  const b = periodBounds(range);
+  const inCur = (d) => d >= b.start && d < b.end;
+  const inPrev = (d) => d >= b.prevStart && d < b.prevEnd;
+  const cur = data.orders.filter(o => inCur(o.date));
+  const prev = data.orders.filter(o => inPrev(o.date));
+  const stats = (list, from, to) => {
+    const placed = list.filter(o => o.status !== "cancelled");
+    const sales = list.filter(o => COUNTS_TO_SALES.has(o.status));
+    const revenue = sales.reduce((a, o) => a + o.total, 0);
+    const sessions = data.days.filter(d => d.date >= from && d.date < to).reduce((a, d) => a + Object.values(d.sessions).reduce((x, y) => x + y, 0), 0);
+    return { revenue, orders: placed.length, aov: sales.length ? revenue / sales.length : null, conv: sessions ? placed.length / sessions : null, sessions };
+  };
+  const s = stats(cur, b.start, b.end), p = stats(prev, b.prevStart, b.prevEnd);
+  // daily series
+  const series = [];
+  for (let i = 0; i < range; i++){
+    const day = addDays(b.start, i), next = addDays(day, 1), pday = addDays(b.prevStart, i), pnext = addDays(pday, 1);
+    const dayOrders = cur.filter(o => o.date >= day && o.date < next);
+    const prevOrders = prev.filter(o => o.date >= pday && o.date < pnext);
+    const sumRev = (l) => l.filter(o => COUNTS_TO_SALES.has(o.status)).reduce((a, o) => a + o.total, 0);
+    const placed = dayOrders.filter(o => o.status !== "cancelled");
+    const sess = (data.days.find(d => +d.date === +day) || { sessions:{} }).sessions;
+    const sessTotal = Object.values(sess).reduce((a, b) => a + b, 0);
+    const salesOrders = dayOrders.filter(o => COUNTS_TO_SALES.has(o.status));
+    series.push({ date: day, prevDate: pday, revenue: sumRev(dayOrders), prevRevenue: sumRev(prevOrders), orders: placed.length,
+      aov: salesOrders.length ? sumRev(dayOrders) / salesOrders.length : null, conv: sessTotal ? placed.length / sessTotal : null, today: i === range - 1 });
+  }
+  // products
+  const prod = new Map(PRODUCTS.map(p => [p.id, { p, units:0, revenue:0 }]));
+  cur.filter(o => COUNTS_TO_SALES.has(o.status)).forEach(o => o.lines.forEach(l => { const x = prod.get(l.p.id); x.units += l.qty; x.revenue += l.p.price * l.qty; }));
+  // traffic
+  const traffic = SOURCES.map(src => {
+    const sessions = data.days.filter(d => inCur(d.date)).reduce((a, d) => a + d.sessions[src.id], 0);
+    const orders = cur.filter(o => o.source === src.id && o.status !== "cancelled").length;
+    return { src, sessions, orders, conv: sessions ? orders / sessions : 0 };
+  }).sort((a, b) => b.sessions - a.sessions);
+  return { b, cur, s, p, series, products: [...prod.values()], traffic };
+}
+function pctChange(a, b){ if (a == null || b == null) return null; if (b === 0) return a === 0 ? 0 : null; return (a - b) / b; }
+
+/* ---------- rendering: shared bits ---------- */
+function deltaHTML(ch, label, opts = {}){
+  if (opts.bothEmpty) return `<span class="delta flat"><span class="vs">No orders in the ${esc(label)} either</span></span>`;
+  if (ch == null) return `<span class="delta flat"><span class="vs">No earlier data to compare</span></span>`;
+  const pts = opts.points;
+  const v = pts ? ch * 100 : ch * 100;
+  const flat = Math.abs(v) < (pts ? .05 : .5);
+  const cls = flat ? "flat" : (v > 0 ? "up" : "down");
+  const arrow = flat ? "■" : (v > 0 ? "▲" : "▼");
+  const text = pts ? `${v > 0 ? "+" : ""}${v.toFixed(2)} pts` : `${v > 0 ? "+" : ""}${v.toFixed(1)}%`;
+  const word = flat ? "No change" : (v > 0 ? "Up" : "Down");
+  return `<span class="delta ${cls}"><span aria-hidden="true">${arrow}</span><span class="sr-only">${word}</span>${flat ? "0.0%" : text} <span class="vs">vs ${esc(label)}</span></span>`;
+}
+function stateHTML(kind, title, body, action){
+  return `<div class="state ${kind === "error" ? "err" : ""} fade-in"><div class="state-icon">${icon[kind] || icon.empty}</div><h4>${esc(title)}</h4><p>${body}</p>${action ? `<button type="button" class="btn ${action.primary ? "primary" : ""}" data-action="${action.id}">${esc(action.label)}</button>` : ""}</div>`;
+}
+function sk(w, h, extra = ""){ return `<span class="sk" style="width:${w};height:${h}px;${extra}"></span>`; }
+function animateNumber(el, from, to, fmt){
+  if (from == null || reduceMotion.matches || from === to || to == null){ el.textContent = fmt(to); return; }
+  const t0 = performance.now(), dur = 420;
+  const step = (t) => { const k = Math.min(1, (t - t0) / dur); const e = 1 - Math.pow(1 - k, 3); el.textContent = fmt(from + (to - from) * e); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function rangeText(range){ return range === 7 ? "Last 7 days" : `Last ${range} days`; }
+function prevText(range){ return `previous ${range} days`; }
+
+/* ---------- overview ---------- */
+const KPIS = [
+  { el:"#kpiOrders", id:"h-orders", key:"orders", label:"Orders", fmt:(v) => v == null ? "—" : int.format(Math.round(v)), spark:"orders" },
+  { el:"#kpiAov", id:"h-aov", key:"aov", label:"Avg. order value", fmt:(v) => v == null ? "—" : money2.format(v), spark:"aov" },
+  { el:"#kpiConv", id:"h-conv", key:"conv", label:"Conversion rate", fmt:(v) => v == null ? "—" : (v * 100).toFixed(2) + "%", spark:"conv", points:true }
+];
+function renderOverview(sum){
+  const rev = $("#revBody");
+  $("#revLegend").style.visibility = state.status === "ready" && sum && sum.cur.length ? "visible" : "hidden";
+  if (state.status === "loading"){
+    rev.innerHTML = `<div aria-hidden="true">${sk("min(280px,70%)", 56, "margin:8px 0 16px")}${sk("180px", 14, "margin-bottom:20px")}${sk("100%", 240)}</div>`;
+    KPIS.forEach(k => { $(k.el).innerHTML = `<h3 id="${k.id}" class="label">${k.label}</h3><div aria-hidden="true">${sk("120px", 34)}</div><div aria-hidden="true">${sk("112px", 40)}</div><div aria-hidden="true">${sk("150px", 12)}</div>`; });
+    return;
+  }
+  if (state.status === "error"){
+    rev.innerHTML = stateHTML("error", "Sales unavailable", "This chart will appear once the data loads.", null);
+    KPIS.forEach(k => { $(k.el).innerHTML = `<h3 id="${k.id}" class="label">${k.label}</h3><p class="val" aria-label="Unavailable">—</p><p class="note">Unavailable</p>`; });
+    state.lastKpi = {};
+    return;
+  }
+  const { s, p, series } = sum;
+  const prevLbl = prevText(state.range);
+  $("#prevLegendText").textContent = `Previous ${state.range} days`;
+  const hasSales = sum.cur.length > 0;
+  rev.innerHTML = `
+    <div class="hero-value">
+      <p class="big" id="revVal">${money0.format(s.revenue)}</p>
+      ${deltaHTML(pctChange(s.revenue, p.revenue), prevLbl, { bothEmpty: !s.orders && !p.orders })}
+    </div>
+    ${hasSales ? `<div class="chart" id="revChart" tabindex="0" role="img" aria-roledescription="line chart"></div>
+    <p class="chart-hint" id="chartHint">Hover or tap the chart for daily figures. With the keyboard, focus it and use the arrow keys.</p>
+    <details class="data-table"><summary>Show daily figures as a table</summary><div class="dt-scroll"><table><caption class="sr-only">Net sales by day</caption><thead><tr><th scope="col">Date</th><th scope="col">Net sales</th><th scope="col">Orders</th><th scope="col">Previous period</th></tr></thead><tbody>
+      ${series.slice().reverse().map(d => `<tr><td>${dDay.format(d.date)}${d.today ? " (so far)" : ""}</td><td>${money0.format(d.revenue)}</td><td>${d.orders}</td><td>${money0.format(d.prevRevenue)}</td></tr>`).join("")}
+    </tbody></table></div></details>`
+    : stateHTML("empty", "No sales in this period yet", `There are no orders in the ${rangeText(state.range).toLowerCase()}. ${state.range < 90 ? "Try a longer range, or check back after your next sale." : "Sales will show here as soon as your first order comes in."}`, state.range < 90 ? { id:"range90", label:"Show last 90 days" } : null)}
+  `;
+  if (hasSales){ state.chartIndex = null; drawRevenueChart(); }
+  else state.lastKpi.revenue = 0;
+  const revEl = $("#revVal");
+  animateNumber(revEl, state.lastKpi.revenue, s.revenue, money0.format);
+  state.lastKpi.revenue = s.revenue;
+
+  KPIS.forEach(k => {
+    const el = $(k.el);
+    const v = s[k.key], pv = p[k.key];
+    const ch = k.points ? (v != null && pv != null ? (v - pv) : null) : pctChange(v, pv);
+    const vals = series.map(d => d[k.spark]).filter(x => x != null);
+    el.innerHTML = `<h3 id="${k.id}" class="label">${k.label}</h3>
+      <p class="val" data-val>${k.fmt(v)}</p>
+      ${vals.length > 1 ? sparkSVG(series.map(d => d[k.spark])) : `<span></span>`}
+      ${v == null ? `<p class="note">No orders in this period</p>` : deltaHTML(ch, prevLbl, { points: k.points, bothEmpty: !s.orders && !p.orders })}`;
+    animateNumber($("[data-val]", el), state.lastKpi[k.key], v, k.fmt);
+    state.lastKpi[k.key] = v;
+  });
+}
+function sparkSVG(vals){
+  const w = 112, h = 40, pad = 3;
+  const clean = vals.map(v => v == null ? 0 : v);
+  const max = Math.max(...clean), min = Math.min(...clean);
+  const span = max - min || 1;
+  const pts = clean.map((v, i) => [pad + i * (w - pad*2) / (clean.length - 1), h - pad - (v - min) / span * (h - pad*2)]);
+  const last = pts[pts.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" aria-hidden="true" focusable="false"><polyline points="${pts.map(p => p.map(n => n.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3" fill="var(--signal)"/></svg>`;
+}
+function niceMax(v){ if (v <= 0) return 100; const e = Math.pow(10, Math.floor(Math.log10(v))); const f = v / e; const n = f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10; return n * e; }
+
+function drawRevenueChart(){
+  const host = $("#revChart"); if (!host || !state.sum) return;
+  const series = state.sum.series;
+  const W = Math.max(260, host.clientWidth);
+  const narrow = W < 520;
+  const H = narrow ? 200 : 260;
+  const pad = { l: narrow ? 42 : 52, r: 8, t: 10, b: 26 };
+  const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
+  const max = niceMax(Math.max(...series.map(d => Math.max(d.revenue, d.prevRevenue))) * 1.05);
+  const n = series.length;
+  const x = (i) => pad.l + (n === 1 ? iw / 2 : i * iw / (n - 1));
+  const y = (v) => pad.t + ih - (v / max) * ih;
+  const ticks = [0, .25, .5, .75, 1].map(k => k * max);
+  const linePts = series.map((d, i) => `${x(i).toFixed(1)},${y(d.revenue).toFixed(1)}`);
+  const prevPts = series.map((d, i) => `${x(i).toFixed(1)},${y(d.prevRevenue).toFixed(1)}`);
+  const want = narrow ? 4 : (n <= 7 ? 7 : 6);
+  const step = Math.max(1, Math.ceil((n - 1) / (want - 1)));
+  const xIdx = []; for (let i = n - 1; i >= 0; i -= step) xIdx.push(i);
+  const xLab = (i) => n <= 7 ? dWk.format(series[i].date) : dShort.format(series[i].date);
+  const total = series.reduce((a, d) => a + d.revenue, 0);
+  const best = series.reduce((a, d) => d.revenue > a.revenue ? d : a, series[0]);
+  host.setAttribute("aria-label", `Net sales per day, ${rangeText(state.range).toLowerCase()}: ${money0.format(total)} in total. Best day ${dDay.format(best.date)} with ${money0.format(best.revenue)}. Dashed line shows the previous period.`);
+  host.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true" focusable="false">
+      <g class="grid">${ticks.map(t => `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}"/>`).join("")}</g>
+      <g class="axis">${ticks.map(t => `<text x="${pad.l - 8}" y="${(y(t) + 4).toFixed(1)}" text-anchor="end">${compactMoney(t)}</text>`).join("")}
+        ${xIdx.map(i => `<text x="${x(i).toFixed(1)}" y="${H - 6}" text-anchor="${i === n - 1 ? "end" : i === 0 ? "start" : "middle"}">${xLab(i)}</text>`).join("")}</g>
+      <polyline class="prev" points="${prevPts.join(" ")}"/>
+      <path class="area" d="M${x(0).toFixed(1)},${y(0)} L${linePts.join(" L")} L${x(n - 1).toFixed(1)},${y(0)} Z"/>
+      <polyline class="line" points="${linePts.join(" ")}"/>
+      <g class="hover" style="display:none"><line class="cross" y1="${pad.t}" y2="${pad.t + ih}"/><circle class="dot" r="4.5"/></g>
+      <rect class="hit" x="${pad.l}" y="0" width="${iw}" height="${H}" fill="transparent"/>
+    </svg>
+    <div class="tip" aria-hidden="true"></div>
+    <p class="sr-only" aria-live="polite" id="chartLive"></p>`;
+  const svg = $("svg", host), g = $(".hover", svg), tip = $(".tip", host), live = $("#chartLive", host);
+  const show = (i, announce) => {
+    state.chartIndex = i;
+    const d = series[i];
+    g.style.display = "";
+    $(".cross", g).setAttribute("x1", x(i)); $(".cross", g).setAttribute("x2", x(i));
+    $(".dot", g).setAttribute("cx", x(i)); $(".dot", g).setAttribute("cy", y(d.revenue));
+    tip.innerHTML = `<b>${dDay.format(d.date)}${d.today ? " · so far" : ""}</b><br>${money0.format(d.revenue)} · ${d.orders} order${d.orders === 1 ? "" : "s"}<br><span style="opacity:.75">Prev. ${dShort.format(d.prevDate)}: ${money0.format(d.prevRevenue)}</span>`;
+    tip.classList.add("show");
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let left = x(i) + 12; if (left + tw > W) left = x(i) - tw - 12; left = Math.max(0, left);
+    const top = Math.max(0, Math.min(H - th, y(d.revenue) - th - 10));
+    tip.style.transform = `translate(${left}px, ${top}px)`;
+    if (announce) live.textContent = `${dDay.format(d.date)}: ${money0.format(d.revenue)}, ${d.orders} orders. Previous period ${money0.format(d.prevRevenue)}.`;
+  };
+  const hide = () => { g.style.display = "none"; tip.classList.remove("show"); };
+  const idxFrom = (evt) => { const r = svg.getBoundingClientRect(); const px = (evt.clientX - r.left) * (W / r.width); return Math.max(0, Math.min(n - 1, Math.round((px - pad.l) / (iw / Math.max(1, n - 1))))); };
+  svg.addEventListener("pointermove", (e) => show(idxFrom(e), false));
+  svg.addEventListener("pointerdown", (e) => show(idxFrom(e), false));
+  svg.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse" && document.activeElement !== host) hide(); });
+  host.onkeydown = (e) => {
+    let i = state.chartIndex == null ? n - 1 : state.chartIndex;
+    if (e.key === "ArrowRight") i = Math.min(n - 1, i + 1);
+    else if (e.key === "ArrowLeft") i = Math.max(0, i - 1);
+    else if (e.key === "Home") i = 0;
+    else if (e.key === "End") i = n - 1;
+    else if (e.key === "Escape") { hide(); return; }
+    else return;
+    e.preventDefault(); show(i, true);
+  };
+  host.onfocus = () => show(state.chartIndex == null ? n - 1 : state.chartIndex, true);
+  host.onblur = hide;
+}
+
+/* ---------- products & traffic ---------- */
+function renderProducts(sum){
+  const body = $("#productsBody");
+  if (state.status === "loading"){
+    body.innerHTML = `<div aria-hidden="true">${Array.from({ length: 5 }, () => `<div style="padding:12px 0;border-top:1px solid var(--rule)">${sk("60%", 14, "margin-bottom:8px")}${sk("100%", 6)}</div>`).join("")}</div>`;
+    return;
+  }
+  if (state.status === "error"){ body.innerHTML = stateHTML("error", "Product sales unavailable", "Rankings will appear once the data loads.", null); return; }
+  const m = state.productMetric;
+  const list = sum.products.filter(x => x.units > 0).sort((a, b) => b[m] - a[m] || b.revenue - a.revenue).slice(0, 6);
+  if (!list.length){ body.innerHTML = stateHTML("empty", "Nothing sold in this period", "Your best sellers will be ranked here by sales or units once orders come in.", null); return; }
+  const top = list[0][m];
+  const totalRev = sum.products.reduce((a, x) => a + x.revenue, 0);
+  body.innerHTML = `<ol class="rank fade-in" aria-label="Top products by ${m === "revenue" ? "sales" : "units sold"}">${list.map((x, i) => `
+    <li>
+      <span class="pos">${String(i + 1).padStart(2, "0")}</span>
+      <span class="name" title="${esc(x.p.name)}">${esc(x.p.name)}</span>
+      <span class="fig">${m === "revenue" ? money0.format(x.revenue) : int.format(x.units) + " units"}</span>
+      <span class="sub"><span class="bar" aria-hidden="true"><i style="width:${(x[m] / top * 100).toFixed(1)}%"></i></span>
+        <span class="meta">${m === "revenue" ? `${int.format(x.units)} sold · ${(x.revenue / totalRev * 100).toFixed(0)}% of product sales` : money0.format(x.revenue)}</span></span>
+    </li>`).join("")}</ol>`;
+}
+function renderTraffic(sum){
+  const body = $("#trafficBody");
+  if (state.status === "loading"){
+    body.innerHTML = `<div aria-hidden="true">${sk("50%", 24, "margin-bottom:16px")}${Array.from({ length: 6 }, () => `<div style="padding:12px 0;border-top:1px solid var(--rule)">${sk("45%", 14, "margin-bottom:8px")}${sk("100%", 6)}</div>`).join("")}</div>`;
+    return;
+  }
+  if (state.status === "error"){ body.innerHTML = stateHTML("error", "Traffic unavailable", "Sources will appear once the data loads.", null); return; }
+  const totalS = sum.traffic.reduce((a, t) => a + t.sessions, 0);
+  if (!totalS){ body.innerHTML = stateHTML("empty", "No visits recorded", "Sessions by source will show here once people visit your store.", null); return; }
+  const top = sum.traffic[0].sessions;
+  const bestConv = sum.traffic.filter(t => t.sessions >= 50).sort((a, b) => b.conv - a.conv)[0];
+  body.innerHTML = `
+    <div class="traffic-total fade-in">
+      <div><span class="label">Sessions</span><span class="v">${int.format(totalS)}</span></div>
+      <div><span class="label">Best converting</span><span class="v" style="font-size:16px;line-height:1.9">${bestConv && bestConv.orders ? `${esc(bestConv.src.name)} · ${(bestConv.conv * 100).toFixed(1)}%` : "—"}</span></div>
+    </div>
+    <ol class="rank" aria-label="Traffic sources by sessions">${sum.traffic.map((t, i) => `
+      <li>
+        <span class="pos">${String(i + 1).padStart(2, "0")}</span>
+        <span class="name">${esc(t.src.name)}</span>
+        <span class="fig">${int.format(t.sessions)}</span>
+        <span class="sub"><span class="bar" aria-hidden="true"><i style="width:${(t.sessions / top * 100).toFixed(1)}%"></i></span>
+          <span class="meta">${(t.sessions / totalS * 100).toFixed(0)}% · ${t.orders} order${t.orders === 1 ? "" : "s"} · ${(t.conv * 100).toFixed(1)}% conv.</span></span>
+      </li>`).join("")}</ol>`;
+}
+
+/* ---------- orders table ---------- */
+function filteredOrders(){
+  const t = state.table;
+  const q = t.q.trim().toLowerCase().replace(/^#/, "");
+  let list = state.sum.cur.slice();
+  if (t.statuses.size) list = list.filter(o => t.statuses.has(o.status));
+  if (t.source !== "all") list = list.filter(o => o.source === t.source);
+  if (q) list = list.filter(o => String(o.id).includes(q) || o.customer.toLowerCase().includes(q) || o.lines.some(l => l.p.name.toLowerCase().includes(q)));
+  const dir = t.dir === "asc" ? 1 : -1;
+  const statusOrder = Object.fromEntries(STATUSES.map((s, i) => [s.id, s.name]));
+  list.sort((a, b) => {
+    let r = 0;
+    if (t.sort === "date") r = a.date - b.date;
+    else if (t.sort === "total") r = a.total - b.total;
+    else if (t.sort === "customer") r = a.customer.localeCompare(b.customer);
+    else if (t.sort === "status") r = statusOrder[a.status].localeCompare(statusOrder[b.status]);
+    return (r || (a.date - b.date)) * dir;
+  });
+  return list;
+}
+function hl(text){
+  const q = state.table.q.trim().replace(/^#/, "");
+  const s = esc(text);
+  if (!q) return s;
+  const i = text.toLowerCase().indexOf(q.toLowerCase());
+  if (i < 0) return s;
+  return esc(text.slice(0, i)) + "<mark>" + esc(text.slice(i, i + q.length)) + "</mark>" + esc(text.slice(i + q.length));
+}
+function relDate(d){
+  const today = startOfDay(new Date());
+  const day = startOfDay(d);
+  const diff = Math.round((today - day) / DAY);
+  if (diff === 0) return `Today, ${tTime.format(d)}`;
+  if (diff === 1) return `Yesterday, ${tTime.format(d)}`;
+  return `${dShort.format(d)}, ${tTime.format(d)}`;
+}
+function renderChips(){
+  const box = $("#chips");
+  const counts = {};
+  if (state.sum) state.sum.cur.forEach(o => counts[o.status] = (counts[o.status] || 0) + 1);
+  const ready = state.status === "ready" && !state.data.ordersFailed;
+  box.innerHTML = `<span class="label" style="align-self:center;margin-right:4px">Status</span>` + STATUSES.map(s => `<button type="button" class="chip" data-status="${s.id}" aria-pressed="${state.table.statuses.has(s.id)}" ${ready ? "" : "disabled"}>${tick}${s.name}<span class="count">${ready ? (counts[s.id] || 0) : ""}</span></button>`).join("");
+}
+function renderTable(){
+  const tbody = $("#ordersBody"), pager = $("#pager"), result = $("#resultText");
+  const t = state.table;
+  const cols = 7;
+  $$("#ordersTable th[data-key]").forEach(th => {
+    if (th.dataset.key === t.sort) th.setAttribute("aria-sort", t.dir === "asc" ? "ascending" : "descending"); else th.removeAttribute("aria-sort");
+  });
+  $("#sortMobile").value = `${t.sort}:${t.dir}`;
+  const anyFilter = t.q || t.statuses.size || t.source !== "all";
+  $("#clearFilters").hidden = !anyFilter;
+  const controlsOn = state.status === "ready" && !state.data.ordersFailed;
+  ["#q", "#channel", "#sortMobile", "#exportBtn"].forEach(s => $(s).disabled = !controlsOn);
+  $$(".sort-btn").forEach(b => b.disabled = !controlsOn);
+
+  if (state.status === "loading"){
+    result.textContent = "Loading orders…";
+    tbody.innerHTML = Array.from({ length: 6 }, () => `<tr aria-hidden="true">${[60, 90, 110, 160, 80, 70, 60].map((w, i) => `<td class="${["c-id","c-date","c-cust","c-items","c-chan hide-md","c-status","c-total r"][i]}">${sk(w + "px", 12, "max-width:100%" + (i === 6 ? ";margin-left:auto" : ""))}</td>`).join("")}</tr>`).join("");
+    pager.innerHTML = "";
+    return;
+  }
+  if (state.status === "error" || state.data.ordersFailed){
+    result.textContent = "Orders unavailable";
+    tbody.innerHTML = `<tr class="state-row"><td colspan="${cols}" class="table-state">${stateHTML("error", "Orders didn't load",
+      state.status === "error" ? "The report service didn't respond. Try again in a moment." : "The orders list timed out, but your other figures are up to date. Your orders themselves are safe.",
+      state.status === "error" ? null : { id:"retryOrders", label:"Retry orders", primary:true })}</td></tr>`;
+    pager.innerHTML = "";
+    return;
+  }
+  const list = filteredOrders();
+  const pages = Math.max(1, Math.ceil(list.length / t.per));
+  t.page = Math.min(t.page, pages);
+  const from = (t.page - 1) * t.per;
+  const slice = list.slice(from, from + t.per);
+  if (!state.sum.cur.length){
+    result.textContent = "0 orders";
+    $("#exportBtn").disabled = true;
+    tbody.innerHTML = `<tr class="state-row"><td colspan="${cols}" class="table-state">${stateHTML("empty", "No orders yet", `Orders from the ${rangeText(state.range).toLowerCase()} will be listed here, newest first.`, null)}</td></tr>`;
+    pager.innerHTML = "";
+    return;
+  }
+  if (!list.length){
+    result.textContent = "No matching orders";
+    const why = t.q ? `No orders match “${esc(t.q)}”` : "No orders match these filters";
+    tbody.innerHTML = `<tr class="state-row"><td colspan="${cols}" class="table-state">${stateHTML("search", why, "Check the spelling, search by order number (like 1240), or clear the filters to see every order in this period.", { id:"clearFilters", label:"Clear filters" })}</td></tr>`;
+    pager.innerHTML = "";
+    return;
+  }
+  result.textContent = `Showing ${from + 1}–${from + slice.length} of ${int.format(list.length)} order${list.length === 1 ? "" : "s"}${anyFilter ? " (filtered)" : ""}`;
+  const srcName = Object.fromEntries(SOURCES.map(s => [s.id, s.name]));
+  tbody.innerHTML = slice.map(o => {
+    const first = o.lines[0];
+    const units = o.lines.reduce((a, l) => a + l.qty, 0);
+    const more = o.lines.length - 1;
+    const st = STATUSES.find(s => s.id === o.status);
+    return `<tr>
+      <td class="c-id"><span class="id">#${hl(String(o.id))}</span></td>
+      <td class="c-date"><time datetime="${o.date.toISOString()}">${relDate(o.date)}</time></td>
+      <td class="c-cust">${hl(o.customer)}</td>
+      <td class="c-items"><div class="items">${hl(first.p.name)}${first.qty > 1 ? ` ×${first.qty}` : ""}${more ? ` <span class="muted">+ ${more} more</span>` : ""}</div><div class="muted">${units} item${units === 1 ? "" : "s"}</div></td>
+      <td class="c-chan hide-md">${esc(srcName[o.source])}</td>
+      <td class="c-status"><span class="status ${o.status}">${st.name}</span></td>
+      <td class="c-total r">${money2.format(o.total)}</td>
+    </tr>`;
+  }).join("");
+  // pager
+  if (pages <= 1){ pager.innerHTML = ""; return; }
+  const nums = [];
+  const add = (n) => { if (!nums.includes(n) && n >= 1 && n <= pages) nums.push(n); };
+  add(1); for (let i = t.page - 1; i <= t.page + 1; i++) add(i); add(pages);
+  nums.sort((a, b) => a - b);
+  let html = "", prev = 0;
+  nums.forEach(n => { if (n - prev > 1) html += `<span class="muted" aria-hidden="true" style="align-self:center;padding:0 4px">…</span>`; html += `<button type="button" class="btn" data-page="${n}" ${n === t.page ? 'aria-current="page"' : ""} aria-label="Page ${n}">${n}</button>`; prev = n; });
+  pager.innerHTML = `<p class="label">Page ${t.page} of ${pages}</p>
+    <div class="pages"><button type="button" class="btn" data-page="${t.page - 1}" ${t.page === 1 ? "disabled" : ""} aria-label="Previous page">‹ Prev</button>${html}<button type="button" class="btn" data-page="${t.page + 1}" ${t.page === pages ? "disabled" : ""} aria-label="Next page">Next ›</button></div>`;
+}
+
+/* ---------- top-level render & load ---------- */
+function renderAll(){
+  if (state.status === "ready") state.sum = summarize(state.data, state.range);
+  const sum = state.sum;
+  $("#main").setAttribute("aria-busy", state.status === "loading");
+  $("#rangeLabel").textContent = rangeText(state.range);
+  $("#ordersRangeLabel").textContent = rangeText(state.range);
+  $$("[data-range]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.range === state.range));
+  $$("[data-metric]").forEach(b => b.setAttribute("aria-pressed", b.dataset.metric === state.productMetric));
+  $("#banner").hidden = state.status !== "error";
+  renderOverview(sum);
+  renderProducts(sum);
+  renderTraffic(sum);
+  renderChips();
+  renderTable();
+  renderSync();
+}
+function renderSync(){
+  const el = $("#sync"), txt = $("#syncText");
+  if (state.status === "loading"){ el.dataset.state = "loading"; txt.textContent = state.scenario === "slow" ? "Loading store data… this is taking longer than usual" : "Loading store data…"; return; }
+  if (state.status === "error"){ el.dataset.state = "error"; txt.textContent = "Not updated · connection failed"; return; }
+  el.dataset.state = state.data.ordersFailed ? "error" : "live";
+  const mins = Math.floor((Date.now() - state.data.fetchedAt) / 60000);
+  txt.textContent = `${state.data.ordersFailed ? "Partly updated" : "Updated"} ${mins < 1 ? "just now" : mins === 1 ? "1 min ago" : mins + " min ago"} · ${tTime.format(state.data.fetchedAt)}`;
+}
+setInterval(() => { if (state.status === "ready") renderSync(); }, 30000);
+
+function load(scenario = state.scenario){
+  const my = ++loadToken;
+  state.status = "loading";
+  renderAll();
+  fetchStore(scenario).then(data => {
+    if (my !== loadToken) return;
+    state.data = data; state.status = "ready"; state.lastKpi = state.lastKpi || {};
+    renderAll();
+  }).catch(() => {
+    if (my !== loadToken) return;
+    state.status = "error"; state.sum = null;
+    renderAll();
+    $("#retryAll").focus({ preventScroll: true });
+  });
+}
+
+/* ---------- events ---------- */
+function setRange(r){
+  if (r === state.range) return;
+  state.range = r; state.table.page = 1;
+  const u = new URL(location.href); u.searchParams.set("range", r); try { history.replaceState(null, "", u); } catch (e) {}
+  if (state.status === "ready") renderAll(); else { $$("[data-range]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.range === r)); $("#rangeLabel").textContent = rangeText(r); }
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b || b.disabled) return;
+  if (b.dataset.range) return setRange(+b.dataset.range);
+  if (b.dataset.metric){ state.productMetric = b.dataset.metric; $$("[data-metric]").forEach(x => x.setAttribute("aria-pressed", x === b)); renderProducts(state.sum); return; }
+  if (b.dataset.status){
+    const s = state.table.statuses; s.has(b.dataset.status) ? s.delete(b.dataset.status) : s.add(b.dataset.status);
+    state.table.page = 1; b.setAttribute("aria-pressed", s.has(b.dataset.status)); renderTable(); return;
+  }
+  if (b.dataset.sort){
+    const t = state.table;
+    if (t.sort === b.dataset.sort) t.dir = t.dir === "asc" ? "desc" : "asc";
+    else { t.sort = b.dataset.sort; t.dir = (b.dataset.sort === "customer" || b.dataset.sort === "status") ? "asc" : "desc"; }
+    t.page = 1; renderTable(); return;
+  }
+  if (b.dataset.page){ state.table.page = +b.dataset.page; renderTable(); $("#h-orders-table").scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "start" }); const cur = $('#pager [aria-current="page"]'); if (cur) cur.focus({ preventScroll:true }); return; }
+  const act = b.dataset.action || b.id;
+  if (act === "range90") return setRange(90);
+  if (act === "clearFilters"){ clearFilters(); $("#q").focus(); return; }
+  if (act === "retryOrders"){
+    b.disabled = true; b.textContent = "Retrying…";
+    setTimeout(() => { state.data.ordersFailed = false; if (state.scenario === "partial"){ state.scenario = "live"; $("#scenario").value = "live"; } renderAll(); toast("Orders loaded"); }, 700);
+    return;
+  }
+  if (act === "retryAll"){ if (state.scenario === "error"){ state.scenario = "live"; $("#scenario").value = "live"; } load(); return; }
+  if (act === "refreshBtn"){ load(); return; }
+  if (act === "themeBtn"){ toggleTheme(); return; }
+  if (act === "exportBtn"){ exportCSV(); return; }
+  if (act === "qClear"){ $("#q").value = ""; state.table.q = ""; $("#qClear").hidden = true; state.table.page = 1; renderTable(); $("#q").focus(); return; }
+});
+function clearFilters(){
+  const t = state.table; t.q = ""; t.statuses.clear(); t.source = "all"; t.page = 1;
+  $("#q").value = ""; $("#qClear").hidden = true; $("#channel").value = "all";
+  renderChips(); renderTable();
+}
+let qTimer;
+$("#q").addEventListener("input", (e) => {
+  $("#qClear").hidden = !e.target.value;
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => { state.table.q = e.target.value; state.table.page = 1; renderTable(); }, 140);
+});
+$("#q").addEventListener("keydown", (e) => { if (e.key === "Escape" && e.target.value){ e.preventDefault(); $("#qClear").click(); } });
+$("#channel").innerHTML += SOURCES.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join("");
+$("#channel").addEventListener("change", (e) => { state.table.source = e.target.value; state.table.page = 1; renderTable(); });
+$("#sortMobile").addEventListener("change", (e) => { const [k, d] = e.target.value.split(":"); state.table.sort = k; state.table.dir = d; state.table.page = 1; renderTable(); });
+$("#scenario").value = state.scenario;
+$("#scenario").addEventListener("change", (e) => {
+  state.scenario = e.target.value; state.lastKpi = {}; state.table.page = 1;
+  const u = new URL(location.href); u.searchParams.set("state", state.scenario); try { history.replaceState(null, "", u); } catch (err) {}
+  load();
+});
+
+/* CSV export of the current filtered list */
+function exportCSV(){
+  const list = filteredOrders();
+  const srcName = Object.fromEntries(SOURCES.map(s => [s.id, s.name]));
+  const rows = [["Order","Date","Customer","Items","Source","Status","Total (USD)"]].concat(list.map(o => [
+    o.id, o.date.toISOString(), o.customer, o.lines.map(l => `${l.p.name} x${l.qty}`).join("; "), srcName[o.source], o.status, o.total.toFixed(2)
+  ]));
+  const csv = rows.map(r => r.map(v => /[",\n;]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : v).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = `orders-last-${state.range}-days.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast(`Exported ${int.format(list.length)} order${list.length === 1 ? "" : "s"}`);
+}
+let toastTimer;
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600); }
+
+/* Theme: follows the system until the person picks one */
+function currentTheme(){ const a = document.documentElement.dataset.theme; if (a) return a; return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+function syncThemeBtn(){ const next = currentTheme() === "dark" ? "light" : "dark"; $("#themeBtn").setAttribute("aria-label", `Switch to ${next} theme`); $("#themeBtn").title = `Switch to ${next} theme`; }
+function toggleTheme(){ const next = currentTheme() === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = next; try { localStorage.setItem("fc-theme", next); } catch (e) {} syncThemeBtn(); }
+try { const saved = localStorage.getItem("fc-theme"); if (saved === "dark" || saved === "light") document.documentElement.dataset.theme = saved; } catch (e) {}
+syncThemeBtn();
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", syncThemeBtn);
+
+/* Redraw chart on resize */
+let rz;
+new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(() => { if (state.status === "ready" && $("#revChart")) drawRevenueChart(); }, 80); }).observe($("#main"));
+
+load();
+})();
+</script>
+</body>
+</html>

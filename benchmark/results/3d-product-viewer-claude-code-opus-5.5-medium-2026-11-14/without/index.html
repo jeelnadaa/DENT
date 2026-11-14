@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pivot Modular Desk Lamp — Halden Studio</title>
+<meta name="description" content="Pivot is a modular desk lamp with swappable arms and heads. Explore it in 3D in matte black, brushed brass or white.">
+<meta name="theme-color" content="#f3efe8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3efe8;
+    --bg-2: #e9e3d9;
+    --surface: #fbf9f5;
+    --ink: #1d1b18;
+    --ink-2: #5c574f;
+    --ink-3: #8a8378;
+    --line: #d9d1c4;
+    --accent: #9a6a22;
+    --focus: #2f5bd3;
+    --radius: 14px;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    /* finish tokens used by the 2D fallback */
+    --f-base: #232220; --f-hi: #45423d; --f-lo: #121110;
+  }
+  [data-finish="brass"] { --f-base: #b48a45; --f-hi: #e6c98a; --f-lo: #6e4f1f; }
+  [data-finish="white"] { --f-base: #ebe8e2; --f-hi: #ffffff; --f-lo: #bdb8ae; }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 400 16px/1.55 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg, canvas { display: block; max-width: 100%; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .skip { position: absolute; left: 12px; top: -48px; background: var(--ink); color: var(--bg); padding: 8px 12px; border-radius: 8px; z-index: 50; }
+  .skip:focus { top: 12px; }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); }
+
+  /* Header */
+  header.site { border-bottom: 1px solid var(--line); }
+  header.site .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font: 500 20px/1 var(--serif); letter-spacing: .01em; text-decoration: none; }
+  nav.main { display: flex; gap: 28px; font-size: 14px; color: var(--ink-2); }
+  nav.main a { text-decoration: none; }
+  nav.main a:hover { color: var(--ink); }
+  .cart-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; font-size: 14px; cursor: pointer; }
+  .cart-count { min-width: 20px; height: 20px; border-radius: 10px; background: var(--ink); color: var(--bg); font-size: 12px; display: inline-grid; place-items: center; padding: 0 6px; }
+  @media (max-width: 760px) { nav.main { display: none; } }
+
+  /* Product hero */
+  .product { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); padding: clamp(16px, 3vw, 32px) 0 64px; align-items: start; }
+  @media (max-width: 900px) { .product { grid-template-columns: 1fr; padding-top: 0; } }
+
+  .viewer-col { position: sticky; top: 16px; }
+  @media (max-width: 900px) { .viewer-col { position: static; margin: 0 calc(-1 * clamp(16px, 4vw, 40px)); } }
+
+  .viewer {
+    position: relative; aspect-ratio: 1 / 1; max-height: calc(100vh - 120px); width: 100%;
+    background: radial-gradient(120% 90% at 50% 30%, #fbf8f3 0%, var(--bg-2) 70%);
+    border-radius: var(--radius); overflow: hidden; touch-action: pan-y;
+    user-select: none; -webkit-user-select: none;
+  }
+  @media (max-width: 900px) { .viewer { border-radius: 0; aspect-ratio: 4 / 4.2; max-height: 64vh; } }
+  .viewer::before { content: ""; position: absolute; inset: 0; background: radial-gradient(110% 85% at 50% 35%, #4b443b 0%, #1f1c19 75%); opacity: 0; transition: opacity .6s ease; }
+  .viewer.lit::before { opacity: 1; }
+  .viewer.lit .mode-note span { background: rgba(251,249,245,.92); }
+  .viewer canvas { width: 100% !important; height: 100% !important; cursor: grab; outline: none; }
+  .viewer canvas:active { cursor: grabbing; }
+  .viewer[data-mode="3d"] .fallback { display: none; }
+  .viewer[data-mode="2d"] .stage3d { display: none; }
+  .stage3d { position: absolute; inset: 0; }
+
+  .viewer-status { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; color: var(--ink-3); font-size: 13px; transition: opacity .4s; }
+  .viewer-status .spinner { width: 28px; height: 28px; border: 2px solid var(--line); border-top-color: var(--ink-2); border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 10px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .viewer.ready .viewer-status { opacity: 0; }
+
+  .viewer-ui { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; pointer-events: none; }
+  .viewer-ui > * { pointer-events: auto; }
+  .hint { font-size: 12px; color: var(--ink-2); background: rgba(251,249,245,.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 6px 10px; border-radius: 999px; transition: opacity .5s; }
+  .hint.gone { opacity: 0; }
+  .tools { display: flex; gap: 6px; }
+  .tool { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: rgba(251,249,245,.9); display: grid; place-items: center; cursor: pointer; }
+  .tool:hover { background: #fff; }
+  .tool[aria-pressed="true"] { background: #ffe3a6; color: var(--ink); border-color: #ffe3a6; box-shadow: 0 0 18px rgba(255,214,140,.55); }
+  .tool svg { width: 18px; height: 18px; }
+
+  .mode-note { position: absolute; top: 12px; left: 12px; right: 12px; display: none; font-size: 12px; color: var(--ink-2); align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .viewer[data-mode="2d"] .mode-note { display: flex; }
+  .mode-note span { background: rgba(251,249,245,.85); padding: 6px 10px; border-radius: 999px; }
+  .mode-note button { background: var(--ink); color: var(--bg); border: 0; border-radius: 999px; padding: 7px 12px; font-size: 12px; cursor: pointer; }
+  .mode-note button[hidden] { display: none; }
+
+  /* 2D fallback */
+  .fallback { position: absolute; inset: 0; display: grid; place-items: center; cursor: grab; touch-action: pan-y; }
+  .fallback:active { cursor: grabbing; }
+  .fallback svg { width: 82%; height: 82%; overflow: visible; }
+  .fallback .tint { transition: fill .45s ease, stop-color .45s ease; }
+
+  /* Details column */
+  .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 10px; }
+  h1 { font: 400 clamp(36px, 5vw, 56px)/1.02 var(--serif); letter-spacing: -.015em; margin: 0 0 12px; }
+  .lede { color: var(--ink-2); margin: 0 0 20px; max-width: 46ch; }
+  .price-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .price { font: 500 26px/1 var(--sans); font-variant-numeric: tabular-nums; }
+  .rating { font-size: 13px; color: var(--ink-2); }
+  .rating b { color: var(--ink); font-weight: 600; }
+
+  fieldset { border: 0; padding: 0; margin: 28px 0 0; min-width: 0; }
+  legend { font-size: 13px; font-weight: 600; padding: 0; margin-bottom: 12px; display: flex; gap: 8px; width: 100%; }
+  legend .val { font-weight: 400; color: var(--ink-2); }
+
+  .swatches { display: flex; gap: 12px; flex-wrap: wrap; }
+  .swatch { position: relative; }
+  .swatch input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .swatch label { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; color: var(--ink-2); width: 76px; text-align: center; }
+  .chip { width: 48px; height: 48px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); position: relative; }
+  .chip::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1.5px solid transparent; transition: border-color .2s; }
+  .swatch input:checked + label .chip::after { border-color: var(--ink); }
+  .swatch input:checked + label { color: var(--ink); font-weight: 500; }
+  .swatch input:focus-visible + label .chip { outline: 2px solid var(--focus); outline-offset: 7px; }
+  .chip.black { background: radial-gradient(circle at 35% 30%, #4a4844, #1a1918 60%); }
+  .chip.brass { background: linear-gradient(115deg, #7a5823 0%, #d8b26b 38%, #f2dca6 50%, #b38641 64%, #6e4f1f 100%); }
+  .chip.white { background: radial-gradient(circle at 35% 30%, #ffffff, #e2ded6 70%); }
+
+  .options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .options.two { grid-template-columns: repeat(2, 1fr); }
+  .opt { position: relative; }
+  .opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .opt label { display: block; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; background: var(--surface); transition: border-color .2s, box-shadow .2s; height: 100%; }
+  .opt label b { display: block; font-size: 14px; font-weight: 500; }
+  .opt label small { color: var(--ink-3); font-size: 12px; }
+  .opt input:checked + label { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .opt input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .buy { display: flex; gap: 10px; margin-top: 28px; }
+  .btn { appearance: none; border: 0; border-radius: 999px; padding: 15px 22px; font-weight: 500; cursor: pointer; font-size: 15px; transition: transform .15s, background .2s; }
+  .btn:active { transform: scale(.98); }
+  .btn-primary { background: var(--ink); color: var(--bg); flex: 1; }
+  .btn-primary:hover { background: #000; }
+  .btn-ghost { background: transparent; border: 1px solid var(--line); }
+  .assure { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 8px; font-size: 13px; color: var(--ink-2); }
+  .assure li { display: flex; gap: 10px; align-items: center; }
+  .assure svg { width: 16px; height: 16px; flex: none; color: var(--accent); }
+
+  /* Sections */
+  section.band { padding: clamp(56px, 8vw, 104px) 0; border-top: 1px solid var(--line); }
+  h2 { font: 400 clamp(28px, 3.6vw, 40px)/1.1 var(--serif); letter-spacing: -.01em; margin: 0 0 16px; }
+  .section-lede { color: var(--ink-2); max-width: 56ch; margin: 0 0 40px; }
+  .modules { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 960px) { .modules { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .modules { grid-template-columns: 1fr; } }
+  .module { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .module .num { font: 400 13px/1 var(--serif); color: var(--accent); }
+  .module h3 { font-size: 17px; font-weight: 600; margin: 12px 0 6px; }
+  .module p { margin: 0; color: var(--ink-2); font-size: 14px; }
+  .module svg { width: 56px; height: 56px; color: var(--ink); margin-top: 18px; }
+
+  .specs { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(24px, 5vw, 80px); }
+  @media (max-width: 800px) { .specs { grid-template-columns: 1fr; } }
+  dl.spec { margin: 0; display: grid; grid-template-columns: minmax(120px, 1fr) 2fr; border-top: 1px solid var(--line); }
+  dl.spec dt, dl.spec dd { margin: 0; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+  dl.spec dt { color: var(--ink-2); }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0 calc(32px + env(safe-area-inset-bottom)); color: var(--ink-3); font-size: 13px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  /* Mobile sticky buy bar */
+  .buybar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: rgba(251,249,245,.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); display: none; align-items: center; gap: 12px; transform: translateY(100%); transition: transform .3s ease; }
+  .buybar.show { transform: none; }
+  .buybar .meta { flex: 1; min-width: 0; font-size: 13px; line-height: 1.3; }
+  .buybar .meta b { display: block; font-size: 15px; }
+  .buybar .btn { padding: 12px 18px; flex: none; }
+  @media (max-width: 900px) { .buybar { display: flex; } }
+
+  .toast { position: fixed; left: 50%; top: 16px; transform: translate(-50%, -150%); background: var(--ink); color: var(--bg); padding: 12px 18px; border-radius: 999px; font-size: 14px; z-index: 60; transition: transform .35s ease; max-width: calc(100% - 32px); }
+  .toast.show { transform: translate(-50%, 0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body data-finish="black">
+<a class="skip" href="#details">Skip to product details</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="#">Halden</a>
+    <nav class="main" aria-label="Main">
+      <a href="#">Lighting</a><a href="#">Desk</a><a href="#modules">Modules</a><a href="#specs">Journal</a>
+    </nav>
+    <button class="cart-btn" type="button" aria-label="Cart, 0 items" id="cartBtn">
+      Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="product">
+    <!-- Viewer -->
+    <div class="viewer-col">
+      <div class="viewer" id="viewer" data-mode="3d" role="region" aria-label="Pivot lamp viewer">
+        <div class="stage3d" id="stage3d"></div>
+
+        <!-- 2D fallback: inline SVG, recoloured by CSS finish tokens, pseudo-rotates on drag -->
+        <div class="fallback" id="fallback" tabindex="0" role="img" aria-label="Illustration of the Pivot lamp. Drag or use arrow keys to turn it.">
+          <svg viewBox="0 0 400 440" aria-hidden="true">
+            <defs>
+              <linearGradient id="gMetal" x1="0" x2="1" y1="0" y2="0">
+                <stop class="tint" offset="0" style="stop-color: var(--f-lo)"/>
+                <stop class="tint" offset=".45" style="stop-color: var(--f-hi)"/>
+                <stop class="tint" offset="1" style="stop-color: var(--f-base)"/>
+              </linearGradient>
+              <linearGradient id="gShade" x1="0" x2="1" y1="0" y2="0">
+                <stop class="tint" offset="0" style="stop-color: var(--f-lo)"/>
+                <stop class="tint" offset=".35" style="stop-color: var(--f-hi)"/>
+                <stop class="tint" offset=".7" style="stop-color: var(--f-base)"/>
+                <stop class="tint" offset="1" style="stop-color: var(--f-lo)"/>
+              </linearGradient>
+              <radialGradient id="gPool" cx=".5" cy=".5" r=".5">
+                <stop offset="0" stop-color="#fff3cf" stop-opacity=".9"/>
+                <stop offset="1" stop-color="#fff3cf" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="gShadow" cx=".5" cy=".5" r=".5">
+                <stop offset="0" stop-color="#000" stop-opacity=".22"/>
+                <stop offset="1" stop-color="#000" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <ellipse cx="200" cy="404" rx="150" ry="18" fill="url(#gShadow)"/>
+            <ellipse id="fbPool" cx="300" cy="404" rx="80" ry="14" fill="url(#gPool)" opacity="0"/>
+            <!-- base (round, so it doesn't change with rotation) -->
+            <ellipse cx="200" cy="394" rx="78" ry="13" class="tint" fill="var(--f-lo)"/>
+            <rect x="122" y="380" width="156" height="14" class="tint" fill="url(#gMetal)"/>
+            <ellipse cx="200" cy="380" rx="78" ry="13" class="tint" fill="var(--f-hi)"/>
+            <rect x="193" y="352" width="14" height="30" rx="3" class="tint" fill="url(#gMetal)"/>
+            <!-- articulated arm; scaled horizontally to fake a turntable -->
+            <g id="fbArm" style="transform-origin: 200px 0; transform-box: view-box;">
+              <g id="fbLower">
+                <line x1="196" y1="352" x2="150" y2="168" stroke="var(--f-base)" class="tint" stroke-width="7" stroke-linecap="round"/>
+                <line x1="206" y1="352" x2="160" y2="168" stroke="var(--f-lo)" class="tint" stroke-width="5" stroke-linecap="round"/>
+              </g>
+              <circle cx="200" cy="352" r="11" class="tint" fill="var(--f-base)"/>
+              <circle cx="200" cy="352" r="4" fill="rgba(0,0,0,.35)"/>
+              <circle cx="155" cy="166" r="12" class="tint" fill="var(--f-base)"/>
+              <circle cx="155" cy="166" r="4" fill="rgba(0,0,0,.35)"/>
+              <line id="fbUpper" x1="155" y1="166" x2="300" y2="148" stroke="url(#gMetal)" class="tint" stroke-width="8" stroke-linecap="round"/>
+              <g id="fbHead">
+                <circle cx="300" cy="148" r="9" class="tint" fill="var(--f-base)"/>
+                <!-- dome head -->
+                <g id="fbDome">
+                  <path d="M300 152 C 270 152 252 178 250 212 L 350 212 C 348 178 330 152 300 152 Z" fill="url(#gShade)" class="tint"/>
+                  <ellipse cx="300" cy="212" rx="50" ry="7" fill="#d9d4ca"/>
+                  <ellipse id="fbGlowD" cx="300" cy="212" rx="44" ry="5" fill="#fff6dc" opacity="0"/>
+                </g>
+                <!-- cone head -->
+                <g id="fbCone" style="display:none">
+                  <path d="M288 152 L 312 152 L 342 214 L 258 214 Z" fill="url(#gShade)" class="tint"/>
+                  <ellipse cx="300" cy="214" rx="42" ry="6" fill="#d9d4ca"/>
+                  <ellipse id="fbGlowC" cx="300" cy="214" rx="36" ry="4" fill="#fff6dc" opacity="0"/>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+
+        <div class="viewer-status" id="status" aria-hidden="true"><div><div class="spinner"></div>Loading 3D view…</div></div>
+
+        <div class="mode-note">
+          <span id="modeReason">Showing lightweight view</span>
+          <button type="button" id="try3d" hidden>Load 3D view</button>
+        </div>
+
+        <div class="viewer-ui">
+          <span class="hint" id="hint">Drag to rotate · Pinch to zoom</span>
+          <div class="tools">
+            <button class="tool" type="button" id="lightBtn" aria-pressed="false" aria-label="Turn lamp on">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3z"/></svg>
+            </button>
+            <button class="tool" type="button" id="resetBtn" aria-label="Reset view">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div id="details">
+      <p class="eyebrow">Desk lighting · Modular</p>
+      <h1>Pivot</h1>
+      <p class="lede">A desk lamp built from four parts that click together. Swap arms and heads as your desk changes, and replace any piece instead of the whole lamp.</p>
+      <div class="price-row">
+        <span class="price" id="price">€289</span>
+        <span class="rating"><b>4.8</b> · 312 reviews</span>
+      </div>
+
+      <form id="config" onsubmit="return false" autocomplete="off">
+        <fieldset>
+          <legend>Finish <span class="val" id="finishName">Matte black</span></legend>
+          <div class="swatches">
+            <div class="swatch"><input type="radio" name="finish" id="f-black" value="black" checked><label for="f-black"><span class="chip black"></span>Matte black</label></div>
+            <div class="swatch"><input type="radio" name="finish" id="f-brass" value="brass"><label for="f-brass"><span class="chip brass"></span>Brushed brass</label></div>
+            <div class="swatch"><input type="radio" name="finish" id="f-white" value="white"><label for="f-white"><span class="chip white"></span>White</label></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Arm</legend>
+          <div class="options">
+            <div class="opt"><input type="radio" name="arm" id="a-short" value="short"><label for="a-short"><b>Short</b><small>Reach 32 cm</small></label></div>
+            <div class="opt"><input type="radio" name="arm" id="a-std" value="standard" checked><label for="a-std"><b>Standard</b><small>Reach 44 cm</small></label></div>
+            <div class="opt"><input type="radio" name="arm" id="a-long" value="long"><label for="a-long"><b>Long</b><small>Reach 56 cm · +€30</small></label></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Head</legend>
+          <div class="options two">
+            <div class="opt"><input type="radio" name="head" id="h-dome" value="dome" checked><label for="h-dome"><b>Dome</b><small>Wide, soft pool</small></label></div>
+            <div class="opt"><input type="radio" name="head" id="h-cone" value="cone"><label for="h-cone"><b>Cone</b><small>Focused task light</small></label></div>
+          </div>
+        </fieldset>
+
+        <div class="buy">
+          <button class="btn btn-primary" type="button" id="addBtn">Add to cart — <span class="price-inline">€289</span></button>
+        </div>
+      </form>
+      <ul class="assure">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>Free delivery in 3–5 days</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>10-year warranty on every module</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2M20 4v5h-5M4 20v-5h5"/></svg>Spare parts sold individually</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<section class="band" id="modules" aria-labelledby="mod-h">
+  <div class="wrap">
+    <h2 id="mod-h">Four modules, one click</h2>
+    <p class="section-lede">Each joint uses the same magnetic bayonet. Twist to lock, twist to release. No tools, no screws to lose.</p>
+    <div class="modules">
+      <article class="module"><span class="num">01</span><h3>Weighted base</h3><p>2.1 kg cast steel with a cork underside. Holds the long arm without tipping. Clamp and wall mounts also fit.</p>
+        <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="28" cy="40" rx="22" ry="6"/><path d="M6 40v4c0 3.3 9.8 6 22 6s22-2.7 22-6v-4M25 34V10h6v24"/></svg></article>
+      <article class="module"><span class="num">02</span><h3>Twin-rod arm</h3><p>Friction hinges hold any angle. Three lengths, and the cable runs hidden inside the rods.</p>
+        <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="14" cy="44" r="4"/><circle cx="22" cy="12" r="4"/><path d="M13 40l7-24M17 41l7-25M26 12l22 6"/></svg></article>
+      <article class="module"><span class="num">03</span><h3>Interchangeable head</h3><p>A wide dome for reading, a narrow cone for detail work. Both turn 300°.</p>
+        <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M28 10c-10 0-16 9-17 22h34c-1-13-7-22-17-22z"/><path d="M11 32h34" /><path d="M20 38l-2 6M28 38v7M36 38l2 6"/></svg></article>
+      <article class="module"><span class="num">04</span><h3>Light engine</h3><p>8 W LED, CRI 97, 2700–4000 K. Touch dimming on the head, and the engine lifts out for replacement.</p>
+        <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="12" y="20" width="32" height="16" rx="8"/><path d="M20 28h16M28 8v6M28 42v6M10 10l4 4M46 10l-4 4"/></svg></article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="specs" aria-labelledby="spec-h">
+  <div class="wrap specs">
+    <div>
+      <h2 id="spec-h">Specifications</h2>
+      <p class="section-lede">Designed in Copenhagen. Made from recycled steel and aluminium. Every finish is powder-coated or brushed by hand.</p>
+    </div>
+    <dl class="spec">
+      <dt>Height</dt><dd id="specHeight">48 cm at rest, up to 72 cm</dd>
+      <dt>Reach</dt><dd id="specReach">44 cm</dd>
+      <dt>Base</dt><dd>Ø 20 cm, 2.1 kg</dd>
+      <dt>Light</dt><dd>8 W LED, 650 lm, CRI 97, 2700–4000 K</dd>
+      <dt>Dimming</dt><dd>Touch, stepless, remembers last level</dd>
+      <dt>Power</dt><dd>USB-C PD 20 W, 2 m braided cable</dd>
+      <dt>Materials</dt><dd>Steel, aluminium, brass (brass finish), cork</dd>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span>© 2026 Halden Studio</span><span>3D model built in code with three.js</span></div>
+</footer>
+
+<div class="buybar" id="buybar" aria-hidden="true">
+  <div class="meta"><b>Pivot</b><span id="buybarMeta">Matte black · Standard · Dome</span></div>
+  <button class="btn btn-primary" type="button" id="addBtn2" tabindex="-1">Add — <span class="price-inline">€289</span></button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<p class="sr-only" aria-live="polite" id="announce"></p>
+
+<!-- ============ Page logic (works without 3D) ============ -->
+<script>
+(function () {
+  const FINISHES = { black: "Matte black", brass: "Brushed brass", white: "White" };
+  const ARMS = { short: { label: "Short", reach: 32, height: "40 cm at rest, up to 58 cm", price: 0 },
+                 standard: { label: "Standard", reach: 44, height: "48 cm at rest, up to 72 cm", price: 0 },
+                 long: { label: "Long", reach: 56, height: "56 cm at rest, up to 86 cm", price: 30 } };
+  const HEADS = { dome: "Dome", cone: "Cone" };
+  const BASE_PRICE = 289;
+
+  const state = { finish: "black", arm: "standard", head: "dome", light: false };
+  const listeners = [];
+  window.Lamp = {
+    state,
+    onChange(fn) { listeners.push(fn); fn(state); },
+  };
+  const $ = (id) => document.getElementById(id);
+
+  function update(changed) {
+    document.body.dataset.finish = state.finish;
+    $("finishName").textContent = FINISHES[state.finish];
+    const price = BASE_PRICE + ARMS[state.arm].price;
+    $("price").textContent = "€" + price;
+    document.querySelectorAll(".price-inline").forEach(n => n.textContent = "€" + price);
+    $("specReach").textContent = ARMS[state.arm].reach + " cm";
+    $("specHeight").textContent = ARMS[state.arm].height;
+    $("buybarMeta").textContent = `${FINISHES[state.finish]} · ${ARMS[state.arm].label} · ${HEADS[state.head]}`;
+    if (changed) $("announce").textContent = `${FINISHES[state.finish]}, ${ARMS[state.arm].label} arm, ${HEADS[state.head]} head, €${price}`;
+    listeners.forEach(fn => fn(state, changed));
+  }
+
+  $("config").addEventListener("change", (e) => {
+    const t = e.target;
+    if (t.name in state) { state[t.name] = t.value; update(t.name); }
+  });
+
+  $("lightBtn").addEventListener("click", () => {
+    state.light = !state.light;
+    $("lightBtn").setAttribute("aria-pressed", String(state.light));
+    $("lightBtn").setAttribute("aria-label", state.light ? "Turn lamp off" : "Turn lamp on");
+    update("light");
+  });
+
+  // Cart
+  let count = 0, toastTimer;
+  function add() {
+    count++;
+    $("cartCount").textContent = count;
+    $("cartBtn").setAttribute("aria-label", `Cart, ${count} item${count === 1 ? "" : "s"}`);
+    const t = $("toast");
+    t.textContent = `Added Pivot — ${FINISHES[state.finish]}, ${ARMS[state.arm].label.toLowerCase()} arm, ${HEADS[state.head].toLowerCase()} head`;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+  }
+  $("addBtn").addEventListener("click", add);
+  $("addBtn2").addEventListener("click", add);
+
+  // Mobile sticky buy bar: show when the main CTA scrolls out of view
+  (function () {
+    const bar = $("buybar"), cta = $("addBtn");
+    let shown = null, queued = false;
+    function check() {
+      queued = false;
+      const show = cta.getBoundingClientRect().bottom < 0;
+      if (show === shown) return;
+      shown = show;
+      bar.classList.toggle("show", show);
+      bar.setAttribute("aria-hidden", String(!show));
+      $("addBtn2").tabIndex = show ? 0 : -1;
+    }
+    const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(check); } };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll);
+    check();
+  })();
+
+  // ---------- 2D fallback renderer ----------
+  const fb = {
+    angle: 0, active: false,
+    el: $("fallback"), arm: $("fbArm"),
+    render() {
+      const a = this.angle;
+      // Turntable illusion: horizontal scale by cos(angle), slight bob of depth
+      const sx = Math.cos(a);
+      this.arm.style.transform = `scaleX(${sx.toFixed(3)})`;
+      const pool = $("fbPool");
+      pool.setAttribute("cx", 200 + 100 * sx);
+    },
+  };
+  function applyFallback(s) {
+    $("fbDome").style.display = s.head === "dome" ? "" : "none";
+    $("fbCone").style.display = s.head === "cone" ? "" : "none";
+    const k = { short: 0.8, standard: 1, long: 1.18 }[s.arm];
+    // lower arm length: end point scales from base pivot (200,352)
+    const ex = 200 + (155 - 200) * k, ey = 352 + (166 - 352) * k;
+    const lower = $("fbLower").children;
+    lower[0].setAttribute("x2", ex - 5); lower[0].setAttribute("y2", ey + 2);
+    lower[1].setAttribute("x2", ex + 5); lower[1].setAttribute("y2", ey + 2);
+    const elbow = document.querySelectorAll("#fbArm > circle");
+    elbow[2].setAttribute("cx", ex); elbow[2].setAttribute("cy", ey);
+    elbow[3].setAttribute("cx", ex); elbow[3].setAttribute("cy", ey);
+    const hx = ex + 145 * k, hy = ey - 18 * k;
+    const up = $("fbUpper");
+    up.setAttribute("x1", ex); up.setAttribute("y1", ey); up.setAttribute("x2", hx); up.setAttribute("y2", hy);
+    $("fbHead").setAttribute("transform", `translate(${hx - 300} ${hy - 148})`);
+    const on = s.light ? 1 : 0;
+    $("fbGlowD").setAttribute("opacity", on); $("fbGlowC").setAttribute("opacity", on);
+    $("fbPool").setAttribute("opacity", on * 0.9);
+    fb.render();
+  }
+  window.Lamp.onChange(applyFallback);
+  window.Lamp.onChange((s) => $("viewer").classList.toggle("lit", s.light));
+
+  (function bindFallbackDrag() {
+    let dragging = false, lastX = 0;
+    const el = fb.el;
+    el.addEventListener("pointerdown", (e) => { dragging = true; lastX = e.clientX; el.setPointerCapture(e.pointerId); hideHint(); });
+    el.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      fb.angle += (e.clientX - lastX) * 0.012; lastX = e.clientX; fb.render();
+    });
+    const end = () => { dragging = false; };
+    el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { fb.angle -= 0.25; fb.render(); e.preventDefault(); }
+      if (e.key === "ArrowRight") { fb.angle += 0.25; fb.render(); e.preventDefault(); }
+    });
+  })();
+
+  $("resetBtn").addEventListener("click", () => {
+    if ($("viewer").dataset.mode === "2d") { fb.angle = 0; fb.render(); }
+  });
+
+  function hideHint() { $("hint").classList.add("gone"); }
+  window.Lamp.hideHint = hideHint;
+
+  // ---------- Decide 3D vs fallback ----------
+  const viewer = $("viewer");
+  function hasWebGL() {
+    try {
+      const c = document.createElement("canvas");
+      return !!(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl")));
+    } catch (e) { return false; }
+  }
+  const nav = navigator;
+  const conn = nav.connection || {};
+  const lowEnd =
+    (nav.deviceMemory && nav.deviceMemory <= 2) ||
+    (nav.hardwareConcurrency && nav.hardwareConcurrency <= 2) ||
+    conn.saveData === true ||
+    /(^|-)2g$/.test(conn.effectiveType || "");
+
+  window.Lamp.useFallback = function (reason, allowRetry) {
+    viewer.dataset.mode = "2d";
+    viewer.classList.add("ready");
+    $("modeReason").textContent = reason;
+    $("try3d").hidden = !allowRetry;
+    $("hint").textContent = "Drag to turn";
+    $("hint").classList.remove("gone");
+    fb.render();
+  };
+  window.Lamp.webgl = hasWebGL();
+
+  if (!window.Lamp.webgl) {
+    window.Lamp.useFallback("3D isn't supported in this browser — showing an illustration", false);
+  } else if (/[?&]2d\b/.test(location.search) || (lowEnd && !/[?&]3d\b/.test(location.search))) {
+    window.Lamp.useFallback("Lightweight view to save battery and data", true);
+    window.Lamp.deferred3D = true;
+  }
+
+  $("try3d").addEventListener("click", () => {
+    viewer.dataset.mode = "3d";
+    viewer.classList.remove("ready");
+    $("hint").textContent = "Drag to rotate · Pinch to zoom";
+    window.Lamp.deferred3D = false;
+    if (window.Lamp.start3D) window.Lamp.start3D();
+    else window.Lamp.pendingStart = true;
+  });
+
+  // If the 3D module can't load (offline, blocked CDN), fall back after a timeout
+  window.Lamp.loadTimer = setTimeout(() => {
+    if (!window.Lamp.started && viewer.dataset.mode === "3d") {
+      window.Lamp.useFallback("Couldn't load the 3D view — showing an illustration", false);
+    }
+  }, 12000);
+})();
+</script>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+
+<!-- ============ 3D viewer ============ -->
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const Lamp = window.Lamp;
+const viewer = document.getElementById("viewer");
+const stage = document.getElementById("stage3d");
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+let started = false;
+Lamp.start3D = start;
+if (Lamp.webgl && (!Lamp.deferred3D || Lamp.pendingStart)) start();
+
+function start() {
+  if (started) return;
+  started = true;
+  Lamp.started = true;
+  clearTimeout(Lamp.loadTimer);
+  try { init(); }
+  catch (err) {
+    console.error(err);
+    Lamp.useFallback("Couldn't start the 3D view — showing an illustration", false);
+  }
+}
+
+function init() {
+  let visible = true, running = false, lastT = 0, idleFrames = 0;
+  let slowFrames = 0, degraded = false;
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+  const dprCap = Math.min(window.devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(dprCap);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.domElement.setAttribute("tabindex", "0");
+  renderer.domElement.setAttribute("role", "img");
+  renderer.domElement.setAttribute("aria-label", "3D model of the Pivot lamp. Drag, or use the arrow keys, to rotate. Plus and minus zoom.");
+  stage.appendChild(renderer.domElement);
+
+  renderer.domElement.addEventListener("webglcontextlost", (e) => {
+    e.preventDefault();
+    Lamp.useFallback("The 3D view was interrupted — showing an illustration", false);
+  });
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  pmrem.dispose();
+
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+  const HOME = new THREE.Vector3(6.6, 3.9, 8.3);
+  camera.position.copy(HOME);
+
+  // Lights
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xd8cfc0, 0.6));
+  const key = new THREE.DirectionalLight(0xfff6ea, 1.6);
+  key.position.set(4, 9, 6);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.camera.left = -5; key.shadow.camera.right = 5;
+  key.shadow.camera.top = 5; key.shadow.camera.bottom = -5;
+  key.shadow.camera.near = 1; key.shadow.camera.far = 25;
+  key.shadow.radius = 6;
+  key.shadow.bias = -0.0005;
+  scene.add(key);
+
+  // Ground: shadow catcher + soft contact blob
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.16 }));
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  function radialTexture(inner, outer) {
+    const c = document.createElement("canvas"); c.width = c.height = 128;
+    const g = c.getContext("2d");
+    const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gr.addColorStop(0, inner); gr.addColorStop(1, outer);
+    g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+  }
+  const contact = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 3.2),
+    new THREE.MeshBasicMaterial({ map: radialTexture("rgba(0,0,0,0.35)", "rgba(0,0,0,0)"), transparent: true, depthWrite: false }));
+  contact.rotation.x = -Math.PI / 2; contact.position.y = 0.002;
+  scene.add(contact);
+
+  const pool = new THREE.Mesh(new THREE.PlaneGeometry(1, 1),
+    new THREE.MeshBasicMaterial({ map: radialTexture("rgba(255,236,190,0.95)", "rgba(255,236,190,0)"), transparent: true, depthWrite: false, opacity: 0 }));
+  pool.rotation.x = -Math.PI / 2; pool.position.y = 0.004;
+  scene.add(pool);
+
+  // ---------- Materials ----------
+  function brushedTexture() {
+    const c = document.createElement("canvas"); c.width = 512; c.height = 64;
+    const g = c.getContext("2d");
+    g.fillStyle = "#808080"; g.fillRect(0, 0, 512, 64);
+    for (let i = 0; i < 1400; i++) {
+      const y = Math.random() * 64, v = 90 + Math.random() * 90;
+      g.fillStyle = `rgba(${v},${v},${v},0.35)`;
+      g.fillRect(0, y, 512, Math.random() * 0.9 + 0.2);
+    }
+    const t = new THREE.CanvasTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(1, 6);
+    t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    return t;
+  }
+  const brushed = brushedTexture();
+  const FINISH = {
+    black: { color: new THREE.Color(0x1c1b1a), roughness: 0.72, metalness: 0.15, rough: null, env: 0.6 },
+    brass: { color: new THREE.Color(0xc89a52), roughness: 0.32, metalness: 1.0, rough: brushed, env: 1.15 },
+    white: { color: new THREE.Color(0xeeebe5), roughness: 0.55, metalness: 0.0, rough: null, env: 0.7 },
+  };
+  const body = new THREE.MeshStandardMaterial({ color: FINISH.black.color.clone(), roughness: 0.72, metalness: 0.15 });
+  const inner = new THREE.MeshStandardMaterial({ color: 0xf4f1ea, roughness: 0.9, metalness: 0, side: THREE.BackSide });
+  const hardware = new THREE.MeshStandardMaterial({ color: 0x2a2826, roughness: 0.45, metalness: 0.8 });
+  const cork = new THREE.MeshStandardMaterial({ color: 0xa7835a, roughness: 1 });
+  const diffuser = new THREE.MeshStandardMaterial({ color: 0xf2efe8, roughness: 0.6, emissive: 0xffe2a8, emissiveIntensity: 0 });
+
+  // ---------- Geometry (units ≈ 10 cm) ----------
+  const lamp = new THREE.Group();
+  scene.add(lamp);
+  const cast = (m) => { m.castShadow = true; m.receiveShadow = true; return m; };
+
+  // Base: lathe with rounded edge
+  const baseProfile = [
+    [0, 0.02], [0.92, 0.02], [0.98, 0.05], [1.0, 0.1], [0.99, 0.15], [0.95, 0.19], [0.3, 0.21], [0.16, 0.24], [0, 0.24],
+  ].map(([x, y]) => new THREE.Vector2(x, y));
+  lamp.add(cast(new THREE.Mesh(new THREE.LatheGeometry(baseProfile, 64), body)));
+  const corkDisc = new THREE.Mesh(new THREE.CylinderGeometry(0.86, 0.86, 0.02, 64), cork);
+  corkDisc.position.y = 0.01; lamp.add(corkDisc);
+
+  // Stem + shoulder fork
+  const stem = cast(new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.36, 24), body));
+  stem.position.y = 0.42; lamp.add(stem);
+  const shoulderY = 0.66;
+  function knuckle(width = 0.34, r = 0.11) {
+    const g = new THREE.Group();
+    const k = cast(new THREE.Mesh(new THREE.CylinderGeometry(r, r, width, 28), body));
+    k.rotation.x = Math.PI / 2; g.add(k);
+    for (const s of [-1, 1]) {
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.45, r * 0.45, 0.02, 20), hardware);
+      cap.rotation.x = Math.PI / 2; cap.position.z = s * (width / 2 + 0.01); g.add(cap);
+    }
+    return g;
+  }
+  const shoulder = knuckle(); shoulder.position.y = shoulderY; lamp.add(shoulder);
+
+  // Arm groups (nested so joints articulate naturally)
+  const lowerPivot = new THREE.Group(); lowerPivot.position.y = shoulderY; lamp.add(lowerPivot);
+  const ROD_GAP = 0.075;
+  function twinRods(len) {
+    const g = new THREE.Group();
+    for (const s of [-1, 1]) {
+      const rod = cast(new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 1, 20), body));
+      rod.position.set(0, 0.5, s * ROD_GAP);
+      g.add(rod);
+    }
+    g.scale.y = len;
+    return g;
+  }
+  const lowerRods = twinRods(2.6); lowerPivot.add(lowerRods);
+  // spring detail on lower arm
+  const spring = cast(new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.9, 12), hardware));
+  spring.position.set(0.12, 0.55, 0); lowerPivot.add(spring);
+
+  const elbow = new THREE.Group(); lowerPivot.add(elbow);
+  elbow.add(knuckle(0.3, 0.12));
+  const counter = cast(new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.26, 24), body));
+  counter.rotation.x = Math.PI / 2;
+  elbow.add(counter);
+
+  const upperPivot = new THREE.Group(); elbow.add(upperPivot);
+  const upperRods = twinRods(2.4); upperPivot.add(upperRods);
+  counter.position.set(0, -0.32, 0); upperPivot.add(counter); // counterweight behind elbow
+
+  const wrist = new THREE.Group(); upperPivot.add(wrist);
+  wrist.add(knuckle(0.24, 0.085));
+
+  // Heads
+  const head = new THREE.Group(); wrist.add(head);
+  const neck = cast(new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.22, 16), body));
+  neck.position.y = -0.11; head.add(neck);
+
+  function shade(profile, discR, discY) {
+    const g = new THREE.Group();
+    const pts = profile.map(([x, y]) => new THREE.Vector2(x, y)).reverse(); // outward-facing normals
+    g.add(cast(new THREE.Mesh(new THREE.LatheGeometry(pts, 72), body)));
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(p.x * 0.97, p.y)), 72), inner));
+    const d = new THREE.Mesh(new THREE.CircleGeometry(discR, 48), diffuser);
+    d.rotation.x = Math.PI / 2; d.position.y = discY; g.add(d);
+    return g;
+  }
+  const dome = shade([[0, 0], [0.16, 0], [0.32, -0.04], [0.47, -0.15], [0.57, -0.32], [0.62, -0.52], [0.63, -0.58]], 0.5, -0.36);
+  const cone = shade([[0, 0], [0.13, 0], [0.15, -0.06], [0.42, -0.62], [0.44, -0.66]], 0.33, -0.48);
+  dome.position.y = cone.position.y = -0.22;
+  head.add(dome, cone);
+
+  // Lamp light (only when switched on)
+  const bulb = new THREE.SpotLight(0xffe2b0, 0, 9, 0.75, 0.6, 1.4);
+  bulb.position.set(0, -0.4, 0); head.add(bulb);
+  const bulbTarget = new THREE.Object3D(); bulbTarget.position.set(0, -3, 0); head.add(bulbTarget);
+  bulb.target = bulbTarget;
+
+  // ---------- Pose & configuration ----------
+  const ARM_K = { short: 0.78, standard: 1, long: 1.22 };
+  const LOWER_TILT = 0.32, UPPER_REL = -1.95, HEAD_WORLD = 0.18;
+  const target = new THREE.Vector3();
+  let armK = 1, armKTarget = 1;
+
+  function pose() {
+    const L1 = 2.6 * armK, L2 = 2.4 * armK;
+    lowerPivot.rotation.z = LOWER_TILT;
+    lowerRods.scale.y = L1;
+    spring.scale.y = armK; spring.position.y = 0.55 * armK;
+    elbow.position.y = L1;
+    upperPivot.rotation.z = UPPER_REL;
+    upperRods.scale.y = L2;
+    wrist.position.y = L2;
+    // Keep the shade hanging downward: undo the parent rotation, then tilt
+    head.rotation.z = -(LOWER_TILT + UPPER_REL) - HEAD_WORLD;
+    lamp.updateMatrixWorld(true);
+
+    // centre the model horizontally over the orbit target
+    const box = new THREE.Box3().setFromObject(lamp);
+    const c = box.getCenter(new THREE.Vector3());
+    target.set(c.x, (box.max.y) * 0.48, 0);
+
+    // pool of light under the head
+    const hp = new THREE.Vector3(); dome.getWorldPosition(hp);
+    pool.position.x = hp.x + 0.35; pool.position.z = hp.z;
+    const s = 1.6 + hp.y * 0.55; pool.scale.set(s, s, 1);
+  }
+
+  // ---------- Controls ----------
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.enablePan = false;
+  controls.minDistance = 6;
+  controls.maxDistance = 20;
+  controls.minPolarAngle = 0.15;
+  controls.maxPolarAngle = Math.PI / 2 - 0.04;
+  controls.autoRotate = !reduceMotion;
+  controls.autoRotateSpeed = 0.9;
+  controls.rotateSpeed = 0.7;
+
+  pose();
+  controls.target.copy(target);
+  camera.lookAt(target);
+  controls.update();
+
+  let interacting = false;
+  controls.addEventListener("start", () => { interacting = true; controls.autoRotate = false; Lamp.hideHint(); wake(); });
+  controls.addEventListener("end", () => { interacting = false; });
+  controls.addEventListener("change", wake);
+
+  // Let the page scroll normally over the viewer; zoom only with Ctrl/⌘ + wheel or trackpad pinch
+  stage.addEventListener("wheel", (e) => { if (!e.ctrlKey && !e.metaKey) e.stopPropagation(); }, { capture: true });
+  if (matchMedia("(pointer: fine)").matches) document.getElementById("hint").textContent = "Drag to rotate · Ctrl + scroll to zoom";
+
+  // Keyboard: arrows orbit, +/- zoom
+  const sph = new THREE.Spherical();
+  renderer.domElement.addEventListener("keydown", (e) => {
+    const off = camera.position.clone().sub(controls.target);
+    sph.setFromVector3(off);
+    let used = true;
+    switch (e.key) {
+      case "ArrowLeft": sph.theta -= 0.2; break;
+      case "ArrowRight": sph.theta += 0.2; break;
+      case "ArrowUp": sph.phi = Math.max(controls.minPolarAngle, sph.phi - 0.12); break;
+      case "ArrowDown": sph.phi = Math.min(controls.maxPolarAngle, sph.phi + 0.12); break;
+      case "+": case "=": sph.radius = Math.max(controls.minDistance, sph.radius * 0.9); break;
+      case "-": case "_": sph.radius = Math.min(controls.maxDistance, sph.radius * 1.1); break;
+      default: used = false;
+    }
+    if (!used) return;
+    e.preventDefault();
+    controls.autoRotate = false; Lamp.hideHint();
+    camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(sph));
+    wake();
+  });
+
+  // Reset view (animated)
+  let resetAnim = null;
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (viewer.dataset.mode !== "3d") return;
+    resetAnim = { t: 0, from: camera.position.clone(), fromT: controls.target.clone() };
+    wake();
+  });
+
+  // ---------- Finish transitions ----------
+  let finishAnim = null;
+  const tmpColor = new THREE.Color();
+  function setFinish(name, instant) {
+    const f = FINISH[name];
+    body.roughnessMap = f.rough; body.metalnessMap = null; body.needsUpdate = true;
+    if (instant || reduceMotion) {
+      body.color.copy(f.color); body.roughness = f.roughness; body.metalness = f.metalness; body.envMapIntensity = f.env;
+      finishAnim = null;
+    } else {
+      finishAnim = { t: 0, from: { c: body.color.clone(), r: body.roughness, m: body.metalness, e: body.envMapIntensity }, to: f };
+    }
+    wake();
+  }
+
+  let lightOn = false, lightLevel = 0;
+  Lamp.onChange((s, changed) => {
+    if (!changed) { setFinish(s.finish, true); return; }
+    if (changed === "finish") setFinish(s.finish);
+    if (changed === "head") { dome.visible = s.head === "dome"; cone.visible = s.head === "cone"; wake(); }
+    if (changed === "arm") { armKTarget = ARM_K[s.arm]; if (reduceMotion) armK = armKTarget; wake(); }
+    if (changed === "light") { lightOn = s.light; wake(); }
+  });
+  dome.visible = Lamp.state.head === "dome"; cone.visible = Lamp.state.head === "cone";
+  armK = armKTarget = ARM_K[Lamp.state.arm];
+  lightOn = Lamp.state.light;
+  pose();
+
+  // ---------- Sizing ----------
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    // widen FOV on tall/narrow viewports so the lamp fits
+    camera.fov = w / h < 0.95 ? 34 : 30;
+    camera.updateProjectionMatrix();
+    wake();
+  }
+  new ResizeObserver(resize).observe(stage);
+
+  // ---------- Render loop (on demand; pauses offscreen / hidden tab) ----------
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake(); }).observe(viewer);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) wake(); });
+
+  // Adaptive quality: if frames are slow, lower pixel ratio and drop soft shadows
+
+  function wake() {
+    idleFrames = 0;
+    if (!running && visible && !document.hidden && viewer.dataset.mode === "3d") {
+      running = true; lastT = performance.now(); requestAnimationFrame(loop);
+    }
+  }
+
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  function loop(now) {
+    if (!visible || document.hidden || viewer.dataset.mode !== "3d") { running = false; return; }
+    const dt = Math.min((now - lastT) / 1000, 0.1); lastT = now;
+    let busy = interacting || controls.autoRotate;
+
+    if (finishAnim) {
+      finishAnim.t = Math.min(1, finishAnim.t + dt / 0.45);
+      const k = ease(finishAnim.t), a = finishAnim.from, b = finishAnim.to;
+      body.color.copy(tmpColor.copy(a.c).lerp(b.color, k));
+      body.roughness = a.r + (b.roughness - a.r) * k;
+      body.metalness = a.m + (b.metalness - a.m) * k;
+      body.envMapIntensity = a.e + (b.env - a.e) * k;
+      if (finishAnim.t >= 1) finishAnim = null;
+      busy = true;
+    }
+    if (Math.abs(armK - armKTarget) > 0.001) {
+      armK += (armKTarget - armK) * Math.min(1, dt * 7);
+      if (Math.abs(armK - armKTarget) < 0.001) armK = armKTarget;
+      pose(); busy = true;
+      controls.target.lerp(target, Math.min(1, dt * 6));
+    }
+    const lt = lightOn ? 1 : 0;
+    if (Math.abs(lightLevel - lt) > 0.001) {
+      lightLevel += (lt - lightLevel) * Math.min(1, dt * 8);
+      if (Math.abs(lightLevel - lt) < 0.01) lightLevel = lt;
+      busy = true;
+    }
+    diffuser.emissiveIntensity = lightLevel * 2.2;
+    bulb.intensity = lightLevel * 18;
+    pool.material.opacity = lightLevel * 0.85;
+    renderer.toneMappingExposure = 1.0 - lightLevel * 0.08;
+
+    if (resetAnim) {
+      resetAnim.t = Math.min(1, resetAnim.t + dt / 0.8);
+      const k = ease(resetAnim.t);
+      camera.position.lerpVectors(resetAnim.from, HOME, k);
+      controls.target.lerpVectors(resetAnim.fromT, target, k);
+      if (resetAnim.t >= 1) { resetAnim = null; controls.autoRotate = !reduceMotion; }
+      busy = true;
+    }
+
+    const moved = controls.update(dt);
+    renderer.render(scene, camera);
+
+    // adaptive quality
+    if (!degraded && dt > 0.045) {
+      if (++slowFrames > 30) {
+        degraded = true;
+        renderer.setPixelRatio(Math.min(1, dprCap));
+        renderer.shadowMap.type = THREE.PCFShadowMap; key.shadow.mapSize.set(512, 512);
+        key.shadow.map?.dispose(); key.shadow.map = null;
+        resize();
+      }
+    } else if (dt < 0.03) slowFrames = Math.max(0, slowFrames - 1);
+
+    if (busy || moved) idleFrames = 0; else idleFrames++;
+    if (idleFrames > 20) { running = false; return; }
+    requestAnimationFrame(loop);
+  }
+
+  resize();
+  renderer.render(scene, camera);
+  viewer.classList.add("ready");
+  if (reduceMotion) document.getElementById("hint").textContent = "Drag to rotate · Arrow keys work too";
+  wake();
+}
+</script>
+</body>
+</html>

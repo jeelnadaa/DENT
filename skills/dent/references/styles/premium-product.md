@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Neutral canvas: pure white #FFFFFF / light grey #F5F5F7 sections, or black #000 for dramatic sections. Text near-black #1D1D1F / white. **One** link/CTA blue (#0071E3) or the product's color. Color comes from imagery. |
-| Typography | SF Pro-like neo-grotesque (Inter Display, "Geist", system-ui). **Very large, bold, tightly tracked headlines** (−0.02 to −0.04em), short (2–6 words). Subheads in medium grey. |
+| Typography | SF Pro-like grotesque (General Sans, Geist, Satoshi; system-ui on Apple). **Very large, bold, tightly tracked headlines** (−0.02 to −0.04em), short (2–6 words). Subheads in medium grey. |
 | Spacing / layout | Full-width sections, each about ONE idea. Very large vertical spacing (120–200px between sections on desktop). Centered heroes, tiles/bento grids for feature lists. |
 | Radius | Controls pill (980px) for CTAs; tiles/cards 18–28px; continuous ("squircle") corners where possible. |
 | Borders | Almost none. |
@@ -44,7 +44,7 @@
 :root{
   --bg:#FFFFFF; --bg-alt:#F5F5F7; --bg-dark:#000000; --text:#1D1D1F; --text-2:#6E6E73; --text-on-dark:#F5F5F7;
   --accent:#0071E3; --on-accent:#FFFFFF;
-  --font-sans:"Inter Display","Inter",system-ui,-apple-system,sans-serif;
+  --font-sans:"General Sans","Geist",system-ui,-apple-system,sans-serif;
   --h1:clamp(2.75rem,1.75rem + 4.5vw,6rem); --tracking-h1:-0.035em;
   --radius-pill:980px; --radius-container:24px;
   --nav-glass:rgb(255 255 255 / .72); --blur:blur(20px) saturate(180%);

@@ -13,14 +13,14 @@ Status legend: ✓ checked 2026-11-14 · K from knowledge, verify on the source 
 | Source | Licence | Notes | Status |
 |---|---|---|---|
 | [Google Fonts](https://fonts.google.com) | Mostly SIL OFL 1.1 (some Apache-2.0/UFL) | Free incl. commercial; self-host for privacy/performance | K |
-| [Fontshare (ITF)](https://www.fontshare.com) | ITF Free Font License | Free for personal and commercial use; read per-family terms | K |
+| [Fontshare (ITF)](https://www.fontshare.com) | ITF Free Font License (some families OFL) | **DENT's preferred source** (Satoshi, General Sans, Switzer, Cabinet Grotesk, Clash Display, Gambetta, Zodiak…). Free for commercial use in any media; self-hosting allowed; **no subsetting/format conversion/modification; no redistribution (don't commit to public repos; use the Fontshare API there)** | ✓ 2026-11-14 |
 | [Velvetyne](https://velvetyne.fr) | OFL (mostly) | Experimental, characterful display faces | K |
 | [The League of Moveable Type](https://www.theleagueofmoveabletype.com) | OFL | Classic open display faces | K |
 | [Uncut.wtf](https://uncut.wtf) | Varies (catalogue of free fonts) | Check each font's licence link | K |
 | [Collletttivo](https://www.collletttivo.it) | OFL (mostly) | Free type collective | K |
 | Commercial foundries (Klim, Grilli Type, Pangram Pangram, Commercial Type, Dinamo, OH no Type…) | Paid desktop/web licences (some free trials/personal-use) | Recommend only if the user owns or will buy the licence; trial fonts are not for production | K |
 
-Rules: self-host with `font-display: swap`, subset, preload the 1–2 critical files; never embed a font whose licence forbids web embedding.
+Rules: `font-display: swap`, preload the 1–2 critical files, subset **only OFL fonts** (never ITF/Fontshare fonts); never embed a font whose licence forbids web embedding. Priority and pairings: `../typography.md` §0 and §3.
 
 ## 2. Icons
 | Set | Licence | Style | Status |

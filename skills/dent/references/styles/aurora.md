@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | 3–5 harmonious vivid colors (e.g. violet #7F5AF0, pink #FF6AC1, orange #FFB86B, teal #2CB1BC, blue #3A86FF) blended as **blurred blobs/mesh**; the UI on top is neutral (white or dark). |
-| Typography | Clean modern sans (Inter, "Satoshi", "General Sans", "Plus Jakarta Sans"); large bold headlines. |
+| Typography | Clean modern sans (Satoshi, General Sans, Plus Jakarta Sans); large bold headlines. |
 | Spacing / layout | Gradient lives in hero/section backgrounds; content in clean containers with plenty of space. |
 | Radius | Medium-large (12–24px). |
 | Borders | Optional subtle white/transparent borders on cards over gradients. |
@@ -43,7 +43,7 @@
   --bg:#0E0B1F; --text:#FFFFFF; --text-2:rgb(255 255 255 / .78);
   --c1:#7F5AF0; --c2:#FF6AC1; --c3:#FFB86B; --c4:#2CB1BC;
   --accent:#FFFFFF; --on-accent:#0E0B1F;
-  --font-sans:"Plus Jakarta Sans","Inter",system-ui,sans-serif;
+  --font-sans:"Satoshi","Plus Jakarta Sans",system-ui,sans-serif;
   --radius-control:12px; --radius-container:20px;
   --dur:300ms; --ease:cubic-bezier(.16,1,.3,1);
 }

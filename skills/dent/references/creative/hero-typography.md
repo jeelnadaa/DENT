@@ -28,30 +28,27 @@ Pick one per page (plus at most one secondary moment).
 
 ## 3. Choosing faces (pairing matrix)
 
-Use a **contrast axis**: pair faces that differ clearly in one dimension (classification, width, weight) and agree in another (x-height, mood).
+Use a **contrast axis**: pair faces that differ clearly in one dimension (classification, width, weight) and agree in another (x-height, mood). DENT's default text face is **Satoshi** (font priority: `../typography.md` §0); the full pairing library is `../typography.md` §3. Best hero pairings:
 
 | Display (hero) | Text | Mood | Licence |
 |---|---|---|---|
-| Fraunces (variable, opsz/SOFT/WONK) | Inter / Instrument Sans | Warm editorial, characterful | OFL |
-| Instrument Serif | Instrument Sans | Elegant, modern editorial | OFL |
-| Playfair Display / Bodoni Moda | Source Sans 3 | Fashion, luxury, classic | OFL |
-| Newsreader / Source Serif 4 (display opsz) | Inter | Journalism, calm authority | OFL |
-| Space Grotesk | IBM Plex Sans / Mono | Technical, engineered | OFL |
-| Archivo (variable width) / Archivo Black | Archivo | Bold, versatile, poster | OFL |
-| Anton / Bebas Neue (caps only) | Inter | Loud, condensed, poster | OFL |
-| Bricolage Grotesque (variable) | Inter | Quirky, friendly, indie | OFL |
-| Syne (extra bold) | Manrope | Avant-garde, art | OFL |
-| Unbounded | Inter | Wide, futuristic, playful | OFL |
-| Big Shoulders Display | Barlow | Industrial signage | OFL |
-| Cormorant Garamond | Lato / Inter | Romantic, literary | OFL |
-| DM Serif Display | DM Sans | Friendly classic | OFL |
-| JetBrains Mono / IBM Plex Mono (as display) | Plex Sans | Dev tools, terminal-editorial | OFL |
-| Recursive (MONO/CASL axes) | Recursive | Code meets casual | OFL |
-| Roboto Flex (many axes) | Roboto Flex | Kinetic, adaptable | OFL |
-| Young Serif | Inter | Soft vintage | OFL |
-| Gloock | Inter | High-contrast editorial | OFL |
+| **Cabinet Grotesk** 800, tracking −3% | Satoshi | Bold, modern, confident | ITF FFL (Fontshare) |
+| **Clash Display** 600 | General Sans | Punchy, contemporary | ITF FFL |
+| **Gambetta** (italic for the key word) | Satoshi | Warm editorial-modern | ITF FFL |
+| **Zodiak** | General Sans | Premium, elegant | ITF FFL |
+| **Boska** | Switzer | Fashion, dramatic | ITF FFL |
+| **Panchang** 700 (wide) | Satoshi + Geist Mono labels | Architectural, technical | ITF FFL / OFL |
+| **Instrument Serif** (italic accent) | Satoshi | Elegant tech | OFL / ITF FFL |
+| **Fraunces** (SOFT, WONK, opsz 144) | Satoshi or Manrope | Warm, characterful | OFL / ITF FFL |
+| **Bricolage Grotesque** (opsz) | Instrument Sans | Indie, playful-modern | OFL |
+| **Mona Sans** (wdth 125, 800) | Hubot Sans | Tech-expressive | OFL |
+| **Satoshi** 900 (one family) | Satoshi 400 | Minimal, confident | ITF FFL |
+| **Geist** 700 / Geist Mono | Geist | Developer precision | OFL |
+| **Newsreader** (display opsz) | Onest | Journalism, calm authority | OFL |
+| **Big Shoulders Display** | Switzer | Industrial signage | OFL / ITF FFL |
+| **Young Serif** | Figtree | Soft vintage | OFL |
 
-Paid families (Söhne, GT America, Neue Haas, PP Editorial, Canela…) are excellent; recommend only if the user has a licence. Fontshare (ITF) fonts are free under the ITF Free Font License: check the terms per family. Always record the licence (`../catalog/asset-sources.md` §1).
+Avoid as automatic choices (use only deliberately, logged): Inter-only headlines, Playfair Display as "luxury", Bebas Neue/Anton for everything, Montserrat/Poppins headings. Paid families (Söhne, GT America, Neue Haas, PP Editorial, Canela…) are excellent; recommend only if the user owns a licence. Fontshare fonts: no subsetting or modification, don't commit them to public repos (load via the Fontshare API). Record every licence (`../catalog/asset-sources.md` §1).
 
 ## 4. Composition techniques (the move library)
 
@@ -94,8 +91,8 @@ Each technique: **what**, **when**, **build notes**, **watch-out**.
 <span class="line"><span>doesn't look <em>generated</em>.</span></span></h1>
 ```
 ```css
-.hero{font: 800 clamp(2.75rem,1rem + 7vw,7.5rem)/.95 "Fraunces",serif;letter-spacing:-.035em;text-wrap:balance}
-.hero em{font-style:italic;font-variation-settings:"SOFT" 100,"WONK" 1}
+.hero{font: 800 clamp(2.75rem,1rem + 7vw,7.5rem)/.95 "Cabinet Grotesk","Satoshi",sans-serif;letter-spacing:-.035em;text-wrap:balance}
+.hero em{font-family:"Gambetta","Instrument Serif",serif;font-style:italic;font-weight:500;letter-spacing:-.02em}
 .line{display:block;overflow:clip}
 @media (prefers-reduced-motion:no-preference){
   .line>span{display:inline-block;transform:translateY(105%);animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}

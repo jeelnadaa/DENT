@@ -4,7 +4,7 @@ description: DENT 2.0 is a design-engineering skill for any visual, interactive 
 license: Apache-2.0
 metadata:
   author: Jeel Nada (solarquack)
-  version: "2.0.0"
+  version: "2.1.0"
   homepage: https://github.com/jeelnadaa/DENT
 ---
 
@@ -73,7 +73,8 @@ Open `references/creative-direction.md` (process) and `references/creative/direc
 2. Run the **category-cliché check**: name the predictable look for this product category and diverge on at least two axes (type, color, layout, imagery, motion, sound) unless the user asked for the expected look.
 3. Choose **one base style + at most one accent style** (`references/styles/_styles-index.md`).
 4. Pick the **signature element** (one or two things that make it recognisable), often a hero typography move (`references/creative/hero-typography.md`).
-5. Polished: write the brief (`references/design-brief-and-metrics.md`). All-out: show 2–3 genuinely different directions and let the user pick.
+5. **Fonts:** follow the font priority in `references/typography.md` §0 (Satoshi-style modern grotesks first, characterful serif/display partners, overused defaults like Inter/Roboto/Poppins only as a logged choice) and check the licence (§9).
+6. Polished: write the brief (`references/design-brief-and-metrics.md`). All-out: show 2–3 genuinely different directions and let the user pick.
 
 ### 1.5 Build
 1. **Foundations** (tokens) then **components** from `references/foundations-and-components.md` (+ `references/components-extended.md`), applying the style's overrides (§9.1).

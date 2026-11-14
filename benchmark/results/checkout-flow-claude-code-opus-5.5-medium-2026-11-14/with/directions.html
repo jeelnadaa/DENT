@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;600&family=Instrument+Sans:wght@400;600&family=Archivo:wght@500;800&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;font-family:system-ui,sans-serif;background:#ecebe7;color:#1d1b19;padding:24px 16px}
+  h1{font-size:20px;margin:0 0 4px} p.lead{margin:0 0 20px;color:#4a4642}
+  .grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .tile{border-radius:4px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.1)}
+  .meta{background:#fff;padding:14px 16px;font-size:14px;line-height:1.45}
+  .meta b{font-size:16px;display:block;margin-bottom:2px}
+  .meta em{color:#555}
+  /* A docket */
+  .a{background:#efe6d6;color:#221d17;font-family:'Instrument Sans',sans-serif;padding:20px}
+  .a .hd{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid #221d17;padding-bottom:8px}
+  .a .steps{display:flex;gap:4px;margin:12px 0;font-family:'IBM Plex Mono',monospace;font-size:11px}
+  .a .steps span{flex:1;border-top:4px solid #c9bba3;padding-top:4px}.a .steps .on{border-color:#c2410c;color:#9a3412;font-weight:600}
+  .a h2{font-size:28px;margin:6px 0 12px;letter-spacing:-.02em}
+  .a .row{display:flex;justify-content:space-between;border-bottom:1px dashed #8a7c66;padding:8px 0;font-size:15px}
+  .a .row span:last-child{font-family:'IBM Plex Mono',monospace}
+  .a .tot{font-weight:600;border-bottom:2px solid #221d17}
+  .a button{margin-top:14px;width:100%;height:48px;background:#c2410c;color:#fff;border:0;font:600 16px 'Instrument Sans';border-radius:2px}
+  .a .stamp{display:inline-block;margin-top:12px;border:2px solid #9a3412;color:#9a3412;font:600 11px 'IBM Plex Mono';padding:4px 8px;transform:rotate(-4deg);letter-spacing:.1em}
+  /* B plan */
+  .b{background:#f4f6f8;color:#0f2a44;font-family:'Archivo',sans-serif;padding:20px;background-image:linear-gradient(#dfe7ef 1px,transparent 1px),linear-gradient(90deg,#dfe7ef 1px,transparent 1px);background-size:16px 16px}
+  .b .hd{font:500 11px 'IBM Plex Mono';letter-spacing:.08em;text-transform:uppercase}
+  .b h2{font-weight:800;font-size:34px;margin:6px 0 10px;letter-spacing:-.03em;line-height:1}
+  .b svg{display:block;width:100%;height:auto;margin-bottom:10px}
+  .b .row{display:flex;justify-content:space-between;padding:6px 0;font-size:15px;border-bottom:1px solid #9fb3c8}
+  .b button{margin-top:14px;width:100%;height:48px;background:#0f2a44;color:#fff;border:0;font:800 16px 'Archivo'}
+  /* C showroom */
+  .c{background:#f5f1ea;color:#2e2b28;font-family:'Manrope',sans-serif;padding:24px}
+  .c .hd{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6b665f}
+  .c h2{font-family:'Fraunces',serif;font-weight:400;font-size:32px;margin:8px 0 14px}
+  .c .item{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #e0d8cb}
+  .c .sw{width:56px;height:44px;background:#e8e1d5;border-radius:3px}
+  .c button{margin-top:16px;width:100%;height:48px;background:#4f5640;color:#fff;border:0;border-radius:3px;font:600 15px 'Manrope'}
+  .pal{display:flex;gap:4px;margin-top:8px}.pal i{width:22px;height:22px;border-radius:2px;display:block;border:1px solid rgba(0,0,0,.1)}
+</style>
+</head>
+<body>
+<h1>Three directions for the checkout</h1>
+<p class="lead">Each tile shows the same moment (cart step). Pick one, or combine.</p>
+<div class="grid">
+  <div class="tile">
+    <div class="a">
+      <div class="hd"><span>Docket № 24-0117</span><span>Step 1 / 5</span></div>
+      <div class="steps"><span class="on">Cart</span><span>Address</span><span>Slot</span><span>Pay</span><span>Done</span></div>
+      <h2>Your order docket</h2>
+      <div class="row"><span>Oak lounge chair ×1</span><span>₹24,900</span></div>
+      <div class="row"><span>Linen sofa, 3-seat ×1</span><span>₹68,500</span></div>
+      <div class="row tot"><span>Total incl. GST</span><span>₹93,400</span></div>
+      <button>Continue to address</button>
+      <span class="stamp">CHECKED · 1 OF 5</span>
+    </div>
+    <div class="meta"><b>A · The workshop docket</b><em>"A carpenter's delivery docket that fills in and gets stamped as you go."</em><br>Kraft paper, ink black, one vermilion; mono numbers; dashed tally rules. The order literally becomes a stamped docket on confirmation. Best if you want it memorable and craft-honest.
+      <div class="pal"><i style="background:#efe6d6"></i><i style="background:#221d17"></i><i style="background:#c2410c"></i><i style="background:#8a7c66"></i></div></div>
+  </div>
+  <div class="tile">
+    <div class="b">
+      <div class="hd">Sheet 01 — Cart</div>
+      <h2>Room for<br>two pieces.</h2>
+      <svg viewBox="0 0 300 70" aria-hidden="true"><rect x="2" y="2" width="296" height="66" fill="none" stroke="#0f2a44" stroke-width="2"/><line x1="120" y1="2" x2="120" y2="68" stroke="#0f2a44"/><rect x="20" y="20" width="70" height="30" fill="none" stroke="#0f2a44" stroke-dasharray="3 2"/><circle cx="200" cy="35" r="16" fill="none" stroke="#0f2a44" stroke-dasharray="3 2"/></svg>
+      <div class="row"><span>Oak lounge chair</span><span>₹24,900</span></div>
+      <div class="row"><span>Linen sofa, 3-seat</span><span>₹68,500</span></div>
+      <button>Continue →</button>
+    </div>
+    <div class="meta"><b>B · The floor plan</b><em>"Placing furniture on an architect's plan."</em><br>Blueprint ink on gridded paper, bold condensed headlines, furniture drawn as plan symbols; the step bar is a corridor of rooms. Best if you want it technical and confident.
+      <div class="pal"><i style="background:#f4f6f8"></i><i style="background:#0f2a44"></i><i style="background:#9fb3c8"></i></div></div>
+  </div>
+  <div class="tile">
+    <div class="c">
+      <div class="hd">Your cart · 2 pieces</div>
+      <h2>Almost home.</h2>
+      <div class="item"><span class="sw"></span><span>Oak lounge chair<br><small>₹24,900</small></span></div>
+      <div class="item"><span class="sw"></span><span>Linen sofa, 3-seat<br><small>₹68,500</small></span></div>
+      <button>Continue to address</button>
+    </div>
+    <div class="meta"><b>C · The quiet showroom</b><em>"A calm, daylit showroom."</em><br>Warm linen neutrals, serif headings, moss accent, lots of space. This is the expected furniture look: refined but least distinctive. Best if you want safe and soothing.
+      <div class="pal"><i style="background:#f5f1ea"></i><i style="background:#2e2b28"></i><i style="background:#4f5640"></i><i style="background:#e8e1d5"></i></div></div>
+  </div>
+</div>
+</body>
+</html>

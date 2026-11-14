@@ -1,0 +1,1501 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tidal: a steady monthly paycheck for freelancers with irregular income</title>
+<meta name="description" content="Tidal is a buffer account for freelancers. Client payments land in your buffer whenever they arrive; Tidal pays you the same amount on the same day every month. Join the waitlist.">
+<meta name="theme-color" content="#F3EEE4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A1C23" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- Set og:image / og:url to absolute URLs once the domain is known -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tidal: your income comes in waves. Your paycheck doesn't have to.">
+<meta property="og:description" content="A buffer account that pays freelancers the same amount every month. Join the waitlist.">
+<meta property="og:image" content="og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tidal: a jagged income line flowing into a flat, steady paycheck line.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tidal: steady pay for irregular work">
+<meta name="twitter:description" content="A buffer account that pays freelancers the same amount every month.">
+<meta name="twitter:image" content="og-image.png">
+
+<script>
+  // Apply a saved theme before first paint (no flash of the wrong theme).
+  (function () {
+    try {
+      var t = localStorage.getItem('tidal-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+    document.documentElement.classList.add('js');
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ---------- Fonts (Satoshi: Indian Type Foundry, ITF Free Font License, via Fontshare) ---------- */
+
+
+
+
+/* ---------- Tokens ---------- */
+:root{
+  /* colour: light (sand paper, deep-sea ink, coral) */
+  --paper:#F3EEE4; --surface:#FBF8F1; --ink:#0E2A33; --ink-2:#45606A; --rule:#D5CCBA; --rule-strong:#B9AE98;
+  --coral:#B23A24; --on-coral:#FFFFFF; --sea:#2F7C80; --sea-soft:#CFE0DC;
+  --panel:#0E2A33; --panel-ink:#F3EEE4; --panel-ink-2:#A9C6C4; --panel-rule:#2B4A54; --panel-coral:#F08A6E; --panel-field:#163842;
+  --focus:#B23A24;
+  /* type */
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-text:"Satoshi",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --fs-hero:clamp(2.55rem,1.15rem + 5.4vw,5.9rem);
+  --fs-h2:clamp(2rem,1.25rem + 3.2vw,4rem);
+  --fs-h3:clamp(1.35rem,1.15rem + .8vw,1.75rem);
+  --fs-lead:clamp(1.125rem,1.04rem + .4vw,1.375rem);
+  --fs-body:clamp(1rem,.97rem + .15vw,1.0625rem);
+  --fs-small:.875rem; --fs-label:.75rem;
+  /* space */
+  --s-1:.25rem; --s-2:.5rem; --s-3:.75rem; --s-4:1rem; --s-5:1.5rem; --s-6:2rem; --s-7:3rem; --s-8:4.5rem; --s-9:clamp(4.5rem,3rem + 6vw,8.5rem);
+  --gutter:clamp(16px,4vw,40px); --max:1240px; --measure:62ch;
+  /* shape */
+  --r-control:999px; --r-field:10px; --r-panel:4px;
+  /* motion (calm personality) */
+  --dur-fast:160ms; --dur-normal:300ms; --dur-slow:600ms; --dur-scene:900ms;
+  --ease-out:cubic-bezier(.16,1,.3,1); --ease-in-out:cubic-bezier(.65,0,.35,1); --ease-std:cubic-bezier(.2,0,0,1);
+  --header-h:64px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A1C23; --surface:#0F2830; --ink:#EFE8D8; --ink-2:#A3B8BD; --rule:#234049; --rule-strong:#35596A;
+    --coral:#FF8C6E; --on-coral:#0A1C23; --sea:#5FB3B3; --sea-soft:#17393F;
+    --panel:#EFE8D8; --panel-ink:#0E2A33; --panel-ink-2:#45606A; --panel-rule:#CFC6B4; --panel-coral:#B23A24; --panel-field:#FBF8F1;
+    --focus:#FF8C6E; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A1C23; --surface:#0F2830; --ink:#EFE8D8; --ink-2:#A3B8BD; --rule:#234049; --rule-strong:#35596A;
+  --coral:#FF8C6E; --on-coral:#0A1C23; --sea:#5FB3B3; --sea-soft:#17393F;
+  --panel:#EFE8D8; --panel-ink:#0E2A33; --panel-ink-2:#45606A; --panel-rule:#CFC6B4; --panel-coral:#B23A24; --panel-field:#FBF8F1;
+  --focus:#FF8C6E; color-scheme:dark;
+}
+@media (prefers-contrast:more){
+  :root{--ink-2:var(--ink); --rule:var(--rule-strong)}
+}
+
+/* ---------- Base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:calc(var(--header-h) + 12px)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-text);font-size:var(--fs-body);line-height:1.6;
+  font-feature-settings:"kern";-webkit-font-smoothing:antialiased;overflow-x:clip;
+  transition:background-color var(--dur-normal) var(--ease-std),color var(--dur-normal) var(--ease-std)}
+img,svg,canvas{display:block;max-width:100%}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.2em}
+a:hover{text-decoration-color:var(--coral)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px}
+::selection{background:var(--coral);color:var(--on-coral)}
+.wrap{width:100%;max-width:calc(var(--max) + var(--gutter)*2);margin-inline:auto;padding-inline:max(var(--gutter),env(safe-area-inset-left))}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:var(--gutter);top:-100px;z-index:100;background:var(--ink);color:var(--paper);padding:.75rem 1rem;border-radius:var(--r-field);font-weight:500}
+.skip:focus{top:12px}
+.mono{font-family:var(--font-mono);font-size:var(--fs-label);letter-spacing:.08em;text-transform:uppercase;font-weight:400}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.ph{font-family:var(--font-mono);font-size:.9em;background:color-mix(in srgb,var(--coral) 10%,transparent);border:1px dashed color-mix(in srgb,var(--coral) 55%,transparent);padding:.05em .4em;border-radius:3px;white-space:normal}
+
+/* Kicker row with the tide-line signature */
+.kicker{display:flex;align-items:center;gap:var(--s-3);color:var(--ink-2)}
+.kicker .tl{flex:1;max-width:180px;height:14px;color:var(--rule-strong)}
+.tl path{fill:none;stroke:currentColor;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.tl .flat{stroke:var(--coral);stroke-width:2}
+
+/* ---------- Buttons ---------- */
+.btn{--h:48px;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:var(--h);padding:0 1.35rem;border-radius:var(--r-control);
+  border:1.5px solid transparent;font-weight:500;font-size:1rem;line-height:1;text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:background-color var(--dur-fast) var(--ease-std),color var(--dur-fast) var(--ease-std),border-color var(--dur-fast) var(--ease-std),transform var(--dur-fast) var(--ease-std)}
+.btn-primary{background:var(--ink);color:var(--paper)}
+.btn-primary:hover{background:var(--coral);color:var(--on-coral)}
+.btn-ghost{border-color:var(--rule-strong);color:var(--ink);background:transparent}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{cursor:progress;opacity:.75}
+.icon-btn{width:44px;height:44px;display:inline-grid;place-items:center;border-radius:50%;border:1.5px solid var(--rule);background:transparent;cursor:pointer;color:var(--ink);
+  transition:border-color var(--dur-fast) var(--ease-std),background-color var(--dur-fast) var(--ease-std)}
+.icon-btn:hover{border-color:var(--ink)}
+.icon-btn svg{width:20px;height:20px}
+.link-arrow{display:inline-flex;align-items:center;gap:.4rem;font-weight:500;min-height:44px;text-decoration:underline;text-decoration-color:var(--rule-strong)}
+.link-arrow:hover{text-decoration-color:var(--coral)}
+
+/* ---------- Header ---------- */
+.site-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 92%,transparent);
+  -webkit-backdrop-filter:saturate(1.2) blur(10px);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid transparent;
+  transition:border-color var(--dur-normal) var(--ease-std)}
+.site-header.scrolled{border-bottom-color:var(--rule)}
+.header-row{display:flex;align-items:center;gap:var(--s-4);height:var(--header-h)}
+.brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;min-height:44px;margin-right:auto}
+.brand svg{width:30px;height:30px;flex:none}
+.brand span{font-family:var(--font-display);font-size:1.55rem;font-weight:500;letter-spacing:-.02em;font-variation-settings:"opsz" 72;line-height:1}
+.nav-desktop{display:none}
+.nav-desktop ul{display:flex;gap:var(--s-1)}
+.nav-desktop a{display:inline-flex;align-items:center;min-height:44px;padding:0 .7rem;text-decoration:none;font-size:.95rem;color:var(--ink-2);border-radius:var(--r-control);position:relative}
+.nav-desktop a:hover{color:var(--ink)}
+.nav-desktop a[aria-current="true"]{color:var(--ink)}
+.nav-desktop a[aria-current="true"]::after{content:"";position:absolute;left:.7rem;right:.7rem;bottom:8px;height:2px;background:var(--coral);border-radius:2px}
+.header-actions{display:flex;align-items:center;gap:var(--s-2)}
+.header-cta{--h:44px;padding:0 1.1rem;font-size:.95rem}
+.theme-desktop{display:none}
+@media (max-width:379px){.header-cta{display:none}}
+@media (min-width:1024px){
+  .nav-desktop{display:block}
+  .theme-desktop{display:inline-grid}
+  .menu-btn{display:none}
+}
+.icon-sun{display:none}
+:root[data-theme="dark"] .icon-sun{display:block}
+:root[data-theme="dark"] .icon-moon{display:none}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .icon-sun{display:block}
+  :root:not([data-theme="light"]) .icon-moon{display:none}
+}
+
+/* Mobile menu (native dialog: focus stays inside, Esc closes) */
+.menu{border:0;padding:0;margin:0;width:100%;max-width:100%;height:100%;max-height:100%;background:var(--paper);color:var(--ink)}
+.menu::backdrop{background:rgba(5,15,20,.4)}
+.menu-inner{display:flex;flex-direction:column;min-height:100%;padding:0 var(--gutter) var(--s-6)}
+.menu-top{display:flex;align-items:center;justify-content:space-between;height:var(--header-h)}
+.menu nav ul{display:flex;flex-direction:column;border-top:1px solid var(--rule);margin-top:var(--s-4)}
+.menu nav a{display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--rule);text-decoration:none;
+  font-family:var(--font-display);font-size:clamp(1.75rem,1.4rem + 2vw,2.5rem);letter-spacing:-.02em;font-weight:400}
+.menu nav a .mono{color:var(--ink-2)}
+.menu-foot{margin-top:auto;padding-top:var(--s-6);display:flex;flex-wrap:wrap;gap:var(--s-3);align-items:center}
+.menu-foot .btn-primary{flex:1 1 220px}
+.theme-row{display:inline-flex;align-items:center;gap:.6rem;color:var(--ink-2);font-size:.95rem}
+
+/* ---------- Hero ---------- */
+.hero{padding-block:clamp(1.25rem,1rem + 2vw,3rem) var(--s-9)}
+.masthead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s-2) var(--s-5);padding-block:var(--s-3);border-top:2px solid var(--ink);border-bottom:1px solid var(--rule);color:var(--ink-2)}
+.hero-grid{display:grid;gap:var(--s-7);margin-top:clamp(1.75rem,1rem + 2.4vw,3.25rem);align-items:center}
+@media (min-width:960px){.hero-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--s-8)}}
+.hero h1{font-family:var(--font-display);font-weight:300;font-size:var(--fs-hero);line-height:.96;letter-spacing:-.035em;font-variation-settings:"opsz" 144;text-wrap:balance}
+.hero h1 .l{display:block}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--coral);letter-spacing:-.03em}
+.hero .lead{margin-top:var(--s-5);font-size:var(--fs-lead);line-height:1.5;max-width:36ch;color:var(--ink);text-wrap:pretty}
+.hero .lead strong{font-weight:500}
+.hero-form{margin-top:var(--s-6);max-width:520px}
+.reassure{margin-top:var(--s-3);color:var(--ink-2);font-size:var(--fs-small)}
+.reassure span+span::before{content:"·";margin:0 .5em;color:var(--rule-strong)}
+.hero-secondary{margin-top:var(--s-2)}
+
+/* Hero tide chart card */
+.tide-card{border-top:2px solid var(--ink);padding-top:var(--s-3)}
+.tide-card header{display:flex;justify-content:space-between;gap:var(--s-3);color:var(--ink-2)}
+.tide-card svg{width:100%;height:auto;margin-block:var(--s-4) var(--s-3);overflow:visible}
+.tide-card .grid line{stroke:var(--rule);stroke-width:1}
+.tide-card .jag{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-linejoin:round}
+.tide-card .flat{fill:none;stroke:var(--coral);stroke-width:3.5;stroke-linecap:round}
+.tide-card .divider{stroke:var(--ink);stroke-dasharray:2 4;stroke-width:1}
+.tide-card text{font-family:var(--font-mono);font-size:11px;fill:var(--ink-2);letter-spacing:.06em}
+.tide-card dl{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--rule)}
+.tide-card dl>div{padding:var(--s-3) var(--s-3) var(--s-3) 0}
+.tide-card dl>div+div{border-left:1px solid var(--rule);padding-left:var(--s-3)}
+.tide-card dt{color:var(--ink-2)}
+.tide-card dd{font-family:var(--font-display);font-size:clamp(1.5rem,1.2rem + 1vw,2rem);letter-spacing:-.02em;line-height:1.15;margin-top:.25rem}
+.tide-card dd small{display:block;font-family:var(--font-text);font-size:var(--fs-small);color:var(--ink-2);letter-spacing:0}
+.tide-card dd.coral{color:var(--coral)}
+
+/* Hero entrance (motion only when allowed) */
+@media (prefers-reduced-motion:no-preference){
+  .js .hero h1 .l{animation:rise var(--dur-scene) var(--ease-out) both}
+  .js .hero h1 .l:nth-child(2){animation-delay:140ms}
+  .js .hero .lead,.js .hero-form,.js .reassure,.js .hero-secondary{animation:fade var(--dur-slow) var(--ease-out) 380ms both}
+  .js .tide-card .jag{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.4s var(--ease-in-out) 300ms forwards}
+  .js .tide-card .flat{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1s var(--ease-out) 1.5s forwards}
+}
+@keyframes rise{from{opacity:0;transform:translateY(.35em)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* ---------- Forms ---------- */
+.waitlist label{display:block;font-weight:500;margin-bottom:.4rem}
+.field-row{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.field-row input{flex:1 1 220px;min-width:0;min-height:52px;padding:0 1rem;border-radius:var(--r-control);border:1.5px solid var(--rule-strong);
+  background:var(--surface);color:var(--ink);font-size:1rem;transition:border-color var(--dur-fast) var(--ease-std)}
+.field-row input::placeholder{color:var(--ink-2);opacity:1}
+.field-row input:hover{border-color:var(--ink-2)}
+.field-row input:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-color:var(--ink)}
+.field-row input[aria-invalid="true"]{border-color:var(--coral)}
+.field-row .btn{--h:52px;flex:0 0 auto}
+@media (max-width:479px){.field-row .btn{flex:1 1 100%}}
+.form-msg{min-height:1.5em;margin-top:.5rem;font-size:var(--fs-small);color:var(--ink-2)}
+.form-msg.error{color:var(--coral);font-weight:500}
+.form-msg.error::before{content:"! ";font-family:var(--font-mono)}
+.spinner{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;display:none}
+.is-loading .spinner{display:inline-block}
+@media (prefers-reduced-motion:no-preference){.is-loading .spinner{animation:spin .8s linear infinite}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.success{border:1.5px solid var(--ink);border-radius:var(--r-panel);padding:var(--s-4) var(--s-5);background:var(--surface)}
+.success p:first-child{font-family:var(--font-display);font-size:1.5rem;letter-spacing:-.01em;line-height:1.2}
+.success p+p{margin-top:.35rem;color:var(--ink-2);font-size:var(--fs-small);overflow-wrap:anywhere}
+.success:focus{outline:none}
+.success:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+
+/* ---------- Section scaffolding ---------- */
+section{position:relative}
+.section{padding-block:var(--s-9)}
+.section-head{display:grid;gap:var(--s-4);margin-bottom:clamp(2rem,1.5rem + 2vw,3.5rem)}
+.section h2{font-family:var(--font-display);font-weight:300;font-size:var(--fs-h2);line-height:1.02;letter-spacing:-.03em;font-variation-settings:"opsz" 144;text-wrap:balance;max-width:18ch}
+.section h2 em{font-style:italic;color:var(--coral);font-weight:400}
+.section-head p{max-width:var(--measure);color:var(--ink-2);font-size:var(--fs-lead);line-height:1.5}
+.section-head p.kicker{font-size:var(--fs-label);line-height:1.2;max-width:none}
+
+/* ---------- Story ---------- */
+.story{padding-top:var(--s-9);border-top:1px solid var(--rule)}
+.story-intro{padding-bottom:var(--s-7)}
+.story-body{display:grid;grid-template-columns:minmax(0,1fr);position:relative}
+.stage{position:sticky;top:var(--header-h);height:calc(58svh - var(--header-h)*.3);min-height:330px;z-index:2;background:var(--paper);
+  display:flex;flex-direction:column;border-bottom:1px solid var(--rule)}
+.stage-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);padding-block:var(--s-2);border-bottom:1px solid var(--rule);min-height:52px}
+.readout{display:flex;flex-wrap:wrap;gap:.15rem .9rem;color:var(--ink-2);font-size:.6875rem;line-height:1.4}
+.readout b{color:var(--ink);font-weight:500}
+.readout .buf b{color:var(--sea)}
+.sound{display:flex;align-items:center;gap:var(--s-2);flex:none}
+.sound-btn{display:inline-flex;align-items:center;gap:.45rem;min-height:44px;padding:0 .9rem;border-radius:var(--r-control);border:1.5px solid var(--rule);background:transparent;cursor:pointer;font-size:.85rem;color:var(--ink)}
+.sound-btn:hover{border-color:var(--ink)}
+.sound-btn svg{width:18px;height:18px}
+.sound-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.sound-btn .on{display:none}
+.sound-btn[aria-pressed="true"] .on{display:block}
+.sound-btn[aria-pressed="true"] .off{display:none}
+.vol{display:none;align-items:center;gap:.4rem}
+.vol.show{display:flex}
+.vol input{width:84px;accent-color:var(--coral);height:44px}
+.canvas-wrap{position:relative;flex:1;min-height:0}
+.canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.gauge{display:flex;gap:2px;padding-block:var(--s-2)}
+.gauge a{flex:1;display:flex;flex-direction:column;gap:6px;min-height:44px;justify-content:center;text-decoration:none;color:var(--ink-2);font-size:.6875rem}
+.gauge a::before{content:"";height:3px;border-radius:2px;background:var(--rule)}
+.gauge a[aria-current="step"]{color:var(--ink)}
+.gauge a[aria-current="step"]::before{background:var(--coral)}
+.gauge a.done::before{background:var(--ink-2)}
+.gauge .g-name{display:none}
+.steps{position:relative;z-index:1}
+.step{min-height:72svh;padding-block:var(--s-5) var(--s-8)}
+.step:last-child{min-height:52svh}
+.step-card{background:var(--paper);max-width:34rem}
+@media (max-width:1023px){
+  /* phones/tablets: chart pinned on top, always leaving ~280px below it where each step's text holds while active */
+  .story-body{--stage-h:clamp(300px,calc(100svh - var(--header-h) - 290px),62svh)}
+  .stage{height:var(--stage-h);min-height:0}
+  .step-card{position:sticky;top:calc(var(--header-h) + var(--stage-h) + 12px)}
+  .step{min-height:68svh;padding-block:var(--s-4) var(--s-6)}
+}
+.step .mono{color:var(--coral);font-weight:500}
+.step h3{font-family:var(--font-display);font-weight:400;font-size:var(--fs-h3);letter-spacing:-.02em;line-height:1.15;margin-top:.4rem}
+.step p{margin-top:.6rem;color:var(--ink);max-width:var(--measure);text-wrap:pretty}
+.step p.note{color:var(--ink-2);font-size:var(--fs-small)}
+.step strong{font-weight:500}
+@media (min-width:1024px){
+  .story-body{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s-8)}
+  .stage{grid-column:2;grid-row:1;height:calc(100svh - var(--header-h) - 32px);top:calc(var(--header-h) + 16px);border:0}
+  .steps{grid-column:1;grid-row:1}
+  .step{min-height:92svh;display:flex;align-items:center;padding-block:0}
+  .step:first-child{min-height:70svh;align-items:flex-start;padding-top:12svh}
+  .step:last-child{min-height:90svh}
+  .gauge .g-name{display:inline}
+}
+/* landscape phones: side-by-side like desktop, so the pinned chart never covers the text */
+@media (min-width:600px) and (max-width:1023px) and (orientation:landscape) and (max-height:600px){
+  .story-body{grid-template-columns:minmax(0,4fr) minmax(0,6fr);gap:var(--s-5)}
+  .stage{grid-column:2;grid-row:1;height:calc(100svh - var(--header-h) - 8px);min-height:0;top:calc(var(--header-h) + 4px);border:0}
+  .steps{grid-column:1;grid-row:1}
+  .step{min-height:95svh;display:flex;align-items:center;padding-block:0}
+  .step-card{position:static}
+  .stage-bar{min-height:44px;padding-block:2px}
+  .readout{font-size:.625rem}
+}
+.stage-fallback{padding:var(--s-5) 0;color:var(--ink-2)}
+.story-table{margin-top:var(--s-6);border-top:1px solid var(--rule);padding-top:var(--s-4)}
+.story-table summary{cursor:pointer;min-height:44px;display:inline-flex;align-items:center;font-weight:500;text-decoration:underline;text-decoration-color:var(--rule-strong);text-underline-offset:.2em}
+.story-table summary:hover{text-decoration-color:var(--coral)}
+.table-scroll{overflow-x:auto;margin-top:var(--s-4);-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:420px;font-variant-numeric:tabular-nums}
+caption{text-align:left;color:var(--ink-2);font-size:var(--fs-small);padding-bottom:var(--s-3)}
+th,td{padding:.55rem .75rem .55rem 0;border-bottom:1px solid var(--rule);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-family:var(--font-mono);font-weight:400;font-size:var(--fs-label);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+tfoot td,tfoot th{font-weight:500;border-bottom:0}
+
+/* ---------- How it works ---------- */
+.how{border-top:1px solid var(--rule)}
+.how-steps{display:grid;gap:var(--s-7);counter-reset:how;position:relative}
+.how-step{position:relative;padding-top:var(--s-5);border-top:1px solid var(--ink)}
+.how-step .n{font-family:var(--font-display);font-size:clamp(3.5rem,2.5rem + 4vw,6rem);line-height:.85;font-weight:300;letter-spacing:-.04em;color:var(--coral);font-variation-settings:"opsz" 144}
+.how-step h3{font-family:var(--font-display);font-size:var(--fs-h3);font-weight:400;letter-spacing:-.02em;line-height:1.2;margin-top:var(--s-4)}
+.how-step p{margin-top:var(--s-2);color:var(--ink-2);max-width:40ch}
+.how-line{display:none}
+@media (min-width:768px){
+  .how-steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s-6)}
+  .how-line{display:block;height:28px;color:var(--rule-strong);margin-bottom:calc(var(--s-4) * -1)}
+}
+
+/* ---------- Try your year (inverted panel) ---------- */
+.try{background:var(--panel);color:var(--panel-ink)}
+.try .kicker{color:var(--panel-ink-2)}
+.try .kicker .tl{color:var(--panel-rule)}
+.try .tl .flat{stroke:var(--panel-coral)}
+.try h2 em{color:var(--panel-coral)}
+.try .section-head p{color:var(--panel-ink-2)}
+.try :focus-visible{outline-color:var(--panel-coral)}
+.try-grid{display:grid;gap:var(--s-7)}
+@media (min-width:1024px){.try-grid{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:var(--s-8)}}
+.months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-3) var(--s-4)}
+@media (min-width:560px){.months{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:768px) and (max-width:1023px){.months{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.mfield label{display:block;font-family:var(--font-mono);font-size:var(--fs-label);letter-spacing:.06em;text-transform:uppercase;color:var(--panel-ink-2);margin-bottom:.3rem}
+.money{display:flex;align-items:center;border:1.5px solid var(--panel-rule);border-radius:var(--r-field);background:var(--panel-field);min-height:48px;padding-left:.75rem;transition:border-color var(--dur-fast) var(--ease-std)}
+.money:hover{border-color:var(--panel-ink-2)}
+.money:focus-within{border-color:var(--panel-coral);outline:2px solid var(--panel-coral);outline-offset:2px}
+.money span{color:var(--panel-ink-2);font-variant-numeric:tabular-nums}
+.money input{flex:1;min-width:0;border:0;background:transparent;color:var(--panel-ink);padding:.6rem .6rem .6rem .35rem;font-variant-numeric:tabular-nums;font-size:1rem}
+.money input:focus{outline:none}
+.cushion{margin-top:var(--s-5);display:grid;gap:var(--s-3);grid-template-columns:minmax(0,1fr)}
+@media (min-width:560px){.cushion{grid-template-columns:minmax(0,1fr) auto;align-items:end}}
+.cushion .hint{font-size:var(--fs-small);color:var(--panel-ink-2);margin-top:.3rem}
+.try-actions{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.btn-panel{border-color:var(--panel-rule);color:var(--panel-ink);background:transparent}
+.btn-panel:hover{border-color:var(--panel-ink)}
+.result{border-top:2px solid var(--panel-ink);padding-top:var(--s-4)}
+.result .mono{color:var(--panel-ink-2)}
+.result .big{font-family:var(--font-display);font-weight:300;font-size:clamp(3rem,2rem + 4.5vw,5.5rem);line-height:1;letter-spacing:-.04em;margin-top:var(--s-3);font-variation-settings:"opsz" 144;color:var(--panel-ink);overflow-wrap:anywhere}
+.result .big small{font-size:.32em;letter-spacing:0;font-family:var(--font-text);color:var(--panel-ink-2);margin-left:.25em}
+.result .facts{display:grid;grid-template-columns:1fr 1fr;margin-top:var(--s-5);border-top:1px solid var(--panel-rule)}
+.result .facts>div{padding:var(--s-3) var(--s-3) var(--s-3) 0}
+.result .facts>div+div{border-left:1px solid var(--panel-rule);padding-left:var(--s-3)}
+.result .facts dt{color:var(--panel-ink-2)}
+.result .facts dd{margin-top:.2rem;font-weight:500;font-variant-numeric:tabular-nums}
+.result .empty-msg{margin-top:var(--s-3);color:var(--panel-ink-2)}
+#mini{width:100%;height:auto;margin-top:var(--s-5);overflow:visible}
+#mini .bar{fill:var(--panel-ink-2);opacity:.55}
+#mini .buf{fill:var(--sea);opacity:.45}
+#mini .line{stroke:var(--panel-coral);stroke-width:3;fill:none;stroke-linecap:round}
+#mini text{font-family:var(--font-mono);font-size:10px;fill:var(--panel-ink-2)}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin-top:var(--s-3);font-size:var(--fs-small);color:var(--panel-ink-2)}
+.legend i{display:inline-block;width:14px;height:10px;margin-right:.4rem;vertical-align:middle;border-radius:1px}
+.disclaimer{margin-top:var(--s-4);font-size:var(--fs-small);color:var(--panel-ink-2);max-width:52ch}
+
+/* ---------- Pricing (rate card) ---------- */
+.pricing-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:var(--s-5);margin-bottom:var(--s-6)}
+.seg{display:inline-flex;border:1.5px solid var(--rule-strong);border-radius:var(--r-control);padding:3px}
+.seg button{min-height:44px;padding:0 1.1rem;border:0;border-radius:var(--r-control);background:transparent;cursor:pointer;color:var(--ink-2);font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.rate{display:grid;border-top:2px solid var(--ink)}
+@media (min-width:768px){.rate{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.plan{padding:var(--s-5) 0 var(--s-6);border-bottom:1px solid var(--rule);display:flex;flex-direction:column}
+@media (min-width:768px){.plan{padding:var(--s-5) var(--s-6) var(--s-6) 0;border-bottom:0}.plan+.plan{border-left:1px solid var(--rule);padding-left:var(--s-6)}}
+.plan h3{font-family:var(--font-display);font-size:var(--fs-h3);font-weight:400;letter-spacing:-.02em}
+.price{margin-top:var(--s-4);font-family:var(--font-display);font-size:clamp(2rem,1.6rem + 1.6vw,3rem);letter-spacing:-.03em;line-height:1}
+.price .ph{font-size:.5em;vertical-align:middle;letter-spacing:0}
+.plan h3 .ph{font-size:.75em}
+.price .unit{font-family:var(--font-text);font-size:1rem;color:var(--ink-2);letter-spacing:0}
+.plan .sub{margin-top:var(--s-2);color:var(--ink-2);font-size:var(--fs-small)}
+.plan ul{margin-top:var(--s-5);border-top:1px solid var(--rule)}
+.plan li{display:flex;gap:.7rem;padding:.7rem 0;border-bottom:1px solid var(--rule)}
+.plan li svg{width:18px;height:18px;flex:none;margin-top:.2rem;color:var(--sea)}
+.plan .btn{margin-top:var(--s-5);align-self:flex-start}
+.price-note{margin-top:var(--s-5);color:var(--ink-2);font-size:var(--fs-small)}
+
+/* ---------- FAQ ---------- */
+.faq{border-top:1px solid var(--rule)}
+.faq-grid{display:grid;gap:var(--s-6)}
+@media (min-width:1024px){.faq-grid{grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:var(--s-8)}.faq-grid .section-head{position:sticky;top:calc(var(--header-h) + 32px);align-self:start}}
+.faq-list{border-top:2px solid var(--ink)}
+.faq-list details{border-bottom:1px solid var(--rule)}
+.faq-list summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:var(--s-4);align-items:center;padding:1.1rem 0;min-height:56px;
+  font-family:var(--font-display);font-size:clamp(1.15rem,1.05rem + .5vw,1.4rem);letter-spacing:-.01em;line-height:1.25}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary:hover{color:var(--coral)}
+.faq-list summary .pm{flex:none;width:28px;height:28px;border:1.5px solid var(--rule-strong);border-radius:50%;display:grid;place-items:center;transition:transform var(--dur-normal) var(--ease-std)}
+.faq-list summary .pm svg{width:14px;height:14px}
+.faq-list details[open] summary .pm{transform:rotate(45deg)}
+.faq-list .a{padding:0 0 1.25rem;max-width:var(--measure);color:var(--ink-2)}
+.faq-list .a p+p{margin-top:.6rem}
+
+/* ---------- Final CTA ---------- */
+.final{border-top:1px solid var(--rule);text-align:center}
+.final .tl-big{width:min(520px,100%);height:44px;margin:0 auto var(--s-6);color:var(--rule-strong)}
+.final .tl-big .flat{stroke-width:3}
+.final h2{margin-inline:auto;max-width:14ch;font-size:clamp(2.5rem,1.4rem + 5vw,5.75rem);line-height:.98}
+.final p.sub{margin:var(--s-4) auto 0;max-width:44ch;color:var(--ink-2);font-size:var(--fs-lead)}
+.final .waitlist{max-width:520px;margin:var(--s-6) auto 0;text-align:left}
+.final .reassure{text-align:center}
+
+/* ---------- Footer ---------- */
+.site-footer{border-top:2px solid var(--ink);padding-block:var(--s-7) calc(var(--s-6) + env(safe-area-inset-bottom));font-size:var(--fs-small);color:var(--ink-2)}
+.foot-grid{display:grid;gap:var(--s-6)}
+@media (min-width:768px){.foot-grid{grid-template-columns:2fr 1fr 1fr}}
+.site-footer .brand{margin:0}
+.site-footer h2{font-family:var(--font-mono);font-size:var(--fs-label);letter-spacing:.08em;text-transform:uppercase;font-weight:400;margin-bottom:var(--s-3);color:var(--ink-2)}
+.site-footer li{padding:.3rem 0}
+.site-footer a{min-height:44px;display:inline-flex;align-items:center}
+.foot-legal{margin-top:var(--s-7);padding-top:var(--s-4);border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-5);justify-content:space-between}
+
+/* ---------- Reduced motion: everything visible, nothing moves ---------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important}
+}
+/* ---------- Print ---------- */
+@media print{
+  .site-header,.stage,.gauge,.menu,.hero-form,.final .waitlist,.seg,.sound{display:none!important}
+  body{background:#fff;color:#000}
+  .try{background:#fff;color:#000}
+  .step{min-height:0!important;padding-block:1rem!important}
+  .story-table details{display:block}
+}
+</style>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&amp;display=swap">
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Inline symbol sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="mark" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M4.5 19 L7.5 10 L10 22 L12.5 13.5 L15 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M15 18 H27.5" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 20 20"><path d="M4 10.5 8 14.5 16 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 14 14"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="site-header" id="top">
+  <div class="wrap header-row">
+    <a class="brand" href="#top" aria-label="Tidal, back to top">
+      <svg aria-hidden="true"><use href="#mark"/></svg><span>Tidal</span>
+    </a>
+    <nav class="nav-desktop" aria-label="Main">
+      <ul>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#try">Try your year</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme-desktop js-theme" type="button" aria-label="Switch to dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
+      <a class="btn btn-primary header-cta" href="#join">Join the waitlist</a>
+      <button class="icon-btn menu-btn" type="button" aria-haspopup="dialog" aria-controls="menu" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="menu" id="menu" aria-label="Menu">
+  <div class="menu-inner">
+    <div class="menu-top">
+      <a class="brand" href="#top" data-close aria-label="Tidal, back to top"><svg aria-hidden="true"><use href="#mark"/></svg><span>Tidal</span></a>
+      <button class="icon-btn" type="button" data-close aria-label="Close menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <nav aria-label="Menu">
+      <ul>
+        <li><a href="#story" data-close>The story <span class="mono">01</span></a></li>
+        <li><a href="#how" data-close>How it works <span class="mono">02</span></a></li>
+        <li><a href="#try" data-close>Try your year <span class="mono">03</span></a></li>
+        <li><a href="#pricing" data-close>Pricing <span class="mono">04</span></a></li>
+        <li><a href="#faq" data-close>FAQ <span class="mono">05</span></a></li>
+      </ul>
+    </nav>
+    <div class="menu-foot">
+      <a class="btn btn-primary" href="#join" data-close>Join the waitlist</a>
+      <span class="theme-row">
+        <button class="icon-btn js-theme" type="button" aria-label="Switch to dark theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+        <span class="js-theme-label">Theme</span>
+      </span>
+    </div>
+  </div>
+</dialog>
+
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap">
+    <div class="masthead mono">
+      <span>The tide table for freelance income</span>
+      <span>Waitlist edition · November 2026</span>
+    </div>
+
+    <div class="hero-grid">
+      <div>
+        <h1 id="hero-title"><span class="l">Your income comes in waves.</span> <span class="l">Your paycheck <em>doesn’t have to.</em></span></h1>
+        <p class="lead"><strong>Tidal is a buffer account for freelancers.</strong> Client payments land in your buffer whenever they arrive. Tidal pays you the same amount, on the same day, every month.</p>
+
+        <form class="waitlist hero-form" novalidate data-form="hero">
+          <label for="email-hero">Email address</label>
+          <div class="field-row">
+            <input id="email-hero" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="email-hero-msg">
+            <button class="btn btn-primary" type="submit"><span class="spinner" aria-hidden="true"></span><span class="btn-label">Join the waitlist</span></button>
+          </div>
+          <p class="form-msg" id="email-hero-msg" aria-live="polite"></p>
+        </form>
+        <p class="reassure"><span>Free to join</span><span>No card needed</span><span>Unsubscribe anytime</span></p>
+        <p class="hero-secondary"><a class="link-arrow" href="#story">See how one year smooths out <span aria-hidden="true">↓</span></a></p>
+      </div>
+
+      <figure class="tide-card" aria-labelledby="tide-card-cap">
+        <header class="mono"><span id="tide-card-cap">Tide chart · example year</span><span>Apr → Mar</span></header>
+        <svg viewBox="0 0 400 190" role="img" aria-label="Example: monthly client payments swing between zero and 2.4 lakh rupees, while the Tidal paycheck stays flat at 75,000 rupees.">
+          <g class="grid"><line x1="0" y1="20" x2="400" y2="20"/><line x1="0" y1="90" x2="400" y2="90"/><line x1="0" y1="160" x2="400" y2="160"/></g>
+          <path class="jag" pathLength="1" d="M0 25 L18 152 L36 160 L54 49 L72 160 L90 133 L108 82 L126 160 L144 64 L162 142 L180 145 L198 97"/>
+          <line class="divider" x1="200" y1="6" x2="200" y2="168"/>
+          <path class="flat" pathLength="1" d="M204 115 H398"/>
+          <text x="0" y="184">CLIENT PAYMENTS</text>
+          <text x="398" y="184" text-anchor="end">YOUR PAYCHECK</text>
+          <text x="398" y="106" text-anchor="end" style="fill:var(--coral)">₹75,000</text>
+        </svg>
+        <dl>
+          <div><dt class="mono">In, per month</dt><dd class="num">₹0–2.4L<small>whenever clients pay</small></dd></div>
+          <div><dt class="mono">Out, per month</dt><dd class="num coral">₹75,000<small>same day, every month</small></dd></div>
+        </dl>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STORY ================= -->
+<section class="story" id="story" aria-labelledby="story-title">
+  <div class="wrap">
+    <div class="section-head story-intro">
+      <p class="kicker mono">01 — The story <svg class="tl" viewBox="0 0 180 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 11 L12 2 L22 13 L34 4 L44 12 L54 6 L66 9"/><path class="flat" d="M66 9 H180"/></svg></p>
+      <h2 id="story-title">One year of freelance pay, <em>smoothed.</em></h2>
+      <p>Scroll through an example year and watch each client payment pour into the buffer and come back out as the same paycheck, month after month.</p>
+    </div>
+
+    <div class="story-body">
+      <div class="stage" id="stage">
+        <div class="stage-bar">
+          <p class="readout mono num" aria-hidden="true" id="readout"><span>Example year</span></p>
+          <div class="sound" id="sound" hidden>
+            <button class="sound-btn" type="button" aria-pressed="false" id="sound-btn">
+              <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h3l5-4v14l-5-4H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h3l5-4v14l-5-4H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span>Sea sound</span>
+            </button>
+            <div class="vol" id="vol">
+              <label class="sr-only" for="vol-range">Sound volume</label>
+              <input type="range" id="vol-range" min="0" max="100" value="45">
+            </div>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="story-canvas" aria-hidden="true"></canvas>
+          <noscript><p class="stage-fallback">The animated chart needs JavaScript. The full example year is in the table below the story.</p></noscript>
+        </div>
+        <nav class="gauge mono" aria-label="Story steps">
+          <a href="#step-1"><span>01 <span class="g-name">Swell</span></span></a>
+          <a href="#step-2"><span>02 <span class="g-name">Worry</span></span></a>
+          <a href="#step-3"><span>03 <span class="g-name">Harbour</span></span></a>
+          <a href="#step-4"><span>04 <span class="g-name">Tide</span></span></a>
+          <a href="#step-5"><span>05 <span class="g-name">Steady</span></span></a>
+        </nav>
+      </div>
+
+      <ol class="steps" id="steps">
+        <li class="step" id="step-1"><div class="step-card">
+          <p class="mono">01 · The swell</p>
+          <h3>Freelance money arrives like weather.</h3>
+          <p>Here’s an example freelancer’s year, April to March. <strong>₹2,40,000</strong> lands in April. June, August and November bring nothing at all.</p>
+          <p class="note num">Example data. Year total ₹9,40,000, an average of ₹78,333 a month.</p>
+        </div></li>
+        <li class="step" id="step-2"><div class="step-card">
+          <p class="mono">02 · The worry</p>
+          <h3>Bills arrive like clockwork.</h3>
+          <p>Say rent, EMIs and groceries cost <strong>₹75,000</strong> a month. In <strong>7 of these 12 months</strong>, client payments fall short of that line.</p>
+          <p>The year is fine on average. The months aren’t.</p>
+        </div></li>
+        <li class="step" id="step-3"><div class="step-card">
+          <p class="mono">03 · The harbour</p>
+          <h3>Every payment lands in your buffer first.</h3>
+          <p>With Tidal, client payments go into your buffer, not straight into your spending money. April’s ₹2,40,000 fills it.</p>
+          <p>Then, on payday, Tidal pays you <strong>₹75,000</strong>. The rest stays in the harbour.</p>
+        </div></li>
+        <li class="step" id="step-4"><div class="step-card">
+          <p class="mono">04 · The tide</p>
+          <h3>Big months fill it. Quiet months draw on it.</h3>
+          <p>Month after month, the same motion: invoices raise the buffer, dry spells lower it, and payday never moves. <strong>₹75,000</strong>, twelve times.</p>
+        </div></li>
+        <li class="step" id="step-5"><div class="step-card">
+          <p class="mono">05 · Steady</p>
+          <h3>Same year. Same clients. Twelve identical paydays.</h3>
+          <p>The same ₹9,40,000 came in. But no month fell short, and <strong>₹40,000</strong> was still in the buffer at year end. The lowest it ever got was <strong>₹10,000</strong>, in February.</p>
+          <p class="note">In this example the paycheck sits a little under the ₹78,333 monthly average. That gap is what keeps a cushion in the buffer.</p>
+        </div></li>
+      </ol>
+    </div>
+
+    <details class="story-table">
+      <summary>See the example year as a table</summary>
+      <div class="table-scroll">
+        <table>
+          <caption>Example freelancer’s year with Tidal (illustrative figures, not real customer data)</caption>
+          <thead><tr><th scope="col">Month</th><th scope="col">Client payments</th><th scope="col">Tidal paycheck</th><th scope="col">Buffer after payday</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">April</th><td>₹2,40,000</td><td>₹75,000</td><td>₹1,65,000</td></tr>
+            <tr><th scope="row">May</th><td>₹20,000</td><td>₹75,000</td><td>₹1,10,000</td></tr>
+            <tr><th scope="row">June</th><td>₹0</td><td>₹75,000</td><td>₹35,000</td></tr>
+            <tr><th scope="row">July</th><td>₹1,85,000</td><td>₹75,000</td><td>₹1,45,000</td></tr>
+            <tr><th scope="row">August</th><td>₹0</td><td>₹75,000</td><td>₹70,000</td></tr>
+            <tr><th scope="row">September</th><td>₹45,000</td><td>₹75,000</td><td>₹40,000</td></tr>
+            <tr><th scope="row">October</th><td>₹1,30,000</td><td>₹75,000</td><td>₹95,000</td></tr>
+            <tr><th scope="row">November</th><td>₹0</td><td>₹75,000</td><td>₹20,000</td></tr>
+            <tr><th scope="row">December</th><td>₹1,60,000</td><td>₹75,000</td><td>₹1,05,000</td></tr>
+            <tr><th scope="row">January</th><td>₹30,000</td><td>₹75,000</td><td>₹60,000</td></tr>
+            <tr><th scope="row">February</th><td>₹25,000</td><td>₹75,000</td><td>₹10,000</td></tr>
+            <tr><th scope="row">March</th><td>₹1,05,000</td><td>₹75,000</td><td>₹40,000</td></tr>
+          </tbody>
+          <tfoot><tr><th scope="row">Year</th><td>₹9,40,000</td><td>₹9,00,000</td><td>₹40,000</td></tr></tfoot>
+        </table>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="section how" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker mono">02 — How it works <svg class="tl" viewBox="0 0 180 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 11 L12 2 L22 13 L34 4 L44 12 L54 6 L66 9"/><path class="flat" d="M66 9 H180"/></svg></p>
+      <h2 id="how-title">Three steps, then it runs <em>on its own.</em></h2>
+    </div>
+    <ol class="how-steps">
+      <li class="how-step">
+        <p class="n" aria-hidden="true">01</p>
+        <h3>Point client payments to your buffer</h3>
+        <p>Put your Tidal account details on your invoices. Every payment, big or small, lands in your buffer.</p>
+      </li>
+      <li class="how-step">
+        <p class="n" aria-hidden="true">02</p>
+        <h3>Choose your monthly paycheck</h3>
+        <p>Pick an amount your buffer can keep up with. Not sure what that is? Try your own year below.</p>
+      </li>
+      <li class="how-step">
+        <p class="n" aria-hidden="true">03</p>
+        <h3>Get paid the same day, every month</h3>
+        <p>Payday comes on the same date for the same amount, whether a client paid this month or not.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= TRY YOUR YEAR ================= -->
+<section class="section try" id="try" aria-labelledby="try-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker mono">03 — Try your year <svg class="tl" viewBox="0 0 180 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 11 L12 2 L22 13 L34 4 L44 12 L54 6 L66 9"/><path class="flat" d="M66 9 H180"/></svg></p>
+      <h2 id="try-title">What steady paycheck could <em>your</em> year pay?</h2>
+      <p>Type in roughly what clients paid you each month. We’ll work out the highest monthly paycheck that year could have paid without the buffer running dry.</p>
+    </div>
+
+    <div class="try-grid">
+      <form id="try-form" novalidate aria-describedby="try-help">
+        <p id="try-help" class="sr-only">Amounts in rupees. Leave a month empty for zero.</p>
+        <fieldset style="border:0;padding:0;margin:0;min-width:0">
+          <legend class="sr-only">Client payments per month, April to March</legend>
+          <div class="months" id="months"></div>
+        </fieldset>
+        <div class="cushion">
+          <div class="mfield">
+            <label for="cushion">Savings you’d start with (optional)</label>
+            <div class="money"><span aria-hidden="true">₹</span><input id="cushion" inputmode="numeric" autocomplete="off" placeholder="0" aria-describedby="cushion-hint"></div>
+            <p class="hint" id="cushion-hint">Money already in the buffer on day one.</p>
+          </div>
+          <div class="try-actions">
+            <button class="btn btn-panel" type="button" id="try-example">Use the example year</button>
+            <button class="btn btn-panel" type="button" id="try-clear">Clear</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="result" aria-live="polite" aria-atomic="true" id="result">
+        <p class="mono">Steadiest monthly paycheck</p>
+        <p class="big num" id="r-pay">₹75,000<small>/ month</small></p>
+        <p class="empty-msg" id="r-empty" hidden>Enter at least one month’s income to see a paycheck.</p>
+        <dl class="facts" id="r-facts">
+          <div><dt class="mono">Lowest buffer</dt><dd id="r-low">₹10,000 in Feb</dd></div>
+          <div><dt class="mono">Year in / average</dt><dd id="r-avg">₹9,40,000 / ₹78,333</dd></div>
+        </dl>
+        <svg id="mini" viewBox="0 0 480 170" aria-hidden="true"></svg>
+        <p class="legend" aria-hidden="true"><span><i style="background:var(--panel-ink-2);opacity:.55"></i>Client payments</span><span><i style="background:var(--sea);opacity:.6"></i>Buffer</span><span><i style="background:var(--panel-coral)"></i>Your paycheck</span></p>
+        <p class="disclaimer">An illustration of the buffer idea, not financial advice. It ignores tax, fees and interest, and assumes each month’s payments arrive before payday.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="section" id="pricing" aria-labelledby="pricing-title">
+  <div class="wrap">
+    <div class="pricing-top">
+      <div class="section-head" style="margin:0">
+        <p class="kicker mono">04 — Pricing <svg class="tl" viewBox="0 0 180 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 11 L12 2 L22 13 L34 4 L44 12 L54 6 L66 9"/><path class="flat" d="M66 9 H180"/></svg></p>
+        <h2 id="pricing-title">Pricing, written <em>in pencil.</em></h2>
+        <p>Prices aren’t set yet. These plans are placeholders, and the waitlist hears about real prices first.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Billing period">
+        <button type="button" aria-pressed="true" data-period="month">Monthly</button>
+        <button type="button" aria-pressed="false" data-period="year">Yearly</button>
+      </div>
+    </div>
+
+    <div class="rate">
+      <article class="plan" aria-labelledby="plan-a">
+        <h3 id="plan-a"><span class="ph">[Plan name]</span></h3>
+        <p class="price num"><span class="ph">[₹ price]</span> <span class="unit js-unit">/ month</span></p>
+        <p class="sub js-sub">Billed monthly.</p>
+        <ul>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Buffer account for client payments</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>The same paycheck, on the same day, every month</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span class="ph">[Add what’s included]</span></li>
+        </ul>
+        <a class="btn btn-ghost" href="#join">Join the waitlist</a>
+      </article>
+      <article class="plan" aria-labelledby="plan-b">
+        <h3 id="plan-b"><span class="ph">[Plan name]</span></h3>
+        <p class="price num"><span class="ph">[₹ price]</span> <span class="unit js-unit">/ month</span></p>
+        <p class="sub js-sub">Billed monthly.</p>
+        <ul>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Everything in <span class="ph">[first plan]</span></span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span class="ph">[Add what’s included]</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span class="ph">[Add what’s included]</span></li>
+        </ul>
+        <a class="btn btn-ghost" href="#join">Join the waitlist</a>
+      </article>
+    </div>
+    <p class="price-note">Prices in ₹. <span class="ph">[State whether GST is included.]</span></p>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="section faq" id="faq" aria-labelledby="faq-title">
+  <div class="wrap faq-grid">
+    <div class="section-head">
+      <p class="kicker mono">05 — Questions <svg class="tl" viewBox="0 0 180 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 11 L12 2 L22 13 L34 4 L44 12 L54 6 L66 9"/><path class="flat" d="M66 9 H180"/></svg></p>
+      <h2 id="faq-title">Fair questions, <em>straight answers.</em></h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>Can I use Tidal yet?<span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+        <div class="a"><p>Not yet. Tidal is opening to the waitlist first. Join with your email and we’ll tell you when you can sign up. <span class="ph">[Add launch date when known.]</span></p></div>
+      </details>
+      <details>
+        <summary>How is this different from a savings account?<span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+        <div class="a"><p>A savings account holds money until you move it. Tidal also pays it back to you on a schedule: the same amount, on the same day, every month. A big invoice turns into several months of steady pay instead of one good month.</p></div>
+      </details>
+      <details>
+        <summary>What happens in a month when no client pays?<span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+        <div class="a"><p>Your paycheck is paid from your buffer, so it still arrives as long as the buffer holds enough. That’s what the June, August and November dips in the story show.</p></div>
+      </details>
+      <details>
+        <summary>What if my buffer runs low?<span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+        <div class="a"><p>Tidal pays you from your own money in the buffer. It isn’t a loan, so the paycheck needs to be an amount your buffer can sustain. The “Try your year” tool shows how to pick one.</p><p><span class="ph">[Add how Tidal warns you and adjusts the paycheck when the buffer runs low.]</span></p></div>
+      </details>
+      <details>
+        <summary>Where is my money held?<span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+        <div class="a"><p><span class="ph">[Add the partner bank, how deposits are protected, and regulatory details before launch.]</span></p></div>
+      </details>
+      <details>
+        <summary>What will it cost?<span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+        <div class="a"><p>Prices aren’t final. People on the waitlist will see them before Tidal opens, and joining the waitlist costs nothing.</p></div>
+      </details>
+      <details>
+        <summary>What will you do with my email?<span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+        <div class="a"><p>We’ll use it only to tell you about Tidal’s launch. Every email has an unsubscribe link. <span class="ph">[Link the privacy policy.]</span></p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="section final" id="join" aria-labelledby="join-title">
+  <div class="wrap">
+    <svg class="tl tl-big" viewBox="0 0 520 44" preserveAspectRatio="none" aria-hidden="true"><path d="M0 36 L26 6 L48 40 L76 12 L98 38 L126 16 L150 30 L176 22 L200 26 L230 24"/><path class="flat" d="M230 24 H520"/></svg>
+    <h2 id="join-title">Make every month <em>a payday.</em></h2>
+    <p class="sub">Join the waitlist and be first to try Tidal when it opens.</p>
+    <form class="waitlist" novalidate data-form="final">
+      <label for="email-final">Email address</label>
+      <div class="field-row">
+        <input id="email-final" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="email-final-msg">
+        <button class="btn btn-primary" type="submit"><span class="spinner" aria-hidden="true"></span><span class="btn-label">Join the waitlist</span></button>
+      </div>
+      <p class="form-msg" id="email-final-msg" aria-live="polite"></p>
+    </form>
+    <p class="reassure"><span>Free to join</span><span>No card needed</span><span>Unsubscribe anytime</span></p>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top" aria-label="Tidal, back to top"><svg aria-hidden="true"><use href="#mark"/></svg><span>Tidal</span></a>
+        <p style="margin-top:.75rem;max-width:36ch">Steady pay for irregular work. A buffer account for freelancers, coming soon.</p>
+      </div>
+      <nav aria-label="Footer">
+        <h2>Page</h2>
+        <ul>
+          <li><a href="#story">The story</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#try">Try your year</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div>
+        <h2>Legal &amp; contact</h2>
+        <ul>
+          <li><span class="ph">[Privacy policy link]</span></li>
+          <li><span class="ph">[Terms link]</span></li>
+          <li><span class="ph">[Contact email]</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-legal">
+      <p>© 2026 Tidal. Tidal isn’t open yet. <span class="ph">[Add regulatory disclosure before launch.]</span></p>
+      <p>Set in Fraunces, Satoshi and JetBrains Mono.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var reduceMQ = matchMedia('(prefers-reduced-motion: reduce)');
+  var darkMQ = matchMedia('(prefers-color-scheme: dark)');
+  var root = document.documentElement;
+  var inr = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+  var fmt = function (n) { return inr.format(Math.round(n)); };
+  var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
+  var easeInOut = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  /* ---------------- Theme ---------------- */
+  function isDark() { var t = root.getAttribute('data-theme'); return t ? t === 'dark' : darkMQ.matches; }
+  function syncThemeButtons() {
+    var dark = isDark();
+    document.querySelectorAll('.js-theme').forEach(function (b) { b.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme'); });
+    document.querySelectorAll('.js-theme-label').forEach(function (s) { s.textContent = dark ? 'Dark theme' : 'Light theme'; });
+    var meta = document.querySelectorAll('meta[name="theme-color"]');
+    meta.forEach(function (m) { m.setAttribute('content', dark ? '#0A1C23' : '#F3EEE4'); m.removeAttribute('media'); });
+    document.dispatchEvent(new Event('tidal:theme'));
+  }
+  document.querySelectorAll('.js-theme').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', next); store('tidal-theme', next); syncThemeButtons();
+    });
+  });
+  darkMQ.addEventListener('change', syncThemeButtons);
+  syncThemeButtons();
+
+  /* ---------------- Header: condense + active section ---------------- */
+  var header = document.querySelector('.site-header');
+  addEventListener('scroll', function () { header.classList.toggle('scrolled', scrollY > 8); }, { passive: true });
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-desktop a'));
+  var sections = navLinks.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function () {
+      var mid = innerHeight * 0.4, current = null;
+      sections.forEach(function (s, i) { var r = s.getBoundingClientRect(); if (r.top <= mid && r.bottom > mid) current = i; });
+      navLinks.forEach(function (a, i) { if (i === current) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+    }, { threshold: [0, .25, .5, .75, 1], rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------------- Mobile menu (dialog) ---------------- */
+  var menu = document.getElementById('menu');
+  var menuBtn = document.querySelector('.menu-btn');
+  if (menu && typeof menu.showModal === 'function') {
+    menuBtn.addEventListener('click', function () { menu.showModal(); root.style.overflow = 'hidden'; menuBtn.setAttribute('aria-expanded', 'true'); });
+    menu.addEventListener('close', function () { root.style.overflow = ''; menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.focus(); });
+    menu.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-close]');
+      if (t) { menu.close(); }
+      else if (e.target === menu) { menu.close(); }
+    });
+  } else if (menuBtn) {
+    menuBtn.addEventListener('click', function () { location.hash = '#story'; });
+  }
+
+  /* ---------------- Waitlist forms ---------------- */
+  // Set this to your sign-up endpoint (expects POST JSON {email}). Empty = demo mode (shows the states locally).
+  var WAITLIST_ENDPOINT = '';
+  var forceError = /[?&]waitlist=error/.test(location.search);
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  document.querySelectorAll('form.waitlist').forEach(function (form) {
+    var input = form.querySelector('input[type=email]');
+    var btn = form.querySelector('button[type=submit]');
+    var label = btn.querySelector('.btn-label');
+    var msg = form.querySelector('.form-msg');
+    function setError(text) { msg.textContent = text; msg.classList.add('error'); input.setAttribute('aria-invalid', 'true'); }
+    function clearError() { msg.textContent = ''; msg.classList.remove('error'); input.removeAttribute('aria-invalid'); }
+    input.addEventListener('input', function () { if (input.getAttribute('aria-invalid') === 'true' && EMAIL_RE.test(input.value.trim())) clearError(); });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = input.value.trim();
+      if (!v) { setError('Enter your email address so we can tell you when Tidal opens.'); input.focus(); return; }
+      if (!EMAIL_RE.test(v)) { setError('That email looks incomplete. Check it has an @ and a domain, like you@example.com.'); input.focus(); return; }
+      clearError();
+      btn.disabled = true; form.classList.add('is-loading'); label.textContent = 'Joining…'; msg.textContent = 'Adding you to the waitlist…';
+      var done = function (ok) {
+        btn.disabled = false; form.classList.remove('is-loading'); label.textContent = 'Join the waitlist';
+        if (!ok) { setError('We couldn’t add you just now. Check your connection and try again.'); return; }
+        var box = document.createElement('div');
+        box.className = 'success'; box.tabIndex = -1; box.setAttribute('role', 'status');
+        var p1 = document.createElement('p'); p1.textContent = 'You’re on the list.';
+        var p2 = document.createElement('p'); p2.textContent = 'We’ll email ' + v + ' when Tidal opens.';
+        box.appendChild(p1); box.appendChild(p2);
+        form.replaceWith(box); box.focus();
+      };
+      if (!navigator.onLine || forceError) { setTimeout(function () { done(false); }, 700); return; }
+      if (!WAITLIST_ENDPOINT) { setTimeout(function () { done(true); }, 900); return; }
+      fetch(WAITLIST_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: v }) })
+        .then(function (r) { done(r.ok); }).catch(function () { done(false); });
+    });
+  });
+
+  /* ---------------- Pricing toggle ---------------- */
+  var segBtns = document.querySelectorAll('.seg button');
+  segBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      segBtns.forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      var yearly = b.dataset.period === 'year';
+      document.querySelectorAll('.js-unit').forEach(function (u) { u.textContent = yearly ? '/ year' : '/ month'; });
+      document.querySelectorAll('.js-sub').forEach(function (s) {
+        s.innerHTML = yearly ? 'Billed yearly. <span class="ph">[Add the yearly saving, if any]</span>' : 'Billed monthly.';
+      });
+    });
+  });
+
+  /* ---------------- Shared data ---------------- */
+  var MONTHS = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+  var MONTHS_LONG = ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March'];
+  var EXAMPLE = [240000, 20000, 0, 185000, 0, 45000, 130000, 0, 160000, 30000, 25000, 105000];
+
+  /* ---------------- Try your year ---------------- */
+  var monthsBox = document.getElementById('months');
+  var monthInputs = MONTHS_LONG.map(function (m, i) {
+    var wrap = document.createElement('div'); wrap.className = 'mfield';
+    var id = 'm-' + i;
+    wrap.innerHTML = '<label for="' + id + '">' + m + '</label><div class="money"><span aria-hidden="true">₹</span><input id="' + id + '" inputmode="numeric" autocomplete="off" placeholder="0" aria-describedby="try-help"></div>';
+    monthsBox.appendChild(wrap);
+    return wrap.querySelector('input');
+  });
+  var cushionInput = document.getElementById('cushion');
+  var groupIN = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
+  function parseAmt(s) { var n = parseInt(String(s).replace(/[^\d]/g, ''), 10); return isFinite(n) ? Math.min(n, 9999999999) : 0; }
+  function prettify(inp) {
+    var raw = inp.value.replace(/[^\d]/g, '');
+    if (!raw) { inp.value = ''; return; }
+    inp.value = groupIN.format(Math.min(parseInt(raw, 10), 9999999999));
+  }
+  function fill(values) { monthInputs.forEach(function (inp, i) { inp.value = values[i] ? groupIN.format(values[i]) : ''; }); }
+
+  function computeYear(inc, S) {
+    var cum = S, best = Infinity;
+    for (var k = 0; k < 12; k++) { cum += inc[k]; best = Math.min(best, cum / (k + 1)); }
+    var P = best >= 1000 ? Math.floor(best / 1000) * 1000 : Math.floor(best / 100) * 100;
+    if (P < 0) P = 0;
+    var buf = S, low = Infinity, lowIdx = 0, series = [];
+    for (var j = 0; j < 12; j++) { buf += inc[j] - P; series.push(buf); if (buf < low) { low = buf; lowIdx = j; } }
+    var total = inc.reduce(function (a, b) { return a + b; }, 0);
+    return { P: P, low: low, lowIdx: lowIdx, series: series, total: total };
+  }
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function el(name, attrs) { var e = document.createElementNS(SVGNS, name); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  var mini = document.getElementById('mini');
+  function drawMini(inc, r) {
+    while (mini.firstChild) mini.removeChild(mini.firstChild);
+    var W = 480, top = 10, base = 145, n = 12, slot = W / n, bw = slot * .5;
+    var maxV = Math.max(1, Math.max.apply(null, inc), Math.max.apply(null, r.series), r.P) * 1.05;
+    var y = function (v) { return base - (v / maxV) * (base - top); };
+    // buffer area (stepped)
+    var d = 'M0 ' + base;
+    r.series.forEach(function (b, i) { var yy = y(Math.max(0, b)); d += ' L' + (i * slot) + ' ' + yy + ' L' + ((i + 1) * slot) + ' ' + yy; });
+    d += ' L' + W + ' ' + base + ' Z';
+    mini.appendChild(el('path', { d: d, class: 'buf' }));
+    inc.forEach(function (v, i) {
+      var h = Math.max(v > 0 ? 1.5 : 0, base - y(v));
+      mini.appendChild(el('rect', { x: i * slot + (slot - bw) / 2, y: base - h, width: bw, height: h, class: 'bar' }));
+      var t = el('text', { x: i * slot + slot / 2, y: base + 16, 'text-anchor': 'middle' }); t.textContent = MONTHS[i][0]; mini.appendChild(t);
+    });
+    if (r.P > 0) mini.appendChild(el('path', { d: 'M0 ' + y(r.P) + ' H' + W, class: 'line' }));
+    mini.appendChild(el('line', { x1: 0, y1: base, x2: W, y2: base, stroke: 'currentColor', 'stroke-opacity': .25 }));
+  }
+  var rPay = document.getElementById('r-pay'), rLow = document.getElementById('r-low'), rAvg = document.getElementById('r-avg');
+  var rEmpty = document.getElementById('r-empty'), rFacts = document.getElementById('r-facts');
+  var updT;
+  function update(immediate) {
+    clearTimeout(updT);
+    updT = setTimeout(function () {
+      var inc = monthInputs.map(function (i) { return parseAmt(i.value); });
+      var S = parseAmt(cushionInput.value);
+      var r = computeYear(inc, S);
+      var empty = r.total + S === 0;
+      rEmpty.hidden = !empty; rFacts.hidden = empty; mini.style.visibility = empty ? 'hidden' : '';
+      rPay.innerHTML = '';
+      rPay.appendChild(document.createTextNode((empty ? '₹0' : fmt(r.P)) + ' '));
+      var sm = document.createElement('small'); sm.textContent = '/ month'; rPay.appendChild(sm);
+      if (!empty) {
+        rLow.textContent = fmt(Math.max(0, r.low)) + ' in ' + MONTHS[r.lowIdx];
+        rAvg.textContent = fmt(r.total) + ' / ' + fmt(r.total / 12);
+        drawMini(inc, r);
+      }
+    }, immediate ? 0 : 250);
+  }
+  monthInputs.concat([cushionInput]).forEach(function (inp) {
+    inp.addEventListener('input', function () { update(false); });
+    inp.addEventListener('blur', function () { prettify(inp); });
+  });
+  document.getElementById('try-example').addEventListener('click', function () { fill(EXAMPLE); cushionInput.value = ''; update(true); });
+  document.getElementById('try-clear').addEventListener('click', function () { fill([]); cushionInput.value = ''; update(true); monthInputs[0].focus(); });
+  document.getElementById('try-form').addEventListener('submit', function (e) { e.preventDefault(); update(true); });
+  fill(EXAMPLE); update(true);
+
+  /* =================================================================
+     SCROLL STORY: a pure function of scroll progress (scrubs both ways)
+     ================================================================= */
+  var canvas = document.getElementById('story-canvas');
+  var ctx = canvas.getContext('2d');
+  var stage = document.getElementById('stage');
+  var stepsEl = document.getElementById('steps');
+  var readout = document.getElementById('readout');
+  var gaugeLinks = Array.prototype.slice.call(document.querySelectorAll('.gauge a'));
+  var PAY = 75000, COST = 75000, MAXV = 250000, UNIT = 6000;
+  var T = { grow: [0.015, 0.16], worry: [0.215, 0.36], morph: [0.40, 0.465], first: [0.465, 0.60], rest: [0.62, 0.865], fin: [0.885, 0.975] };
+  var STEP_END = [0.17, 0.375, 0.605, 0.87, 1]; // reduced motion: show each step's settled frame
+  var C = {}; // colours read from CSS tokens
+  function readColors() {
+    var cs = getComputedStyle(root);
+    ['paper', 'ink', 'ink-2', 'rule', 'rule-strong', 'coral', 'sea', 'sea-soft'].forEach(function (k) { C[k] = cs.getPropertyValue('--' + k).trim(); });
+  }
+  readColors();
+
+  // deterministic pseudo-random per drop
+  function rnd(seed) { var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+
+  function monthWindow(i) {
+    if (i === 0) return T.first;
+    var span = (T.rest[1] - T.rest[0]) / 11, s = T.rest[0] + (i - 1) * span;
+    return [s, s + span];
+  }
+  // state of the simulation at progress p
+  function sim(p) {
+    var months = [], tank = 0, cur = -1, curPhase = '';
+    for (var i = 0; i < 12; i++) {
+      var w = monthWindow(i), u = clamp((p - w[0]) / (w[1] - w[0]), 0, 1);
+      var inF = clamp(u / 0.55, 0, 1), outF = clamp((u - 0.55) / 0.45, 0, 1);
+      var I = EXAMPLE[i];
+      var launchedIn = I * clamp(inF / 0.75, 0, 1), arrivedIn = I * clamp((inF - 0.25) / 0.75, 0, 1);
+      var launchedOut = PAY * clamp(outF / 0.75, 0, 1), arrivedOut = PAY * clamp((outF - 0.25) / 0.75, 0, 1);
+      tank += arrivedIn - launchedOut;
+      months.push({ I: I, inF: inF, outF: outF, remaining: I - launchedIn, paid: arrivedOut });
+      if (p >= w[0]) { cur = i; curPhase = outF > 0 ? 'out' : 'in'; }
+    }
+    return { months: months, tank: Math.max(0, tank), cur: cur, phase: curPhase };
+  }
+
+  var W = 0, H = 0, DPR = 1, vertical = false;
+  function resize() {
+    var r = canvas.getBoundingClientRect();
+    W = Math.max(1, r.width); H = Math.max(1, r.height);
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+    vertical = W < 560 || W / H < 1.15;
+    dirty = true;
+  }
+
+  function zones(m) {
+    var padX = Math.max(12, W * 0.03);
+    var full, inc, tank, pay;
+    if (!vertical) {
+      var top = H * 0.12, base = H * 0.84;
+      full = { x0: padX + 4, x1: W - padX, top: top, base: base };
+      inc = { x0: padX + 4, x1: W * 0.36, top: top, base: base };
+      tank = { x0: W * 0.415, x1: W * 0.585, top: top, base: base };
+      pay = { x0: W * 0.64, x1: W - padX, top: top, base: base };
+    } else {
+      full = { x0: padX, x1: W - padX, top: H * 0.10, base: H * 0.86 };
+      inc = { x0: padX, x1: W - padX, top: H * 0.075, base: H * 0.27 };
+      tank = { x0: W * 0.3, x1: W * 0.7, top: H * 0.405, base: H * 0.62 };
+      pay = { x0: padX, x1: W - padX, top: H * 0.74, base: H * 0.91 };
+    }
+    var cur = {
+      x0: lerp(full.x0, inc.x0, m), x1: lerp(full.x1, inc.x1, m),
+      top: lerp(full.top, inc.top, m), base: lerp(full.base, inc.base, m)
+    };
+    [cur, tank, pay].forEach(function (z) { z.scale = (z.base - z.top) / MAXV; });
+    return { inc: cur, tank: tank, pay: pay };
+  }
+  function barGeom(z, i) {
+    var slot = (z.x1 - z.x0) / 12, bw = slot * 0.62;
+    return { x: z.x0 + i * slot + (slot - bw) / 2, w: bw, cx: z.x0 + i * slot + slot / 2 };
+  }
+  function shortAmt(v) {
+    if (v === 0) return '₹0';
+    if (v >= 100000) return (v / 100000).toFixed(v % 100000 === 0 ? 0 : (v % 10000 === 0 ? 1 : 2)).replace(/\.?0+$/, '') + 'L';
+    return Math.round(v / 1000) + 'k';
+  }
+  function mono(px) { return '500 ' + px + 'px "JetBrains Mono", ui-monospace, monospace'; }
+  function alpha(hex, a) { ctx.globalAlpha = a; return hex; }
+
+  var progress = 0, shown = -1, dirty = true, visible = false, t0 = performance.now();
+
+  function draw(now) {
+    var p = reduceMQ.matches ? quantize(progress) : progress;
+    var time = (now - t0) / 1000;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+    var m = easeInOut(clamp((p - T.morph[0]) / (T.morph[1] - T.morph[0]), 0, 1));
+    var Z = zones(m), s = sim(p);
+    var wp = clamp((p - T.worry[0]) / (T.worry[1] - T.worry[0]), 0, 1);
+    var fin = clamp((p - T.fin[0]) / (T.fin[1] - T.fin[0]), 0, 1);
+    var labelPx = W < 420 ? 10 : 11;
+
+    // --- zone titles
+    ctx.font = mono(labelPx); ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = C['ink-2']; ctx.globalAlpha = 1; ctx.textAlign = 'left';
+    ctx.fillText(m < 0.5 && W >= 560 ? 'CLIENT PAYMENTS · EXAMPLE YEAR' : 'CLIENT PAYMENTS', Z.inc.x0, Math.max(labelPx + 2, Z.inc.top - (vertical ? 8 : 14)));
+    if (m > 0) {
+      ctx.globalAlpha = m;
+      if (vertical) { ctx.textAlign = 'left'; ctx.fillText('TIDAL', Z.tank.x1 + 10, Z.tank.top + 10); ctx.fillText('BUFFER', Z.tank.x1 + 10, Z.tank.top + 10 + labelPx + 3); }
+      else { ctx.textAlign = 'center'; ctx.fillText('TIDAL BUFFER', (Z.tank.x0 + Z.tank.x1) / 2, Z.tank.top - 14); }
+      ctx.textAlign = 'left';
+      ctx.fillText('YOUR PAYCHECK', Z.pay.x0, Z.pay.top - (vertical ? 8 : 14));
+    }
+    ctx.globalAlpha = 1;
+
+    // --- baselines
+    ctx.strokeStyle = C['rule-strong']; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(Z.inc.x0, Z.inc.base + .5); ctx.lineTo(Z.inc.x1, Z.inc.base + .5); ctx.stroke();
+    if (m > 0) { ctx.globalAlpha = m; ctx.beginPath(); ctx.moveTo(Z.pay.x0, Z.pay.base + .5); ctx.lineTo(Z.pay.x1, Z.pay.base + .5); ctx.stroke(); ctx.globalAlpha = 1; }
+
+    // --- cost line + shortfall gaps (step 2)
+    var costY = Z.inc.base - COST * Z.inc.scale;
+    var gapA = wp * (1 - 0.6 * m) * (1 - fin);
+    if (wp > 0) {
+      ctx.save();
+      ctx.strokeStyle = C.coral; ctx.lineWidth = 1.5; ctx.setLineDash([5, 5]);
+      ctx.globalAlpha = 1 - 0.55 * m;
+      ctx.beginPath(); ctx.moveTo(Z.inc.x0, costY); ctx.lineTo(lerp(Z.inc.x0, Z.inc.x1, easeOut(clamp(wp * 1.6, 0, 1))), costY); ctx.stroke();
+      ctx.setLineDash([]);
+      if (m < 0.6) {
+        // legend in the title row (never collides with bars)
+        ctx.globalAlpha = clamp(wp * 2 - .4, 0, 1) * (1 - m / 0.6);
+        ctx.font = mono(labelPx); ctx.textAlign = 'right';
+        var lbl = W < 560 ? 'COSTS ₹75K/MO' : 'YOUR MONTH COSTS ₹75,000', lw = ctx.measureText(lbl).width;
+        var ly = Math.max(labelPx + 2, Z.inc.top - (vertical ? 8 : 14));
+        ctx.fillStyle = C.coral; ctx.fillText(lbl, Z.inc.x1, ly);
+        ctx.setLineDash([4, 3]); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(Z.inc.x1 - lw - 26, ly - labelPx * .35); ctx.lineTo(Z.inc.x1 - lw - 6, ly - labelPx * .35); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      ctx.restore();
+    }
+
+    // --- income bars
+    for (var i = 0; i < 12; i++) {
+      var g = easeOut(clamp((p - T.grow[0] - i * 0.007) / 0.055, 0, 1));
+      if (reduceMQ.matches && p >= T.grow[0]) g = 1;
+      var b = barGeom(Z.inc, i), mo = s.months[i];
+      var fullH = mo.I * Z.inc.scale * g;
+      var curH = mo.remaining * Z.inc.scale * g;
+      // ghost outline of the original bar once draining starts
+      if (mo.inF > 0 && fullH > 0) {
+        ctx.save(); ctx.strokeStyle = C['ink-2']; ctx.globalAlpha = .45; ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+        ctx.strokeRect(b.x + .5, Z.inc.base - fullH + .5, b.w - 1, fullH - 1); ctx.restore();
+      }
+      ctx.fillStyle = C['ink-2']; ctx.globalAlpha = .9;
+      if (curH > 0) ctx.fillRect(b.x, Z.inc.base - curH, b.w, curH);
+      ctx.globalAlpha = 1;
+      // shortfall hatch
+      if (gapA > 0 && mo.I < COST) {
+        var gy = Z.inc.base - Math.max(fullH, 0), gTop = costY;
+        if (gy > gTop) {
+          ctx.save(); ctx.globalAlpha = gapA * .9; ctx.beginPath(); ctx.rect(b.x, gTop, b.w, gy - gTop); ctx.clip();
+          ctx.strokeStyle = C.coral; ctx.lineWidth = 1.2;
+          for (var hx = b.x - (gy - gTop); hx < b.x + b.w; hx += 5) { ctx.beginPath(); ctx.moveTo(hx, gy); ctx.lineTo(hx + (gy - gTop), gTop); ctx.stroke(); }
+          ctx.restore();
+          ctx.save(); ctx.globalAlpha = gapA; ctx.strokeStyle = C.coral; ctx.lineWidth = 1; ctx.strokeRect(b.x + .5, gTop + .5, b.w - 1, gy - gTop - 1); ctx.restore();
+        }
+      }
+      // amount labels (full layout only)
+      var la = g * (1 - clamp(m * 2, 0, 1));
+      if (la > 0.01 && (!vertical || W > 340)) {
+        ctx.globalAlpha = la; ctx.font = mono(W < 500 ? 9 : labelPx); ctx.textAlign = 'center';
+        ctx.fillStyle = mo.I < COST && wp > .3 ? C.coral : C.ink;
+        ctx.fillText(shortAmt(mo.I), b.cx, Z.inc.base - fullH - 6);
+        ctx.globalAlpha = 1;
+      }
+      // month initials
+      ctx.font = mono(labelPx); ctx.textAlign = 'center'; ctx.fillStyle = C['ink-2'];
+      ctx.globalAlpha = s.cur === i && m > .5 ? 1 : .8;
+      if (s.cur === i && m > .5) ctx.fillStyle = C.ink;
+      ctx.fillText(MONTHS[i][0], b.cx, Z.inc.base + (vertical ? 13 : 18));
+      ctx.globalAlpha = 1;
+    }
+
+    // --- tank
+    if (m > 0) {
+      var tk = Z.tank, level = tk.base - s.tank * tk.scale;
+      ctx.globalAlpha = m;
+      // water
+      var chop = s.phase === 'in' ? 1 : 0.35;
+      var amp = reduceMQ.matches ? 0 : Math.min(4, (tk.x1 - tk.x0) * 0.025) * chop;
+      if (s.tank > 0) {
+        ctx.fillStyle = C.sea; ctx.globalAlpha = m * .85;
+        ctx.beginPath(); ctx.moveTo(tk.x0, tk.base);
+        for (var x = tk.x0; x <= tk.x1 + 0.1; x += 4) {
+          var yy = level + Math.sin(x * 0.07 + time * 2.2) * amp + Math.sin(x * 0.031 - time * 1.3) * amp * .6;
+          ctx.lineTo(x, Math.min(tk.base, yy));
+        }
+        ctx.lineTo(tk.x1, tk.base); ctx.closePath(); ctx.fill();
+      }
+      // walls (harbour wall: open top)
+      ctx.globalAlpha = m; ctx.strokeStyle = C.ink; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(tk.x0, tk.top); ctx.lineTo(tk.x0, tk.base); ctx.lineTo(tk.x1, tk.base); ctx.lineTo(tk.x1, tk.top); ctx.stroke();
+      // tick marks every ₹50k
+      ctx.strokeStyle = C['rule-strong']; ctx.lineWidth = 1; ctx.font = mono(9); ctx.fillStyle = C['ink-2']; ctx.textAlign = 'right';
+      for (var v = 50000; v < MAXV; v += 50000) {
+        var ty = tk.base - v * tk.scale;
+        ctx.beginPath(); ctx.moveTo(tk.x0, ty); ctx.lineTo(tk.x0 + 6, ty); ctx.stroke();
+        if (!vertical || W > 360) ctx.fillText(shortAmt(v), tk.x0 - 5, ty + 3);
+      }
+      // amount label in the tank
+      ctx.textAlign = 'center'; ctx.font = mono(vertical ? 11 : 12); ctx.fillStyle = C.ink;
+      var lblY = Math.min(tk.base - 8, Math.max(tk.top + 14, level - 8));
+      ctx.fillText(fmt(Math.round(s.tank / 1000) * 1000), (tk.x0 + tk.x1) / 2, lblY);
+      // outflow pipe
+      ctx.strokeStyle = C['rule-strong']; ctx.lineWidth = 1.5; ctx.setLineDash([2, 4]);
+      ctx.beginPath();
+      if (!vertical) { ctx.moveTo(tk.x1, tk.base - 4); ctx.lineTo(Z.pay.x0 - 6, tk.base - 4); }
+      else { ctx.moveTo((tk.x0 + tk.x1) / 2, tk.base); ctx.lineTo((tk.x0 + tk.x1) / 2, Z.pay.top - 22); }
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+    }
+
+    // --- paycheck bars
+    if (m > 0) {
+      var pz = Z.pay, payY = pz.base - PAY * pz.scale;
+      ctx.globalAlpha = m * .7; ctx.strokeStyle = C.coral; ctx.setLineDash([5, 5]); ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(pz.x0, payY); ctx.lineTo(pz.x1, payY); ctx.stroke(); ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+      for (var j = 0; j < 12; j++) {
+        var pb = barGeom(pz, j), mp = s.months[j], ph = mp.paid * pz.scale;
+        if (ph > 0) { ctx.fillStyle = C.ink; ctx.fillRect(pb.x, pz.base - ph, pb.w, ph); }
+        ctx.font = mono(labelPx); ctx.textAlign = 'center'; ctx.fillStyle = C['ink-2']; ctx.globalAlpha = m * .8;
+        ctx.fillText(MONTHS[j][0], pb.cx, pz.base + (vertical ? 13 : 18)); ctx.globalAlpha = 1;
+      }
+      // finale: the tide line
+      if (fin > 0) {
+        ctx.save();
+        ctx.strokeStyle = C.coral; ctx.lineWidth = 3.5; ctx.lineCap = 'round';
+        var fx = lerp(pz.x0, pz.x1, easeOut(fin));
+        ctx.beginPath(); ctx.moveTo(pz.x0, payY); ctx.lineTo(fx, payY); ctx.stroke();
+        // jagged line across the ghosts of income
+        ctx.strokeStyle = C.ink; ctx.lineWidth = 1.5; ctx.globalAlpha = .8; ctx.lineJoin = 'round';
+        ctx.beginPath();
+        var lastK = Math.floor(easeOut(fin) * 11.999);
+        for (var k = 0; k <= lastK; k++) {
+          var gb = barGeom(Z.inc, k), gy2 = Z.inc.base - EXAMPLE[k] * Z.inc.scale;
+          if (k === 0) ctx.moveTo(gb.cx, gy2); else ctx.lineTo(gb.cx, gy2);
+        }
+        ctx.stroke();
+        ctx.globalAlpha = fin; ctx.fillStyle = C.coral; ctx.font = mono(labelPx + 1); ctx.textAlign = 'right';
+        ctx.fillText('₹75,000 × 12', pz.x1, payY - 10);
+        ctx.restore();
+      }
+    }
+
+    // --- drops (only while moving, never under reduced motion)
+    if (!reduceMQ.matches && m > 0.98) {
+      var r0 = vertical ? 2.6 : 3.2;
+      for (var q = 0; q < 12; q++) {
+        var mq = s.months[q];
+        if ((mq.inF > 0 && mq.inF < 1) || (mq.outF > 0 && mq.outF < 1)) {
+          var bq = barGeom(Z.inc, q), tkq = Z.tank, lv = tkq.base - s.tank * tkq.scale;
+          // incoming
+          if (mq.inF > 0 && mq.inF < 1 && mq.I > 0) {
+            var n = Math.ceil(mq.I / UNIT);
+            for (var d = 0; d < n; d++) {
+              var a = (d + .5) / n * .75, t = clamp((mq.inF - a) / .25, 0, 1);
+              if (t <= 0 || t >= 1) continue;
+              var sx = bq.x + rnd(q * 97 + d) * bq.w, sy = Z.inc.base - (mq.I * (1 - a / .75)) * Z.inc.scale;
+              var ex = lerp(tkq.x0 + 8, tkq.x1 - 8, rnd(q * 53 + d * 7)), ey = Math.min(tkq.base - 4, lv);
+              var cx = vertical ? lerp(sx, ex, .5) : lerp(sx, ex, .55), cy = vertical ? lerp(sy, ey, .4) : Math.min(sy, ey) - H * 0.12;
+              var te = easeInOut(t), it = 1 - te;
+              var px = it * it * sx + 2 * it * te * cx + te * te * ex, py = it * it * sy + 2 * it * te * cy + te * te * ey;
+              ctx.fillStyle = C.sea; ctx.globalAlpha = .95;
+              ctx.beginPath(); ctx.arc(px, py, r0, 0, Math.PI * 2); ctx.fill();
+            }
+          }
+          // outgoing paycheck
+          if (mq.outF > 0 && mq.outF < 1) {
+            var pbq = barGeom(Z.pay, q), n2 = Math.ceil(PAY / UNIT);
+            for (var d2 = 0; d2 < n2; d2++) {
+              var a2 = (d2 + .5) / n2 * .75, t2 = clamp((mq.outF - a2) / .25, 0, 1);
+              if (t2 <= 0 || t2 >= 1) continue;
+              var sx2 = vertical ? (tkq.x0 + tkq.x1) / 2 + (rnd(d2 * 13 + q) - .5) * 10 : tkq.x1 - 6;
+              var sy2 = vertical ? tkq.base : Math.max(lv + 4, tkq.base - 10);
+              var ex2 = pbq.x + rnd(q * 31 + d2 * 3) * pbq.w, ey2 = Z.pay.base - mq.paid * Z.pay.scale;
+              var cx2 = vertical ? lerp(sx2, ex2, .3) : lerp(sx2, ex2, .5), cy2 = vertical ? lerp(sy2, ey2, .55) : Math.min(sy2, ey2) - H * 0.08;
+              var te2 = easeInOut(t2), it2 = 1 - te2;
+              var px2 = it2 * it2 * sx2 + 2 * it2 * te2 * cx2 + te2 * te2 * ex2, py2 = it2 * it2 * sy2 + 2 * it2 * te2 * cy2 + te2 * te2 * ey2;
+              ctx.fillStyle = C.coral; ctx.globalAlpha = .95;
+              ctx.beginPath(); ctx.arc(px2, py2, r0 * .9, 0, Math.PI * 2); ctx.fill();
+            }
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // --- DOM readout + gauge (update only on change)
+    var key = s.cur + '|' + Math.round(s.tank / 1000) + '|' + s.phase + '|' + (m > .5) + '|' + Math.min(4, Math.floor(p * 5 + .0001));
+    if (key !== shown) {
+      shown = key;
+      if (m <= .5 || s.cur < 0) {
+        readout.innerHTML = '<span>Example year</span><span>In <b>' + fmt(940000) + '</b></span><span>Average <b>' + fmt(940000 / 12) + '</b>/mo</span>';
+      } else {
+        var c = s.cur, paidNow = s.months[c].outF >= 1;
+        readout.innerHTML = '<span>' + MONTHS_LONG[c] + '</span><span>In <b>' + fmt(EXAMPLE[c]) + '</b></span><span>Paid <b>' + (s.months[c].outF > 0 ? fmt(PAY) : '—') + '</b></span><span class="buf">Buffer <b>' + fmt(Math.round(s.tank / 1000) * 1000) + '</b></span>';
+      }
+      var stepIdx = activeStep();
+      gaugeLinks.forEach(function (a, i) {
+        if (i === stepIdx) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current');
+        a.classList.toggle('done', i < stepIdx);
+      });
+    }
+    sound.update(p, s);
+  }
+  function quantize(p) {
+    var idx = activeStep();
+    return STEP_END[idx];
+  }
+  function activeStep() {
+    // same anchor line as the progress measurement, so the gauge and the chart always agree
+    var steps = stepsEl.children, anchor = innerHeight * anchorRatio(), idx = 0;
+    for (var i = 0; i < steps.length; i++) { if (steps[i].getBoundingClientRect().top < anchor) idx = i; }
+    return idx;
+  }
+  // text beside the chart (desktop, landscape) reads at 60% height; text under the chart (phones) at 80%
+  function anchorRatio() { return stage.getBoundingClientRect().left > innerWidth * 0.25 ? 0.6 : 0.8; }
+  function measure() {
+    var r = stepsEl.getBoundingClientRect();
+    var anchor = innerHeight * anchorRatio();
+    var first = stepsEl.firstElementChild.getBoundingClientRect(), last = stepsEl.lastElementChild.getBoundingClientRect();
+    var start = first.top + Math.min(first.height * .15, 80), end = last.top + last.height * .55;
+    var np = clamp((anchor - start) / (end - start), 0, 1);
+    if (np !== progress) { progress = np; dirty = true; }
+  }
+  var raf = 0;
+  function loop(now) {
+    raf = 0;
+    measure();
+    var animatedWater = !reduceMQ.matches && progress > T.morph[0];
+    if (dirty || animatedWater || sound.on) { draw(now); dirty = false; }
+    if (visible) raf = requestAnimationFrame(loop);
+  }
+  function kick() { if (!raf && visible) raf = requestAnimationFrame(loop); }
+
+  /* ---------------- Sound: generated sea (Web Audio), opt-in ---------------- */
+  var sound = (function () {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    var api = { on: false, update: function () {} };
+    if (!AC) return api;
+    document.getElementById('sound').hidden = false;
+    var btn = document.getElementById('sound-btn'), volWrap = document.getElementById('vol'), range = document.getElementById('vol-range');
+    var savedVol = parseInt(store('tidal-volume'), 10); if (isFinite(savedVol)) range.value = savedVol;
+    var ac = null, master, swell, filter, src;
+    function build() {
+      ac = new AC();
+      var len = ac.sampleRate * 4, buf = ac.createBuffer(1, len, ac.sampleRate), data = buf.getChannelData(0), last = 0;
+      for (var i = 0; i < len; i++) { var w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; data[i] = last * 3.2; }
+      src = ac.createBufferSource(); src.buffer = buf; src.loop = true;
+      filter = ac.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 700; filter.Q.value = 0.4;
+      swell = ac.createGain(); swell.gain.value = 0;
+      master = ac.createGain(); master.gain.value = 0;
+      src.connect(filter); filter.connect(swell); swell.connect(master); master.connect(ac.destination);
+      src.start();
+    }
+    function vol() { return (parseInt(range.value, 10) / 100) * 0.5; }
+    btn.addEventListener('click', function () {
+      api.on = !api.on;
+      btn.setAttribute('aria-pressed', String(api.on));
+      volWrap.classList.toggle('show', api.on);
+      if (api.on) { if (!ac) build(); ac.resume(); master.gain.setTargetAtTime(visible ? vol() : 0, ac.currentTime, 0.4); kick(); }
+      else if (ac) { master.gain.setTargetAtTime(0, ac.currentTime, 0.15); setTimeout(function () { if (!api.on && ac) ac.suspend(); }, 700); }
+    });
+    range.addEventListener('input', function () { store('tidal-volume', range.value); if (api.on && ac) master.gain.setTargetAtTime(visible ? vol() : 0, ac.currentTime, 0.1); });
+    api.update = function (p, s) {
+      if (!api.on || !ac) return;
+      var t = ac.currentTime;
+      // choppy before the harbour, a slow even swell once Tidal is smoothing
+      var calm = clamp((p - 0.42) / 0.45, 0, 1);
+      // choppy: irregular surf slaps (two detuned, sharpened pulses); calm: one slow, even 7.5 s swell
+      var slap = Math.pow(Math.max(0, Math.sin(t * 2.3)), 3) + 0.8 * Math.pow(Math.max(0, Math.sin(t * 3.7 + 1)), 4) + 0.5 * Math.pow(Math.max(0, Math.sin(t * 5.3 + 2.1)), 6);
+      var chopG = 0.18 + 0.75 * Math.min(1.3, slap);
+      var calmG = 0.42 + 0.38 * (0.5 + 0.5 * Math.sin(t * 2 * Math.PI / 7.5));
+      var g = lerp(chopG, calmG, calm);
+      swell.gain.setTargetAtTime(g, t, lerp(0.04, 0.4, calm));
+      filter.frequency.setTargetAtTime(lerp(700 + 900 * Math.min(1, slap), 520, calm) + (s.phase === 'in' ? 120 : 0), t, lerp(0.05, 0.4, calm));
+    };
+    api.visibility = function (v) { if (api.on && ac) master.gain.setTargetAtTime(v ? vol() : 0, ac.currentTime, 0.5); };
+    return api;
+  })();
+
+  /* ---------------- Wiring ---------------- */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting; if (sound.visibility) sound.visibility(visible);
+      if (visible) { dirty = true; kick(); }
+    }, { rootMargin: '100px 0px' }).observe(document.getElementById('story'));
+  } else { visible = true; }
+  addEventListener('scroll', kick, { passive: true });
+  addEventListener('resize', function () { resize(); kick(); });
+  if ('ResizeObserver' in window) new ResizeObserver(function () { resize(); kick(); }).observe(canvas);
+  document.addEventListener('tidal:theme', function () { readColors(); dirty = true; kick(); });
+  reduceMQ.addEventListener('change', function () { dirty = true; kick(); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden && raf) { cancelAnimationFrame(raf); raf = 0; } else kick(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { dirty = true; kick(); });
+  resize(); measure(); draw(performance.now()); kick();
+})();
+</script>
+</body>
+</html>

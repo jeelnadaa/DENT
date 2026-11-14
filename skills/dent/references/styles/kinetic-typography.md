@@ -41,7 +41,7 @@
 ```css
 :root{
   --bg:#0F0F0F; --text:#F4F1EA; --accent:#FF4D00; --on-accent:#0F0F0F;
-  --font-display:"Unbounded","Anton",sans-serif; --font-sans:"Inter",system-ui,sans-serif;
+  --font-display:"Unbounded","Anton",sans-serif; --font-sans:"Satoshi","Manrope",system-ui,sans-serif;
   --mega:clamp(4rem,2rem + 15vw,22rem); --leading-mega:.85; --tracking-mega:-0.04em;
   --dur:600ms; --ease:cubic-bezier(.16,1,.3,1);
 }

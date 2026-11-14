@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Background near-black, slightly tinted (#0A0A0B, #0B0D12). Surfaces step up in lightness (#111215, #17181C, #1E1F24). Text #EDEDEF / #A0A0AB secondary. **Borders do the separating**: white at 6–12%. One accent (violet #7C5CFF, blue #3B82F6, or green #22C55E) used for focus, links, glows. |
-| Typography | Geometric/neo-grotesque (Inter, Geist, "Satoshi"), medium weights; **gradient text** on hero headline (white → grey); monospace (Geist Mono, JetBrains Mono) for code, keys, metadata. |
+| Typography | Geometric/neo-grotesque (Geist, Satoshi, General Sans), medium weights; **gradient text** on hero headline (white → grey); monospace (Geist Mono, JetBrains Mono) for code, keys, metadata. |
 | Spacing / layout | Centered hero with product screenshot; bento feature grids; tight, dense app UIs with compact rows (32–36px). |
 | Radius | Controls 6–8px; cards 12–16px. |
 | Borders | **1px hairline borders everywhere** (rgba 255,255,255,.08); sometimes a gradient border (light at top). |
@@ -45,7 +45,7 @@
   --bg:#0A0A0B; --surface-1:#111215; --surface-2:#17181C; --surface-3:#1E1F24;
   --text:#EDEDEF; --text-2:#A0A0AB; --border:rgb(255 255 255 / .08); --border-strong:rgb(255 255 255 / .22);
   --accent:#7C5CFF; --on-accent:#FFFFFF; --glow:radial-gradient(600px circle at 50% 0%,rgb(124 92 255 / .25),transparent 60%);
-  --font-sans:"Geist","Inter",system-ui,sans-serif; --font-mono:"Geist Mono","JetBrains Mono",monospace;
+  --font-sans:"Geist","Satoshi",system-ui,sans-serif; --font-mono:"Geist Mono","JetBrains Mono",monospace;
   --radius-control:8px; --radius-container:14px;
   --dur:160ms; --ease:cubic-bezier(.2,0,0,1);
 }

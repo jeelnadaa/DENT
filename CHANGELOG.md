@@ -4,6 +4,19 @@ All notable changes to DENT are documented here. Format: [Keep a Changelog](http
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-11-15
+
+### Added
+- **Benchmark batch: 8 tests with Claude Code + Claude Opus 5.5 (medium)**, built with and without DENT 2.0: Brewlog site, SaaS dashboard, checkout, kanban app, scroll-story launch page, meditation timer with sound, 3D product viewer, 45 s launch video. Per-test `RESULT.md` with screenshots, live pages, `verify_page.py` output and scores; `benchmark/RESULTS-SUMMARY.md` (read by the landing-page prompt); the run's `DEVIATIONS` file. Average 37.9 → 43.8 / 50; all 7 DENT web builds pass every automated gate while all 7 without DENT fail at least one; one build without DENT invented reviews. Scores are by Claude Opus 5.5 (same model family, DENT's author), so they are not independent.
+- **Font priority** (`references/typography.md` §0): Satoshi-style modern grotesks first (Satoshi, General Sans, Switzer, Supreme, Cabinet Grotesk, Clash Display, Geist, Manrope, Onest, Figtree, Hanken Grotesk, Instrument Sans…), characterful serif and display partners (Gambetta, Zodiak, Erode, Sentient, Boska, Panchang, Instrument Serif, Fraunces…), and overused defaults (Inter-only, Roboto, Open Sans, Montserrat, Poppins, Playfair Display) demoted to deliberate, logged choices.
+- **20 new pairings** (`typography.md` §3) and a rewritten hero pairing matrix.
+- **Font licence rules** from the actual ITF Free Font License text: Fontshare fonts are free for commercial use and self-hosting, but must not be subset, converted or redistributed (no committing them to public repos; use the Fontshare API there).
+
+### Changed
+- Style files and directions now default to Satoshi / General Sans / Switzer instead of Inter; SKILL.md §1.4 points to the font priority.
+- Subsetting advice now applies to OFL fonts only.
+- The scroll-story benchmark copy loads Satoshi from Fontshare's API instead of committed font files (licence compliance; documented in its RESULT.md).
+
 ## [2.0.0] — 2026-11-14
 
 DENT becomes a design-engineering system: interfaces, motion graphics, 3D, sound, narration and video, with orchestration, planning, enforced gates, runnable verification and self-scoring. Specification: `improvement.md` (Parts I–XXI). Audit, plan and progress: `docs/dent-2/`.

@@ -111,7 +111,7 @@ Never: the ways this direction fails
 
 ### 3.8 Museum Placard
 **Concept:** exhibition hall: works on walls, small precise labels. **Fits:** portfolios, galleries, premium products, case studies, archives.
-**Type:** text serif (EB Garamond / Cormorant for titles) + small sans labels (Inter 12–13 px caps tracked).
+**Type:** text serif (EB Garamond / Cormorant for titles) + small sans labels (Satoshi or General Sans 12–13 px caps tracked).
 **Color:** gallery white #F7F7F5 · wall grey #E8E8E4 · ink #1A1A1A · muted #6B6B66 · single accent from the artwork itself.
 **Layout:** one object per viewport, placard text bottom-left, wide margins, catalogue numbers.
 **Motion:** slow cross-fades, spotlight follows cursor subtly on artworks (pointer only). **Sound:** room tone ambience (opt-in, very low).
@@ -127,7 +127,7 @@ Never: the ways this direction fails
 
 ### 3.10 Night Train
 **Concept:** a sleeper train at night: amber lamps, dark wood, passing lights. **Fits:** travel, sleep, audio/podcast, cozy games, reading apps.
-**Type:** warm serif display (Fraunces soft, Young Serif), text: Inter or Atkinson Hyperlegible.
+**Type:** warm serif display (Fraunces soft, Young Serif), text: Satoshi or Atkinson Hyperlegible.
 **Color:** night #11131A · cabin wood #2A1E17 · lamp amber #F2B35B (accent) · text #F3EEE6 · muted #B8AFA2.
 **Layout:** framed "windows" (rounded rectangles) that reveal content as if passing by.
 **Motion:** horizontal parallax of light streaks behind window frames (reduced motion: static); gentle rocking 0.5° on the hero only. **Sound:** rail rhythm ambience (opt-in), soft chime for notifications.
@@ -152,7 +152,7 @@ Never: the ways this direction fails
 
 ### 3.13 Atelier
 **Concept:** a fashion atelier: chalk marks, pattern paper, pins. **Fits:** fashion, craft, luxury, made-to-order.
-**Type:** thin high-contrast serif caps (Bodoni Moda) + neutral sans (Neue Montreal-like: Inter Tight).
+**Type:** thin high-contrast serif caps (Bodoni Moda) + neutral sans (Neue Montreal-like: Switzer; Inter Tight).
 **Color:** pattern paper #EFE7DA · chalk #FFFFFF · ink #171512 · tailor blue #2E4A7D · pin red #B4232C.
 **Layout:** dashed cutting lines, measurement tape rulers on edges, pinned swatches.
 **Motion:** pieces slide into place along dashed guides. **Sound:** scissor snip on add-to-bag (opt-in).
@@ -230,7 +230,7 @@ Never: the ways this direction fails
 
 ### 3.23 Signal Red
 **Concept:** emergency signage and safety design: urgent clarity. **Fits:** security, incident management, health alerts, civic tech.
-**Type:** DIN-like (Barlow, D-DIN style: Bai Jamjuree) heavy caps; text: Inter.
+**Type:** DIN-like (Barlow, D-DIN style: Bai Jamjuree) heavy caps; text: Switzer or Satoshi.
 **Color:** white #FFFFFF · signal red #D7261E (fills with white bold text ≥ 4.5:1) · ink #111 · safety yellow #FFD400 (fills with ink text) · grey #6B6B6B.
 **Layout:** big pictograms, numbered steps, high-contrast bands.
 **Motion:** none decorative; state changes flash once (not repeating, < 3/s). **Sound:** clear, short two-tone alert (user-enabled).
@@ -238,7 +238,7 @@ Never: the ways this direction fails
 
 ### 3.24 Folio Dark
 **Concept:** a premium photography portfolio at night. **Fits:** photographers, studios, film, architecture.
-**Type:** refined grotesk (Inter Tight / Neue Haas-like) in two sizes only.
+**Type:** refined grotesk (Switzer or General Sans; Neue Haas-like) in two sizes only.
 **Color:** #0C0C0C · #EDEDED · muted #8C8C8C (large text only; small text #B5B5B5).
 **Layout:** images dominate, captions small, horizontal scroll galleries with visible scrollbar.
 **Motion:** image transitions with shared-element zoom; cursor shows "View" label (pointer only). **Sound:** none.

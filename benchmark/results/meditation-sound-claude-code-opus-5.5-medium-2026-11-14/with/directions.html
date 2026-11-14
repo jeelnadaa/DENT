@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Directions · meditation timer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500&family=Lora:ital,wght@0,400;1,400&family=Quicksand:wght@500&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0}
+  body{background:#e9e7e2;font:15px/1.5 system-ui,sans-serif;color:#222;padding:24px 16px}
+  h1{font-size:18px;font-weight:600;margin:0 auto 16px;max-width:1240px}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));max-width:1240px;margin:auto}
+  .tile{border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .stage{height:300px;display:grid;place-items:center;position:relative;overflow:hidden}
+  .meta{padding:18px 18px 20px;display:grid;gap:10px;font-size:14px}
+  .name{font-size:22px}
+  .sw{display:flex;gap:6px}.sw i{width:30px;height:30px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+  .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+  /* A: Enso */
+  .a{background:#F4EFE6;color:#1F1B16}
+  .a .stage{background:#F4EFE6}
+  .a .name,.a .num{font-family:"Shippori Mincho",serif}
+  .a .meta{font-family:"Zen Kaku Gothic New",sans-serif}
+  .a svg path{stroke:#1F1B16;stroke-dasharray:820;stroke-dashoffset:820;animation:draw 10s ease-in-out infinite}
+  @keyframes draw{0%{stroke-dashoffset:820;opacity:1}40%{stroke-dashoffset:40}60%{stroke-dashoffset:40;opacity:1}100%{stroke-dashoffset:40;opacity:0}}
+  .a .num{position:absolute;font-size:44px;letter-spacing:-.01em}
+  .a .seal{position:absolute;right:22px;bottom:22px;width:26px;height:26px;background:#B5452F;border-radius:3px}
+  /* B: Tidepool */
+  .b{background:#0E2A33;color:#EAF6F4}
+  .b .stage{background:radial-gradient(120% 90% at 50% 20%,#12424F,#0E2A33)}
+  .b .name{font-family:Lora,serif}
+  .b .meta{font-family:Quicksand,sans-serif}
+  .b .orb{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#9FE7E1,#3B8E92 60%,#12424F);animation:breathe 10s ease-in-out infinite;opacity:.9}
+  .b .caus{position:absolute;inset:-20%;background:repeating-radial-gradient(circle at 30% 40%,transparent 0 18px,rgba(159,231,225,.07) 19px 21px);animation:drift 18s linear infinite}
+  @keyframes drift{to{transform:translate(40px,20px) rotate(6deg)}}
+  @keyframes breathe{0%,100%{transform:scale(.7)}40%,55%{transform:scale(1.1)}}
+  /* C: Horizon */
+  .c{background:#F7F5F2;color:#121212}
+  .c .stage{background:#F7F5F2}
+  .c .name,.c .meta{font-family:"Instrument Sans",sans-serif}
+  .c .line{position:absolute;left:0;right:0;top:62%;height:2px;background:#121212}
+  .c .sun{position:absolute;left:50%;top:62%;width:120px;height:120px;margin-left:-60px;border-radius:50%;background:#E4572E;animation:rise 10s ease-in-out infinite}
+  .c .cover{position:absolute;left:0;right:0;top:calc(62% + 2px);bottom:0;background:#F7F5F2}
+  @keyframes rise{0%,100%{transform:translateY(10px)}40%,55%{transform:translateY(-130px)}}
+  .c .num{position:absolute;left:20px;bottom:16px;font:600 54px/1 "Instrument Sans";font-variant-numeric:tabular-nums;letter-spacing:-.03em;z-index:2}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}.a svg path{stroke-dashoffset:40}}
+</style>
+</head>
+<body>
+<h1>Pick a direction (or combine) — each tile animates one 10-second breath.</h1>
+<div class="grid">
+  <section class="tile a">
+    <div class="stage">
+      <svg width="230" height="230" viewBox="0 0 230 230" aria-hidden="true"><path d="M150 40 C 205 62 215 140 170 182 C 125 222 48 205 30 140 C 14 82 58 32 118 34" fill="none" stroke-width="13" stroke-linecap="round"/></svg>
+      <span class="num">12:00</span><i class="seal"></i>
+    </div>
+    <div class="meta">
+      <div class="name">1 · Ensō — ink on washi (Recommended)</div>
+      <div>A Zen brush circle is drawn as you inhale, held, then fades as you exhale. Warm paper by day, sumi-ink night by dark. Big mincho-serif numerals; one vermilion seal accent.</div>
+      <div class="sw"><i style="background:#F4EFE6"></i><i style="background:#1F1B16"></i><i style="background:#6B6157"></i><i style="background:#B5452F"></i><i style="background:#16130F"></i></div>
+      <div><span class="lbl">Sound</span><br>Brass rin bowl for start, soft wooden clapper for intervals, a three-strike bowl fade for the end.</div>
+      <div><span class="lbl">Fits / risk</span><br>Timeless, very calm, distinctive. Risk: quieter on first glance.</div>
+    </div>
+  </section>
+  <section class="tile b">
+    <div class="stage"><div class="caus"></div><div class="orb"></div></div>
+    <div class="meta">
+      <div class="name">2 · Tidepool — light under water</div>
+      <div>A glowing pool orb swells and settles under slow caustic light. Deep teal water, sand and coral accents; soft serif with rounded labels.</div>
+      <div class="sw"><i style="background:#0E2A33"></i><i style="background:#12424F"></i><i style="background:#9FE7E1"></i><i style="background:#E9DCC1"></i><i style="background:#F2836B"></i></div>
+      <div><span class="lbl">Sound</span><br>Glassy water-drop pings, a bubbling interval cue, a long airy chime to end.</div>
+      <div><span class="lbl">Fits / risk</span><br>Immersive and dreamy. Risk: closest to the wellness cliché (teal glow).</div>
+    </div>
+  </section>
+  <section class="tile c">
+    <div class="stage"><div class="sun"></div><div class="cover"></div><div class="line"></div><span class="num">12:00</span></div>
+    <div class="meta">
+      <div class="name">3 · Horizon — a sunrise per breath</div>
+      <div>A vermilion sun rises over one hard horizon line as you inhale and sets as you exhale. Swiss grid, huge grotesk numerals, nearly monochrome.</div>
+      <div class="sw"><i style="background:#F7F5F2"></i><i style="background:#121212"></i><i style="background:#E4572E"></i><i style="background:#8A8580"></i></div>
+      <div><span class="lbl">Sound</span><br>Silence-first: one warm low sine tone as signature, a soft tick at intervals.</div>
+      <div><span class="lbl">Fits / risk</span><br>Bold, graphic, modern. Risk: more "design object" than sanctuary.</div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

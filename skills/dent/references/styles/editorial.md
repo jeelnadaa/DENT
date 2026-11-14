@@ -42,7 +42,7 @@
 ```css
 :root{
   --bg:#FAF8F3; --text:#141414; --text-2:#55524C; --rule:#D9D4C7; --accent:#B3261E; --on-accent:#FFFFFF;
-  --font-display:"Fraunces","Playfair Display",Georgia,serif; --font-body:"Source Serif 4",Georgia,serif; --font-ui:"Inter",system-ui,sans-serif;
+  --font-display:"Fraunces","Playfair Display",Georgia,serif; --font-body:"Source Serif 4",Georgia,serif; --font-ui:"Satoshi","Manrope",system-ui,sans-serif;
   --body-size:clamp(1.125rem,1.05rem + .3vw,1.3125rem); --measure:66ch;
   --radius-control:2px; --radius-container:0;
   --dur:300ms; --ease:cubic-bezier(.2,0,0,1);

@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f2ec">
+<title>Checkout · Oakroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f2ec; --surface:#fff; --surface-2:#faf7f3;
+  --ink:#231f1c; --muted:#675e56; --line:#e3dad0; --line-strong:#cdbfb1;
+  --accent:#2f4b3c; --accent-hover:#263e31; --accent-soft:#e6eee8; --accent-ink:#fff;
+  --clay:#a8573a; --clay-soft:#f6e7df;
+  --err:#b42318; --err-soft:#fdeceb; --ok:#1f7a4d; --ok-soft:#e3f3ea; --warn-soft:#fff6e0;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 2px rgba(35,31,28,.05),0 6px 20px rgba(35,31,28,.06);
+  --focus:0 0 0 3px rgba(47,75,60,.35);
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.2;margin:0;letter-spacing:-.01em}
+h2:focus{outline:none}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+[hidden]{display:none!important}
+:focus-visible{outline:none;box-shadow:var(--focus);border-radius:6px}
+
+/* Header */
+.topbar{display:flex;align-items:center;justify-content:space-between;max-width:1120px;margin:0 auto;padding:14px 16px}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:22px;font-weight:600;text-decoration:none;color:var(--ink)}
+.logo svg{width:28px;height:28px}
+.secure{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.secure svg{width:16px;height:16px}
+
+/* Stepper */
+.steps-wrap{max-width:1120px;margin:0 auto;padding:4px 16px 16px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.step-btn{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:6px;width:100%;cursor:default;font-size:12px;color:var(--muted);font-weight:500}
+.step-btn .bar{height:4px;border-radius:4px;background:var(--line);transition:background .25s}
+.step-btn .lbl{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step-btn .num{display:none}
+.step-btn.done{cursor:pointer;color:var(--ink)}
+.step-btn.done .bar{background:var(--accent)}
+.step-btn.done:hover .lbl{text-decoration:underline}
+.step-btn.current{color:var(--ink);font-weight:600}
+.step-btn.current .bar{background:var(--clay)}
+.step-btn:focus-visible{box-shadow:var(--focus);border-radius:4px}
+.step-btn .tick{width:12px;height:12px;flex:none;display:none}
+.step-btn.done .tick{display:inline}
+@media (min-width:600px){.step-btn{font-size:13px}.step-btn .num{display:inline}}
+
+/* Layout */
+.layout{max-width:1120px;margin:0 auto;padding:0 16px 40px;display:flex;flex-direction:column;gap:16px}
+main{min-width:0}
+.summary{order:-1}
+@media (min-width:960px){
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:32px;align-items:start}
+  .summary{order:0;position:sticky;top:20px}
+}
+body[data-step="done"] .summary{display:none}
+body[data-step="done"] .layout{display:block;max-width:720px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.panel{padding:20px}
+@media (min-width:600px){.panel{padding:28px}}
+.step-head{margin-bottom:20px}
+.step-head h2{font-size:26px}
+.step-head p{margin:6px 0 0;color:var(--muted)}
+@media (min-width:600px){.step-head h2{font-size:30px}}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 20px;border-radius:999px;border:1px solid transparent;font-weight:600;font-size:16px;text-decoration:none;transition:background .15s,border-color .15s,transform .05s;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-primary[disabled]{background:#9aa79f;cursor:not-allowed;transform:none}
+.btn-ghost{background:transparent;border-color:var(--line-strong);color:var(--ink)}
+.btn-ghost:hover{background:var(--surface-2)}
+.btn-link{background:none;border:0;padding:4px 2px;min-height:auto;color:var(--accent);font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px;border-radius:4px}
+.btn-sm{min-height:40px;padding:8px 16px;font-size:14px}
+.spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Actions bar */
+.actions{position:sticky;bottom:0;z-index:5;display:flex;gap:10px;align-items:center;margin:20px -20px -20px;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid var(--line);border-radius:0 0 var(--radius) var(--radius)}
+.actions .btn-primary{flex:1}
+.actions .btn-ghost{flex:none}
+@media (min-width:600px){.actions{margin:28px -28px -28px;padding:16px 28px}}
+@media (min-width:960px){.actions{position:static;background:none;backdrop-filter:none}.actions .btn-primary{flex:0 1 auto;min-width:240px;margin-left:auto}}
+.actions .back-ico{width:18px;height:18px}
+@media (max-width:420px){.actions .back-txt{display:none}.actions .btn-ghost{padding:12px 14px}}
+
+/* Forms */
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{padding:0}
+.group-title{font-family:var(--serif);font-size:19px;font-weight:600;margin:0 0 12px}
+.grid{display:grid;gap:14px}
+@media (min-width:600px){.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:2fr 1fr 1fr}.span-2{grid-column:1/-1}}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.label{font-size:14px;font-weight:600}
+.field .opt{font-weight:400;color:var(--muted)}
+.input{width:100%;min-height:50px;padding:12px 14px;font-size:16px;background:var(--surface);border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);transition:border-color .15s,box-shadow .15s;appearance:none;-webkit-appearance:none}
+.input::placeholder{color:#a39a91}
+.input:hover{border-color:#b3a596}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:var(--focus)}
+select.input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23675e56' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+textarea.input{min-height:84px;resize:vertical}
+.hint{margin:0;font-size:13px;color:var(--muted)}
+.err{display:none;margin:0;font-size:13.5px;color:var(--err);font-weight:500;align-items:flex-start;gap:6px}
+.err svg{width:15px;height:15px;flex:none;margin-top:2px}
+.field.invalid .err{display:flex}
+.field.invalid .input{border-color:var(--err);background:#fffafa}
+.field.invalid .input:focus{box-shadow:0 0 0 3px rgba(180,35,24,.2)}
+.field.valid .input{border-color:#8fb39f}
+.input-wrap{position:relative}
+.input-wrap .input{padding-right:64px}
+.brand-tag{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 7px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);text-transform:uppercase;pointer-events:none}
+.section-gap{margin-top:28px}
+.check{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1.5px solid var(--line);border-radius:var(--radius-sm);cursor:pointer;background:var(--surface)}
+.check:hover{border-color:var(--line-strong)}
+.check input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);flex:none}
+.check strong{display:block;font-weight:600}
+.check span.sub{display:block;font-size:13.5px;color:var(--muted)}
+.check .price-tag{margin-left:auto;font-weight:600;white-space:nowrap}
+.check:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.check:has(input:focus-visible){box-shadow:var(--focus)}
+
+/* Error summary + alerts */
+.alert{display:flex;gap:12px;padding:14px 16px;border-radius:var(--radius-sm);margin-bottom:20px;border:1px solid}
+.alert:focus{outline:none;box-shadow:var(--focus)}
+.alert svg{width:20px;height:20px;flex:none;margin-top:1px}
+.alert h3{font-family:var(--sans);font-size:15px;font-weight:700;margin:0 0 4px}
+.alert p{margin:0;font-size:14.5px}
+.alert ul{margin:6px 0 0;padding-left:18px;font-size:14.5px}
+.alert li{margin:2px 0}
+.alert a{color:inherit;font-weight:600}
+.alert-err{background:var(--err-soft);border-color:#f3c3be;color:#7a1a12}
+.alert-err svg{color:var(--err)}
+.alert-info{background:var(--warn-soft);border-color:#f0dfb0;color:#5c4a14}
+.alert .alert-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.alert .btn-sm{background:#fff;border-color:#e6b4ae;color:#7a1a12}
+
+/* Cart */
+.cart-list{list-style:none;margin:0;padding:0}
+.cart-item{display:grid;grid-template-columns:76px minmax(0,1fr);gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.cart-item:first-child{padding-top:0}
+.thumb{width:76px;height:76px;border-radius:12px;overflow:hidden;flex:none}
+.thumb svg{width:100%;height:100%;display:block}
+.ci-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.ci-name{font-weight:600;margin:0;line-height:1.3}
+.ci-meta{font-size:13.5px;color:var(--muted);margin:2px 0 0}
+.ci-price{font-weight:600;white-space:nowrap}
+.ci-unit{font-size:12.5px;color:var(--muted);text-align:right;font-weight:400}
+.ci-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+.qty{display:inline-flex;align-items:center;border:1.5px solid var(--line-strong);border-radius:999px;overflow:hidden}
+.qty button{width:40px;height:40px;border:0;background:none;font-size:18px;display:grid;place-items:center}
+.qty button:hover:not([disabled]){background:var(--surface-2)}
+.qty button[disabled]{color:#c8bdb2;cursor:not-allowed}
+.qty output{min-width:28px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.stock{font-size:12.5px;color:var(--ok);display:flex;align-items:center;gap:5px;margin-top:4px}
+.stock::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.stock.low{color:var(--clay)}
+@media (min-width:600px){.cart-item{grid-template-columns:96px minmax(0,1fr)}.thumb{width:96px;height:96px}}
+.promo{margin-top:20px}
+.promo-row{display:flex;gap:8px}
+.promo-row .input{flex:1}
+.promo-row .btn{flex:none}
+.promo-applied{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:var(--radius-sm);background:var(--ok-soft);color:#14532d;font-size:14.5px}
+.empty{text-align:center;padding:24px 8px}
+.empty svg{width:120px;height:90px;margin:0 auto 12px;display:block}
+.empty h3{font-size:22px;margin-bottom:6px}
+.empty p{color:var(--muted);margin:0 0 18px}
+
+/* Delivery */
+.dates{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 10px;margin:0 -2px;scrollbar-width:thin}
+@media (min-width:600px){.dates{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));overflow:visible}}
+.chip{position:relative;scroll-snap-align:start;flex:0 0 74px}
+.chip input,.slot input{position:absolute;opacity:0;pointer-events:none}
+.chip label{display:flex;flex-direction:column;align-items:center;gap:1px;padding:10px 4px;border:1.5px solid var(--line-strong);border-radius:12px;cursor:pointer;background:var(--surface);transition:border-color .15s,background .15s;text-align:center}
+.chip .dow{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.chip .day{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.15}
+.chip .mon{font-size:12px;color:var(--muted)}
+.chip label:hover{border-color:var(--accent)}
+.chip input:checked+label{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip input:checked+label .dow,.chip input:checked+label .mon{color:rgba(255,255,255,.85)}
+.chip input:focus-visible+label,.slot input:focus-visible+label{box-shadow:var(--focus)}
+.chip input:disabled+label{cursor:not-allowed;background:repeating-linear-gradient(-45deg,var(--surface-2),var(--surface-2) 6px,#f1ebe4 6px,#f1ebe4 12px);color:#b3a89d;border-color:var(--line)}
+.chip input:disabled+label .dow,.chip input:disabled+label .mon{color:#b3a89d}
+.slots{display:grid;gap:10px}
+@media (min-width:600px){.slots{grid-template-columns:repeat(3,1fr)}}
+.slot{position:relative}
+.slot label{display:flex;align-items:center;gap:12px;padding:14px;border:1.5px solid var(--line-strong);border-radius:12px;cursor:pointer;background:var(--surface);height:100%}
+@media (min-width:600px){.slot label{flex-direction:column;align-items:flex-start;gap:4px}}
+.slot .s-name{font-weight:600}
+.slot .s-time{font-size:14px;color:var(--muted)}
+.slot .s-fee{margin-left:auto;font-size:13.5px;font-weight:600;color:var(--clay);white-space:nowrap}
+@media (min-width:600px){.slot .s-fee{margin-left:0}}
+.slot label:hover{border-color:var(--accent)}
+.slot input:checked+label{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.slot input:disabled+label{cursor:not-allowed;opacity:.55;background:var(--surface-2)}
+.slot input:disabled+label .s-fee{color:var(--muted)}
+.group-err{display:none;margin:8px 0 0;font-size:13.5px;color:var(--err);font-weight:500;gap:6px;align-items:flex-start}
+.group-err svg{width:15px;height:15px;flex:none;margin-top:2px}
+.fgroup.invalid .group-err{display:flex}
+.fgroup.invalid .dates,.fgroup.invalid .slots{outline:2px solid rgba(180,35,24,.35);outline-offset:4px;border-radius:12px}
+.muted-note{font-size:13.5px;color:var(--muted);margin:8px 0 0}
+
+/* Payment */
+.review{display:grid;gap:10px;margin-bottom:24px}
+@media (min-width:600px){.review{grid-template-columns:1fr 1fr}}
+.review-box{padding:14px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--line);font-size:14.5px;display:flex;gap:10px;justify-content:space-between;align-items:flex-start}
+.review-box .rk{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;margin-bottom:2px}
+.review-box .rv{line-height:1.45;overflow-wrap:anywhere}
+.cards-accepted{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.cards-accepted span{font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 8px;border-radius:5px;border:1px solid var(--line);background:var(--surface-2);color:var(--muted)}
+.testcards{margin-top:22px;border:1px dashed var(--line-strong);border-radius:var(--radius-sm);padding:4px 14px;font-size:14px;background:var(--surface-2)}
+.testcards summary{cursor:pointer;padding:10px 0;font-weight:600;color:var(--muted)}
+.testcards ul{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.testcards li{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.testcards code{font-size:13px;background:#fff;border:1px solid var(--line);padding:2px 6px;border-radius:5px}
+.secure-note{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-top:16px}
+.secure-note svg{width:16px;height:16px;flex:none}
+
+/* Summary */
+.summary .card{overflow:hidden}
+.summary-toggle{all:unset;box-sizing:border-box;display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;cursor:pointer;font-weight:600;color:var(--accent)}
+.summary-toggle:focus-visible{box-shadow:inset var(--focus)}
+.summary-toggle .chev{width:14px;height:14px;transition:transform .2s;margin-left:6px}
+.summary-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.summary-toggle .tot{font-family:var(--serif);font-size:20px;color:var(--ink)}
+.summary-title{display:none;padding:22px 24px 0;font-size:22px}
+.summary-body{display:none;padding:4px 20px 20px;border-top:1px solid var(--line)}
+.summary.open .summary-body{display:block}
+@media (min-width:960px){.summary-toggle{display:none}.summary-title{display:block}.summary-body{display:block;border-top:0;padding:16px 24px 24px}}
+.mini-list{list-style:none;margin:0;padding:12px 0;display:grid;gap:12px;border-bottom:1px solid var(--line)}
+.mini{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;font-size:14.5px}
+.mini .thumb{width:52px;height:52px;border-radius:9px;position:relative;overflow:visible}
+.mini .thumb svg{border-radius:9px}
+.mini .badge{position:absolute;top:-7px;right:-7px;min-width:21px;height:21px;padding:0 6px;border-radius:999px;background:var(--muted);color:#fff;font-size:12px;font-weight:600;display:grid;place-items:center}
+.mini .n{font-weight:600;line-height:1.3}
+.mini .v{font-size:13px;color:var(--muted)}
+.mini .p{font-weight:600;font-variant-numeric:tabular-nums}
+.totals{margin:12px 0 0;display:grid;gap:8px;font-size:14.5px}
+.totals div{display:flex;justify-content:space-between;gap:12px}
+.totals dt{color:var(--muted)}
+.totals dd{margin:0;font-variant-numeric:tabular-nums;text-align:right}
+.totals .discount dd{color:var(--ok);font-weight:600}
+.totals .grand{padding-top:12px;margin-top:4px;border-top:1px solid var(--line);font-size:17px}
+.totals .grand dt{color:var(--ink);font-weight:600}
+.totals .grand dd{font-family:var(--serif);font-size:24px;font-weight:600}
+.free{color:var(--ok);font-weight:600}
+.ship-progress{margin-top:14px;font-size:13.5px;color:var(--muted)}
+.ship-progress .track{height:6px;border-radius:6px;background:var(--line);margin-top:6px;overflow:hidden}
+.ship-progress .fill{height:100%;background:var(--clay);border-radius:6px;transition:width .3s}
+.perks{margin:16px 0 0;padding:14px 0 0;border-top:1px solid var(--line);list-style:none;display:grid;gap:8px;font-size:13.5px;color:var(--muted)}
+.perks li{display:flex;gap:8px;align-items:center}
+.perks svg{width:16px;height:16px;flex:none;color:var(--accent)}
+
+/* Confirmation */
+.confirm-hero{text-align:center;padding:12px 0 8px}
+.confirm-hero .check-circle{width:72px;height:72px;margin:0 auto 16px;border-radius:50%;background:var(--ok-soft);display:grid;place-items:center;animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+.confirm-hero .check-circle svg{width:36px;height:36px;color:var(--ok)}
+@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.confirm-hero h2{font-size:30px}
+.confirm-hero p{color:var(--muted);margin:8px auto 0;max-width:440px}
+.order-no{display:inline-block;margin-top:14px;padding:6px 14px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);font-weight:600;font-variant-numeric:tabular-nums}
+.confirm-grid{display:grid;gap:12px;margin:24px 0}
+@media (min-width:600px){.confirm-grid{grid-template-columns:1fr 1fr}}
+.timeline{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:0}
+.timeline li{display:grid;grid-template-columns:22px 1fr;gap:12px;padding-bottom:14px;position:relative;font-size:14.5px}
+.timeline li::before{content:"";width:12px;height:12px;border-radius:50%;border:2px solid var(--line-strong);background:var(--surface);margin:4px 0 0 4px;z-index:1}
+.timeline li::after{content:"";position:absolute;left:10px;top:18px;bottom:0;width:2px;background:var(--line)}
+.timeline li:last-child::after{display:none}
+.timeline li.on::before{background:var(--ok);border-color:var(--ok)}
+.timeline strong{display:block}
+.timeline span{color:var(--muted);font-size:13.5px}
+.confirm-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+@media (min-width:600px){.confirm-actions{flex-direction:row;justify-content:center}}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--ink);color:#fff;padding:12px 14px 12px 18px;border-radius:12px;display:flex;align-items:center;gap:14px;font-size:14.5px;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:opacity .2s,transform .2s;z-index:50;width:max-content;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast button{background:none;border:0;color:#f5c9b6;font-weight:700;padding:6px 8px;border-radius:6px;text-decoration:underline}
+@media (min-width:960px){.toast{bottom:32px}}
+
+.step{animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+footer.foot{text-align:center;font-size:13px;color:var(--muted);padding:0 16px 32px}
+
+@media print{
+  .topbar .secure,.steps-wrap,.summary,.confirm-actions,.toast,footer.foot{display:none!important}
+  body{background:#fff}
+  .card{box-shadow:none;border:0}
+}
+</style>
+</head>
+<body data-step="cart">
+
+<header class="topbar">
+  <a class="logo" href="#cart" aria-label="Oakroom home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#2f4b3c"/><path d="M9 21v-6.5a7 7 0 0 1 14 0V21" stroke="#f6f2ec" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M7 21h18" stroke="#d58a69" stroke-width="2.4" stroke-linecap="round"/></svg>
+    Oakroom
+  </a>
+  <span class="secure">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+    Secure checkout
+  </span>
+</header>
+
+<nav class="steps-wrap" aria-label="Checkout progress">
+  <ol class="steps" id="steps"></ol>
+</nav>
+
+<div class="layout">
+  <main>
+    <form id="checkout" class="card panel" novalidate>
+      <div id="live" class="sr-only" aria-live="polite"></div>
+
+      <!-- STEP 1: CART -->
+      <section class="step" data-step="cart" aria-labelledby="h-cart">
+        <div class="step-head">
+          <h2 id="h-cart" tabindex="-1">Your cart</h2>
+          <p id="cart-sub">Review your pieces before we arrange delivery.</p>
+        </div>
+        <div id="cart-err"></div>
+        <ul class="cart-list" id="cart-list"></ul>
+        <div id="cart-empty" class="empty" hidden>
+          <svg viewBox="0 0 120 90" aria-hidden="true"><rect x="10" y="78" width="100" height="3" rx="1.5" fill="#e3dad0"/><path d="M28 48h64v18H28z" fill="#efe6dc"/><path d="M24 44a6 6 0 0 1 6 6v20h-8V50a6 6 0 0 1 2-6zM96 44a6 6 0 0 0-6 6v20h8V50a6 6 0 0 0-2-6z" fill="#e3d5c6"/><path d="M32 30h56a4 4 0 0 1 4 4v14H28V34a4 4 0 0 1 4-4z" fill="#f3ece4"/><path d="M30 70v8M90 70v8" stroke="#b9a48f" stroke-width="3" stroke-linecap="round"/></svg>
+          <h3>Your cart is empty</h3>
+          <p>Nothing to check out just yet.</p>
+          <button type="button" class="btn btn-ghost" id="restore-cart">Restore sample cart</button>
+        </div>
+        <div class="promo" id="promo-area">
+          <div id="promo-form">
+            <div class="field" id="f-promo">
+              <label for="promo">Promo code <span class="opt">(optional)</span></label>
+              <div class="promo-row">
+                <input class="input" id="promo" name="promo" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. WELCOME10" aria-describedby="promo-err promo-hint">
+                <button type="button" class="btn btn-ghost" id="apply-promo">Apply</button>
+              </div>
+              <p class="hint" id="promo-hint">Try <strong>WELCOME10</strong> for 10% off.</p>
+              <p class="err" id="promo-err" role="alert"></p>
+            </div>
+          </div>
+          <div id="promo-applied" class="promo-applied" hidden></div>
+        </div>
+      </section>
+
+      <!-- STEP 2: SHIPPING -->
+      <section class="step" data-step="shipping" aria-labelledby="h-shipping" hidden>
+        <div class="step-head">
+          <h2 id="h-shipping" tabindex="-1">Shipping address</h2>
+          <p>Where should our delivery team bring your order?</p>
+        </div>
+        <div class="err-summary-slot"></div>
+        <fieldset>
+          <legend class="group-title">Contact</legend>
+          <div class="grid grid-2">
+            <div class="field span-2" data-f="fullName">
+              <label for="fullName">Full name</label>
+              <input class="input" id="fullName" name="fullName" autocomplete="name" aria-describedby="fullName-err">
+              <p class="err" id="fullName-err"></p>
+            </div>
+            <div class="field" data-f="email">
+              <label for="email">Email</label>
+              <input class="input" id="email" name="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" aria-describedby="email-hint email-err">
+              <p class="hint" id="email-hint">For your receipt and tracking.</p>
+              <p class="err" id="email-err"></p>
+            </div>
+            <div class="field" data-f="phone">
+              <label for="phone">Phone</label>
+              <input class="input" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="phone-hint phone-err">
+              <p class="hint" id="phone-hint">The driver will call 30 min before arrival.</p>
+              <p class="err" id="phone-err"></p>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset class="section-gap">
+          <legend class="group-title">Address</legend>
+          <div class="grid grid-2">
+            <div class="field span-2" data-f="country">
+              <label for="country">Country</label>
+              <select class="input" id="country" name="country" autocomplete="country" aria-describedby="country-err">
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+              </select>
+              <p class="err" id="country-err"></p>
+            </div>
+            <div class="field span-2" data-f="address1">
+              <label for="address1">Street address</label>
+              <input class="input" id="address1" name="address1" autocomplete="address-line1" aria-describedby="address1-err">
+              <p class="err" id="address1-err"></p>
+            </div>
+            <div class="field span-2" data-f="address2">
+              <label for="address2">Apartment, suite, floor <span class="opt">(optional)</span></label>
+              <input class="input" id="address2" name="address2" autocomplete="address-line2">
+            </div>
+          </div>
+          <div class="grid grid-3" style="margin-top:14px">
+            <div class="field" data-f="city">
+              <label for="city">City</label>
+              <input class="input" id="city" name="city" autocomplete="address-level2" aria-describedby="city-err">
+              <p class="err" id="city-err"></p>
+            </div>
+            <div class="field" data-f="region">
+              <label for="region" id="region-label">State</label>
+              <input class="input" id="region" name="region" autocomplete="address-level1" aria-describedby="region-err">
+              <p class="err" id="region-err"></p>
+            </div>
+            <div class="field" data-f="postcode">
+              <label for="postcode" id="postcode-label">ZIP code</label>
+              <input class="input" id="postcode" name="postcode" autocomplete="postal-code" autocapitalize="characters" aria-describedby="postcode-err">
+              <p class="err" id="postcode-err"></p>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset class="section-gap">
+          <legend class="group-title">Access for large items</legend>
+          <div class="grid">
+            <div class="field" data-f="access">
+              <label for="access">Building access</label>
+              <select class="input" id="access" name="access" aria-describedby="access-hint access-err">
+                <option value="">Choose one…</option>
+                <option value="ground">House or ground floor</option>
+                <option value="elevator">Apartment with elevator</option>
+                <option value="stairs">Stairs only (no elevator)</option>
+              </select>
+              <p class="hint" id="access-hint">Helps us send the right size team. Our sofa needs a 32″ doorway.</p>
+              <p class="err" id="access-err"></p>
+            </div>
+            <div class="field" data-f="notes">
+              <label for="notes">Delivery notes <span class="opt">(optional)</span></label>
+              <textarea class="input" id="notes" name="notes" maxlength="240" placeholder="Gate code, parking, tight corners…"></textarea>
+            </div>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- STEP 3: DELIVERY -->
+      <section class="step" data-step="delivery" aria-labelledby="h-delivery" hidden>
+        <div class="step-head">
+          <h2 id="h-delivery" tabindex="-1">Delivery time</h2>
+          <p>Our two-person team brings everything inside to the room of your choice.</p>
+        </div>
+        <div class="err-summary-slot"></div>
+        <fieldset class="fgroup" id="g-date" aria-describedby="date-err">
+          <legend class="group-title">Choose a day</legend>
+          <div class="dates" id="dates"></div>
+          <p class="group-err" id="date-err"></p>
+          <p class="muted-note">No deliveries on Sundays. Earliest available is 3 days out.</p>
+        </fieldset>
+        <fieldset class="fgroup section-gap" id="g-slot" aria-describedby="slot-err">
+          <legend class="group-title">Choose a time window</legend>
+          <div class="slots" id="slots"></div>
+          <p class="group-err" id="slot-err"></p>
+        </fieldset>
+        <fieldset class="section-gap">
+          <legend class="group-title">Extras</legend>
+          <div class="grid">
+            <label class="check">
+              <input type="checkbox" id="assembly" name="assembly">
+              <span><strong>Assembly &amp; placement</strong><span class="sub">We'll unbox, assemble and position each piece.</span></span>
+              <span class="price-tag">+$59</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="haulaway" name="haulaway" checked>
+              <span><strong>Take away packaging</strong><span class="sub">We recycle all cardboard and foam.</span></span>
+              <span class="price-tag free">Free</span>
+            </label>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- STEP 4: PAYMENT -->
+      <section class="step" data-step="payment" aria-labelledby="h-payment" hidden>
+        <div class="step-head">
+          <h2 id="h-payment" tabindex="-1">Payment</h2>
+          <p>You won't be charged until you press Pay.</p>
+        </div>
+        <div id="pay-alert"></div>
+        <div class="err-summary-slot"></div>
+        <div class="review" id="review"></div>
+        <fieldset id="pay-fields">
+          <legend class="group-title">Card details</legend>
+          <div class="cards-accepted" aria-label="Accepted cards"><span>Visa</span><span>Mastercard</span><span>Amex</span></div>
+          <div class="grid grid-2">
+            <div class="field span-2" data-f="cardNumber">
+              <label for="cardNumber">Card number</label>
+              <div class="input-wrap">
+                <input class="input" id="cardNumber" name="cardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="1234 1234 1234 1234" maxlength="23" aria-describedby="cardNumber-err">
+                <span class="brand-tag" id="brand-tag" hidden></span>
+              </div>
+              <p class="err" id="cardNumber-err"></p>
+            </div>
+            <div class="field span-2" data-f="cardName">
+              <label for="cardName">Name on card</label>
+              <input class="input" id="cardName" name="cardName" autocomplete="cc-name" aria-describedby="cardName-err">
+              <p class="err" id="cardName-err"></p>
+            </div>
+            <div class="field" data-f="expiry">
+              <label for="expiry">Expiry date</label>
+              <input class="input" id="expiry" name="expiry" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7" aria-describedby="expiry-err">
+              <p class="err" id="expiry-err"></p>
+            </div>
+            <div class="field" data-f="cvc">
+              <label for="cvc">Security code</label>
+              <input class="input" id="cvc" name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="CVC" maxlength="4" aria-describedby="cvc-hint cvc-err">
+              <p class="hint" id="cvc-hint">3 digits on the back (Amex: 4 on the front).</p>
+              <p class="err" id="cvc-err"></p>
+            </div>
+          </div>
+          <div class="section-gap" style="margin-top:20px">
+            <label class="check">
+              <input type="checkbox" id="sameBilling" name="sameBilling" checked>
+              <span><strong>Billing address same as shipping</strong><span class="sub" id="billing-preview"></span></span>
+            </label>
+          </div>
+          <div id="billing-fields" class="grid grid-2" style="margin-top:14px" hidden>
+            <div class="field span-2" data-f="bAddress1">
+              <label for="bAddress1">Billing street address</label>
+              <input class="input" id="bAddress1" name="bAddress1" autocomplete="billing address-line1" aria-describedby="bAddress1-err">
+              <p class="err" id="bAddress1-err"></p>
+            </div>
+            <div class="field" data-f="bCity">
+              <label for="bCity">City</label>
+              <input class="input" id="bCity" name="bCity" autocomplete="billing address-level2" aria-describedby="bCity-err">
+              <p class="err" id="bCity-err"></p>
+            </div>
+            <div class="field" data-f="bPostcode">
+              <label for="bPostcode">ZIP / postal code</label>
+              <input class="input" id="bPostcode" name="bPostcode" autocomplete="billing postal-code" autocapitalize="characters" aria-describedby="bPostcode-err">
+              <p class="err" id="bPostcode-err"></p>
+            </div>
+          </div>
+        </fieldset>
+        <p class="secure-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          Encrypted and processed securely. We never store your full card number.
+        </p>
+        <details class="testcards">
+          <summary>Demo: test card numbers</summary>
+          <ul>
+            <li><span><code>4242 4242 4242 4242</code> Succeeds</span><button type="button" class="btn-link" data-fill="4242424242424242">Use</button></li>
+            <li><span><code>4000 0000 0000 0002</code> Declined</span><button type="button" class="btn-link" data-fill="4000000000000002">Use</button></li>
+            <li><span><code>4000 0000 0000 9995</code> Insufficient funds</span><button type="button" class="btn-link" data-fill="4000000000009995">Use</button></li>
+            <li><span><code>4000 0000 0000 0119</code> Network error (once)</span><button type="button" class="btn-link" data-fill="4000000000000119">Use</button></li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- STEP 5: DONE -->
+      <section class="step" data-step="done" aria-labelledby="h-done" hidden>
+        <div id="confirm"></div>
+      </section>
+
+      <div class="actions" id="actions">
+        <button type="button" class="btn btn-ghost" id="back-btn">
+          <svg class="back-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          <span class="back-txt">Back</span><span class="sr-only" id="back-sr"></span>
+        </button>
+        <button type="submit" class="btn btn-primary" id="next-btn">Continue</button>
+      </div>
+    </form>
+  </main>
+
+  <aside class="summary" id="summary" aria-label="Order summary">
+    <div class="card">
+      <button type="button" class="summary-toggle" id="summary-toggle" aria-expanded="false" aria-controls="summary-body">
+        <span>Order summary<svg class="chev" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></span>
+        <span class="tot" id="toggle-total"></span>
+      </button>
+      <h2 class="summary-title">Order summary</h2>
+      <div class="summary-body" id="summary-body"></div>
+    </div>
+  </aside>
+</div>
+
+<footer class="foot">Questions? Call 1-800-555-0144 · 100-night home trial · Free returns within 30 days</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-msg"></span><button type="button" id="toast-undo">Undo</button></div>
+
+<script>
+(() => {
+"use strict";
+
+/* ---------- Data ---------- */
+const ART = {
+  sofa: `<svg viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="#efe5d8"/><rect x="0" y="70" width="96" height="26" fill="#e6d9c8"/><rect x="18" y="32" width="60" height="26" rx="8" fill="#d9c7ae"/><rect x="12" y="46" width="72" height="18" rx="6" fill="#cdb898"/><rect x="8" y="40" width="14" height="26" rx="7" fill="#c4ad8b"/><rect x="74" y="40" width="14" height="26" rx="7" fill="#c4ad8b"/><path d="M48 48v14" stroke="#bfa683" stroke-width="1.5"/><rect x="15" y="66" width="3" height="7" rx="1" fill="#6b4f37"/><rect x="78" y="66" width="3" height="7" rx="1" fill="#6b4f37"/></svg>`,
+  table: `<svg viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="#e9ece4"/><rect x="0" y="68" width="96" height="28" fill="#dde2d6"/><ellipse cx="48" cy="48" rx="34" ry="9" fill="#b07a4f"/><ellipse cx="48" cy="46" rx="34" ry="9" fill="#c99366"/><path d="M26 52l-4 22M70 52l4 22M40 55l-1 20M56 55l1 20" stroke="#8a5a36" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  lamp: `<svg viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="#f1e8dc"/><rect x="0" y="78" width="96" height="18" fill="#e7dbcb"/><path d="M34 34h28l-6-18H40z" fill="#f4dcae"/><path d="M34 34h28" stroke="#d8b67a" stroke-width="2"/><path d="M48 34v44" stroke="#b8893f" stroke-width="3"/><ellipse cx="48" cy="80" rx="13" ry="3.5" fill="#b8893f"/><circle cx="48" cy="40" r="10" fill="#fff4d6" opacity=".55"/></svg>`,
+  chair: `<svg viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="#f3e3d9"/><rect x="0" y="72" width="96" height="24" fill="#ead3c5"/><path d="M28 24c0-6 40-6 40 0v30H28z" fill="#a8573a"/><rect x="24" y="50" width="48" height="12" rx="6" fill="#bd6a4b"/><path d="M30 62l-5 14M66 62l5 14M38 62l-2 12M58 62l2 12" stroke="#6b4f37" stroke-width="3" stroke-linecap="round"/></svg>`
+};
+const PRODUCTS = {
+  "halden-sofa":  { name:"Halden 3-Seat Sofa",  variant:"Oat bouclé · 84″ wide", price:1290, art:"sofa",  stock:6 },
+  "ora-table":    { name:"Ora Coffee Table",    variant:"Solid white oak",      price:420,  art:"table", stock:12 },
+  "lume-lamp":    { name:"Lume Floor Lamp",     variant:"Brushed brass",        price:189,  art:"lamp",  stock:3 },
+  "wren-chair":   { name:"Wren Lounge Chair",   variant:"Terracotta linen",     price:640,  art:"chair", stock:8 }
+};
+const DEFAULT_CART = [
+  { id:"halden-sofa", qty:1 },
+  { id:"ora-table", qty:1 },
+  { id:"lume-lamp", qty:2 }
+];
+const PROMOS = { WELCOME10:{ pct:10, label:"10% off your order" } };
+const STEPS = ["cart","shipping","delivery","payment","done"];
+const STEP_LABELS = { cart:"Cart", shipping:"Shipping", delivery:"Delivery", payment:"Payment", done:"Done" };
+const SLOTS = [
+  { id:"am",  name:"Morning",   time:"8 am – 12 pm", fee:0 },
+  { id:"pm",  name:"Afternoon", time:"12 – 4 pm",    fee:0 },
+  { id:"eve", name:"Evening",   time:"4 – 8 pm",     fee:20 }
+];
+const DELIVERY_FEE = 79, FREE_DELIVERY_OVER = 1500, ASSEMBLY_FEE = 59, TAX_RATE = 0.08, MAX_QTY = 10;
+const STORE_KEY = "oakroom-checkout-v1";
+
+/* ---------- State ---------- */
+const freshState = () => ({
+  cart: DEFAULT_CART.map(i => ({...i})),
+  promo: null,
+  addr: { fullName:"", email:"", phone:"", country:"US", address1:"", address2:"", city:"", region:"", postcode:"", access:"", notes:"" },
+  delivery: { date:"", slot:"", assembly:false, haulaway:true },
+  billing: { same:true, bAddress1:"", bCity:"", bPostcode:"" },
+  step: "cart",
+  reached: 0,
+  order: null
+});
+let state = load() || freshState();
+function load(){ try { const s = JSON.parse(localStorage.getItem(STORE_KEY)); return s && s.cart ? Object.assign(freshState(), s) : null; } catch(e){ return null; } }
+function save(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e){} }
+
+/* ---------- Helpers ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const money = n => new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(n);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ERR_ICON = `<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-.75-11.5a.75.75 0 0 1 1.5 0v4a.75.75 0 0 1-1.5 0v-4zM10 14.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" clip-rule="evenodd"/></svg>`;
+const TICK = `<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.6l7.3-7.3a1 1 0 0 1 1.4 0z" clip-rule="evenodd"/></svg>`;
+const announce = msg => { const l = $("#live"); l.textContent = ""; setTimeout(() => l.textContent = msg, 50); };
+const pad = n => String(n).padStart(2,"0");
+const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseIso = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+const longDate = s => parseIso(s).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+
+function totals(src = state){
+  const items = src.cart.map(l => ({...l, p:PRODUCTS[l.id]})).filter(l => l.p);
+  const count = items.reduce((a,l) => a + l.qty, 0);
+  const subtotal = items.reduce((a,l) => a + l.p.price * l.qty, 0);
+  const discount = src.promo && PROMOS[src.promo] ? Math.round(subtotal * PROMOS[src.promo].pct) / 100 : 0;
+  const net = subtotal - discount;
+  const delivery = count === 0 ? 0 : (net >= FREE_DELIVERY_OVER ? 0 : DELIVERY_FEE);
+  const slot = SLOTS.find(s => s.id === src.delivery.slot);
+  const slotFee = slot ? slot.fee : 0;
+  const assembly = src.delivery.assembly ? ASSEMBLY_FEE : 0;
+  const tax = Math.round((net + delivery + slotFee + assembly) * TAX_RATE * 100) / 100;
+  const total = Math.round((net + delivery + slotFee + assembly + tax) * 100) / 100;
+  return { items, count, subtotal, discount, net, delivery, slotFee, assembly, tax, total };
+}
+
+/* ---------- Delivery dates ---------- */
+function availableDates(){
+  const out = [], d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + 3);
+  for (let i = 0; i < 14; i++){
+    const x = new Date(d); x.setDate(d.getDate() + i);
+    out.push({ iso: isoDate(x), date: x, closed: x.getDay() === 0 });
+  }
+  return out;
+}
+function soldOut(iso, slotId){
+  let h = 0; for (const c of iso + slotId) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return h % 4 === 0;
+}
+
+/* ---------- Validation ---------- */
+const digits = s => (s || "").replace(/\D/g, "");
+function luhn(num){
+  let sum = 0, alt = false;
+  for (let i = num.length - 1; i >= 0; i--){ let n = +num[i]; if (alt){ n *= 2; if (n > 9) n -= 9; } sum += n; alt = !alt; }
+  return sum % 10 === 0;
+}
+function cardBrand(num){
+  if (/^4/.test(num)) return "visa";
+  if (/^(5[1-5]|2[2-7])/.test(num)) return "mastercard";
+  if (/^3[47]/.test(num)) return "amex";
+  return "";
+}
+const v = id => (document.getElementById(id).value || "").trim();
+const VALIDATORS = {
+  fullName: x => !x ? "Enter your full name." : (x.length < 2 ? "Name looks too short." : ""),
+  email: x => !x ? "Enter your email address." : (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(x) ? "Enter an email like name@example.com." : ""),
+  phone: x => { const d = digits(x); return !x ? "Enter a phone number so the driver can reach you." : (d.length < 10 || d.length > 15 ? "Enter a phone number with at least 10 digits." : ""); },
+  country: x => !x ? "Choose a country." : "",
+  address1: x => !x ? "Enter your street address." : (x.length < 4 ? "Street address looks incomplete." : ""),
+  city: x => !x ? "Enter your city." : "",
+  region: x => !x ? `Enter your ${v("country") === "CA" ? "province" : "state"}.` : "",
+  postcode: x => {
+    const ca = v("country") === "CA";
+    if (!x) return `Enter your ${ca ? "postal code" : "ZIP code"}.`;
+    if (ca ? !/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(x) : !/^\d{5}(-\d{4})?$/.test(x))
+      return ca ? "Postal code should look like K1A 0B1." : "ZIP code should be 5 digits, like 94110.";
+    return "";
+  },
+  access: x => !x ? "Tell us how we'll get your furniture inside." : "",
+  cardNumber: x => {
+    const d = digits(x); const b = cardBrand(d);
+    if (!d) return "Enter your card number.";
+    if (!b) return "We accept Visa, Mastercard and American Express.";
+    if (d.length !== (b === "amex" ? 15 : 16)) return `Card number should be ${b === "amex" ? 15 : 16} digits.`;
+    if (!luhn(d)) return "This card number isn't valid. Check for typos.";
+    return "";
+  },
+  cardName: x => !x ? "Enter the name shown on the card." : "",
+  expiry: x => {
+    const m = x.replace(/\s/g,"").match(/^(\d{2})\/(\d{2})$/);
+    if (!x) return "Enter the expiry date.";
+    if (!m) return "Use the format MM / YY.";
+    const mm = +m[1], yy = 2000 + +m[2];
+    if (mm < 1 || mm > 12) return "Month should be between 01 and 12.";
+    const now = new Date(); const end = new Date(yy, mm, 1);
+    if (end <= new Date(now.getFullYear(), now.getMonth(), 1)) return "This card has expired.";
+    if (yy > now.getFullYear() + 20) return "Check the expiry year.";
+    return "";
+  },
+  cvc: x => { const need = cardBrand(digits(v("cardNumber"))) === "amex" ? 4 : 3; return !x ? "Enter the security code." : (!new RegExp(`^\\d{${need}}$`).test(x) ? `Security code should be ${need} digits.` : ""); },
+  bAddress1: x => !x ? "Enter the billing street address." : "",
+  bCity: x => !x ? "Enter the billing city." : "",
+  bPostcode: x => !x ? "Enter the billing ZIP or postal code." : (x.replace(/\W/g,"").length < 5 ? "Check the billing ZIP or postal code." : "")
+};
+const FIELD_LABELS = { fullName:"Full name", email:"Email", phone:"Phone", country:"Country", address1:"Street address", city:"City", region:"State / province", postcode:"ZIP / postal code", access:"Building access", cardNumber:"Card number", cardName:"Name on card", expiry:"Expiry date", cvc:"Security code", bAddress1:"Billing street address", bCity:"Billing city", bPostcode:"Billing ZIP / postal code" };
+const STEP_FIELDS = {
+  shipping: ["fullName","email","phone","country","address1","city","region","postcode","access"],
+  payment: () => ["cardNumber","cardName","expiry","cvc", ...(state.billing.same ? [] : ["bAddress1","bCity","bPostcode"])]
+};
+
+function setFieldError(id, msg){
+  const input = document.getElementById(id), field = input.closest(".field"), err = document.getElementById(id + "-err");
+  if (msg){
+    field.classList.add("invalid"); field.classList.remove("valid");
+    input.setAttribute("aria-invalid","true");
+    err.innerHTML = ERR_ICON + `<span>${esc(msg)}</span>`;
+  } else {
+    field.classList.remove("invalid");
+    input.removeAttribute("aria-invalid");
+    err.innerHTML = "";
+    if (input.value.trim() && input.tagName !== "SELECT") field.classList.add("valid"); else field.classList.remove("valid");
+  }
+}
+function validateField(id){ const msg = VALIDATORS[id](v(id)); setFieldError(id, msg); return msg; }
+
+function showErrorSummary(step, errors){
+  const slot = $(`section[data-step="${step}"] .err-summary-slot`);
+  if (!errors.length){ slot.innerHTML = ""; return; }
+  slot.innerHTML = `<div class="alert alert-err" role="alert" tabindex="-1">${ERR_ICON}<div>
+    <h3>${errors.length === 1 ? "There's 1 thing to fix" : `There are ${errors.length} things to fix`}</h3>
+    <ul>${errors.map(e => `<li><a href="#${e.id}" data-jump="${e.id}">${esc(e.msg)}</a></li>`).join("")}</ul></div></div>`;
+  return slot.firstElementChild;
+}
+function clearErrorSummaryIfFixed(step){
+  const slot = $(`section[data-step="${step}"] .err-summary-slot`);
+  if (!slot || !slot.firstElementChild) return;
+  const ids = $$("a[data-jump]", slot).map(a => a.dataset.jump);
+  if (ids.every(id => !document.getElementById(id).closest(".field, .fgroup").classList.contains("invalid"))) slot.innerHTML = "";
+}
+
+function validateStep(step){
+  const errors = [];
+  if (step === "cart"){
+    return totals().count > 0;
+  }
+  if (step === "delivery"){
+    const dateOk = !!state.delivery.date, slotOk = !!state.delivery.slot;
+    setGroupError("g-date","date-err", dateOk ? "" : "Choose a delivery day.");
+    setGroupError("g-slot","slot-err", slotOk ? "" : (dateOk ? "Choose a time window for that day." : "Choose a time window after picking a day."));
+    if (!dateOk) errors.push({ id:"g-date", msg:"Choose a delivery day." });
+    if (!slotOk) errors.push({ id:"g-slot", msg:"Choose a time window." });
+  } else {
+    const ids = typeof STEP_FIELDS[step] === "function" ? STEP_FIELDS[step]() : STEP_FIELDS[step];
+    ids.forEach(id => { const m = validateField(id); if (m) errors.push({ id, msg:m }); });
+  }
+  const box = showErrorSummary(step, errors);
+  if (errors.length){
+    if (errors.length === 1) focusField(errors[0].id); else box && box.focus();
+    return false;
+  }
+  return true;
+}
+function setGroupError(groupId, errId, msg){
+  const g = document.getElementById(groupId);
+  g.classList.toggle("invalid", !!msg);
+  document.getElementById(errId).innerHTML = msg ? ERR_ICON + `<span>${esc(msg)}</span>` : "";
+}
+function focusField(id){
+  const el = document.getElementById(id);
+  const target = el.matches("fieldset") ? (el.querySelector("input:checked:not(:disabled)") || el.querySelector("input:not(:disabled)")) : el;
+  if (!target) return;
+  target.focus({ preventScroll:true });
+  (el.closest(".field") || el).scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"center" });
+}
+
+/* ---------- Rendering ---------- */
+function renderStepper(){
+  const cur = STEPS.indexOf(state.step);
+  $("#steps").innerHTML = STEPS.map((s, i) => {
+    const done = i < cur && i <= state.reached && state.step !== "done" || (state.step === "done" && i < 4);
+    const isCur = i === cur;
+    const clickable = state.step !== "done" && i !== cur && i <= state.reached && s !== "done";
+    const cls = [isCur ? "current" : "", (done || clickable) ? "done" : ""].join(" ");
+    const status = isCur ? " (current step)" : (done ? " (completed)" : "");
+    return `<li><button type="button" class="step-btn ${cls}" data-goto="${s}" ${clickable ? "" : 'tabindex="-1" aria-disabled="true"'} ${isCur ? 'aria-current="step"' : ""} aria-label="Step ${i+1}: ${STEP_LABELS[s]}${status}">
+      <span class="bar"></span><span class="lbl">${TICK.replace('aria-hidden','class="tick" aria-hidden')}<span class="num">${i+1}.</span> ${STEP_LABELS[s]}</span></button></li>`;
+  }).join("");
+}
+
+function renderCart(){
+  const t = totals();
+  const list = $("#cart-list");
+  $("#cart-empty").hidden = t.count > 0;
+  list.hidden = t.count === 0;
+  $("#promo-area").hidden = t.count === 0;
+  $("#cart-sub").textContent = t.count ? `${t.count} ${t.count === 1 ? "item" : "items"} · Review your pieces before we arrange delivery.` : "";
+  list.innerHTML = t.items.map(l => `
+    <li class="cart-item">
+      <div class="thumb">${ART[l.p.art]}</div>
+      <div>
+        <div class="ci-top">
+          <div><p class="ci-name">${esc(l.p.name)}</p><p class="ci-meta">${esc(l.p.variant)}</p>
+            <p class="stock ${l.p.stock <= 3 ? "low" : ""}">${l.p.stock <= 3 ? `Only ${l.p.stock} left` : "In stock"}</p></div>
+          <div class="ci-price">${money(l.p.price * l.qty)}${l.qty > 1 ? `<div class="ci-unit">${money(l.p.price)} each</div>` : ""}</div>
+        </div>
+        <div class="ci-bottom">
+          <div class="qty" role="group" aria-label="Quantity for ${esc(l.p.name)}">
+            <button type="button" data-dec="${l.id}" aria-label="Decrease quantity" ${l.qty <= 1 ? "disabled" : ""}>−</button>
+            <output aria-live="polite" aria-label="Quantity">${l.qty}</output>
+            <button type="button" data-inc="${l.id}" aria-label="Increase quantity" ${l.qty >= Math.min(MAX_QTY, l.p.stock) ? "disabled" : ""}>+</button>
+          </div>
+          <button type="button" class="btn-link" data-remove="${l.id}">Remove<span class="sr-only"> ${esc(l.p.name)}</span></button>
+        </div>
+      </div>
+    </li>`).join("");
+  const applied = state.promo && PROMOS[state.promo];
+  $("#promo-form").hidden = !!applied;
+  const pa = $("#promo-applied"); pa.hidden = !applied;
+  if (applied) pa.innerHTML = `<span><strong>${esc(state.promo)}</strong> applied — ${PROMOS[state.promo].label}</span><button type="button" class="btn-link" id="remove-promo" style="color:#14532d">Remove</button>`;
+}
+
+function renderSummary(){
+  const t = totals();
+  const isDone = state.step === "done";
+  const remaining = FREE_DELIVERY_OVER - t.net;
+  $("#toggle-total").textContent = money(t.total);
+  $("#summary-body").innerHTML = t.count === 0 ? `<p class="hint" style="padding:12px 0">Your cart is empty.</p>` : `
+    <ul class="mini-list">${t.items.map(l => `
+      <li class="mini"><div class="thumb">${ART[l.p.art]}<span class="badge" aria-label="Quantity ${l.qty}">${l.qty}</span></div>
+      <div><div class="n">${esc(l.p.name)}</div><div class="v">${esc(l.p.variant)}</div></div>
+      <div class="p">${money(l.p.price * l.qty)}</div></li>`).join("")}</ul>
+    <dl class="totals">
+      <div><dt>Subtotal</dt><dd>${money(t.subtotal)}</dd></div>
+      ${t.discount ? `<div class="discount"><dt>Discount (${esc(state.promo)})</dt><dd>−${money(t.discount)}</dd></div>` : ""}
+      <div><dt>White-glove delivery</dt><dd>${t.delivery ? money(t.delivery) : '<span class="free">Free</span>'}</dd></div>
+      ${t.slotFee ? `<div><dt>Evening window</dt><dd>${money(t.slotFee)}</dd></div>` : ""}
+      ${t.assembly ? `<div><dt>Assembly &amp; placement</dt><dd>${money(t.assembly)}</dd></div>` : ""}
+      <div><dt>Estimated tax</dt><dd>${money(t.tax)}</dd></div>
+      <div class="grand"><dt>Total</dt><dd>${money(t.total)}</dd></div>
+    </dl>
+    ${remaining > 0 && !isDone ? `<div class="ship-progress">Add ${money(remaining)} more for free delivery.<div class="track"><div class="fill" style="width:${Math.min(100, t.net / FREE_DELIVERY_OVER * 100)}%"></div></div></div>` : ""}
+    <ul class="perks">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12l2-2 4 4 10-10 2 2-12 12z"/></svg>100-night home trial</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>Two-person delivery to any room</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg>Free returns within 30 days</li>
+    </ul>`;
+}
+
+function renderDelivery(){
+  const dates = availableDates();
+  if (state.delivery.date && !dates.some(d => d.iso === state.delivery.date && !d.closed)) { state.delivery.date = ""; state.delivery.slot = ""; }
+  $("#dates").innerHTML = dates.map(d => {
+    const id = "d-" + d.iso;
+    const dow = d.date.toLocaleDateString("en-US",{weekday:"short"});
+    const mon = d.date.toLocaleDateString("en-US",{month:"short"});
+    return `<div class="chip"><input type="radio" name="date" id="${id}" value="${d.iso}" ${d.closed ? "disabled" : ""} ${state.delivery.date === d.iso ? "checked" : ""}>
+      <label for="${id}" aria-label="${longDate(d.iso)}${d.closed ? ", no deliveries" : ""}"><span class="dow">${dow}</span><span class="day">${d.date.getDate()}</span><span class="mon">${d.closed ? "Closed" : mon}</span></label></div>`;
+  }).join("");
+  renderSlots();
+  $("#assembly").checked = state.delivery.assembly;
+  $("#haulaway").checked = state.delivery.haulaway;
+}
+function renderSlots(){
+  const date = state.delivery.date;
+  $("#slots").innerHTML = SLOTS.map(s => {
+    const full = date ? soldOut(date, s.id) : false;
+    const dis = !date || full;
+    return `<div class="slot"><input type="radio" name="slot" id="s-${s.id}" value="${s.id}" ${dis ? "disabled" : ""} ${state.delivery.slot === s.id && !dis ? "checked" : ""}>
+      <label for="s-${s.id}"><span><span class="s-name">${s.name}</span><br><span class="s-time">${s.time}</span></span>
+      <span class="s-fee">${full ? "Fully booked" : (s.fee ? "+" + money(s.fee) : "Included")}</span></label></div>`;
+  }).join("");
+}
+
+function addrText(a, multiline){
+  const lines = [a.fullName, [a.address1, a.address2].filter(Boolean).join(", "), `${a.city}, ${a.region} ${a.postcode}`, a.country === "CA" ? "Canada" : "United States"];
+  return lines.map(esc).join(multiline ? "<br>" : ", ");
+}
+function slotText(d){
+  const s = SLOTS.find(x => x.id === d.slot);
+  return d.date && s ? `${longDate(d.date)}<br>${s.name}, ${s.time}` : "—";
+}
+function renderReview(){
+  $("#review").innerHTML = `
+    <div class="review-box"><div><div class="rk">Ship to</div><div class="rv">${addrText(state.addr, true)}</div></div><button type="button" class="btn-link" data-goto="shipping">Edit<span class="sr-only"> shipping address</span></button></div>
+    <div class="review-box"><div><div class="rk">Delivery</div><div class="rv">${slotText(state.delivery)}${state.delivery.assembly ? "<br>With assembly" : ""}</div></div><button type="button" class="btn-link" data-goto="delivery">Edit<span class="sr-only"> delivery time</span></button></div>`;
+  $("#billing-preview").textContent = `${state.addr.address1}, ${state.addr.city}`;
+  $("#sameBilling").checked = state.billing.same;
+  $("#billing-fields").hidden = state.billing.same;
+}
+
+function renderConfirmation(){
+  const o = state.order; if (!o) return;
+  const s = SLOTS.find(x => x.id === o.delivery.slot);
+  $("#confirm").innerHTML = `
+    <div class="confirm-hero">
+      <div class="check-circle">${TICK}</div>
+      <h2 id="h-done" tabindex="-1">Thank you, ${esc(o.addr.fullName.split(" ")[0])}!</h2>
+      <p>Your order is confirmed. We've sent a receipt to <strong>${esc(o.addr.email)}</strong>.</p>
+      <span class="order-no">Order ${esc(o.number)}</span>
+    </div>
+    <div class="confirm-grid">
+      <div class="review-box"><div><div class="rk">Delivering to</div><div class="rv">${addrText(o.addr, true)}</div></div></div>
+      <div class="review-box"><div><div class="rk">Arriving</div><div class="rv">${longDate(o.delivery.date)}<br>${s.name}, ${s.time}${o.delivery.assembly ? "<br>Assembly included" : ""}</div></div></div>
+      <div class="review-box"><div><div class="rk">Paid</div><div class="rv">${money(o.totals.total)} · ${esc(o.card)}</div></div></div>
+      <div class="review-box"><div><div class="rk">Items</div><div class="rv">${o.items.map(i => `${i.qty} × ${esc(PRODUCTS[i.id].name)}`).join("<br>")}</div></div></div>
+    </div>
+    <h3 class="group-title">What happens next</h3>
+    <ol class="timeline">
+      <li class="on"><div></div><div><strong>Order placed</strong><span>Just now</span></div></li>
+      <li><div></div><div><strong>Prepared at our warehouse</strong><span>We'll email when it leaves</span></div></li>
+      <li><div></div><div><strong>Driver calls ahead</strong><span>30 minutes before arrival at ${esc(o.addr.phone)}</span></div></li>
+      <li><div></div><div><strong>Delivered &amp; placed</strong><span>${longDate(o.delivery.date)}, ${s.time}</span></div></li>
+    </ol>
+    <div class="confirm-actions">
+      <button type="button" class="btn btn-ghost" id="print-btn">Print receipt</button>
+      <button type="button" class="btn btn-primary" id="new-order">Start a new order</button>
+    </div>`;
+}
+
+function fillForm(){
+  Object.entries(state.addr).forEach(([k,val]) => { const el = document.getElementById(k); if (el) el.value = val; });
+  ["bAddress1","bCity","bPostcode"].forEach(k => document.getElementById(k).value = state.billing[k] || "");
+  applyCountryLabels();
+}
+function applyCountryLabels(){
+  const ca = $("#country").value === "CA";
+  $("#region-label").textContent = ca ? "Province" : "State";
+  $("#postcode-label").textContent = ca ? "Postal code" : "ZIP code";
+  $("#postcode").setAttribute("inputmode", ca ? "text" : "numeric");
+}
+
+function updateActions(){
+  const step = state.step, next = $("#next-btn"), back = $("#back-btn"), t = totals();
+  $("#actions").hidden = step === "done";
+  back.hidden = step === "cart";
+  const prev = STEPS[STEPS.indexOf(step) - 1];
+  $("#back-sr").textContent = prev ? ` to ${STEP_LABELS[prev].toLowerCase()}` : "";
+  if (paying) return;
+  const labels = { cart:"Continue to shipping", shipping:"Continue to delivery", delivery:"Continue to payment", payment:`Pay ${money(t.total)}` };
+  next.innerHTML = step === "payment" ? `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>${labels.payment}` : labels[step] || "";
+  next.disabled = step === "cart" && t.count === 0;
+}
+
+function renderAll(){
+  renderStepper(); renderCart(); renderSummary(); updateActions();
+  if (state.step === "delivery") renderDelivery();
+  if (state.step === "payment") renderReview();
+  if (state.step === "done") renderConfirmation();
+}
+
+/* ---------- Navigation ---------- */
+function goTo(step, { push = true, focus = true } = {}){
+  if (state.order && step !== "done") step = "done";
+  let idx = STEPS.indexOf(step);
+  if (idx < 0) idx = 0;
+  if (!state.order && idx > state.reached) idx = state.reached;
+  if (!state.order && idx === 4) idx = Math.min(state.reached, 3);
+  if (idx > 0 && totals().count === 0 && !state.order) { idx = 0; state.reached = 0; }
+  step = STEPS[idx];
+  state.step = step; save();
+  document.body.dataset.step = step;
+  $$("section.step").forEach(s => s.hidden = s.dataset.step !== step);
+  renderAll();
+  const url = "#" + step;
+  if (push && location.hash !== url) history.pushState({ step }, "", url);
+  else if (!push && location.hash !== url) history.replaceState({ step }, "", url);
+  if (focus){
+    window.scrollTo({ top:0 });
+    const h = $(`section[data-step="${step}"] h2`) || $("#h-done");
+    h && h.focus({ preventScroll:true });
+    document.title = `${STEP_LABELS[step] === "Done" ? "Order confirmed" : STEP_LABELS[step]} · Oakroom checkout`;
+  }
+}
+function advance(){
+  const step = state.step, idx = STEPS.indexOf(step);
+  if (step === "payment") return pay();
+  if (!validateStep(step)) { announce("Please fix the highlighted fields."); return; }
+  state.reached = Math.max(state.reached, idx + 1);
+  goTo(STEPS[idx + 1]);
+}
+
+/* ---------- Payment ---------- */
+let paying = false, networkFailedOnce = false;
+function setPaying(on){
+  paying = on;
+  const btn = $("#next-btn");
+  btn.disabled = on; btn.setAttribute("aria-busy", on ? "true" : "false");
+  $("#back-btn").disabled = on;
+  $("#pay-fields").disabled = on;
+  $$('#review button').forEach(b => b.disabled = on);
+  if (on) btn.innerHTML = `<span class="spinner" aria-hidden="true"></span>Processing payment…`;
+  else updateActions();
+}
+function payAlert(title, msg, retryable){
+  const box = $("#pay-alert");
+  box.innerHTML = `<div class="alert alert-err" role="alert" tabindex="-1">${ERR_ICON}<div><h3>${esc(title)}</h3><p>${esc(msg)}</p>
+    <p style="margin-top:6px">You have not been charged. Your address and delivery slot are saved.</p>
+    <div class="alert-actions">${retryable ? `<button type="button" class="btn btn-ghost btn-sm" id="retry-pay">Try again</button>` : ""}<button type="button" class="btn btn-ghost btn-sm" id="new-card">Use a different card</button></div></div></div>`;
+  box.firstElementChild.focus();
+  box.scrollIntoView({ block:"start" });
+}
+function pay(){
+  if (paying) return;
+  $("#pay-alert").innerHTML = "";
+  if (!validateStep("payment")) { announce("Please fix the highlighted payment fields."); return; }
+  const num = digits(v("cardNumber"));
+  setPaying(true);
+  announce("Processing payment, please wait.");
+  setTimeout(() => {
+    setPaying(false);
+    if (num === "4000000000000002") return payAlert("Your card was declined", "Your bank declined this payment. Check the card details, try another card, or contact your bank.", false);
+    if (num === "4000000000009995") return payAlert("Insufficient funds", "This card doesn't have enough available credit for this order. Try a different card.", false);
+    if (num === "4000000000000119" && !networkFailedOnce) { networkFailedOnce = true; return payAlert("We couldn't reach the payment network", "This is usually temporary. Please try again in a moment.", true); }
+    const t = totals();
+    const brand = cardBrand(num);
+    state.order = {
+      number: "OAK-" + Math.random().toString(36).slice(2, 8).toUpperCase(),
+      items: state.cart.map(i => ({...i})), addr: {...state.addr}, delivery: {...state.delivery}, totals: t,
+      card: `${brand === "amex" ? "Amex" : brand === "mastercard" ? "Mastercard" : "Visa"} ending ${num.slice(-4)}`
+    };
+    state.reached = 4;
+    ["cardNumber","cardName","expiry","cvc"].forEach(id => { document.getElementById(id).value = ""; });
+    goTo("done", { push:false });
+    announce("Payment successful. Your order is confirmed.");
+  }, 1700);
+}
+
+/* ---------- Toast / undo ---------- */
+let toastTimer, undoFn;
+function toast(msg, undo){
+  $("#toast-msg").textContent = msg; undoFn = undo;
+  $("#toast-undo").hidden = !undo;
+  $("#toast").classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, 6000);
+}
+function hideToast(){ $("#toast").classList.remove("show"); undoFn = null; }
+
+/* ---------- Events ---------- */
+const form = $("#checkout");
+form.addEventListener("submit", e => { e.preventDefault(); advance(); });
+$("#back-btn").addEventListener("click", () => { const i = STEPS.indexOf(state.step); if (i > 0) goTo(STEPS[i - 1]); });
+
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-goto]");
+  if (g && !g.getAttribute("aria-disabled")){
+    const target = g.dataset.goto, ti = STEPS.indexOf(target), ci = STEPS.indexOf(state.step);
+    if (ti === ci) return;
+    if (ti > ci && state.step !== "cart" && !validateStep(state.step)) return; // forward jumps must pass current step
+    if (ti > ci && state.step === "cart" && totals().count === 0) return;
+    goTo(target); return;
+  }
+  const jump = e.target.closest("[data-jump]");
+  if (jump){ e.preventDefault(); focusField(jump.dataset.jump); return; }
+  const inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]"), rem = e.target.closest("[data-remove]");
+  if (inc || dec){
+    const id = (inc || dec).dataset[inc ? "inc" : "dec"], line = state.cart.find(l => l.id === id);
+    const max = Math.min(MAX_QTY, PRODUCTS[id].stock);
+    line.qty = Math.max(1, Math.min(max, line.qty + (inc ? 1 : -1)));
+    save(); renderCart(); renderSummary(); updateActions();
+    const btn = $(`[data-${inc ? "inc" : "dec"}="${id}"]`);
+    if (btn && !btn.disabled) btn.focus(); else $(`[data-${inc ? "dec" : "inc"}="${id}"]`)?.focus();
+    announce(`${PRODUCTS[id].name} quantity ${line.qty}`);
+    return;
+  }
+  if (rem){
+    const id = rem.dataset.remove, idx = state.cart.findIndex(l => l.id === id), line = state.cart[idx];
+    state.cart.splice(idx, 1);
+    if (!state.cart.length) state.reached = 0;
+    save(); renderAll();
+    toast(`Removed ${PRODUCTS[id].name}`, () => { state.cart.splice(idx, 0, line); save(); renderAll(); announce(`${PRODUCTS[id].name} restored`); });
+    ($$("[data-remove]")[Math.min(idx, state.cart.length - 1)] || $("#restore-cart")).focus();
+    return;
+  }
+  if (e.target.closest("#remove-promo")){ state.promo = null; save(); renderAll(); $("#promo").value = ""; $("#promo").focus(); announce("Promo code removed"); return; }
+  if (e.target.closest("#retry-pay")){ pay(); return; }
+  if (e.target.closest("#new-card")){
+    $("#pay-alert").innerHTML = "";
+    ["cardNumber","expiry","cvc"].forEach(id => { document.getElementById(id).value = ""; setFieldError(id, ""); });
+    $("#brand-tag").hidden = true;
+    $("#cardNumber").focus(); return;
+  }
+  const fill = e.target.closest("[data-fill]");
+  if (fill){
+    $("#cardNumber").value = formatCard(fill.dataset.fill);
+    if (!v("cardName")) $("#cardName").value = state.addr.fullName;
+    if (!v("expiry")) $("#expiry").value = "12 / 29";
+    if (!v("cvc")) $("#cvc").value = "123";
+    updateBrand();
+    ["cardNumber","cardName","expiry","cvc"].forEach(validateField);
+    $("#pay-alert").innerHTML = "";
+    return;
+  }
+  if (e.target.closest("#print-btn")){ window.print(); return; }
+  if (e.target.closest("#new-order")){ state = freshState(); networkFailedOnce = false; touched.clear(); save(); fillForm();
+    $$(".field").forEach(f => f.classList.remove("valid","invalid")); $$("[aria-invalid]").forEach(i => i.removeAttribute("aria-invalid"));
+    $$(".err-summary-slot, #pay-alert").forEach(s => s.innerHTML = ""); $("#brand-tag").hidden = true; goTo("cart", { push:false }); return; }
+  if (e.target.closest("#restore-cart")){ state.cart = DEFAULT_CART.map(i => ({...i})); save(); renderAll(); $("#h-cart").focus(); return; }
+});
+
+$("#toast-undo").addEventListener("click", () => { const f = undoFn; hideToast(); f && f(); });
+
+function applyPromo(){
+  const code = v("promo").toUpperCase().replace(/\s/g,"");
+  const err = !code ? "Enter a promo code first." : (!PROMOS[code] ? `“${code}” isn't a valid code. Check the spelling or try another.` : "");
+  setFieldError("promo", err);
+  if (err) { $("#promo").focus(); return; }
+  state.promo = code; save(); renderAll();
+  announce(`Promo ${code} applied: ${PROMOS[code].label}`);
+  $("#remove-promo").focus();
+}
+$("#apply-promo").addEventListener("click", applyPromo);
+$("#promo").addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); applyPromo(); } });
+$("#promo").addEventListener("input", () => { if ($("#f-promo").classList.contains("invalid")) setFieldError("promo",""); });
+
+// Field validation: on blur (once touched), live re-check while invalid
+const touched = new Set();
+Object.keys(VALIDATORS).forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener("blur", () => { if (el.value.trim() || touched.has(id)) { touched.add(id); validateField(id); clearErrorSummaryIfFixed(state.step); } });
+  el.addEventListener("input", () => {
+    if (el.closest(".field").classList.contains("invalid")) { validateField(id); clearErrorSummaryIfFixed(state.step); }
+    persistField(id, el.value);
+    if (["cardNumber","expiry","cvc"].includes(id)) $("#pay-alert").innerHTML = "";
+  });
+  el.addEventListener("change", () => { persistField(id, el.value); if (el.tagName === "SELECT") { touched.add(id); validateField(id); clearErrorSummaryIfFixed(state.step); } });
+});
+["address2","notes"].forEach(id => document.getElementById(id).addEventListener("input", e => persistField(id, e.target.value)));
+function persistField(id, val){
+  if (id in state.addr) { state.addr[id] = val; save(); }
+  else if (id in state.billing) { state.billing[id] = val; save(); }
+}
+$("#country").addEventListener("change", () => { applyCountryLabels(); if (v("postcode")) validateField("postcode"); if (touched.has("region")) validateField("region"); });
+
+// Card formatting
+function formatCard(d){
+  d = digits(d).slice(0, cardBrand(digits(d)) === "amex" ? 15 : 16);
+  if (cardBrand(d) === "amex") return [d.slice(0,4), d.slice(4,10), d.slice(10)].filter(Boolean).join(" ");
+  return d.replace(/(.{4})(?=.)/g, "$1 ");
+}
+function updateBrand(){
+  const b = cardBrand(digits(v("cardNumber"))), tag = $("#brand-tag");
+  tag.hidden = !b; tag.textContent = b === "mastercard" ? "MC" : b;
+  $("#cvc").maxLength = b === "amex" ? 4 : 3;
+}
+$("#cardNumber").addEventListener("input", e => {
+  const el = e.target, before = el.value.slice(0, el.selectionStart).replace(/\D/g,"").length;
+  el.value = formatCard(el.value);
+  let pos = 0, seen = 0; while (pos < el.value.length && seen < before){ if (/\d/.test(el.value[pos])) seen++; pos++; }
+  if (document.activeElement === el) el.setSelectionRange(pos, pos);
+  updateBrand();
+});
+$("#expiry").addEventListener("input", e => {
+  const el = e.target; let d = digits(el.value).slice(0,4);
+  if (d.length === 1 && +d > 1) d = "0" + d;
+  const deleting = e.inputType && e.inputType.startsWith("delete");
+  el.value = d.length > 2 ? `${d.slice(0,2)} / ${d.slice(2)}` : (d.length === 2 && !deleting ? `${d} / ` : d);
+});
+$("#cvc").addEventListener("input", e => { e.target.value = digits(e.target.value).slice(0, e.target.maxLength); });
+$("#sameBilling").addEventListener("change", e => {
+  state.billing.same = e.target.checked; save();
+  $("#billing-fields").hidden = e.target.checked;
+  if (!e.target.checked) $("#bAddress1").focus();
+});
+
+// Delivery selections
+$("#dates").addEventListener("change", e => {
+  if (e.target.name !== "date") return;
+  state.delivery.date = e.target.value;
+  let msg = "";
+  if (state.delivery.slot && soldOut(state.delivery.date, state.delivery.slot)) { state.delivery.slot = ""; msg = " Your previous time window is fully booked on this day, please choose another."; }
+  save(); renderSlots(); renderSummary(); updateActions();
+  setGroupError("g-date","date-err","");
+  if ($("#g-slot").classList.contains("invalid") || msg) setGroupError("g-slot","slot-err", state.delivery.slot ? "" : "Choose a time window for this day.");
+  clearErrorSummaryIfFixed("delivery");
+  announce(longDate(state.delivery.date) + " selected." + msg);
+});
+$("#slots").addEventListener("change", e => {
+  if (e.target.name !== "slot") return;
+  state.delivery.slot = e.target.value; save();
+  renderSummary(); updateActions();
+  setGroupError("g-slot","slot-err",""); clearErrorSummaryIfFixed("delivery");
+});
+$("#assembly").addEventListener("change", e => { state.delivery.assembly = e.target.checked; save(); renderSummary(); updateActions(); });
+$("#haulaway").addEventListener("change", e => { state.delivery.haulaway = e.target.checked; save(); });
+
+// Summary toggle (mobile)
+$("#summary-toggle").addEventListener("click", e => {
+  const open = e.currentTarget.getAttribute("aria-expanded") !== "true";
+  e.currentTarget.setAttribute("aria-expanded", open);
+  $("#summary").classList.toggle("open", open);
+});
+
+// Browser back/forward
+window.addEventListener("popstate", () => goTo(location.hash.slice(1) || "cart", { push:false }));
+
+/* ---------- Init ---------- */
+fillForm();
+const initial = state.order ? "done" : (location.hash.slice(1) || state.step || "cart");
+goTo(initial, { push:false, focus:false });
+document.title = `${state.order ? "Order confirmed" : STEP_LABELS[state.step]} · Oakroom checkout`;
+})();
+</script>
+</body>
+</html>

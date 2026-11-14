@@ -1,0 +1,106 @@
+{
+  "target": "without/index.html",
+  "widths": {
+    "320": {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "offenders": []
+    },
+    "375": {
+      "viewport": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "offenders": []
+    },
+    "390": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "offenders": []
+    },
+    "768": {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "offenders": []
+    },
+    "1024": {
+      "viewport": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "offenders": []
+    },
+    "1440": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "offenders": []
+    }
+  },
+  "gates": {
+    "G2_layout": "Passed",
+    "G3_contrast_sample": "Failed",
+    "G4_operability_auto": "Passed",
+    "G10_reduced_motion": "Failed",
+    "G11_no_autoplay_audio": "Passed"
+  },
+  "a11y": {
+    "unlabeledHiddenControls": [],
+    "lang": "en",
+    "h1": 1,
+    "headingSkips": [],
+    "unlabeledControls": [],
+    "unnamedButtonsLinks": [],
+    "imagesWithoutAlt": [],
+    "deadLinks": [
+      "a.logo",
+      "a",
+      "a"
+    ],
+    "autoplayMedia": []
+  },
+  "contrast_failures": [
+    {
+      "text": "Desk lighting \u00b7 Modular",
+      "ratio": 3.27,
+      "need": 4.5,
+      "fontSize": 12,
+      "color": "rgb(138, 131, 120)"
+    },
+    {
+      "text": "Reach 32 cm",
+      "ratio": 3.57,
+      "need": 4.5,
+      "fontSize": 12,
+      "color": "rgb(138, 131, 120)"
+    },
+    {
+      "text": "01",
+      "ratio": 4.48,
+      "need": 4.5,
+      "fontSize": 13,
+      "color": "rgb(154, 106, 34)"
+    }
+  ],
+  "audio": {
+    "sourcesBeforeGesture": 0,
+    "ctxBeforeGesture": 0,
+    "runningCtx": 0,
+    "mediaPlayBeforeGesture": []
+  },
+  "motion": {
+    "running_normal": 1,
+    "running_reduced": 1,
+    "reduced_examples": [
+      {
+        "name": "spin",
+        "target": "div.spinner",
+        "iterations": "Infinity",
+        "duration": 0.01
+      }
+    ]
+  },
+  "console_errors": [],
+  "note": "Automated checks find mechanical defects only. Inspect the screenshots, tab through the page, and test interactions yourself."
+}

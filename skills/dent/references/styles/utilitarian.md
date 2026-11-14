@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Warm light grey or off-white surface (#E8E6E1), near-black text, mid-grey secondary; **one signal color** (safety orange #FF4F00, or signal yellow/green) used only for active/primary/alerts. Dark variant: graphite (#1A1A1A) with the same signal. |
-| Typography | Grotesk for headings (Inter Tight, Neue Haas-style grotesks, Space Grotesk) + **monospace for labels, numbers and metadata** (JetBrains Mono, IBM Plex Mono). Labels small (11–12px) uppercase with +6–10% tracking. Big tabular numerals. |
+| Typography | Grotesk for headings (Switzer, Cabinet Grotesk, Neue Haas-style grotesks, Space Grotesk) + **monospace for labels, numbers and metadata** (JetBrains Mono, IBM Plex Mono). Labels small (11–12px) uppercase with +6–10% tracking. Big tabular numerals. |
 | Spacing / layout | Dense, strict grid with visible 1px rules dividing cells; compact density; numbered sections; spec-table layouts. |
 | Radius | 0–4px. Controls may be 2px; containers 0–4px. |
 | Borders | 1px hairlines in mid-grey define structure instead of shadows. |
@@ -45,7 +45,7 @@
   --bg:#E8E6E1; --surface:#F2F1EE; --rule:#B9B6AE;
   --text:#161616; --text-2:#5A5A55;
   --signal:#FF4F00; --on-signal:#161616; --signal-text:#C23A00;
-  --font-sans:"Inter Tight","Inter",system-ui,sans-serif;
+  --font-sans:"Switzer","Satoshi","Manrope",system-ui,sans-serif;
   --font-mono:"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace;
   --label-size:11px; --label-tracking:.08em;
   --radius-control:2px; --radius-container:0;

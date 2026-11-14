@@ -9,7 +9,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-111?style=flat-square)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-SKILL.md-111?style=flat-square)](https://agentskills.io)
-[![Version](https://img.shields.io/badge/version-2.0.0-E8461E?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.1.0-E8461E?style=flat-square)](CHANGELOG.md)
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-111?style=flat-square)](skills/dent/references/styles/_styles-index.md)
 [![Commands](https://img.shields.io/badge/commands-30-111?style=flat-square)](docs/COMMANDS.md)
 
@@ -99,6 +99,33 @@ Don't take our word for it. Give your agent the **same prompt twice**, once with
 4. Open both `index.html` files side by side on your phone and desktop, and share your screenshots via a pull request or a [Benchmark result issue](https://github.com/jeelnadaa/DENT/issues/new?template=benchmark_result.md).
 
 Full rules, scoring sheet and a screenshot script: **[benchmark/](benchmark/README.md)** · Full test protocol: **[evals/protocol.md](evals/protocol.md)**
+
+### Latest results: 8 builds with and without DENT (Claude Opus 5.5)
+
+Same agent (Claude Code), same model (Claude Opus 5.5, medium effort), same prompt, built twice: once without DENT and once with DENT 2.0. Full summary: **[RESULTS-SUMMARY.md](benchmark/RESULTS-SUMMARY.md)**.
+
+| Test | Without DENT | With DENT | Comparable? |
+|---|---|---|---|
+| [Brewlog marketing site](benchmark/results/brewlog-claude-code-opus-5.5-medium-2026-11-14/RESULT.md) | 38 | **44** | Yes |
+| [SaaS analytics dashboard](benchmark/results/saas-dashboard-claude-code-opus-5.5-medium-2026-11-14/RESULT.md) | 39 | **43** | Yes |
+| [Checkout with failure recovery](benchmark/results/checkout-flow-claude-code-opus-5.5-medium-2026-11-14/RESULT.md) | 39 | **44** | Partly |
+| [Kanban + command palette + drawer](benchmark/results/project-app-claude-code-opus-5.5-medium-2026-11-14/RESULT.md) | 37 | **43** | Partly |
+| [Scroll-story launch page](benchmark/results/scroll-story-launch-claude-code-opus-5.5-medium-2026-11-14/RESULT.md) | 37 | **45** | Partly |
+| [Meditation timer with sound](benchmark/results/meditation-sound-claude-code-opus-5.5-medium-2026-11-14/RESULT.md) | 39 | **44** | Partly |
+| [3D product viewer](benchmark/results/3d-product-viewer-claude-code-opus-5.5-medium-2026-11-14/RESULT.md) | 36 | **44** | Partly |
+| [45 s launch video](benchmark/results/launch-video-claude-code-opus-5.5-medium-2026-11-14/RESULT.md) | 38 | **43** | Partly |
+| **Average (/50)** | **37.9** | **43.8** | |
+
+| | Without DENT | With DENT |
+|---|---|---|
+| Scroll-story launch page | ![Tidal launch page without DENT](benchmark/results/scroll-story-launch-claude-code-opus-5.5-medium-2026-11-14/without-hero-1440.jpg) | ![Tidal launch page with DENT](benchmark/results/scroll-story-launch-claude-code-opus-5.5-medium-2026-11-14/with-hero-1440.jpg) |
+| 3D product viewer | ![Lamp product page without DENT](benchmark/results/3d-product-viewer-claude-code-opus-5.5-medium-2026-11-14/without-hero-1440.jpg) | ![Lamp product page with DENT](benchmark/results/3d-product-viewer-claude-code-opus-5.5-medium-2026-11-14/with-hero-1440.jpg) |
+
+**What the numbers say, honestly:**
+- **Automated checks:** all 7 web builds with DENT passed every automated gate. All 7 without DENT failed at least one: text contrast in all 7, animation that ignores reduced motion in 3, an unlabeled input in 1.
+- **Honesty:** one build without DENT invented "4.8 · 312 reviews". None of the DENT builds invented proof.
+- **Why the gap isn't bigger:** Opus 5.5 is a very strong model, and its pages are good on their own. DENT's lift shows most in correctness, distinctiveness (a concept instead of the template look) and process (plans, specs, self-checks). Expect a bigger gap with smaller models.
+- **Caveats:** the scores come from Claude Opus 5.5, the same model family and DENT's author, so they are not independent. Six of the eight DENT runs got a higher effort level, design feedback or extra features; every difference is listed in [DEVIATIONS](benchmark/results/DEVIATIONS-claude-code-opus-5.5-medium-2026-11-14.md). Human reviews are welcome.
 
 ### Benchmark 1: DENT's own landing page, built with DENT
 
