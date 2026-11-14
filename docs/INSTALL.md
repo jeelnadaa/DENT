@@ -113,7 +113,7 @@ Or use an installed Chrome/Edge with `--channel chrome` / `--channel msedge`. Wi
 
 ## Commands
 
-Plugin installs in Claude Code get 30 slash commands (`/dent:plan`, `/dent:audit`, `/dent:video`…). In every other agent, type the same text (`/dent:plan …`, `/dent plan …` or `dent plan …`) and the skill follows the matching command file. You never need them: plain `/dent` routes automatically. Reference: [COMMANDS.md](COMMANDS.md).
+Plugin installs in Claude Code get 31 slash commands (`/dent:plan`, `/dent:audit`, `/dent:video`…). In every other agent, type the same text (`/dent:plan …`, `/dent plan …` or `dent plan …`) and the skill follows the matching command file. You never need them: plain `/dent` routes automatically. Reference: [COMMANDS.md](COMMANDS.md).
 
 ## Verify the install
 
@@ -122,8 +122,19 @@ DENT is working if the agent's first reply states a one-line plan (for example "
 
 ## Updating
 
-- `skills` CLI: `npx skills update` (or re-run `add`).
-- Plugin: `/plugin marketplace update dent`.
+DENT releases bump the version in `plugin.json`, and Claude Code updates a plugin when its marketplace lists a newer version. The catch: Claude keeps a local copy of each third-party marketplace and doesn't always refresh it (auto-update is off by default for third-party marketplaces), so removing and re-adding the plugin can reinstall the old version.
+
+**Claude Code (app or CLI): update without reinstalling**
+1. In any chat with DENT installed, run **`/dent:update`**. It refreshes DENT's local marketplace copy from GitHub (no Claude settings are edited) and tells you the installed vs available version.
+2. Then do the one step it shows: **Settings → Plugins → DENT → Update**, or `/plugin update dent@dent` followed by `/reload-plugins`, or `claude plugin update dent@dent` in a terminal.
+3. Start a new chat.
+
+Without `/dent:update`: **Settings → Plugins → Marketplaces → dent → Update marketplace**, then update the plugin (or `/plugin marketplace update dent`, then `/plugin update dent@dent`).
+
+**Never miss an update:** enable auto-update for the DENT marketplace (**Plugins → Marketplaces → dent → Enable auto-update**, or `"autoUpdate": true` on its entry under `extraKnownMarketplaces` in your Claude settings). If an update still doesn't show up, run `/dent:update` once; it forces the refresh.
+
+**Other installs:**
+- `skills` CLI: `npx skills update` (or run `add` again).
 - Script/manual: `git pull` in your clone and re-run the installer (it replaces the folder).
 
 Your `DESIGN.md` files live in your projects, not in the skill, so updates never overwrite them.

@@ -43,7 +43,7 @@ Use the **first matching row** for the main command, then add **companion comman
 | Words: copy, headline text, microcopy, error messages, tone | `copy` | — |
 | Logo, brand, identity, name lockup, brand colors | `brand` | `assets`, `sound` (sonic logo) |
 | Favicon, OG image, icons, illustrations, images, licences | `assets` | `brand` |
-| Hover, transitions, micro-interactions, "animate the UI" | `motion` | — |
+| Hover, scroll effects, transitions, micro-interactions, "animate it", "add animations", "more motion", "it feels static" | `motion` | `motion-graphics` for hero/scroll stories |
 | Animated hero, kinetic type, scroll story, animated illustration, generative visuals, GIF/animated SVG | `motion-graphics` | `sound` if sound is mentioned, `3d` if depth is needed |
 | 3D, WebGL, product viewer, Three.js, scene, "rotate the product" | `3d` | `motion-graphics` |
 | Sound, UI sounds, audio feedback, sonic logo, ambience, music for the product | `sound` | `voice` |
@@ -53,6 +53,7 @@ Use the **first matching row** for the main command, then add **companion comman
 | "Score it", "how good is it", "rate it" | `score` | — |
 | "Improve it", "make it better" after a score exists | `improve` | — |
 | Docs, handoff, DESIGN.md, specs for developers | `handoff` | — |
+| "Update DENT", "update the plugin", "I'm on an old version" | `update` | — |
 | New page, site, app, screen, dashboard, flow, onboarding, form, landing page (nothing exists yet) | `create` | `directions` (Polished+), `components`, `motion`, `copy`, `assets` |
 
 **Several deliverables in one request** ("a landing page and a launch video with narration") → run one pipeline per deliverable, in dependency order (the page/brand first, then media that reuses it), sharing one DESIGN.md.
@@ -65,7 +66,7 @@ Each deliverable has a default pipeline. Commands in brackets run only at the ef
 
 | Deliverable | Pipeline |
 |---|---|
-| Landing page / marketing site | [directions: Polished+] → create (recipe `recipes/landing-page.md`) → [type, copy: always inside create] → [motion: Standard+] → [motion-graphics: All-out] → [assets: Polished+] → verify → score → [improve] |
+| Landing page / marketing site | [directions: Polished+] → create (recipe `recipes/landing-page.md`) → [type, copy: always inside create] → **motion (Standard+; ask kinds + intensity, meet the floor)** → [motion-graphics: All-out] → [assets: Polished+] → verify → score → [improve] |
 | App screen / dashboard / flow | [plan: Advanced+] → create or extend (recipe `recipes/app-and-dashboard.md`) → components (if complex widgets) → [motion: Standard+] → verify → score → [improve] |
 | Redesign | audit → plan → [directions: Polished+] → redesign → verify (with regression) → score |
 | Existing UI "make it better" | score → polish → verify → score (show before/after) |
@@ -84,8 +85,9 @@ Before running the pipeline, tell the user in **one line** what you'll do, e.g.:
 > "Plan: I'll explore 2 directions, build the landing page, add motion, check it at 6 screen sizes, and score it. First question: how far should I go?"
 
 ## Step 4: Ask only what the pipeline needs
-Merge the questions all commands in the pipeline need; remove duplicates; ask the most important first, one at a time (`../workflow-questions-and-effort.md`). Effort first (unless stated). Then, only if relevant and unknown:
+Merge the questions all commands in the pipeline need; remove duplicates; ask the most important first, one at a time (`../workflow-questions-and-effort.md`). Respect the question tool's option limit (4 in Claude): split long menus into grouped questions. Effort first (unless stated). Then, only if relevant and unknown:
 - visual: style direction, light/dark, brand colors/fonts;
+- **motion (any visual build at Standard+):** which kinds of motion as a **multi-select** (scroll, hover, hero entrance, micro-interactions, transitions, text, data, layout, ambient, cursor, SVG, 3D, gestures, or "You choose") and the intensity (Subtle / Balanced / Expressive / Cinematic). Script: `../motion/motion-menu.md` §1. Skip only if the user already said what motion they want or "no motion";
 - media: sound on/off, narration voice, video length/platform, **generative tool access** (image/video/voice);
 - content: real proof, screenshots, logo.
 "Don't ask" / non-interactive → defaults, listed at the end.

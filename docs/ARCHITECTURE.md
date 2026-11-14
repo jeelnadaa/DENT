@@ -35,7 +35,7 @@ At **All-out** effort, `workflow/all-out.md` adds a mandatory completeness sweep
 | Path | Holds | Loaded when |
 |---|---|---|
 | `skills/dent/SKILL.md` | Router, workflow summary, laws, non-negotiables, gates, command table, reference map | Always |
-| `skills/dent/commands/` | 30 command definitions: load list, steps, output, never-list | When a command runs (or the router picks it) |
+| `skills/dent/commands/` | 31 command definitions: load list, steps, output, never-list | When a command runs (or the router picks it) |
 | `references/workflow/` | Orchestration, planning + plan audit, execution + scope, verification, scoring + close-out, All-out protocol | Every non-trivial task (only the relevant file) |
 | `references/recipes/` | Step-by-step procedures with gates (landing page, app & dashboard) | Building those deliverables |
 | `references/creative/` | Directions library, hero typography, anti-slop detector | Direction, polish, review |

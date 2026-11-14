@@ -59,6 +59,9 @@ def test_verify() -> None:
     good = run_verify(FIX / "good.html")
     for gate, verdict in good["gates"].items():
         check(verdict == "Passed", f"good.html passes {gate}")
+    inv = good.get("motion_inventory", {})
+    check(inv.get("keyframes", 0) >= 1 and inv.get("reducedMotionQueries", 0) >= 1 and inv.get("transitionRules", -1) >= 0,
+          "motion inventory reports keyframes and reduced-motion queries")
 
 
 def main() -> int:

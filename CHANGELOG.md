@@ -4,6 +4,22 @@ All notable changes to DENT are documented here. Format: [Keep a Changelog](http
 
 ## [Unreleased]
 
+## [2.2.0] — 2026-11-15
+
+### Added
+- **Motion menu** (`references/motion/motion-menu.md`): DENT now **asks which kinds of motion you want** (page load & hero entrance, scroll, hover, micro-interactions, page/view transitions, text, data & numbers, layout, background & ambient, cursor & pointer, illustration & SVG, loading & feedback, 3D & depth, gestures, or "You choose") and **how strong** (Subtle, Balanced, Expressive, Cinematic). Includes a 4-options-per-question flow for agents whose question tool is limited, a catalogue of concrete effects per kind, recommended sets by product type, and an M-ID motion plan.
+- **Minimum motion per effort level** (motion floor): e.g. Standard landing pages need a hero entrance, varied scroll reveals, one scroll-linked moment, hover on every interactive element and micro-interactions.
+- **Motion inventory** in `verify_page.py`: counts keyframes, transitions, hover rules (and whether they are pointer-guarded), scroll-driven animations, view transitions, SVG animations, reduced-motion queries and motion libraries, and warns when a page looks under-animated. Covered by `scripts/test_tools.py`.
+
+- **`/dent:update`** + `skills/dent/scripts/update_plugin.py`: update the plugin without reinstalling. It refreshes DENT's local marketplace copy from GitHub (a known gap: third-party marketplaces don't auto-update by default and can go stale), reports installed vs available version, and gives the one remaining step. `docs/INSTALL.md` has a full Updating section (auto-update setting included).
+- **Fixes from the Opus 5.5 test runs:** question menus respect the 4-option limit of Claude's question tool (the effort question had 5); a prompt that merely mentions a benchmark is no longer treated as non-interactive; `SCORECARD.md` is written to the project at Standard+; every delivery ends by asking for approval to write DESIGN.md; verification notes for frozen animations in agent browser panes, `file://` CORS and missing WebGL; plugin command wrappers say where to find SKILL.md if it isn't loaded.
+- `verify_page.py` warns when hover rules aren't restricted to mouse/trackpad devices (they stick after a tap on phones).
+
+### Changed
+- `/dent:motion` rewritten: ask kinds + intensity, plan every item, build all of them, verify planned vs built. `/dent:create`, `/dent:polish`, `/dent:motion-graphics`, the router, the question list, both recipes and the "don't ask" defaults now include the motion question and floor.
+- Gate G10 now requires every planned motion item to be built and the effort-level floor to be met.
+- "Restraint" redefined as purpose and quality, not absence; under-animation added to the anti-slop detector.
+
 ## [2.1.0] — 2026-11-15
 
 ### Added

@@ -73,12 +73,14 @@ Default order (adapt; remove what has no content):
 
 **Gate L7 (form):** sign-up/waitlist form has labels above fields, real validation messages, a success state, disabled-while-submitting, and no real-person names as placeholders (use "Your name", "you@example.com").
 
-## Step 7: Motion and sound (only with purpose)
-- Hero entrance (split reveal or one composition move), one storytelling moment (scroll-linked demo or sequence), state transitions. Everything else still.
+## Step 7: Motion and sound
+- **Ask** which kinds of motion and how strong (`../motion/motion-menu.md` §1: multi-select + intensity), unless the user already said.
+- Plan every item with an M-ID (§5) and meet the **minimum for the effort level** (§2): at Standard that is a hero entrance, varied scroll reveals per section, one scroll-linked moment, hover on every interactive element and micro-interactions; Polished and All-out add depth, transitions, ambient, cursor and a motion-graphics sequence.
+- Vary effects per section; never one identical fade-up for the whole page.
 - Reduced motion: final state shown immediately.
 - Sound on a marketing page: off by default; only if the product is about sound, with a visible toggle.
 
-**Gate L8 (motion):** list every animation with its purpose; remove ones without a purpose; reduced-motion run shows full content.
+**Gate L8 (motion):** every planned M-ID is built and observed; the motion floor for the effort level is met; each animation has a purpose; reduced-motion run shows full content.
 
 ## Step 8: Proofread and honesty pass
 Read every word aloud once.

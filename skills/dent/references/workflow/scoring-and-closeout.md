@@ -62,4 +62,4 @@ Summarise the Decision Log's Source column in 3–6 lines:
 6. Known issues and anything that needs the user (real content, licences, accounts).
 7. One-line next step (e.g. "Score is 7.6, below your 8 target: want me to run /dent:improve?").
 
-Fill `templates/SCORECARD.md` for Advanced/Critical work and for every showcase or benchmark run.
+Write `SCORECARD.md` into the project (from `templates/SCORECARD.md`) at Standard effort and above, and for every showcase or benchmark run. A score that only exists in chat is lost.

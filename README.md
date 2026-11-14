@@ -9,9 +9,9 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-111?style=flat-square)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-SKILL.md-111?style=flat-square)](https://agentskills.io)
-[![Version](https://img.shields.io/badge/version-2.1.0-E8461E?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.2.0-E8461E?style=flat-square)](CHANGELOG.md)
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-111?style=flat-square)](skills/dent/references/styles/_styles-index.md)
-[![Commands](https://img.shields.io/badge/commands-30-111?style=flat-square)](docs/COMMANDS.md)
+[![Commands](https://img.shields.io/badge/commands-31-111?style=flat-square)](docs/COMMANDS.md)
 
 **[Install](#install)** · **[One command](#one-command-the-right-pipeline)** · **[What it can make](#what-dent-can-make)** · **[Proof](#see-the-difference-run-the-benchmark)** · **[Commands](docs/COMMANDS.md)** · **[Architecture](docs/ARCHITECTURE.md)**
 
@@ -55,7 +55,7 @@ You never have to learn the commands. Type `/dent` (or just describe what you wa
 ```
 → `responsive → verify`. No questionnaire for a bug.
 
-Power users can call any of the [30 commands](docs/COMMANDS.md) directly: `/dent:plan`, `/dent:audit`, `/dent:components`, `/dent:motion-graphics`, `/dent:sound`, `/dent:video`, `/dent:score`, `/dent:improve`…
+Power users can call any of the [31 commands](docs/COMMANDS.md) directly: `/dent:plan`, `/dent:audit`, `/dent:components`, `/dent:motion-graphics`, `/dent:sound`, `/dent:video`, `/dent:score`, `/dent:improve`…
 
 ---
 
@@ -310,7 +310,7 @@ a short summary of the design decisions you made.
 
 ## Install
 
-**Claude Code (plugin, gets all 30 slash commands)**
+**Claude Code (plugin, gets all 31 slash commands)**
 ```bash
 /plugin marketplace add jeelnadaa/DENT
 ```
@@ -337,6 +337,8 @@ npx skills add jeelnadaa/DENT
 Or run the installer: `./scripts/install.sh claude` (macOS/Linux) · `.\scripts\install.ps1 -Agent claude` (Windows).
 
 **Claude.ai / Claude Desktop:** download `dent.zip` from [Releases](https://github.com/jeelnadaa/DENT/releases) and upload it under **Settings → Capabilities → Skills**. Agents without skill support (Windsurf, Cline, Aider, Zed…): see [docs/INSTALL.md](docs/INSTALL.md#agents-without-native-skill-support).
+
+**Updating:** run `/dent:update` in Claude Code, then click **Update** on DENT in Settings → Plugins (or `/plugin update dent@dent`). Turn on auto-update for the DENT marketplace to get new versions automatically. Details: [docs/INSTALL.md](docs/INSTALL.md#updating).
 
 **Optional, for real verification:** `pip install playwright && python -m playwright install chromium` lets DENT run `verify_page.py` on what it builds.
 
@@ -368,7 +370,7 @@ Score it. Then improve it.
 ```
 skills/dent/
 ├── SKILL.md            # the router: classify → route → gates → score (lean, always loaded)
-├── commands/           # 30 command definitions (one source of truth per command)
+├── commands/           # 31 command definitions (one source of truth per command)
 ├── references/         # loaded only when needed
 │   ├── workflow/       # orchestration, planning + plan audit, execution, verification, scoring, all-out
 │   ├── recipes/        # step-by-step procedures with gates (landing page, app & dashboard)

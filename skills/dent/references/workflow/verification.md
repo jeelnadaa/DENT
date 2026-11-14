@@ -25,7 +25,9 @@ python scripts/verify_page.py http://localhost:3000 --out .dent/verify --widths 
 python scripts/contrast.py "#1A1A1A:#FFFFFF" "#6B7280:#FFFFFF"
 ```
 
-`verify_page.py` reports (exit code 1 if any gate fails): horizontal overflow per width with the offending elements, unlabeled form controls, unnamed buttons/links, images without alt, low-contrast text samples, whether animations stop under `prefers-reduced-motion`, autoplaying audio/video and AudioContexts started without a user gesture, console errors, and saves full-page screenshots. **Then open the screenshots and look at them.** The script finds mechanical defects; you find design defects.
+**Known traps (seen in real runs):** some agent browser panes freeze CSS/JS animations at the first frame, so screenshots of animated pages look broken or empty: re-capture with headless Playwright (`verify_page.py`). Opening a page from `file://` blocks font preloads and some fetches (CORS): remove preloads or serve the folder (`python -m http.server`). WebGL may be unavailable in headless browsers: check that the page shows its fallback, then verify 3D on a real GPU if possible.
+
+`verify_page.py` reports (exit code 1 if any gate fails): horizontal overflow per width with the offending elements, unlabeled form controls, unnamed buttons/links, images without alt, low-contrast text samples, whether animations stop under `prefers-reduced-motion`, a motion inventory (keyframes, transitions, hover rules and whether they're pointer-guarded, scroll-driven animations, libraries), autoplaying audio/video and AudioContexts started without a user gesture, console errors, and saves full-page screenshots. **Then open the screenshots and look at them.** The script finds mechanical defects; you find design defects.
 
 ## 3. Functional checks (only what is in scope)
 

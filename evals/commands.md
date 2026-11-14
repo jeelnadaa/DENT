@@ -6,7 +6,7 @@
 ## 2. Discovery (manual, per agent)
 | Agent | Test | Pass when |
 |---|---|---|
-| Claude Code (plugin) | Type `/dent:` | All 30 commands listed with descriptions |
+| Claude Code (plugin) | Type `/dent:` | All 31 commands listed with descriptions |
 | Claude Code (manual skill) | `/dent plan a pricing page` | Skill loads and follows `commands/plan.md` |
 | Codex / Cursor / Copilot / Gemini CLI | `dent audit this page` (with a file) | Skill triggers; follows `commands/audit.md` steps |
 

@@ -26,7 +26,7 @@ You only need `/dent`: the router (`skills/dent/references/workflow/orchestratio
 | `/dent:copy` | Write or fix UX copy: headlines, CTAs, microcopy, errors, empty states. |
 | `/dent:brand` | Create a mini brand / identity direction (logo direction, color, type, voice, sonic cue). |
 | `/dent:assets` | Find, make and license icons, images, illustrations, favicons, OG images and other assets. |
-| `/dent:motion` | Design or refine interface motion and micro-interactions. |
+| `/dent:motion` | Add rich, purposeful motion: ask which kinds (scroll, hover, hero entrance, micro-interactions, transitions, text, data, layout, ambient, cursor, SVG, 3D, gestures) and how strong, then build and verify every item. |
 | `/dent:motion-graphics` | Create motion graphics: kinetic typography, animated compositions, scroll stories, product animations, generative visuals. |
 | `/dent:3d` | Build 3D and real-time graphics (product viewers, scenes, interactive 3D). |
 | `/dent:sound` | Design UI sound, sonic identity, ambience or interactive audio. |
@@ -35,6 +35,7 @@ You only need `/dent`: the router (`skills/dent/references/workflow/orchestratio
 | `/dent:launch-video` | Make a product launch video end to end (teaser, reveal, feature tour or manifesto). |
 | `/dent:score` | Score the work against the request with evidence; list the top 3 improvements if below target. |
 | `/dent:improve` | Apply the highest-impact improvements from the last scorecard and re-score. |
+| `/dent:update` | Update the DENT plugin to the latest version without reinstalling (refreshes the local marketplace copy so Claude's normal update works). |
 | `/dent:handoff` | Write DESIGN.md and developer handoff (tokens, specs, states, a11y notes, licences). |
 
 ---
@@ -261,13 +262,13 @@ Find, make and license icons, images, illustrations, favicons, OG images and oth
 
 ### `/dent:motion`
 
-Design or refine interface motion and micro-interactions.
+Add rich, purposeful motion: ask which kinds (scroll, hover, hero entrance, micro-interactions, transitions, text, data, layout, ambient, cursor, SVG, 3D, gestures) and how strong, then build and verify every item.
 
-- **Usage:** `/dent:motion <area>`
+- **Usage:** `/dent:motion <area or page>`
 - **Default depth:** Standard
-- **Loads:** references/modern-layer.md; references/motion/motion-system-and-verification.md; templates/MOTION.md
-- **Does:** For each animation define trigger, purpose, duration, easing, sequence, interruption, reduced-motion version, cost → Create or reuse motion tokens; one engine (CSS first) → Implement; check reduced motion and frame smoothness
-- **Delivers:** Motion map + implementation + verification.
+- **Loads:** references/motion/motion-menu.md; references/modern-layer.md; references/motion/motion-system-and-verification.md; references/motion/motion-tech-catalog.md; templates/MOTION.md
+- **Does:** Ask which kinds of motion the user wants, following motion-menu → Ask Question B → Pick concrete items for every chosen kind from the catalogue (§3) and meet the minimum for the effort level (§2) → Write the motion plan table with an M-ID per item (§5) → Build every M-ID with motion tokens and the right engine (CSS first, GSAP/Motion only where needed) → Verify
+- **Delivers:** Motion plan (M-IDs) + implementation + verification (planned vs built, reduced motion, smoothness).
 - **Definition:** [`skills/dent/commands/motion.md`](../skills/dent/commands/motion.md)
 
 ### `/dent:motion-graphics`
@@ -276,7 +277,7 @@ Create motion graphics: kinetic typography, animated compositions, scroll storie
 
 - **Usage:** `/dent:motion-graphics <piece>`
 - **Default depth:** Advanced
-- **Loads:** references/motion/motion-graphics.md; references/motion/motion-tech-catalog.md; references/motion/motion-system-and-verification.md; references/creative/directions-library.md; templates/MOTION.md
+- **Loads:** references/motion/motion-graphics.md; references/motion/motion-menu.md; references/motion/motion-tech-catalog.md; references/motion/motion-system-and-verification.md; references/creative/directions-library.md; templates/MOTION.md
 - **Does:** Ask (if unknown) → Concept → 2–3 motion directions (All-out) → storyboard with timing → animatic → Choose technology with the selection ladder; justify it → Build with a timeline; design the reduced-motion version; budget performance → Verify play-through, sync, loop point, frame rate, reduced motion, cleanup; capture video/GIF if useful
 - **Delivers:** MOTION.md (concept, storyboard, timing, tech), the piece, verification evidence.
 - **Definition:** [`skills/dent/commands/motion-graphics.md`](../skills/dent/commands/motion-graphics.md)
@@ -357,6 +358,17 @@ Apply the highest-impact improvements from the last scorecard and re-score.
 - **Does:** Take the top 3 improvements (or the user's focus) → Apply them in order; re-run the affected gates → Re-score only with new evidence; show before → after per line → Stop at target, or when the remaining gap needs the user (real content, assets, budget)
 - **Delivers:** Changes + updated scorecard with deltas.
 - **Definition:** [`skills/dent/commands/improve.md`](../skills/dent/commands/improve.md)
+
+### `/dent:update`
+
+Update the DENT plugin to the latest version without reinstalling (refreshes the local marketplace copy so Claude's normal update works).
+
+- **Usage:** `/dent:update [--check]`
+- **Default depth:** Quick
+- **Loads:** scripts/update_plugin.py
+- **Does:** Tell the user what you'll do in one line → Run `python scripts/update_plugin → Report the installed version and the available version from the script output → If a newer version is available, give the one remaining step → Suggest enabling auto-update for the DENT marketplace so future versions arrive automatically
+- **Delivers:** Installed vs available version, what was refreshed, and the one step left (if any).
+- **Definition:** [`skills/dent/commands/update.md`](../skills/dent/commands/update.md)
 
 ### `/dent:handoff`
 

@@ -7,13 +7,14 @@ Create motion graphics: kinetic typography, animated compositions, scroll storie
 
 ## Load
 - `references/motion/motion-graphics.md`
+- `references/motion/motion-menu.md`
 - `references/motion/motion-tech-catalog.md`
 - `references/motion/motion-system-and-verification.md`
 - `references/creative/directions-library.md (motion section)`
 - `templates/MOTION.md`
 
 ## Steps
-1. Ask (if unknown): where it lives (web page, README GIF/SVG, video), length, sound on/off, dimension (1D/2D/2.5D/3D).
+1. Ask (if unknown): where it lives (web page, README GIF/SVG, video), length, sound on/off, dimension (1D/2D/2.5D/3D), and which motion kinds and intensity (references/motion/motion-menu.md §1).
 2. Concept → 2–3 motion directions (All-out) → storyboard with timing → animatic.
 3. Choose technology with the selection ladder; justify it.
 4. Build with a timeline; design the reduced-motion version; budget performance.

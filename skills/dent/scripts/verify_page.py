@@ -7,6 +7,7 @@ Checks (DENT gates in SKILL.md §3):
   G4  unlabeled form controls, unnamed buttons/links, images without alt, missing lang
   G10 animations still running under prefers-reduced-motion: reduce
   G11 audio started before any user gesture (Web Audio sources or unmuted media); early AudioContext creation is reported as info
+  +   motion inventory (keyframes, transitions, hover, scroll-driven, view transitions, motion libraries)
   +   console errors, page errors; full-page screenshots per width
 
 Usage:
@@ -133,6 +134,40 @@ ANIM_JS = r"""
 })
 """
 
+INVENTORY_JS = r"""
+() => {
+  const inv = { keyframes: 0, transitionRules: 0, hoverRules: 0, hoverGuarded: 0, scrollDriven: 0, viewTransitions: 0,
+                reducedMotionQueries: 0, svgAnimations: document.querySelectorAll('animate, animateTransform, animateMotion').length,
+                videos: document.querySelectorAll('video').length, canvases: document.querySelectorAll('canvas').length, libraries: [] };
+  const walk = (rules, inHoverMedia) => {
+    for (const r of rules) {
+      const t = r.cssText || '';
+      if (r.type === CSSRule.KEYFRAMES_RULE) { inv.keyframes++; continue; }
+      if (r.media) {
+        const m = r.media.mediaText || '';
+        if (m.includes('prefers-reduced-motion')) inv.reducedMotionQueries++;
+        walk(r.cssRules, inHoverMedia || m.includes('hover: hover') || m.includes('hover:hover'));
+        continue;
+      }
+      if (r.cssRules && r.cssRules.length) walk(r.cssRules, inHoverMedia);
+      if (/transition\s*:\s*(?!none|all 0s)/.test(t) || /transition-property/.test(t)) inv.transitionRules++;
+      if (/:hover/.test(r.selectorText || '')) { inv.hoverRules++; if (inHoverMedia) inv.hoverGuarded++; }
+      if (/animation-timeline/.test(t)) inv.scrollDriven++;
+      if (/view-transition/.test(t)) inv.viewTransitions++;
+    }
+  };
+  for (const sh of document.styleSheets) { try { walk(sh.cssRules, false); } catch (e) {} }
+  const srcs = [...document.scripts].map(s => (s.src || '') + ' ' + (s.textContent || '').slice(0, 20000)).join(' ').toLowerCase();
+  const libs = { gsap: !!window.gsap || /gsap/.test(srcs), scrolltrigger: !!window.ScrollTrigger || /scrolltrigger/.test(srcs),
+                 motion: /framer-motion|motion\.dev|cdn\.jsdelivr\.net\/npm\/motion|\bmotion@/.test(srcs), lenis: !!window.Lenis || /lenis/.test(srcs),
+                 lottie: !!window.lottie || /lottie/.test(srcs), rive: /rive-app|@rive/.test(srcs), three: !!window.THREE || /three(\.module)?(\.min)?\.js|from ['"]three['"]/.test(srcs),
+                 anime: !!window.anime || /animejs|anime\.min/.test(srcs), intersectionObserver: /intersectionobserver/.test(srcs),
+                 webAnimations: /\.animate\(/.test(srcs), viewTransitionsApi: /startviewtransition/.test(srcs) };
+  inv.libraries = Object.entries(libs).filter(([, v]) => v).map(([k]) => k);
+  return inv;
+}
+"""
+
 SCROLL_JS = "async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); } window.scrollTo(0, 0); }"
 
 
@@ -206,6 +241,7 @@ def main() -> int:
         audio = pg.evaluate("() => ({ sourcesBeforeGesture: window.__dent.sourcesBeforeGesture || 0, ctxBeforeGesture: window.__dent.ctxBeforeGesture, runningCtx: (window.__dent.ctxs||[]).filter(c => c.state === 'running').length, mediaPlayBeforeGesture: window.__dent.mediaPlayBeforeGesture })")
         report["audio"] = audio
         normal_anims = pg.evaluate(ANIM_JS)
+        report["motion_inventory"] = pg.evaluate(INVENTORY_JS)
         ctx.close()
         ctx, pg = new_page(wide, reduced=True)
         pg.wait_for_timeout(1200)
@@ -247,6 +283,15 @@ def main() -> int:
     cf = report["contrast_failures"]
     print(f"  contrast failures (sampled): {len(cf)}" + "".join(f"\n      {c['ratio']}:1 < {c['need']}  '{c['text']}'" for c in cf[:6]))
     print(f"  animations running: normal={len(normal_anims)} reduced-motion={len(reduced_anims)}")
+    mi = report["motion_inventory"]
+    print(f"  motion inventory: keyframes={mi['keyframes']} transition-rules={mi['transitionRules']} hover-rules={mi['hoverRules']} "
+          f"(pointer-guarded {mi['hoverGuarded']}) scroll-driven={mi['scrollDriven']} view-transitions={mi['viewTransitions']} "
+          f"svg-anim={mi['svgAnimations']} reduced-motion-queries={mi['reducedMotionQueries']} libraries={', '.join(mi['libraries']) or 'none'}")
+    if mi["hoverRules"] >= 3 and mi["hoverGuarded"] * 2 < mi["hoverRules"]:
+        print(f"  warning: {mi['hoverRules'] - mi['hoverGuarded']} hover rules aren't inside @media (hover:hover) and (pointer:fine); "
+              "hover effects that move or reveal things will stick after a tap on phones.")
+    if mi["keyframes"] + mi["transitionRules"] + mi["scrollDriven"] < 3 and not mi["libraries"]:
+        print("  note: very little motion detected. If the effort is Standard+ this is probably under-animated (motion-menu.md §2).")
     print(f"  audio before gesture: sounds started={au['sourcesBeforeGesture']} audible media={len(audible_media)} (contexts created={au['ctxBeforeGesture']}, running={au['runningCtx']}: info only)")
     print(f"  console errors: {len(report['console_errors'])}")
     print("  gates: " + "  ".join(f"{k}={v}" for k, v in g.items()))

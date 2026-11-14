@@ -151,7 +151,7 @@ def workflow(t: dict) -> str:
 {''.join(boxes)}
 <text x="64" y="296" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{t["muted"]}">POWERED BY</text>
 {''.join(cols)}
-<text x="64" y="536" font-family="{MONO}" font-size="11" letter-spacing="2" fill="{t["muted"]}">30 COMMANDS &#183; 4 EFFORT LEVELS &#183; 4 TASK DEPTHS &#183; WORKS IN ANY AGENT THAT READS SKILL.MD</text>
+<text x="64" y="536" font-family="{MONO}" font-size="11" letter-spacing="2" fill="{t["muted"]}">31 COMMANDS &#183; 4 EFFORT LEVELS &#183; 4 TASK DEPTHS &#183; WORKS IN ANY AGENT THAT READS SKILL.MD</text>
 </svg>
 '''
 

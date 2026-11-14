@@ -14,7 +14,7 @@ Create a new product, page, site or interface from scratch.
 - `references/workflow/verification.md`
 
 ## Steps
-1. Ask the effort level first, then only missing essentials (or decide everything if told to).
+1. Ask the effort level first, then only missing essentials (or decide everything if told to). At Standard+ always include the motion questions from references/motion/motion-menu.md §1 (multi-select kinds + intensity) unless the user said no motion.
 2. Plan (inline for Standard, PLAN.md for Advanced) and audit it.
 3. Direction: concept sentence, category-cliché check, one base style + ≤1 accent, signature element, hero type move.
 4. Follow the recipe step by step, including every gate inside it.

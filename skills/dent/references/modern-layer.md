@@ -10,7 +10,7 @@ A modern design is not a style; it is **craft on top of solid foundations**. Eve
 
 ### 7.0 Ground rules for the whole modern layer
 - **Purpose first [Law: aesthetic-usability effect cuts both ways].** Every effect must do at least one job: show hierarchy, explain a change, give feedback, guide attention, or express the brand. If it does none, remove it.
-- **Restraint is the signature of modern design.** One or two "hero" moments per page or screen. Everything else is quiet and fast.
+- **Restraint means purpose and quality, not absence.** One or two signature "hero" moments per page, plus well-crafted supporting motion (scroll, hover, micro-interactions, transitions) at the level the user chose. Under-animated pages feel static and cheap; see the minimum per effort level in `motion/motion-menu.md` §2.
 - **Consistency [Law: similarity].** Motion, hover and typography behaviors are tokens too. The same kind of thing always moves and reacts the same way.
 - **[Rule] Performance:** effects never block input or drop frames. Animate only `transform` and `opacity` (and `filter` sparingly). Never animate `width`, `height`, `top`, `left`, `margin` or `box-shadow` directly on large or many elements.
 - **[Rule] Reduced motion:** every non-essential animation has a reduced-motion version (fade or no motion). See §7.9.
@@ -122,7 +122,7 @@ Good uses:
 
 ### 7.4 Hover animations (pointer devices)
 
-**[Rule]** Hover is an enhancement, never the only way to see information or reach an action (touch devices have no hover). Wrap hover effects so they only apply to real pointers:
+**[Rule]** Hover is an enhancement, never the only way to see information or reach an action (touch devices have no hover). Wrap hover effects that move, scale or reveal things so they only apply to real pointers (otherwise they "stick" after a tap on phones; `verify_page.py` warns when hover rules aren't guarded):
 ```css
 @media (hover: hover) and (pointer: fine) {
   .card:hover { transform: translateY(-2px); }

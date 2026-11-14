@@ -13,7 +13,7 @@ Refine a working interface: hierarchy, spacing, type, details, interactions. No 
 
 ## Steps
 1. Score the current state (scorecard) to find the weakest lines.
-2. Fix in order of impact: hierarchy → spacing rhythm → typography craft → color/surfaces → states → micro-interactions → optical details.
+2. Fix in order of impact: hierarchy → spacing rhythm → typography craft → color/surfaces → states → motion (check it meets references/motion/motion-menu.md §2 for the effort level; ask which kinds the user wants if unclear) → optical details.
 3. Keep the information architecture and direction unless a change is justified and logged.
 4. Re-score with evidence.
 

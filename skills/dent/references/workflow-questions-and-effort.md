@@ -39,6 +39,8 @@ The user decides how deep the design goes. **Ask this first** (question 0), with
 > 4. **All-out** — the best possible result for your use case with nothing missed: research, 2–3 directions to choose from, every state and screen size, motion (and sound/video if relevant), deep accessibility, assets, and self-review until it scores 9/10.
 > 5. **Skip the questions — you decide everything**
 
+**Question tools with a 4-option limit** (Claude's allows 4): show Essential · Standard (Recommended) · Polished · All-out, and add to the question text "…or answer 'you decide' to skip all questions". The same applies to every question: never exceed the tool's option limit; split long menus into grouped questions (see `motion/motion-menu.md` §1).
+
 ### The floor (every level, including Essential — never skipped)
 - **Consistency:** tokens for color, type, spacing, radius, elevation; each component defined once and reused (`foundations-and-components.md` §3, › Components).
 - **Color rules:** three-role palette (or brand/style colors), contrast checked, never color alone.
@@ -93,7 +95,7 @@ Rules:
 | 6 | **Colors** | Brand feel | "I have brand colors" (ask for hex/logo) · 2–3 palettes from color.md Part 2 or the style's tokens, each shown as swatches with a mood line |
 | 7 | **Typography** | Personality + readability | 2–3 pairings from typography.md §3 that fit the chosen style, each with a sample line and a mood note |
 | 8 | **Density** | Spacing and component sizes | Comfortable (Recommended for most) · Compact (data-heavy/pro tools) · Spacious (marketing/luxury) |
-| 9 | **Motion level** | How alive it feels | Subtle (Recommended) · Expressive (hero moments, scroll storytelling) · Minimal (almost none) |
+| 9 | **Motion: which kinds** (multi-select) **+ intensity** | How alive it feels; what gets built | Kinds: hero entrance · scroll · hover · micro-interactions · page/view transitions · text · data · layout · ambient · cursor · SVG/illustration · loading/feedback · 3D/depth · gestures · You choose. Intensity: Subtle · Balanced (Recommended) · Expressive · Cinematic. Script and recommended sets: `motion/motion-menu.md` |
 | 10 | **Corner shape** (only if the style allows choice) | Personality | Sharp (0–4px) · Soft (8–12px) · Round (16px+/pills) |
 | 11 | **References** (optional) | Fast alignment | "Any app or site whose look you like?" — free answer |
 | 12 | **Content & must-haves** | Real content beats placeholders | Key sections/features, logo, real copy, images available? |
@@ -127,7 +129,7 @@ When the user asks to add something to an existing design:
 
 | User asks for… | Read |
 |---|---|
-| Animations, transitions, micro-interactions | `modern-layer.md` (motion system, micro-interactions, reduced motion, performance) |
+| Animations, transitions, micro-interactions, "more motion" | `motion/motion-menu.md` (ask kinds + intensity, minimums) + `modern-layer.md` (motion system, micro-interactions, reduced motion, performance) |
 | Hover effects | `modern-layer.md` §7.4 |
 | Scroll effects, parallax, sticky storytelling | `modern-layer.md` §7.5 |
 | "More modern / premium / polished" | `modern-layer.md` + quality-review.md Part 2 §4 |
@@ -176,7 +178,7 @@ Choose the best default from this skill, in this order, and record each as **"Ch
 4. **Colors:** the chosen style's starter tokens; if the style doesn't fix colors, the best-matching palette in `color.md` Part 2.
 5. **Typography:** the style's suggested fonts.
 6. **Density:** comfortable; compact for data-heavy tools.
-7. **Motion:** subtle.
+7. **Motion:** the recommended set for the product type at Balanced intensity (`motion/motion-menu.md` §4), meeting the floor for the effort level (§2).
 8. Everything else: DENT defaults (`foundations-and-components.md`, `modern-layer.md`).
 
 Then present the design with a short "Decisions I made" summary and invite changes. The user can still change anything later.

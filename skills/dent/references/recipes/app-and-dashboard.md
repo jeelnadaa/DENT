@@ -49,7 +49,7 @@ For each screen list: empty (first use / no results / cleared / no permission), 
 Streaming with a stop button; visible states (thinking, using tool X, waiting for approval, done, failed); citations/sources; retry and edit; uncertainty language; approvals before consequential actions; history (`../page-and-flow-patterns.md` §16).
 
 ## Step 9: Motion
-Interface motion only: state changes, layout shifts animated (FLIP/Motion layout), drawers and dialogs, number changes (NumberFlow-like), no decorative loops in tools. Reduced motion respected.
+Ask which kinds and how strong (`../motion/motion-menu.md` §1; recommended app set in §4) and meet the app minimum (§2). Typical: state changes, layout shifts animated (FLIP/Motion layout), drawers and dialogs, number changes (NumberFlow-like), no decorative loops in tools. Reduced motion respected.
 
 ## Step 10: Verify, score, close
 - verify_page.py on key screens (overflow, labels, contrast, reduced motion).

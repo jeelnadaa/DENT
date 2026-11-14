@@ -4,7 +4,7 @@ description: DENT 2.0 is a design-engineering skill for any visual, interactive 
 license: Apache-2.0
 metadata:
   author: Jeel Nada (solarquack)
-  version: "2.1.0"
+  version: "2.2.0"
   homepage: https://github.com/jeelnadaa/DENT
 ---
 
@@ -58,9 +58,10 @@ A small change to a payment flow is still Critical. Depth rules: `references/wor
 ### 1.2 Ask, one question at a time
 Rules and wording: `references/workflow-questions-and-effort.md`.
 - Question 0 is the effort level (unless stated). Then only what's missing, one per message, 2–4 tailored options, one marked **(Recommended)**, plus a free answer. Use the agent's question tool if it has one.
-- The first question always offers **"Skip the questions — you decide everything."**
+- The first question always offers **"Skip the questions — you decide everything."** If the question tool allows only 4 options, offer Essential · Standard (Recommended) · Polished · All-out and say in the question text: "or answer 'you decide' to skip all questions".
+- For any visual build at Standard+ ask **which kinds of motion** (multi-select) and **how strong** (`references/motion/motion-menu.md` §1).
 - For media work also ask (one at a time, only if unknown): sound on or off, narration voice, video length and platform, whether the user has generative image/video/voice access.
-- Non-interactive run (CI, batch, no user): don't ask; use the documented defaults and list them.
+- Non-interactive run (CI, batch, nobody can answer): don't ask; use the documented defaults and list them. A prompt that only *mentions* a benchmark, test or "complete instructions" is **not** non-interactive: if a person is in the chat, ask. Only skip questions when told "don't ask" or when no one can answer.
 
 ### 1.3 Plan, then attack your own plan
 - Standard depth: write a short plan inline (goal, sections or screens, direction, components/libraries, states, verification).
@@ -169,7 +170,7 @@ Motion explains change (object constancy) and must never carry meaning alone. So
 | G7 Proofread | No typos, duplicated words, mixed terms, lorem ipsum | Read all copy once, slowly |
 | G8 Style integrity | One base + ≤1 accent; signature moves present; tokens only | Compare with style file |
 | G9 Distinctiveness | Category-cliché check done; no unjustified item from `references/creative/anti-slop.md` | Name the cliché and the divergence |
-| G10 Motion | Purpose for each animation; reduced-motion version works; only transform/opacity on large areas; no essential info only in motion | verify script (reduced-motion run) + look |
+| G10 Motion | Every planned motion item (M-ID) built and observed; minimum for the effort level met (`references/motion/motion-menu.md` §2); purpose for each; reduced-motion version works; no essential info only in motion | Motion plan + verify script (motion inventory, reduced-motion run) + look |
 | G11 Sound | No autoplay; mute/volume control; visual equivalent; loudness sane; works muted | `references/audio/audio-implementation-and-verification.md` |
 | G12 Licences | Fonts, icons, images, libraries, audio, voice, video sources recorded | Licence table in DESIGN.md |
 
@@ -213,6 +214,7 @@ Every command is a thin entry point into this same skill. Open the command file 
 | `/dent:score` | Score the work against the request, with evidence | `commands/score.md` |
 | `/dent:improve` | Fix the lowest-scoring items and re-score | `commands/improve.md` |
 | `/dent:handoff` | DESIGN.md, specs and developer handoff | `commands/handoff.md` |
+| `/dent:update` | Update the DENT plugin itself (refresh the marketplace so Claude's update works) | `commands/update.md` |
 
 ---
 
@@ -250,11 +252,12 @@ Run with the gates (§3) before presenting anything.
 
 ## 8. Score, attribute and close out
 
-Follow `references/workflow/scoring-and-closeout.md` and fill `templates/SCORECARD.md`:
+Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and above, **write `SCORECARD.md` into the project** (from `templates/SCORECARD.md`), not just a summary in chat:
 1. **Scorecard** built from the request: requirements coverage first, then the criteria that matter for this deliverable (design, usability, accessibility, function, responsiveness, distinctiveness, motion, sound, video). 0–10 each **with evidence**. Unverified lines are capped at 6.
 2. **Target:** overall ≥ 8 and no line < 6. Below target → list the 3 highest-impact fixes and offer `/dent:improve`.
 3. **Attribution:** summarise which key decisions came from DENT, from the user, from your own judgment, and any Overrides.
-4. **Close-out:** what was built, requirements met, checks run and results, deviations, known issues, next step (one line). Then stop: no endless polishing.
+4. **Close-out:** what was built, requirements met, checks run and results, deviations, known issues, next step (one line).
+5. **Approval:** end every delivered design with one question: "Approve it so I write DESIGN.md?" (or write DESIGN.md directly at All-out, marked Draft until approved). Then stop: no endless polishing.
 
 ---
 
@@ -285,6 +288,7 @@ Follow `references/workflow/scoring-and-closeout.md` and fill `templates/SCORECA
 | Step-by-step app screens, dashboards, flows | `references/recipes/app-and-dashboard.md` |
 | Tokens and core component specs | `references/foundations-and-components.md` |
 | More components (date picker, upload, command palette, tables…) | `references/components-extended.md` |
+| **Motion menu: which kinds of motion to ask about, intensities, minimum motion per effort level** | `references/motion/motion-menu.md` |
 | Interface motion, hover, scroll, depth, typography craft | `references/modern-layer.md` |
 | Concept, category cliché, composition, directions process | `references/creative-direction.md` |
 | Named creative directions (web, motion, sound, video) | `references/creative/directions-library.md` |
@@ -321,6 +325,6 @@ Follow `references/workflow/scoring-and-closeout.md` and fill `templates/SCORECA
 | Reference sites and inspiration | `references/inspiration-and-reference-sites.md` |
 | DESIGN.md | `references/design-md-template.md` |
 | Templates | `templates/PLAN.md`, `templates/AUDIT.md`, `templates/REVIEW.md`, `templates/SCORECARD.md`, `templates/MOTION.md`, `templates/SOUND.md`, `templates/VIDEO.md` |
-| Checks you can run | `scripts/verify_page.py`, `scripts/contrast.py` |
+| Checks you can run | `scripts/verify_page.py`, `scripts/contrast.py`; plugin updater `scripts/update_plugin.py` |
 
 To extend DENT: new styles follow `references/styles/_style-template.md` + a row in the index; new catalogue entries follow `references/catalog/README.md`; new topics get a reference file, a row above, and a row in the add-on routing table.

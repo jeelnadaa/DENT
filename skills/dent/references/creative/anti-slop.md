@@ -45,6 +45,7 @@ Used by gate G9 (SKILL.md §3), `/dent:review`, `/dent:polish`, `/dent:score`.
 - **Three CTAs with different labels** for the same action. → One label, used consistently.
 
 ## 5. Motion slop
+- **Under-animation:** one fade-in for the whole page, dead hovers, instant state changes. Feels static and unfinished. → Ask which motion kinds the user wants and meet the floor (`../motion/motion-menu.md`).
 - Every section fades up on scroll. → Animate the hero, one storytelling moment, and state changes; let the rest be still.
 - Bouncy springs on frequent actions. → Critically damped UI springs; bounce only for celebration.
 - Random particles/gradients drifting forever. → Motion with a concept, or none; pause after one loop.

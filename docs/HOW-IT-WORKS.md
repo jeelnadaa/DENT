@@ -60,7 +60,7 @@ All levels share a floor: tokens, component states, contrast, core laws, accessi
 
 ## Progressive disclosure
 
-`SKILL.md` (~330 lines) is the router: it classifies the task, routes it, and lists the gates. 50+ reference files, 41 styles, 30 command files and 7 templates are opened only when the task needs them — a dark-mode request reads the color file; a "make it look like Swiss design" request reads one style file. This keeps the agent's context small and focused.
+`SKILL.md` (~330 lines) is the router: it classifies the task, routes it, and lists the gates. 50+ reference files, 41 styles, 31 command files and 7 templates are opened only when the task needs them — a dark-mode request reads the color file; a "make it look like Swiss design" request reads one style file. This keeps the agent's context small and focused.
 
 ## Extending DENT
 
