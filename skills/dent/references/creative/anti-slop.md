@@ -24,6 +24,7 @@ Used by gate G9 (SKILL.md §3), `/dent:review`, `/dent:polish`, `/dent:score`.
 | Fake dashboard tilted in 3D | Says "SaaS" not "this product" | It's the real UI, legible | Cropped real UI at readable size, annotated |
 | Grey "Trusted by" logo row | Usually invented | Real customers with permission | Remove, or a real quote/metric the user supplied |
 | ✨ sparkle icon for AI | Universal cliché | — | Describe the actual capability with a specific icon or none |
+| OS-default surfaces on a designed page (blue checkboxes, grey scrollbars on a dark theme, `title` tooltips, unstyled sliders and selects) | Nobody decided; reads as unfinished | The product deliberately chose the native look (logged) | Built-in surfaces at the chosen level (`../built-in-surfaces.md`) |
 | Dark mode + neon by default | Category reflex | Product is used at night/creative/dev and brand fits | Choose mode from context of use |
 | Espresso + orange for coffee, navy + mint for fintech, pastel teal for health | Category cliché | User asked for the expected look | Diverge on ≥ 2 axes (directions-library §1) |
 

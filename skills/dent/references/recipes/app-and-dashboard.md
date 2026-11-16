@@ -32,6 +32,7 @@ For each screen list: empty (first use / no results / cleared / no permission), 
 - Reuse the project's components; otherwise native elements per Modern Web Guidance for everything the platform covers (dialogs, drawers, menus, tooltips, tabs, switches, selects, toasts; `../modern-web-guidance.md` §4–5), and a library via `../catalog/component-selection.md` only for jobs it doesn't (e.g. TanStack Table or AG Grid Community for grids, cmdk for command palette, dnd-kit for board drag-and-drop, Recharts/ECharts/Visx for charts).
 - Search and retrieve the MWG guide for each component and behaviour before building it; record the ids in the Decision Log.
 - Define every interactive component's states (`../foundations-and-components.md` §4.21 template).
+- Apps are full of built-in surfaces (scrollbars in tables and sidebars, selects, checkboxes, date fields, tooltips on icon buttons): style them at the chosen level (`../built-in-surfaces.md`).
 
 **Gate A4 (operability):** keyboard path through the critical task; focus management in dialogs/drawers/menus; every control labelled; targets ≥ 24 px pointer / 44 px touch.
 

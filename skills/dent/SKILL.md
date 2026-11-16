@@ -4,7 +4,7 @@ description: DENT 2.0 is a design-engineering skill for any visual, interactive 
 license: Apache-2.0
 metadata:
   author: Jeel Nada (solarquack)
-  version: "2.3.0"
+  version: "2.4.0"
   homepage: https://github.com/jeelnadaa/DENT
 ---
 
@@ -60,6 +60,7 @@ A small change to a payment flow is still Critical. Depth rules: `references/wor
 Rules and wording: `references/workflow-questions-and-effort.md`.
 - Question 0 is the effort level (unless stated). Then only what's missing, one per message, 2–4 tailored options, one marked **(Recommended)**, plus a free answer. Use the agent's question tool if it has one.
 - The first question always offers **"Skip the questions — you decide everything."** If the question tool allows only 4 options, offer Essential · Standard (Recommended) · Polished · All-out and say in the question text: "or answer 'you decide' to skip all questions".
+- For any visual build at Standard+ ask **how built-in browser UI should look** (tooltips, scrollbars, sliders, checkboxes, dropdowns, text highlight: Match my design / Brand tint / Native; `references/built-in-surfaces.md` §2).
 - For any visual build at Standard+ ask **which kinds of motion** (multi-select) and **how strong** (`references/motion/motion-menu.md` §1).
 - For media work also ask (one at a time, only if unknown): sound on or off, narration voice, video length and platform, whether the user has generative image/video/voice access.
 - Non-interactive run (CI, batch, nobody can answer): don't ask; use the documented defaults and list them. A prompt that only *mentions* a benchmark, test or "complete instructions" is **not** non-interactive: if a person is in the chat, ask. Only skip questions when told "don't ask" or when no one can answer.
@@ -82,9 +83,10 @@ Open `references/creative-direction.md` (process) and `references/creative/direc
 1. **Foundations** (tokens) then **components** from `references/foundations-and-components.md` (+ `references/components-extended.md`), applying the style's overrides (§9.1).
 2. **Choose implementations deliberately, native first**: reuse what the project has; otherwise the native platform per MWG (`references/modern-web-guidance.md` §5), and a library only for jobs the platform doesn't cover (`references/catalog/component-selection.md`). One library per job.
 3. **Screens** with the matching recipe/pattern (`references/recipes/`, `references/page-and-flow-patterns.md`, `references/complex-product-patterns.md`) and platform rules (`references/platforms-and-devices.md`).
-4. **Modern layer** (`references/modern-layer.md`) only after the screen works without it.
-5. **Media**: motion graphics/3D → `references/motion/`; sound/voice → `references/audio/`; video → `references/video/`. Each has its own pipeline, tech choice and verification.
-6. Code: `references/design-tokens-and-code.md` Part 2. Tokens first, no magic numbers. Every web capability goes through MWG search → retrieve → apply before you write it (`references/modern-web-guidance.md` §2).
+4. **Built-in surfaces** at the chosen level (Match / Tint / Native): tooltips, scrollbars, sliders, checkboxes, selects, selection, caret, placeholder, autofill, file inputs, backdrops. Nothing keeps a default look by accident (`references/built-in-surfaces.md`).
+5. **Modern layer** (`references/modern-layer.md`) only after the screen works without it.
+6. **Media**: motion graphics/3D → `references/motion/`; sound/voice → `references/audio/`; video → `references/video/`. Each has its own pipeline, tech choice and verification.
+7. Code: `references/design-tokens-and-code.md` Part 2. Tokens first, no magic numbers. Every web capability goes through MWG search → retrieve → apply before you write it (`references/modern-web-guidance.md` §2).
 
 ### 1.6 Verify for real
 Follow `references/workflow/verification.md`. When a browser is available run `python scripts/verify_page.py <page or URL>` (overflow, labels, names, alt text, contrast sample, reduced motion, autoplay, console errors, screenshots). Look at the screenshots yourself. Report every check as **Passed / Failed / Not run / Blocked / N/A**. Never claim a check you didn't run.
@@ -169,7 +171,7 @@ Motion explains change (object constancy) and must never carry meaning alone. So
 | G5 States | Empty, loading, error, success; hover, focus, active, disabled; long text; 0/1/many | Trigger them |
 | G6 Honesty | Non-negotiable 2 holds for every word and number | Read every number and quote |
 | G7 Proofread | No typos, duplicated words, mixed terms, lorem ipsum | Read all copy once, slowly |
-| G8 Style integrity | One base + ≤1 accent; signature moves present; tokens only | Compare with style file |
+| G8 Style integrity | One base + ≤1 accent; signature moves present; tokens only; every built-in surface at the chosen level (no accidental defaults, no `title` tooltips) | Compare with style file + `scripts/verify_page.py --surfaces <level>` + surface sheet |
 | G9 Distinctiveness | Category-cliché check done; no unjustified item from `references/creative/anti-slop.md` | Name the cliché and the divergence |
 | G10 Motion | Every planned motion item (M-ID) built and observed; minimum for the effort level met (`references/motion/motion-menu.md` §2); purpose for each; reduced-motion version works; no essential info only in motion | Motion plan + verify script (motion inventory, reduced-motion run) + look |
 | G11 Sound | No autoplay; mute/volume control; visual equivalent; loudness sane; works muted | `references/audio/audio-implementation-and-verification.md` |
@@ -201,6 +203,7 @@ Every command is a thin entry point into this same skill. Open the command file 
 | `/dent:accessibility` | Accessibility audit and remediation | `commands/accessibility.md` |
 | `/dent:system` | Inventory, create or extend a design system | `commands/system.md` |
 | `/dent:components` | Choose and integrate component/UI libraries | `commands/components.md` |
+| `/dent:surfaces` | Make tooltips, scrollbars, sliders, checkboxes, selects, selection and other built-in UI match the design | `commands/surfaces.md` |
 | `/dent:directions` | Explore 2–4 distinct creative directions | `commands/directions.md` |
 | `/dent:type` | Hero titles and expressive typography | `commands/type.md` |
 | `/dent:copy` | UX writing, headlines, microcopy | `commands/copy.md` |
@@ -242,6 +245,7 @@ Front-load key words; use the user's words; be specific ("Password needs 8+ char
 Run with the gates (§3) before presenting anything.
 
 **Hierarchy:** the most important action is obvious within 5 s · one primary action per view · groups read from spacing alone (squint test).
+**Surfaces:** every built-in surface (tooltip, scrollbar, slider, checkbox/radio/switch, select, selection, caret, placeholder, autofill, file input, backdrop) matches the chosen level in both themes · no `title` tooltips for needed info.
 **Consistency:** all values from tokens · same element looks and behaves the same everywhere · buttons/inputs in a row share height and radius · platform conventions followed unless deliberate.
 **Responsiveness:** works at mobile, tablet and desktop · body line length ~45–75 characters · mobile is designed, not shrunk.
 **Typography:** tracking tightened on large type · heading line-height 1.0–1.2 · balanced headline wraps · tabular numbers in data.
@@ -292,6 +296,7 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 | Step-by-step app screens, dashboards, flows | `references/recipes/app-and-dashboard.md` |
 | Tokens and core component specs | `references/foundations-and-components.md` |
 | More components (date picker, upload, command palette, tables…) | `references/components-extended.md` |
+| **Built-in surfaces: tooltips, scrollbars, sliders, checkboxes, selects, selection, caret, placeholder, autofill… Match / Tint / Native** | `references/built-in-surfaces.md` |
 | **Motion menu: which kinds of motion to ask about, intensities, minimum motion per effort level** | `references/motion/motion-menu.md` |
 | Interface motion, hover, scroll, depth, typography craft | `references/modern-layer.md` |
 | Concept, category cliché, composition, directions process | `references/creative-direction.md` |

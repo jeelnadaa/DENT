@@ -119,7 +119,7 @@ With Node.js 22+, DENT queries the always-current guides with `npx -y modern-web
 
 ## Commands
 
-Plugin installs in Claude Code get 31 slash commands (`/dent:plan`, `/dent:audit`, `/dent:video`…). In every other agent, type the same text (`/dent:plan …`, `/dent plan …` or `dent plan …`) and the skill follows the matching command file. You never need them: plain `/dent` routes automatically. Reference: [COMMANDS.md](COMMANDS.md).
+Plugin installs in Claude Code get 32 slash commands (`/dent:plan`, `/dent:audit`, `/dent:video`…). In every other agent, type the same text (`/dent:plan …`, `/dent plan …` or `dent plan …`) and the skill follows the matching command file. You never need them: plain `/dent` routes automatically. Reference: [COMMANDS.md](COMMANDS.md).
 
 ## Verify the install
 

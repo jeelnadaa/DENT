@@ -60,6 +60,8 @@ The numbers below are **[Convention]** defaults. Change them per project or per 
 
 These are **design specs** (sizes, spacing, states, behaviour). On the web, build each component the way its Modern Web Guidance guide says (native element first, MWG's markup, ARIA, fallbacks; `modern-web-guidance.md` §4 maps components to guides), then apply these specs to it. Px values are design units: in CSS, type sizes become `rem`, and heights of anything containing text become `min-block-size` so text can grow (`mwg:typography`).
 
+Browser-drawn pieces of these components (checkbox and radio marks, slider tracks, select pickers, scrollbars, selection, caret, placeholder, autofill, tooltips) follow the product's built-in surface level (Match / Tint / Native) in `built-in-surfaces.md`.
+
 ### 4.1 Shared control tokens (define these first)
 
 "Controls" = anything the user types into or presses: buttons, inputs, selects, chips, segmented controls. They share these tokens so they line up when placed side by side.
@@ -248,7 +250,7 @@ Web: `<input type="checkbox" switch>` with a `<label>`, styled to these specs (`
 - Web: `popover` + CSS anchor positioning with `position-try` fallbacks so it flips at viewport edges (`mwg:menu`, `mwg:viewport-aware-dropdowns`); no JS positioning library.
 
 **Tooltips**
-- Caption text (12–13px), padding 6×10px, small radius (4–6px), high-contrast background (inverted colors).
+- Caption text (12–13px), padding 6×10px, small radius (4–6px), high-contrast background (inverted colors), from the `--tooltip-*` tokens (`built-in-surfaces.md` §3). Never a `title` attribute for information users need.
 - Appear after ~300–500ms hover / on focus; disappear on mouse-out/Esc. No interactive content inside.
 - Web: `popover="hint"` + `interestfor` + anchor positioning (`mwg:interest-triggered-tooltips`, `mwg:position-aware-tooltips`); on touch use a toggletip.
 

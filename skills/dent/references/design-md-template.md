@@ -93,6 +93,19 @@ Sizes: sm/md/lg heights <..>, padding <..>, font <..>, radius <..>
 ### (Select, Checkbox, Radio, Toggle, Tabs, Card, List row, Table, Modal, Toast, Nav, etc.)
 ...
 
+## 7b. Built-in surfaces
+Level: <Match | Tint | Native> (why: <...>) · surface sheet: <path or story>
+
+| Surface | Level | Tokens / spec | Exception (if any) |
+|---|---|---|---|
+| Tooltip | | `--tooltip-bg`, `--tooltip-text`, delay, motion | |
+| Scrollbars | | `--scrollbar-thumb`, `--scrollbar-track` (width stays auto) | |
+| Range slider | | `--range-track`, `--range-fill`, `--range-thumb` | |
+| Checkbox / radio / switch | | `--control-accent`, radius, stroke | |
+| Select & picker | | field + menu spec | |
+| Selection, caret, placeholder | | `--selection-*`, `--caret`, `--placeholder` | |
+| Autofill, validation, file input, progress, backdrop | | `--autofill-ring`, error token, secondary button, `--scrim` | |
+
 ## 8. Motion
 - Durations: instant <..> · fast <..> · normal <..> · slow <..>
 - Easings: <names + cubic-bezier values>

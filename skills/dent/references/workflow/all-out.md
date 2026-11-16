@@ -37,6 +37,7 @@ All-out never means: ignoring the user's scope, adding features they didn't ask 
 - [ ] Product demonstration: interactive or animated, real UI, legible on phones (simplified crop)
 - [ ] Pricing (if any): honest, toggle changes prices, annual savings computed correctly, comparison table, currency/tax notes, accessible toggle
 - [ ] Forms: labels, validation, success, error, loading, autocomplete attributes, no real-person placeholders
+- [ ] Built-in surfaces at Match in both themes: tooltips, scrollbars, sliders, checkboxes/radios/switches, selects, selection, caret, placeholder, autofill, file input, backdrops; `verify_page.py --surfaces match` passes; surface sheet captured (`../built-in-surfaces.md`)
 - [ ] Navigation: sticky/condensing header (`mwg:shrinking-header-on-scroll`), skip link, mobile menu as a native drawer (`mwg:navigation-drawer`: Esc, swipe, outside tap, no hand-made trap or scroll lock), active section indicator (`mwg:scrollspy`)
 - [ ] Footer: legal links, licence/privacy, contact, social with accessible names
 - [ ] Dark + light (system default + toggle with persistence, no flash of wrong theme; `mwg:dark-mode`, `mwg:dark-mode-toggle`)
@@ -57,6 +58,7 @@ All-out never means: ignoring the user's scope, adding features they didn't ask 
 - [ ] Data: realistic varied sample data; 0/1/many/10 000; long names; i18n lengths; numbers/dates/currency by locale
 - [ ] Tables: sort, filter chips, column visibility, density, bulk actions, keyboard row actions, sticky header, responsive strategy, virtualisation for large sets
 - [ ] Forms: validation timing, error summary for long forms, autosave/drafts, unsaved-changes guard, keyboard submit
+- [ ] Built-in surfaces at Match: tooltips on every icon button, scrollbars in every scroll region (tables, sidebars, code, chat), selects, sliders, checkboxes, date fields; surface sheet in light/dark/forced colors (`../built-in-surfaces.md`)
 - [ ] Feedback: optimistic updates with rollback, undo, toasts in live regions, confirmations for irreversible actions
 - [ ] Power users: command palette, shortcuts + cheat sheet, saved views
 - [ ] Roles and permissions states; workspace switching if multi-tenant

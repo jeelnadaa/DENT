@@ -85,6 +85,7 @@ A shortcut for choosing queries and ids; it never replaces `search` (upstream ad
 | Gestures and drag | `mwg:drag`, `mwg:drag-and-drop`, `mwg:swipe-to-remove`, `mwg:swipe-to-reveal`, `mwg:pull-to-reveal`, `mwg:2d-panning` |
 | Depth, shapes, textures, text effects | `mwg:visual-effects`, `mwg:complex-shapes`, `mwg:shaped-cutouts`, `mwg:soft-edge-content-fade`, `mwg:visually-texture-content`, `mwg:custom-text-decorations` |
 | WebGL, canvas, 3D in a page | `mwg:apply-webgl-shaders`, `mwg:interactive-content-in-3d-scenes`, `mwg:expose-canvas-content-to-browser-features` |
+| Built-in browser UI: selection, caret, placeholder, file button, scrollbars, autofill (levels and design: `built-in-surfaces.md`) | `mwg:browser-ui-theming`, `mwg:customize-scrollbar-color-and-thickness`, `mwg:adapt-scrollbar-to-contrast-preferences`, `mwg:autofill-highlight-inputs`, `mwg:custom-text-decorations` |
 | Icons | `mwg:icons` |
 | Performance and Core Web Vitals | `mwg:optimize-image-priority`, `mwg:optimize-preload-priority`, `mwg:optimize-script-priority`, `mwg:deliver-optimized-decorative-images`, `mwg:lazy-load-video-and-audio`, `mwg:defer-rendering-heavy-content`, `mwg:break-up-long-tasks`, `mwg:identify-inp-causes` |
 | Security and privacy | `mwg:security`, `mwg:sanitize-untrusted-html`, `mwg:trusted-types`, `mwg:secure-external-subresources`, `mwg:privacy` |

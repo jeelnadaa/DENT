@@ -16,7 +16,8 @@ Inventory, create or extend a design system (tokens, components, docs).
 1. Inventory foundations, components, behaviour and implementation; classify findings (Healthy, Inconsistent, Missing, Outdated, Conflicting, Intentional exception).
 2. Propose one coherent system that reuses healthy parts; three-tier tokens.
 3. Implement tokens and components; document each component (purpose, anatomy, variants, states, a11y, content).
-4. Verify with a component sheet (every component in every state).
+4. Include the built-in surfaces (tooltips, scrollbars, form controls, selection, caret, placeholder, autofill) as system components with tokens (references/built-in-surfaces.md).
+5. Verify with a component sheet (every component and built-in surface in every state).
 
 ## Output
 Inventory table, token files, component specs, component sheet.

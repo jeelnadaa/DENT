@@ -21,6 +21,7 @@ You only need `/dent`: the router (`skills/dent/references/workflow/orchestratio
 | `/dent:accessibility` | Focused accessibility audit and remediation (WCAG 2.2 AA). |
 | `/dent:system` | Inventory, create or extend a design system (tokens, components, docs). |
 | `/dent:components` | Choose, install and customise the right component/UI libraries for this project. |
+| `/dent:surfaces` | Make every built-in browser surface match the product design: tooltips, scrollbars, sliders, checkboxes, radios, switches, selects, text selection, caret, placeholder, autofill, file inputs, progress and backdrops. |
 | `/dent:directions` | Explore 2–4 genuinely different creative directions before committing. |
 | `/dent:type` | Design hero titles and expressive typography (custom type compositions). |
 | `/dent:copy` | Write or fix UX copy: headlines, CTAs, microcopy, errors, empty states. |
@@ -69,7 +70,7 @@ Create a new product, page, site or interface from scratch.
 - **Usage:** `/dent:create <what to create>`
 - **Default depth:** Standard or Advanced
 - **Loads:** references/workflow-questions-and-effort.md; references/creative-direction.md; references/creative/directions-library.md; references/recipes/landing-page.md or references/recipes/app-and-dashboard.md; references/foundations-and-components.md; references/workflow/verification.md
-- **Does:** Ask the effort level first, then only missing essentials (or decide everything if told to) → Plan (inline for Standard, PLAN → Direction → Follow the recipe step by step, including every gate inside it → Build tokens → components → screens → modern layer → media → Verify (verify_page
+- **Does:** Ask the effort level first, then only missing essentials (or decide everything if told to) → Plan (inline for Standard, PLAN → Direction → Follow the recipe step by step, including every gate inside it → Build tokens → components → screens → built-in surfaces at the chosen level (references/built-in-surfaces → Verify (verify_page
 - **Delivers:** Working files, Decision Log, gate results, scorecard, attribution; DESIGN.md after approval.
 - **Definition:** [`skills/dent/commands/create.md`](../skills/dent/commands/create.md)
 
@@ -190,7 +191,7 @@ Inventory, create or extend a design system (tokens, components, docs).
 - **Usage:** `/dent:system <scope>`
 - **Default depth:** Advanced
 - **Loads:** references/workflow/execution-and-scope.md §1–2; references/design-tokens-and-code.md; references/foundations-and-components.md; references/tooling-and-handoff.md §3
-- **Does:** Inventory foundations, components, behaviour and implementation; classify findings (Healthy, Inconsistent, Missing, Outdated, Conflicting, Intentional exception) → Propose one coherent system that reuses healthy parts; three-tier tokens → Implement tokens and components; document each component (purpose, anatomy, variants, states, a11y, content) → Verify with a component sheet (every component in every state)
+- **Does:** Inventory foundations, components, behaviour and implementation; classify findings (Healthy, Inconsistent, Missing, Outdated, Conflicting, Intentional exception) → Propose one coherent system that reuses healthy parts; three-tier tokens → Implement tokens and components; document each component (purpose, anatomy, variants, states, a11y, content) → Include the built-in surfaces (tooltips, scrollbars, form controls, selection, caret, placeholder, autofill) as system components with tokens (references/built-in-surfaces → Verify with a component sheet (every component and built-in surface in every state)
 - **Delivers:** Inventory table, token files, component specs, component sheet.
 - **Definition:** [`skills/dent/commands/system.md`](../skills/dent/commands/system.md)
 
@@ -204,6 +205,17 @@ Choose, install and customise the right component/UI libraries for this project.
 - **Does:** Detect framework, language, styling, existing libraries and browser-support policy → List functional needs and the visual direction → Shortlist 2–3 options per need from the catalogue; compare compatibility, accessibility, customisation, performance, licence, maintenance, design fit → Recommend one per job with trade-offs; check the licence from the official source → Install, theme to DESIGN
 - **Delivers:** Comparison table, recommendation with reasons, install + integration, verification.
 - **Definition:** [`skills/dent/commands/components.md`](../skills/dent/commands/components.md)
+
+### `/dent:surfaces`
+
+Make every built-in browser surface match the product design: tooltips, scrollbars, sliders, checkboxes, radios, switches, selects, text selection, caret, placeholder, autofill, file inputs, progress and backdrops.
+
+- **Usage:** `/dent:surfaces <page, app or the surfaces to fix>`
+- **Default depth:** Standard
+- **Loads:** references/built-in-surfaces.md; references/modern-web-guidance.md; references/foundations-and-components.md §4; DESIGN.md
+- **Does:** Inventory the built-in surfaces actually present → Ask the surface level if unknown (built-in-surfaces → Derive the surface tokens from DESIGN → For each surface, search and retrieve its Modern Web Guidance guide and build it on the native element (§4); no div rebuilds where CSS reaches the design → Cover every state → Build a surface sheet (every surface x state x theme) and screenshot it; run `verify_page
+- **Delivers:** Surface decision table (level, tokens, exceptions) in DESIGN.md, the implementation, surface sheet screenshots, verification results.
+- **Definition:** [`skills/dent/commands/surfaces.md`](../skills/dent/commands/surfaces.md)
 
 ### `/dent:directions`
 

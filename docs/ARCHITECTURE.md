@@ -37,7 +37,7 @@ At **All-out** effort, `workflow/all-out.md` adds a mandatory completeness sweep
 | Path | Holds | Loaded when |
 |---|---|---|
 | `skills/dent/SKILL.md` | Router, workflow summary, laws, non-negotiables, gates, command table, reference map | Always |
-| `skills/dent/commands/` | 31 command definitions: load list, steps, output, never-list | When a command runs (or the router picks it) |
+| `skills/dent/commands/` | 32 command definitions: load list, steps, output, never-list | When a command runs (or the router picks it) |
 | `references/workflow/` | Orchestration, planning + plan audit, execution + scope, verification, scoring + close-out, All-out protocol | Every non-trivial task (only the relevant file) |
 | `references/recipes/` | Step-by-step procedures with gates (landing page, app & dashboard) | Building those deliverables |
 | `references/creative/` | Directions library, hero typography, anti-slop detector | Direction, polish, review |
@@ -48,6 +48,7 @@ At **All-out** effort, `workflow/all-out.md` adds a mandatory completeness sweep
 | `references/styles/` | 41 aesthetic styles + index + template | A look is named or chosen |
 | `references/*.md` | Foundations & components, modern layer, color, typography, accessibility, patterns, platforms, industries, tokens & code, quality review, i18n, brand, assets, research, ethics, tooling | As routed |
 | `skills/dent/templates/` | PLAN, AUDIT, REVIEW, SCORECARD, MOTION, SOUND, VIDEO | Advanced work, reviews, media |
+| `references/built-in-surfaces.md` | Built-in surfaces (tooltips, scrollbars, sliders, form controls, selection, caret, placeholder, autofill): Match / Tint / Native question, surface tokens, inventory, style personalities, verification | Any visual web build at Standard+, `/dent:surfaces` |
 | `references/modern-web-guidance.md` | DENT's adapter for Modern Web Guidance: precedence, workflow, DENT → MWG map, native-first rule, resolved conflicts | Any HTML/CSS/client-side JS work |
 | `skills/modern-web-guidance/` | Google's Modern Web Guidance skill (SKILL.md + 209 guides), vendored verbatim with `LICENSE` and `UPSTREAM.json`; `vendor/modern-web-guidance/` inside zip and rules-file installs | Web work (its own trigger, or via DENT) |
 | `skills/dent/scripts/` | `verify_page.py`, `contrast.py`, `mwg.py` (offline MWG search/retrieve) | Verification, MWG lookups without network |

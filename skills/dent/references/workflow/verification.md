@@ -23,6 +23,7 @@ Prefer tools already installed in the project. Don't add dependencies just to sa
 ```bash
 python scripts/verify_page.py path/to/index.html --out .dent/verify
 python scripts/verify_page.py http://localhost:3000 --out .dent/verify --widths 320 375 390 768 1024 1440
+python scripts/verify_page.py path/to/index.html --surfaces match   # also gate built-in surfaces (built-in-surfaces.md)
 python scripts/contrast.py "#1A1A1A:#FFFFFF" "#6B7280:#FFFFFF"
 ```
 
@@ -81,6 +82,7 @@ Use this table in the close-out (and `templates/REVIEW.md` for full reviews):
 |---|---|---|
 | G2 Layout 320–1440 | Passed | verify_page: max scrollWidth = viewport at all 6 widths |
 | G3 Contrast | Failed → fixed | `--muted` 3.9:1 → changed to #5F6670 (5.1:1) |
+| G8 Built-in surfaces (Match) | Passed | `verify_page.py --surfaces match`: tooltips, scrollbars, checkboxes, selection, caret, placeholder all styled; surface sheet light/dark checked |
 | G13 Modern Web Guidance | Passed | `dialog`, `accordion`, `motion`, `optimize-image-priority` retrieved and cross-checked; verify_page G13 passed |
 | Keyboard path | Not run | No browser automation in this environment; reviewed focus styles in code |
 

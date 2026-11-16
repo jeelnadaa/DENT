@@ -62,6 +62,7 @@ The user decides how deep the design goes. **Ask this first** (question 0), with
 | Motion | State transitions only (100–200ms) | Motion tokens + subtle feedback | Hover system, scroll reveals, shared transitions | Signature hero moments, choreography, springs, sound/haptics if relevant |
 | Typography | Type scale, 1–2 fonts | + style pairing | + typography craft (tracking, balance, fluid) | + expressive/kinetic moments |
 | Color & theme | One mode | One mode, full semantic set | Light + dark | + high contrast, theme switching, brand scales |
+| Built-in surfaces (`built-in-surfaces.md`) | Tint: accent on native controls, themed scrollbars, selection, no `title` tooltips | Match: tooltips, scrollbars, sliders, checkboxes, selects, selection, caret, placeholder | + autofill, validation, file input, progress, disclosure markers, backdrops; surface sheet | + every surface in every state and theme, forced colors, style-specific personality |
 | Copy | Clear labels & errors | UX-writing rules applied | Voice & tone defined | Full microcopy set |
 | Icons/images | One icon set | + image treatment | Illustration/imagery direction | Custom illustration/icon system, art direction |
 | Accessibility | Minimum bar | + component ARIA patterns | + full WCAG 2.2 AA checklist | + cognitive/motor/vision deep pass |
@@ -97,6 +98,7 @@ Rules:
 | 7 | **Typography** | Personality + readability | 2–3 pairings from typography.md §3 that fit the chosen style, each with a sample line and a mood note |
 | 8 | **Density** | Spacing and component sizes | Comfortable (Recommended for most) · Compact (data-heavy/pro tools) · Spacious (marketing/luxury) |
 | 9 | **Motion: which kinds** (multi-select) **+ intensity** | How alive it feels; what gets built | Kinds: hero entrance · scroll · hover · micro-interactions · page/view transitions · text · data · layout · ambient · cursor · SVG/illustration · loading/feedback · 3D/depth · gestures · You choose. Intensity: Subtle · Balanced (Recommended) · Expressive · Cinematic. Script and recommended sets: `motion/motion-menu.md` |
+| 9b | **Built-in surfaces** (Standard+ visual builds) | Tooltips, scrollbars, sliders, checkboxes and dropdowns otherwise show OS defaults | Match my design everywhere (Recommended) · Brand tint only · Keep the native look · Let me choose per element. Script: `built-in-surfaces.md` §2 |
 | 10 | **Corner shape** (only if the style allows choice) | Personality | Sharp (0–4px) · Soft (8–12px) · Round (16px+/pills) |
 | 11 | **References** (optional) | Fast alignment | "Any app or site whose look you like?" — free answer |
 | 12 | **Content & must-haves** | Real content beats placeholders | Key sections/features, logo, real copy, images available? |
@@ -133,6 +135,7 @@ When the user asks to add something to an existing design:
 | Any web code change: HTML, CSS, client-side JS, a component, "use the modern way", browser support, Core Web Vitals, "modernize the codebase" | modern-web-guidance.md (search + retrieve the MWG guides first; native first; legacy scan only for broad modernization) |
 | Animations, transitions, micro-interactions, "more motion" | `motion/motion-menu.md` (ask kinds + intensity, minimums) + `modern-layer.md` (motion system, micro-interactions, reduced motion, performance) |
 | Hover effects | `modern-layer.md` §7.4 |
+| "Tooltip/scrollbar/slider/checkbox/dropdown looks default", "make native controls match", custom scrollbars, text highlight colour | built-in-surfaces.md (`/dent:surfaces`) |
 | Scroll effects, parallax, sticky storytelling | `modern-layer.md` §7.5 |
 | "More modern / premium / polished" | `modern-layer.md` + quality-review.md Part 2 §4 |
 | Dark mode / theme switch | color.md Part 1 §7 + design-tokens-and-code.md Part 1 §4 + `mwg:dark-mode`, `mwg:dark-mode-toggle` |
@@ -181,6 +184,7 @@ Choose the best default from this skill, in this order, and record each as **"Ch
 5. **Typography:** the style's suggested fonts.
 6. **Density:** comfortable; compact for data-heavy tools.
 7. **Motion:** the recommended set for the product type at Balanced intensity (`motion/motion-menu.md` §4), meeting the floor for the effort level (§2).
+7b. **Built-in surfaces:** Tint at Essential, Match at Standard and above; in an existing product, its current level applied consistently (`built-in-surfaces.md` §2).
 8. Everything else: DENT defaults (`foundations-and-components.md`, `modern-layer.md`).
 
 Then present the design with a short "Decisions I made" summary and invite changes. The user can still change anything later.

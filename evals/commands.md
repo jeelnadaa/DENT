@@ -6,7 +6,7 @@
 ## 2. Discovery (manual, per agent)
 | Agent | Test | Pass when |
 |---|---|---|
-| Claude Code (plugin) | Type `/dent:` | All 31 commands listed with descriptions |
+| Claude Code (plugin) | Type `/dent:` | All 32 commands listed with descriptions |
 | Claude Code (manual skill) | `/dent plan a pricing page` | Skill loads and follows `commands/plan.md` |
 | Codex / Cursor / Copilot / Gemini CLI | `dent audit this page` (with a file) | Skill triggers; follows `commands/audit.md` steps |
 
@@ -23,6 +23,7 @@ For each prompt, the first reply must state the classification/plan line and the
 | `/dent go all out: landing page + launch video with voice-over` | two pipelines, All-out protocol, shared DESIGN.md; asks about generative access and voice |
 | `/dent improve it` (after a scorecard) | improve; (no scorecard yet → score first) |
 | `/dent the submit button does nothing` | fix → verify |
+| `/dent the tooltips and scrollbars look like Windows defaults` | surfaces (+ verify); fixes those and checks sibling surfaces; asks the Match/Tint/Native level only if unknown |
 | `/dent how would you redesign our settings?` | plan (no building) |
 | `/dent make a 30 second trailer for our game` | video (trailer) → sound → verify |
 
@@ -43,6 +44,7 @@ For each prompt, the first reply must state the classification/plan line and the
 | accessibility | `/dent:accessibility` | Automated + manual list; criteria checked |
 | system | `/dent:system` | Inventory + classification |
 | components | `/dent:components rich text editor for Next.js` | Detect stack; compare 2–3 with licences |
+| surfaces | `/dent:surfaces` (on a page with native checkboxes and `title` tooltips) | Lists the built-in surfaces present, asks Match / Tint / Native (Match recommended), names the MWG guide per surface |
 | directions | `/dent:directions for a fintech app` | Name the cliché; 2–4 different directions |
 | type | `/dent:type hero for "Ship faster"` | Role + technique + faces with licence |
 | copy | `/dent:copy pricing page` | Voice words; specific copy; no slop phrases |

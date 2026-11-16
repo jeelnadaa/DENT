@@ -11,10 +11,10 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-111?style=flat-square)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-SKILL.md-111?style=flat-square)](https://agentskills.io)
-[![Version](https://img.shields.io/badge/version-2.3.0-E8461E?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.4.0-E8461E?style=flat-square)](CHANGELOG.md)
 [![Modern Web Guidance](https://img.shields.io/badge/web%20authority-Modern%20Web%20Guidance-111?style=flat-square)](#modern-web-guidance-the-authority-for-web-code)
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-111?style=flat-square)](skills/dent/references/styles/_styles-index.md)
-[![Commands](https://img.shields.io/badge/commands-31-111?style=flat-square)](docs/COMMANDS.md)
+[![Commands](https://img.shields.io/badge/commands-32-111?style=flat-square)](docs/COMMANDS.md)
 
 **[Website](https://dent.solarquack.in)** · **[Install](#install)** · **[One command](#one-command-the-right-pipeline)** · **[What it can make](#what-dent-can-make)** · **[Proof](#see-the-difference-run-the-benchmark)** · **[Commands](docs/COMMANDS.md)** · **[Architecture](docs/ARCHITECTURE.md)**
 
@@ -34,6 +34,7 @@ Ask any agent for a landing page and you get the average of every template: a vi
 | "Looks fine on my screen" | `verify_page.py` checks overflow at 6 widths, contrast, labels, reduced motion, autoplay audio |
 | Adds a second UI library to your repo | Detects your design system and extends it; picks libraries from sourced catalogues, licences included |
 | Writes yesterday's web code: JS modals with focus traps, positioning libraries, global animation kill switches | Follows Google's **Modern Web Guidance** first: native `<dialog>`, `popover`, anchor positioning, `<details>`, view transitions, with each guide's fallbacks |
+| Leaves OS-default tooltips, scrollbars, sliders and checkboxes on a designed page | Asks *match my design / brand tint / native*, then styles every built-in surface with your tokens and checks it (`/dent:surfaces`) |
 | Fades everything in | Motion with a purpose, storyboards for motion graphics, reduced-motion versions |
 | Click sounds everywhere, autoplaying music | Sound as a designed, opt-in system; narration with captions |
 | "Done!" | Scores itself against *your* request with evidence; `/dent:improve` raises the score |
@@ -59,7 +60,7 @@ You never have to learn the commands. Type `/dent` (or just describe what you wa
 ```
 → `responsive → verify`. No questionnaire for a bug.
 
-Power users can call any of the [31 commands](docs/COMMANDS.md) directly: `/dent:plan`, `/dent:audit`, `/dent:components`, `/dent:motion-graphics`, `/dent:sound`, `/dent:video`, `/dent:score`, `/dent:improve`…
+Power users can call any of the [32 commands](docs/COMMANDS.md) directly: `/dent:plan`, `/dent:audit`, `/dent:components`, `/dent:motion-graphics`, `/dent:sound`, `/dent:video`, `/dent:score`, `/dent:improve`…
 
 ---
 
@@ -327,7 +328,7 @@ a short summary of the design decisions you made.
 
 ## Install
 
-**Claude Code (plugin, gets all 31 slash commands)**
+**Claude Code (plugin, gets all 32 slash commands)**
 ```bash
 /plugin marketplace add jeelnadaa/DENT
 ```
@@ -387,7 +388,7 @@ Score it. Then improve it.
 ```
 skills/dent/
 ├── SKILL.md            # the router: classify → route → gates → score (lean, always loaded)
-├── commands/           # 31 command definitions (one source of truth per command)
+├── commands/           # 32 command definitions (one source of truth per command)
 ├── references/         # loaded only when needed
 │   ├── workflow/       # orchestration, planning + plan audit, execution, verification, scoring, all-out
 │   ├── recipes/        # step-by-step procedures with gates (landing page, app & dashboard)

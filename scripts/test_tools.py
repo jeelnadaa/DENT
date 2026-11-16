@@ -2,7 +2,8 @@
 """Regression tests for DENT's runnable tools.
 
 - contrast.py: known ratios
-- verify_page.py: evals/fixtures/bad.html must fail G2, G3, G4, G10, G11, G13 (each MWG rule it breaks);
+- verify_page.py (run with --surfaces match): evals/fixtures/bad.html must fail G2, G3, G4, G8_surfaces, G10, G11,
+  G13 (each MWG rule and default surface it has);
   good.html must pass all (including a slowed progress spinner under reduced motion)
   (skipped with a clear message if Playwright/Chromium isn't installed)
 
@@ -42,7 +43,7 @@ def test_contrast() -> None:
 def run_verify(page: Path) -> dict | None:
     with tempfile.TemporaryDirectory() as out:
         r = subprocess.run([sys.executable, str(SCRIPTS / "verify_page.py"), str(page), "--out", out,
-                            "--no-screenshots", "--widths", "390", "1024"], capture_output=True, text=True)
+                            "--no-screenshots", "--widths", "390", "1024", "--surfaces", "match"], capture_output=True, text=True)
         if r.returncode == 2:
             print("  skip  verify_page.py could not run: " + (r.stdout.strip().splitlines() or ["?"])[-1])
             return None
@@ -56,8 +57,11 @@ def test_verify() -> None:
         return
     g = bad["gates"]
     for gate in ("G2_layout", "G3_contrast_sample", "G4_operability_auto", "G10_reduced_motion", "G11_no_autoplay_audio",
-                 "G13_modern_web_auto"):
+                 "G13_modern_web_auto", "G8_surfaces"):
         check(g.get(gate) == "Failed", f"bad.html fails {gate}")
+    missing = set(bad.get("surfaces", {}).get("missing", []))
+    for s in ("title tooltips", "range slider", "checkbox"):
+        check(s in missing, f"bad.html: G8_surfaces flags {s}")
     rules = {f["rule"] for f in bad.get("mwg", {}).get("fails", [])}
     for rule in ("mwg:motion", "mwg:optimize-image-priority", "mwg:dialog", "mwg:sms-otp-form"):
         check(rule in rules, f"bad.html: G13 flags {rule}")

@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- DENT test fixture: deliberately broken. verify_page.py must FAIL G2, G3, G4, G10, G11 and G13. -->
+<!-- DENT test fixture: deliberately broken. verify_page.py must FAIL G2, G3, G4, G10, G11 and G13 (and G8_surfaces with --surfaces match). -->
 <html>
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -23,6 +23,8 @@
   <button><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6"/></svg></button>  <!-- G4: unnamed -->
   <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">     <!-- G4: no alt; also no lang on html -->
   <div class="spin"></div>
+  <span title="Saves your work every 30 seconds">Autosave</span>  <!-- G8_surfaces: native title tooltip -->
+  <input type="range" aria-label="Volume"> <input type="checkbox" aria-label="Remember me">  <!-- G8_surfaces: OS-default controls -->
   <dialog role="dialog" aria-modal="true" aria-label="Settings"><p>Re-added ARIA</p></dialog>  <!-- G13: ARIA on native dialog (mwg:dialog) -->
   <div class="otp"><input maxlength="1" aria-label="Digit 1"><input maxlength="1" aria-label="Digit 2"><input maxlength="1" aria-label="Digit 3"><input maxlength="1" aria-label="Digit 4"></div>  <!-- G13: split one-time code (mwg:sms-otp-form) -->
   <script>

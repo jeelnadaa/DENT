@@ -13,6 +13,10 @@ Checks (DENT gates in SKILL.md §3):
       one-time codes split across several inputs. Warnings: LCP image without fetchpriority="high", more than
       two high-priority images, custom ARIA dialogs instead of <dialog>, dark-mode rules without color-scheme.
       The rest of G13 (code checked against the retrieved guides) is a manual step: references/modern-web-guidance.md
+  G8_surfaces (only with --surfaces match|tint|native): built-in surfaces present on the page (tooltips,
+      scrollbars, sliders, checkboxes, radios, switches, selects, file inputs, progress, selection, caret,
+      placeholder, autofill, disclosure markers, dialog backdrops) and whether each is styled; fails when the
+      chosen level isn't met. Without the flag the inventory is reported only. See references/built-in-surfaces.md
   +   motion inventory (keyframes, transitions, hover, scroll-driven, view transitions, motion libraries)
   +   console errors, page errors; full-page screenshots per width
 
@@ -20,6 +24,7 @@ Usage:
   python verify_page.py index.html --out .dent/verify
   python verify_page.py http://localhost:3000 --widths 320 375 390 768 1024 1440 --out out
   python verify_page.py page.html --channel chrome      # use installed Chrome/Edge instead of Playwright's Chromium
+  python verify_page.py page.html --surfaces match      # also gate built-in surfaces at the chosen level
 
 Requires: pip install playwright && python -m playwright install chromium   (or --channel chrome|msedge)
 Exit code: 0 all gates passed, 1 a gate failed, 2 could not run.
@@ -236,6 +241,48 @@ async () => {
 }
 """
 
+SURFACES_JS = r"""
+() => {
+  const css = [];
+  const walk = rules => { for (const r of rules) { css.push((r.selectorText || '') + '{' + (r.style ? r.style.cssText : '') + '}'); if (r.cssRules) walk(r.cssRules); } };
+  for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch (e) {} }
+  const all = css.join('\n');
+  const has = re => re.test(all);
+  const cs = el => getComputedStyle(el);
+  const custom = el => { const s = cs(el); return (s.appearance && s.appearance !== 'auto') || (s.accentColor && s.accentColor !== 'auto'); };
+  const tinted = el => { const s = cs(el); return s.accentColor && s.accentColor !== 'auto'; };
+  const q = s => [...document.querySelectorAll(s)];
+  const surfaces = {};
+  const add = (name, els, styledFn, tintFn) => {
+    if (!els.length) return;
+    const styled = els.filter(styledFn).length;
+    surfaces[name] = { count: els.length, styled: styled === els.length, tinted: (tintFn ? els.filter(tintFn).length === els.length : styled === els.length) };
+  };
+  const textual = q('input:not([type]),input[type=text],input[type=email],input[type=search],input[type=tel],input[type=url],input[type=password],input[type=number],textarea');
+  add('checkbox', q('input[type=checkbox]:not([switch])'), custom, tinted);
+  add('radio', q('input[type=radio]'), custom, tinted);
+  add('switch', q('input[type=checkbox][switch]'), custom, tinted);
+  add('range slider', q('input[type=range]'), el => cs(el).appearance === 'none', tinted);
+  add('progress/meter', q('progress,meter'), custom, tinted);
+  add('select', q('select'), el => cs(el).appearance !== 'auto' && cs(el).appearance !== 'menulist', el => true);
+  add('file input', q('input[type=file]'), () => has(/::file-selector-button/), () => has(/::file-selector-button/));
+  add('placeholder', q('[placeholder]'), () => has(/::placeholder/), () => true);
+  add('caret', textual, () => has(/caret-color/), () => has(/caret-color/));
+  add('autofill', textual.filter(e => (e.getAttribute('autocomplete') || '') && e.getAttribute('autocomplete') !== 'off'), () => has(/autofill/), () => true);
+  add('disclosure marker', q('details > summary'), el => cs(el).display !== 'list-item', () => true);
+  add('dialog backdrop', q('dialog'), () => has(/::backdrop/), () => true);
+  if ((document.body.innerText || '').trim()) add('text selection', [document.body], () => has(/::selection/), () => has(/::selection/));
+  const scrollers = [document.documentElement, ...q('body *').filter(e => { const s = cs(e); return /(auto|scroll)/.test(s.overflowY + s.overflowX) && (e.scrollHeight > e.clientHeight + 1 || e.scrollWidth > e.clientWidth + 1); })]
+    .filter(e => e !== document.documentElement || document.documentElement.scrollHeight > innerHeight + 1);
+  add('scrollbars', scrollers, e => cs(e).scrollbarColor && cs(e).scrollbarColor !== 'auto', e => cs(e).scrollbarColor && cs(e).scrollbarColor !== 'auto');
+  const titleTips = q('[title]').filter(e => !/^(IFRAME|ABBR|LINK|STYLE|FRAME|OBJECT|EMBED)$/i.test(e.tagName) && e.getAttribute('title').trim());
+  const thin = scrollers.filter(e => cs(e).scrollbarWidth === 'thin').map(e => e.tagName.toLowerCase() + (e.id ? '#' + e.id : ''));
+  const unvalidated = q('form:not([novalidate])').filter(f => f.querySelector('[required],[pattern],[min],[max],[type=email],[type=url]')).length;
+  return { surfaces, titleTooltips: titleTips.slice(0, 10).map(e => e.tagName.toLowerCase() + ': ' + e.getAttribute('title').slice(0, 40)), titleCount: titleTips.length,
+           thinScrollbars: thin, nativeValidationForms: unvalidated, colorScheme: cs(document.documentElement).colorScheme };
+}
+"""
+
 SCROLL_JS = "async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); } window.scrollTo(0, 0); }"
 
 
@@ -252,6 +299,7 @@ def main() -> int:
     ap.add_argument("--height", type=int, default=900)
     ap.add_argument("--channel", default=None, help="use an installed browser: chrome, msedge")
     ap.add_argument("--no-screenshots", action="store_true")
+    ap.add_argument("--surfaces", choices=["match", "tint", "native"], help="gate built-in surfaces at this level (built-in-surfaces.md)")
     args = ap.parse_args()
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -303,6 +351,7 @@ def main() -> int:
         wide = max(args.widths)
         ctx, pg = new_page(wide)
         report["mwg"] = pg.evaluate(MWG_JS)
+        report["surfaces"] = pg.evaluate(SURFACES_JS)
         report["a11y"] = pg.evaluate(A11Y_JS)
         pg.evaluate(SCROLL_JS); pg.wait_for_timeout(300)
         report["contrast_failures"] = pg.evaluate(CONTRAST_JS)
@@ -335,6 +384,16 @@ def main() -> int:
     loops_reduced = [x for x in decorative_reduced if x["iterations"] in ("Infinity", "inf")]
     g["G10_reduced_motion"] = "Failed" if loops_reduced or len(decorative_reduced) > max(2, len(decorative_normal) // 4) else "Passed"
     g["G13_modern_web_auto"] = "Failed" if report["mwg"]["fails"] else "Passed"
+    sf = report["surfaces"]
+    if args.surfaces == "match":
+        sf["missing"] = [k for k, v in sf["surfaces"].items() if not v["styled"]] + (["title tooltips"] if sf["titleCount"] else [])
+    elif args.surfaces == "tint":
+        sf["missing"] = [k for k, v in sf["surfaces"].items() if not v["tinted"]]
+    else:
+        sf["missing"] = []
+    if args.surfaces:
+        sf["level"] = args.surfaces
+        g["G8_surfaces"] = "Failed" if sf["missing"] else "Passed"
     au = report["audio"]
     audible_media = [m for m in au["mediaPlayBeforeGesture"] if not m["muted"]] + a["autoplayMedia"]
     g["G11_no_autoplay_audio"] = "Failed" if audible_media or au["sourcesBeforeGesture"] else "Passed"
@@ -374,6 +433,17 @@ def main() -> int:
     for w_ in mw["warns"]:
         print(f"      warn {w_['rule']}: {w_['detail']}")
     print("    (G13 also needs the code checked against the retrieved MWG guides: references/modern-web-guidance.md)")
+    styled = [k for k, v in sf["surfaces"].items() if v["styled"]]
+    native = [k for k, v in sf["surfaces"].items() if not v["styled"]]
+    print(f"  built-in surfaces: styled={', '.join(styled) or 'none'} | native={', '.join(native) or 'none'}"
+          + (f" | level={sf['level']}, missing: {', '.join(sf['missing']) or 'none'}" if args.surfaces else " (add --surfaces match|tint|native to gate)"))
+    if sf["titleCount"]:
+        print(f"  warning: {sf['titleCount']} title-attribute tooltip(s) (can't be styled, no touch/keyboard): e.g. {sf['titleTooltips'][0]}; "
+              "use a designed tooltip (mwg:interest-triggered-tooltips)")
+    if sf["thinScrollbars"]:
+        print(f"  warning: scrollbar-width: thin on {', '.join(sf['thinScrollbars'][:4])}: keep auto unless another way to scroll exists (MWG)")
+    if sf["nativeValidationForms"] and args.surfaces == "match":
+        print(f"  note: {sf['nativeValidationForms']} form(s) rely on browser validation bubbles, which can't be styled: use inline messages (mwg:forms)")
     print(f"  console errors: {len(report['console_errors'])}")
     print("  gates: " + "  ".join(f"{k}={v}" for k, v in g.items()))
     print(f"  report: {out / 'report.json'}")

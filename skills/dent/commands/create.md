@@ -19,7 +19,7 @@ Create a new product, page, site or interface from scratch.
 2. Plan (inline for Standard, PLAN.md for Advanced) and audit it.
 3. Direction: concept sentence, category-cliché check, one base style + ≤1 accent, signature element, hero type move.
 4. Follow the recipe step by step, including every gate inside it.
-5. Build tokens → components → screens → modern layer → media.
+5. Build tokens → components → screens → built-in surfaces at the chosen level (references/built-in-surfaces.md; ask the surface question at Standard+) → modern layer → media.
 6. Verify (verify_page.py when a browser is available), fix, then score and close out.
 
 ## Output

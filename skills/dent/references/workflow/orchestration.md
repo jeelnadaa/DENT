@@ -39,6 +39,7 @@ Use the **first matching row** for the main command, then add **companion comman
 | "Accessible", "WCAG", "screen reader", "keyboard", "contrast" | `accessibility` | `verify` |
 | Tokens, theme, design system, component library for the team | `system` | `components`, `handoff` |
 | "Which library / should I use X or Y / install a table/editor/calendar" | `components` | — |
+| Tooltips, scrollbars, sliders, checkboxes, dropdowns or text highlight "look default", "match our design", "style the native controls" | `surfaces` | `verify` |
 | "Options", "directions", "concepts", "moodboard", "not sure what style" | `directions` | `type` |
 | Headline, hero title, typography, font pairing | `type` | `copy` |
 | Words: copy, headline text, microcopy, error messages, tone | `copy` | — |
@@ -67,8 +68,8 @@ Each deliverable has a default pipeline. Commands in brackets run only at the ef
 
 | Deliverable | Pipeline |
 |---|---|
-| Landing page / marketing site | [directions: Polished+] → create (recipe `recipes/landing-page.md`) → [type, copy: always inside create] → **motion (Standard+; ask kinds + intensity, meet the floor)** → [motion-graphics: All-out] → [assets: Polished+] → verify → score → [improve] |
-| App screen / dashboard / flow | [plan: Advanced+] → create or extend (recipe `recipes/app-and-dashboard.md`) → components (if complex widgets) → [motion: Standard+] → verify → score → [improve] |
+| Landing page / marketing site | [directions: Polished+] → create (recipe `recipes/landing-page.md`) → [type, copy, surfaces: always inside create] → **motion (Standard+; ask kinds + intensity, meet the floor)** → [motion-graphics: All-out] → [assets: Polished+] → verify → score → [improve] |
+| App screen / dashboard / flow | [plan: Advanced+] → create or extend (recipe `recipes/app-and-dashboard.md`) → components (if complex widgets) → surfaces (Standard+) → [motion: Standard+] → verify → score → [improve] |
 | Redesign | audit → plan → [directions: Polished+] → redesign → verify (with regression) → score |
 | Existing UI "make it better" | score → polish → verify → score (show before/after) |
 | Bug / visual defect | fix → verify |
@@ -88,6 +89,7 @@ Before running the pipeline, tell the user in **one line** what you'll do, e.g.:
 ## Step 4: Ask only what the pipeline needs
 Merge the questions all commands in the pipeline need; remove duplicates; ask the most important first, one at a time (`../workflow-questions-and-effort.md`). Respect the question tool's option limit (4 in Claude): split long menus into grouped questions. Effort first (unless stated). Then, only if relevant and unknown:
 - visual: style direction, light/dark, brand colors/fonts;
+- **built-in surfaces (any visual build at Standard+):** Match my design / Brand tint / Native / per element (`../built-in-surfaces.md` §2);
 - **motion (any visual build at Standard+):** which kinds of motion as a **multi-select** (scroll, hover, hero entrance, micro-interactions, transitions, text, data, layout, ambient, cursor, SVG, 3D, gestures, or "You choose") and the intensity (Subtle / Balanced / Expressive / Cinematic). Script: `../motion/motion-menu.md` §1. Skip only if the user already said what motion they want or "no motion";
 - media: sound on/off, narration voice, video length/platform, **generative tool access** (image/video/voice);
 - content: real proof, screenshots, logo.

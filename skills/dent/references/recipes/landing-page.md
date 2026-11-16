@@ -64,7 +64,7 @@ Default order (adapt; remove what has no content):
 
 ## Step 6: Build the system, then the sections
 1. Tokens (color roles, type scale with clamp(), spacing, radius, shadow, motion) — `../foundations-and-components.md`.
-2. Components once: button (primary/secondary/ghost), link, input + label + error, toggle/segmented, card, accordion, tag, nav, menu. Before coding each, search and retrieve its Modern Web Guidance guide (`../modern-web-guidance.md` §2, §4) and build it the native way (`<details>` accordion, `<dialog>` mobile menu, `popover` menus); record the guide ids.
+2. Components once: button (primary/secondary/ghost), link, input + label + error, toggle/segmented, card, accordion, tag, nav, menu, plus the built-in surfaces at the chosen level (tooltips, scrollbars, selection, caret, placeholder, form controls; `../built-in-surfaces.md`). Before coding each, search and retrieve its Modern Web Guidance guide (`../modern-web-guidance.md` §2, §4) and build it the native way (`<details>` accordion, `<dialog>` mobile menu, `popover` menus); record the guide ids.
 3. Sections using only tokens and components.
 4. Mobile layout designed for each section (not just stacked): simplify product mockups, reduce columns, keep CTAs reachable.
 5. Product demo/mockup: build with real DOM text (selectable, legible); at phone width show a simplified crop, not a 50 % scaled desktop.

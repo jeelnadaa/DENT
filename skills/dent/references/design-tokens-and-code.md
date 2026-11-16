@@ -55,6 +55,7 @@ Naming rules: lowercase, hyphenated, purpose not appearance (`color-accent` not 
 - **Layout:** breakpoints, grid columns/gutters/margins, container widths.
 - **Z-index** layers.
 - **Opacity:** disabled, scrim, hover overlay.
+- **Built-in surfaces:** tooltip, scrollbar thumb/track, control accent, range track/fill/thumb, selection, caret, placeholder, autofill ring (`built-in-surfaces.md` §3).
 
 ---
 

@@ -44,6 +44,7 @@
 - Signature element(s):
 - Typography (display / text / mono) and hero type move:
 - Color roles and modes:
+- Built-in surfaces level (Match / Tint / Native) and exceptions:
 - Layout, density, grid:
 - Imagery / illustration / 3D:
 - Motion (interface + any motion graphics):

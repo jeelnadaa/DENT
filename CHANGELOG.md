@@ -4,6 +4,33 @@ All notable changes to DENT are documented here. Format: [Keep a Changelog](http
 
 ## [Unreleased]
 
+## [2.4.0] — 2026-11-16
+
+Nothing ships with a default look by accident: DENT now designs the parts the browser draws for you.
+
+### Added
+- **Built-in surfaces** (`references/built-in-surfaces.md`): tooltips, scrollbars, range sliders, checkboxes, radios, switches, selects and pickers, text selection, caret, placeholder, autofill, validation, file inputs, progress, disclosure markers, dialog backdrops, link underlines, browser chrome and system dialogs. Includes:
+  - a **[Rule]**: every surface present gets a deliberate level (**Match**, **Tint** or **Native**), logged in DESIGN.md
+  - **one question** at Standard+ ("Match my design everywhere (Recommended) / Brand tint only / Keep the native look / Let me choose per element")
+  - don't-ask defaults (Tint at Essential, Match at Standard+)
+  - surface tokens with contrast rules
+  - a per-surface inventory with the Modern Web Guidance guide for each
+  - style personalities (how a Brutalist or Glass tooltip and scrollbar should look)
+  - a build order with a **surface sheet**
+  - native-app notes
+- **`/dent:surfaces`** (32 commands): inventory the surfaces on a page, ask the level, derive tokens, build each surface on the native element per its MWG guide, cover every state and theme, verify.
+- **`verify_page.py --surfaces match|tint|native`**: reports which built-in surfaces are present and styled, flags `title`-attribute tooltips, thin scrollbars and browser validation bubbles, and sets gate **G8_surfaces**. New fixture cases and `test_tools.py` assertions.
+
+### Changed
+- G8 Style integrity now covers built-in surfaces. They also appear in:
+  - the effort table and question order
+  - "don't ask" defaults and add-on routing
+  - `/dent:create`, `/dent:polish` and `/dent:system` steps; orchestration routing and pipelines
+  - both recipes, the All-out sweeps
+  - the token checklist, the DESIGN.md template (§7b) and PLAN.md
+  - the anti-slop detector (OS-default surfaces on a designed page) and the MWG map
+- Landing page: scrollbars themed in both colour schemes and in the inverted install section (`verify_page.py --surfaces match` passes).
+
 ## [2.3.0] — 2026-11-16
 
 Google's **Modern Web Guidance** (MWG) becomes DENT's primary authority for all web development and front-end engineering. DENT keeps deciding *what* is designed; MWG decides *how* HTML, CSS and client-side JS are built, and wins any implementation conflict.
