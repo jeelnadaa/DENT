@@ -850,6 +850,8 @@ dialog.mnav[open] li{@media (prefers-reduced-motion:no-preference){@starting-sty
     </div>
     <figure class="film-frame">
       <video controls playsinline preload="none" loading="lazy" width="1920" height="1080" poster="assets/film/dent-launch-poster.webp" aria-describedby="film-desc">
+        <!-- Streamed from GitHub Pages: Workers static assets ignore Range requests, which Safari needs to play video at all -->
+        <source src="https://jeelnadaa.github.io/DENT/site/assets/film/dent-launch.mp4" type="video/mp4">
         <source src="assets/film/dent-launch.mp4" type="video/mp4">
         <track kind="captions" src="assets/film/dent-launch.en.vtt" srclang="en" label="English (on-screen text and sound)">
         <a href="assets/film/dent-launch.mp4">Download the DENT launch film (MP4, 13 MB)</a>
