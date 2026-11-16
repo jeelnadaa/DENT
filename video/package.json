@@ -1,0 +1,17 @@
+{
+  "name": "video",
+  "version": "1.0.0",
+  "description": "Source for DENT launch films (fonts for the HTML compositions). See launch/VIDEO.md.",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0"
+  },
+  "private": true
+}
