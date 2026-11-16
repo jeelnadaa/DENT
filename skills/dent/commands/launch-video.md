@@ -4,6 +4,7 @@ Make a product launch video end to end (teaser, reveal, feature tour or manifest
 
 **Usage:** `/dent:launch-video <product>` (also `/dent launch-video …` or `dent launch-video …`)
 **Default depth:** Advanced. Effort level and the gates in SKILL.md §3 always apply.
+**Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → verify → disclose) before coding; MWG wins any implementation conflict with DENT.
 
 ## Load
 - `references/video/video-types-and-craft.md §2 (launch)`
@@ -26,4 +27,4 @@ Launch video files per platform, thumbnail, captions, VIDEO.md.
 - Show features that don't exist.
 - Bury the product name until the end.
 
-Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8).
+Close with the scorecard summary, attribution (DENT / MWG / user / agent judgment / overrides), the `### Modern Web Guidance` disclosure if guides shaped the code, and a one-line next step (SKILL.md §8).

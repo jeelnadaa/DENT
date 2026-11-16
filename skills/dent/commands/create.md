@@ -4,6 +4,7 @@ Create a new product, page, site or interface from scratch.
 
 **Usage:** `/dent:create <what to create>` (also `/dent create …` or `dent create …`)
 **Default depth:** Standard or Advanced. Effort level and the gates in SKILL.md §3 always apply.
+**Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → verify → disclose) before coding; MWG wins any implementation conflict with DENT.
 
 ## Load
 - `references/workflow-questions-and-effort.md`
@@ -28,4 +29,4 @@ Working files, Decision Log, gate results, scorecard, attribution; DESIGN.md aft
 - Invent stats, testimonials, logos or ratings.
 - Combine more than one base style and one accent.
 
-Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8).
+Close with the scorecard summary, attribution (DENT / MWG / user / agent judgment / overrides), the `### Modern Web Guidance` disclosure if guides shaped the code, and a one-line next step (SKILL.md §8).

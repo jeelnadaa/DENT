@@ -151,7 +151,8 @@ Add per-script fallbacks when needed, e.g. `"Noto Sans Devanagari"` after the La
 - [ ] Only the weights/styles used (variable font if many weights).
 - [ ] `font-display: swap` (or `optional` for decorative fonts).
 - [ ] Preload the 1–2 fonts used above the fold (same-origin files only; preloading from `file://` or cross-origin without CORS fails).
-- [ ] Fallback metrics adjusted (`size-adjust`, `ascent-override`) to avoid layout shift.
+- [ ] Fallback kept visually stable to avoid layout shift: `font-size-adjust` on the text matched to the web font's x-height, plus `size-adjust`/`ascent-override` on a fallback `@font-face` where needed (`mwg:visually-stable-font-fallbacks`).
+- [ ] CSS type sizes in `rem`, never `px`; fluid sizes with a rem term and a max ≤ 2.5× the min (`mwg:typography`, `mwg:responsive-design`).
 - [ ] **OFL / Google Fonts:** subsetting and self-hosting are allowed.
 - [ ] **Fontshare (ITF Free Font License):** **do not subset, convert formats or modify** the files (the licence forbids it). Use the files as downloaded (they include WOFF2) or the Fontshare CSS API.
 - [ ] **Public repositories, templates and open-source projects:** don't commit ITF/Fontshare font files (redistribution through public servers isn't allowed). Load them from the Fontshare API, or document "download Satoshi from fontshare.com" and fall back gracefully.

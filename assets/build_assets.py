@@ -131,7 +131,7 @@ def workflow(t: dict) -> str:
     pillars = [
         ("KNOWLEDGE", ["41 aesthetic styles", "Creative directions library", "Hero typography system", "Laws, patterns, platforms"]),
         ("CATALOGUES", ["UI components & primitives", "Motion, 3D & creative code", "Audio, voice & music", "Video tools & assets"]),
-        ("QUALITY", ["Gates G1–G12", "verify_page.py + contrast.py", "Self-score with evidence", "All-out sweeps"]),
+        ("QUALITY", ["Gates G1–G13", "Modern Web Guidance", "verify_page.py + self-score", "All-out sweeps"]),
         ("MEMORY", ["DESIGN.md source of truth", "Decision Log + attribution", "PLAN / MOTION / SOUND / VIDEO", "Licence table"]),
     ]
     cols = []

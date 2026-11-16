@@ -25,7 +25,7 @@ Write three short lists before planning:
 - **Assumed:** reasonable working assumptions you will disclose.
 - **Unknown:** things that would change correctness, risk or direction if answered differently. Ask about these only; decide the rest.
 
-In a codebase also record: framework, router, styling system, token source, component library, icon set, fonts, test tools, build/lint commands, and screens that share components with the target.
+In a codebase also record: framework, router, styling system, token source, component library, icon set, fonts, test tools, build/lint commands, browser-support policy, and screens that share components with the target.
 
 ## 3. Write the plan
 
@@ -33,7 +33,8 @@ In a codebase also record: framework, router, styling system, token source, comp
 ```
 Goal: …   Deliverable: …   Direction: concept + base style (+accent)
 Sections/screens: …   Components/libraries: …   States: …
-Motion/sound: …   Verification: G1–G12 that apply + tools   Done when: …
+Motion/sound: …   Web platform: MWG guides per capability + support policy
+Verification: G1–G13 that apply + tools   Done when: …
 ```
 
 **Advanced/Critical:** fill `templates/PLAN.md`. Rules:
@@ -55,7 +56,7 @@ Read the plan as a skeptical senior reviewer. Answer every question in writing (
 
 **Honesty:** Does any planned section need numbers, testimonials, logos or reviews the user didn't provide? Replace them with verifiable content or bracketed placeholders now.
 
-**Technical:** Fits the existing architecture? Reuses existing components/tokens? Every new dependency justified (one per job, licence known)? Performance, privacy and security implications? Simpler option available?
+**Technical:** Fits the existing architecture? Reuses existing components/tokens? Every web capability mapped to its Modern Web Guidance guides, and native elements chosen before libraries (`../modern-web-guidance.md` §5)? Every new dependency justified (one per job, licence known, no native equivalent)? Browser-support policy stated and fallbacks planned? Performance, privacy and security implications? Simpler option available? (A web plan with no MWG guides named is a Major finding.)
 
 **Accessibility:** Semantics, keyboard, focus management, labels, contrast in every theme, reduced motion, sound alternatives, target sizes, zoom/reflow.
 

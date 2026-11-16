@@ -2,6 +2,8 @@
 
 Moved from SKILL.md §7 in DENT 2.0. This is **interface** motion and finish. For motion graphics, kinetic compositions, 3D and generative visuals read `motion/motion-graphics.md`; for the per-project motion language read `motion/motion-system-and-verification.md`. Section numbers (7.0–7.11) are kept from DENT 1.x.
 
+This file decides **what** the modern layer does and why. **How** each technique is coded on the web (CSS/JS patterns, browser support, fallbacks, reduced-motion handling) comes from Modern Web Guidance: retrieve the guide before building (`modern-web-guidance.md`; start with `mwg:motion`). The CSS here shows intent and follows MWG; if a retrieved guide differs, the guide wins.
+
 ---
 
 ## §7 The modern layer — what makes a design feel modern
@@ -44,10 +46,10 @@ Typography is the single biggest driver of a modern look. Most of a screen is te
 h1   { font-size: clamp(2.25rem, 1.5rem + 3vw, 4.5rem); }
 body { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); }
 ```
-- **[Rule]** Always include a `rem` part so text still scales with the user's zoom/font settings (WCAG 1.4.4). Never pure `vw`.
+- **[Rule]** Always include a `rem` part so text still scales with the user's zoom/font settings (WCAG 1.4.4). Never pure `vw`. Keep the maximum **no more than 2.5× the minimum** so browser zoom can still reach 200% (`mwg:responsive-design`); to scale with a container instead of the viewport, use container units (`mwg:fluid-scaling`).
 
 **Font loading**
-- Use `font-display: swap` (or `optional` for non-critical fonts), preload the 1–2 critical files, subset to needed characters (OFL fonts only; the ITF/Fontshare licence forbids subsetting), and set fallback font metrics (`size-adjust`) so text doesn't jump when the font loads (layout shift).
+- Use `font-display: swap` (or `optional` for non-critical fonts), preload the 1–2 critical files, subset to needed characters (OFL fonts only; the ITF/Fontshare licence forbids subsetting), and keep the fallback visually stable so text doesn't jump when the font loads: `font-size-adjust` on the text container matched to the web font's x-height, plus `size-adjust`/`ascent-override` on a fallback `@font-face` where needed (`mwg:visually-stable-font-fallbacks`, `mwg:visually-stable-mixed-fonts`).
 
 **Typography as a visual element**
 - Oversized headings, outline or mixed-weight words, text masked over images, and kinetic (animated) type can be hero moments. Use for **one** headline per page, never for body content, and keep it readable.
@@ -87,6 +89,7 @@ Motion that feels "fluid" comes from three things: **the right easing, the right
 - Springs feel more natural than fixed curves for interactive motion because they keep the user's velocity (a flick continues smoothly).
 - Typical: quick, almost no bounce for UI (damping ratio ~0.8–1.0, response ~0.3–0.5s); a small bounce (~0.6–0.75) only for playful, celebratory or physical elements.
 - Use springs for: dragging, swiping, sheets, reordering, pull-to-refresh, toggles on mobile. Use curves for: fades, color changes, simple reveals.
+- In CSS, express springs and bounces with the `linear()` easing function instead of a JS animation library (`mwg:physics-based-easing`).
 
 **Choreography**
 - **Stagger** lists and grids: 20–50ms between items, max ~8–10 items staggered (then show the rest together), total under ~500ms.
@@ -96,8 +99,8 @@ Motion that feels "fluid" comes from three things: **the right easing, the right
 - **Scale subtly:** pop-ins from 0.95–0.98 to 1, not from 0.
 
 **Continuity techniques**
-- **Shared-element transitions:** a thumbnail grows into the detail view instead of the screen cutting. On web: View Transitions API (`view-transition-name`); in apps: shared element / matched geometry; libraries: FLIP technique.
-- **Layout animation:** when items are added, removed or reordered, the others slide to their new places instead of jumping.
+- **Shared-element transitions:** a thumbnail grows into the detail view instead of the screen cutting. On web: View Transitions (`mwg:same-document-transitions`, `mwg:cross-document-transitions`); in apps: shared element / matched geometry; FLIP only as the fallback a guide asks for.
+- **Layout animation:** when items are added, removed or reordered, the others slide to their new places instead of jumping (`mwg:group-element-transitions`).
 - **Morphing:** a button expanding into a panel, an icon morphing (play ↔ pause, menu ↔ close).
 - **Animate numbers:** counters roll to the new value; charts animate from previous to new data, not from zero every time.
 
@@ -125,7 +128,7 @@ Good uses:
 **[Rule]** Hover is an enhancement, never the only way to see information or reach an action (touch devices have no hover). Wrap hover effects that move, scale or reveal things so they only apply to real pointers (otherwise they "stick" after a tap on phones; `verify_page.py` warns when hover rules aren't guarded):
 ```css
 @media (hover: hover) and (pointer: fine) {
-  .card:hover { transform: translateY(-2px); }
+  .card:hover { translate: 0 -2px; }   /* individual transform properties, `mwg:individual-transform-properties` */
 }
 ```
 
@@ -169,13 +172,15 @@ Scroll is the main interaction on websites and long app screens. Used well, it t
 - **Back-to-top** button appears after ~2 screens of scroll on long pages.
 
 **Implementation**
-- Prefer **CSS scroll-driven animations** (`animation-timeline: view()` / `scroll()`) or **IntersectionObserver** over scroll event listeners (better performance).
+- Prefer **CSS scroll-driven animations** (`animation-timeline: view()` / `scroll()`) over scroll event listeners; feature-detect them with `@supports`, and for purely decorative effects let unsupported browsers simply show the static state (no polyfill; `mwg:scroll-entry-exit-effects`, `mwg:parallax-scroll-effects`, `mwg:scrollytelling`). Use IntersectionObserver only for the fallback a guide describes or for non-animation triggers.
 ```css
-@media (prefers-reduced-motion: no-preference) {
-  .reveal {
-    animation: reveal linear both;
-    animation-timeline: view();
-    animation-range: entry 10% cover 30%;
+@supports ((animation-timeline: view()) and (animation-range: entry)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
+    }
   }
 }
 @keyframes reveal { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
@@ -221,23 +226,26 @@ Modern designs use **soft, layered depth** instead of hard lines.
 - **Skeleton loading + optimistic UI** instead of full-page spinners.
 - **Smart defaults and autofill** (Tesler's Law: take the complexity onto the system).
 - **Gestures on mobile:** swipe actions on rows, pull to refresh, swipe-to-dismiss sheets — always with a visible alternative.
-- **Dark mode + system theme** support, switching smoothly (no flash of the wrong theme on load).
+- **Dark mode + system theme** support, switching smoothly (no flash of the wrong theme on load; `mwg:dark-mode`, `mwg:dark-mode-toggle`).
 
 ---
 
 ### 7.9 Reduced motion and accessibility for the modern layer [Rule]
 
+Handle reduced motion **per animation, next to it**, never with a global `*` reset that zeroes every duration (that makes some animations *more* jarring and can't be overridden; `mwg:motion`):
 ```css
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* Reduced motion = no animation: opt in to the motion instead of cancelling it */
+.hero-title{
+  @media (prefers-reduced-motion: no-preference){ animation: rise var(--dur-page) var(--ease-out) both; }
 }
+/* Reduced motion = gentler animation: override only the changed parameters */
+.spinner{
+  animation: spin 0.8s linear infinite;
+  @media (prefers-reduced-motion: reduce){ animation-duration: 2.4s; }
+}
+html{ @media (prefers-reduced-motion: no-preference){ scroll-behavior: smooth; } }
 ```
-- Under reduced motion: replace movement with simple fades or instant changes; remove parallax, auto-playing motion, zoom and large slides. Keep essential feedback (state changes) visible.
+- Under reduced motion: replace movement with simple fades or instant changes; remove parallax, auto-playing motion, zoom and large slides. Keep color/opacity feedback transitions and essential progress indicators (slowed down). When an animation is turned off, the element must still end in its final state (never stuck at `opacity: 0`).
 - **[Rule]** Anything that moves automatically for more than 5 seconds (carousels, background video, looping animations) needs a pause/stop control (WCAG 2.2.2).
 - **[Rule]** No flashing more than 3 times per second (WCAG 2.3.1).
 - Motion never carries meaning alone — pair with text/icon change.
@@ -251,7 +259,8 @@ Modern designs use **soft, layered depth** instead of hard lines.
 - Animate `transform` and `opacity` only; use `will-change` only on elements about to animate, then remove it.
 - Limit simultaneous animations; pause off-screen animations and videos.
 - Avoid layout shift (CLS): reserve space for images, fonts and late content.
-- Heavy effects (WebGL, 3D, large videos, many blurs) only where they are the point of the page, lazy-loaded, with a static fallback.
+- Heavy effects (WebGL, 3D, large videos, many blurs) only where they are the point of the page, lazy-loaded, with a static fallback (`mwg:lazy-load-video-and-audio`, `mwg:defer-rendering-heavy-content`).
+- Long tasks broken up so input stays responsive (`mwg:break-up-long-tasks`, `mwg:identify-inp-causes`); the LCP image is never lazy and gets `fetchpriority="high"` (`mwg:optimize-image-priority`).
 - Test on a mid-range phone, not only a fast laptop.
 
 ---

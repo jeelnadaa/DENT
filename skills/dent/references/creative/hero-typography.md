@@ -54,7 +54,7 @@ Avoid as automatic choices (use only deliberately, logged): Inter-only headlines
 
 Each technique: **what**, **when**, **build notes**, **watch-out**.
 
-1. **Viewport-cropped wordmark.** The name set so large the viewport crops it (letters bleed off left/right or bottom). When: brand-led launches, portfolios. Build: `font-size: clamp(5rem, 22vw, 28rem); line-height: .8; letter-spacing: -0.04em; white-space: nowrap; overflow: clip` on a wrapper that is `overflow-x: clip` (not the body). Watch-out: must not create page-level horizontal scroll; keep the real text accessible.
+1. **Viewport-cropped wordmark.** The name set so large the viewport crops it (letters bleed off left/right or bottom). When: brand-led launches, portfolios. Build: `font-size: clamp(8rem, 2rem + 20vw, 20rem); line-height: .8; letter-spacing: -0.04em; white-space: nowrap; overflow: clip` on a wrapper that is `overflow-x: clip` (not the body). Watch-out: must not create page-level horizontal scroll; keep the real text accessible.
 2. **Scale jump.** One word 4–8× bigger than the rest of the line ("Design that *doesn't* look generated"). When: statements with one key word. Watch-out: line height for mixed sizes; align baselines.
 3. **Mixed faces in one line.** Serif italic for the emotional word, grotesk for the rest. When: editorial warmth in tech. Watch-out: match optical sizes; only one swap per headline.
 4. **Stacked justify.** Each line scaled so all lines share the same width (like a poster). When: manifestos, events. Build: per-line font sizes computed at design time or with a fit-text script; or SVG `textLength`. Watch-out: reflow at narrow widths; provide a simpler stack under 480 px.
@@ -66,7 +66,7 @@ Each technique: **what**, **when**, **build notes**, **watch-out**.
 10. **Underline as gesture.** A hand-drawn SVG underline/circle draws under one word once. When: friendly, human brands. Watch-out: once, not on loop.
 11. **Big numerals as hero.** A real metric or a version/date as giant tabular figures. When: data, launches, changelogs. Watch-out: the number must be real.
 12. **Typewriter / overwrite.** A word types, gets struck through and replaced ("Design ~~templates~~ products"). When: copy-led, contrarian positioning. Watch-out: final text readable instantly with reduced motion; announce only the final text to screen readers.
-13. **Split reveal.** Lines rise from a mask with 60–90 ms stagger. When: almost any premium hero. Build: wrap each line in `overflow: clip` span; animate translateY 100% → 0. Watch-out: don't split by characters for long text (SR noise); use `aria-label` on the parent if spans are needed.
+13. **Split reveal.** Lines rise from a mask with 60–90 ms stagger. When: almost any premium hero. Build: wrap each line in `overflow: clip` span; animate `translate` 0 100% → 0 (individual transform property). Watch-out: don't split by characters for long text (SR noise); use `aria-label` on the parent if spans are needed.
 14. **Text on a path.** Headline follows a curve/circle (SVG `textPath`). When: badges, playful, music. Watch-out: short text only.
 15. **Ticker / marquee band.** A band of repeating words below the hero. When: events, energetic brands. Watch-out: pause control or pause on hover/focus; respects reduced motion; never the only place info appears.
 16. **Glyph as illustration.** One giant character (ampersand, initial, "?") as the image. When: type-centric brands. Watch-out: decorative → `aria-hidden`.
@@ -74,7 +74,7 @@ Each technique: **what**, **when**, **build notes**, **watch-out**.
 18. **Terminal headline.** Prompt + command as headline (`$ dent create --all-out`). When: dev tools. Watch-out: provide normal-language subhead.
 
 ## 5. Scale, spacing and craft numbers
-- Hero size: `clamp(2.5rem, 1rem + 7vw, 7.5rem)` for statements; up to 22vw for wordmarks. Always include a rem term (zoom, WCAG 1.4.4).
+- Hero size: `clamp(3rem, 1rem + 7vw, 7.5rem)` for statements; about 20vw for wordmarks (`clamp(8rem, 2rem + 20vw, 20rem)`). Always include a rem term and keep the maximum ≤ 2.5× the minimum so zoom still reaches 200% (WCAG 1.4.4, `mwg:responsive-design`); a bigger range is a design bug, not a style.
 - Ratio hero : body ≥ 4 on marketing pages (e.g. 72 px vs 18 px). Timid scale reads as template.
 - Tracking: −2% to −5% at ≥ 64 px; −1% to −2% at 32–64 px; +4% to +10% for small caps labels.
 - Line-height: 0.85–1.0 for display caps, 0.95–1.1 for display mixed case, 1.5–1.65 body.
@@ -91,20 +91,20 @@ Each technique: **what**, **when**, **build notes**, **watch-out**.
 <span class="line"><span>doesn't look <em>generated</em>.</span></span></h1>
 ```
 ```css
-.hero{font: 800 clamp(2.75rem,1rem + 7vw,7.5rem)/.95 "Cabinet Grotesk","Satoshi",sans-serif;letter-spacing:-.035em;text-wrap:balance}
+.hero{font: 800 clamp(3rem,1rem + 7vw,7.5rem)/.95 "Cabinet Grotesk","Satoshi",sans-serif;letter-spacing:-.035em;text-wrap:balance}
 .hero em{font-family:"Gambetta","Instrument Serif",serif;font-style:italic;font-weight:500;letter-spacing:-.02em}
 .line{display:block;overflow:clip}
 @media (prefers-reduced-motion:no-preference){
-  .line>span{display:inline-block;transform:translateY(105%);animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}
+  .line>span{display:inline-block;translate:0 105%;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}
   .line:nth-child(2)>span{animation-delay:.09s}
 }
-@keyframes rise{to{transform:none}}
+@keyframes rise{to{translate:none}}
 ```
 
 **Viewport-cropped wordmark without page overflow:**
 ```css
 .wordmark-wrap{overflow-x:clip;width:100%}
-.wordmark{font:900 clamp(5rem,22vw,28rem)/.78 "Archivo",sans-serif;letter-spacing:-.05em;white-space:nowrap;margin-inline:-.04em}
+.wordmark{font:900 clamp(8rem,2rem + 20vw,20rem)/.78 "Archivo",sans-serif;letter-spacing:-.05em;white-space:nowrap;margin-inline:-.04em}
 ```
 
 **Variable weight on scroll (progressive enhancement):**

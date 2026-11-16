@@ -32,6 +32,9 @@ A good designer doesn't start by drawing. They ask what the product is for, deci
  7. Modern layer  typography craft, motion, hover, scroll, depth
    │              (only as deep as the effort level allows)
    ▼
+ 7b. Web code ── Google's Modern Web Guidance decides how it's built:
+   │              search → retrieve → apply → verify → disclose (native first)
+   ▼
  8. Verify ────── pre-ship checklist → render & screenshot → rubric → fix
    ▼
  9. Present ───── design + short Decision Log → user approves
@@ -46,6 +49,8 @@ Every guideline in DENT is labeled so the agent knows how firmly to hold it:
 - **[Law]** — research-backed perception and cognition (Gestalt, Fitts, Hick, Jakob…). Always applies; a style changes *how*, not *whether*.
 - **[Rule]** — measurable standards (WCAG contrast, target sizes, focus, keyboard, reduced motion). **Never** overridden, in any style or effort level.
 - **[Convention]** — industry defaults (8px spacing, 40px control height…). Used unless a style or the user deliberately changes them.
+
+For web code there is a fourth source above DENT's own technique advice: **Modern Web Guidance** (Google Chrome, with Edge, Firefox and MDN). DENT's Laws and Rules say *what* must be true (contrast, targets, focus, reduced motion); MWG says *how* to build it on the web, and wins when the two differ.
 
 ## Effort levels
 

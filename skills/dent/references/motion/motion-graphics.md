@@ -85,7 +85,7 @@ Set `--len` from `path.getTotalLength()`. Under reduced motion the path is simpl
 Rules: the final text is real DOM text; animated copies are `aria-hidden`; reduced motion shows the final state.
 
 **6.5 Scroll-driven storytelling:**
-- CSS first: `animation-timeline: view()` / `scroll()` with `animation-range` (progressive enhancement; check support, provide static fallback).
+- CSS first: `animation-timeline: view()` / `scroll()` with `animation-range`, feature-detected with `@supports`, built the way `mwg:scrollytelling` and `mwg:scroll-entry-exit-effects` say (decorative: static state as fallback; essential: the guide's fallback).
 - GSAP ScrollTrigger for pinning, scrubbing timelines, snapping between scenes, complex sequences.
 - Pattern "sticky stage": a pinned visual on one side changes as text steps scroll past; each step ≤ 1 viewport.
 - Never scroll-jack (no changed scroll speed/direction). Smooth-scroll libraries (Lenis) only if they don't break native behaviour, keyboard and reduced motion.

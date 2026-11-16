@@ -29,7 +29,7 @@
 
 ## Do / Don't
 - **Do** keep the real message readable even while animating.
-- **Do** use `clamp()` with rem so it scales and respects zoom.
+- **Do** use `clamp()` with rem so it scales and respects zoom, with the maximum ≤ 2.5× the minimum (`mwg:responsive-design`).
 - **Don't** split words in ways screen readers can't read — keep accessible text (aria-label on the parent, or visually hidden copy).
 - **Don't** apply kinetic effects to body text.
 
@@ -42,7 +42,7 @@
 :root{
   --bg:#0F0F0F; --text:#F4F1EA; --accent:#FF4D00; --on-accent:#0F0F0F;
   --font-display:"Unbounded","Anton",sans-serif; --font-sans:"Satoshi","Manrope",system-ui,sans-serif;
-  --mega:clamp(4rem,2rem + 15vw,22rem); --leading-mega:.85; --tracking-mega:-0.04em;
+  --mega:clamp(6rem,2rem + 15vw,15rem); --leading-mega:.85; --tracking-mega:-0.04em;
   --dur:600ms; --ease:cubic-bezier(.16,1,.3,1);
 }
 .marquee{display:flex;gap:2rem;white-space:nowrap;animation:marquee 25s linear infinite;}

@@ -46,7 +46,7 @@ Targets: `claude`, `codex`, `copilot`, `cursor`, `gemini`, `agents` (shared `.ag
 
 ## Option D — Manual copy
 
-Copy `skills/dent/` (the whole folder, keeping the name `dent`) to:
+Copy `skills/dent/` (the whole folder, keeping the name `dent`) and, next to it, `skills/modern-web-guidance/` (Google's Modern Web Guidance, DENT's authority for web code) to:
 
 | Agent | Personal (all projects) | Project only |
 |---|---|---|
@@ -62,7 +62,7 @@ Restart the agent (or start a new session) so it picks up the new skill.
 
 ## Claude.ai and Claude Desktop (chat)
 
-1. Download `dent.zip` from the [latest release](https://github.com/jeelnadaa/DENT/releases) — or build it: `python scripts/package.py` → `dist/dent.zip`.
+1. Download `dent.zip` from the [latest release](https://github.com/jeelnadaa/DENT/releases) — or build it: `python scripts/package.py` → `dist/dent.zip` (Modern Web Guidance is bundled inside it under `vendor/`). Optionally also upload `modern-web-guidance.zip` so the guidance applies to web tasks outside DENT.
 2. In Claude, open **Settings → Capabilities**, make sure Skills (and code execution, if required by your plan) are enabled, and **upload** `dent.zip`.
 3. Start a new chat and ask for design work.
 
@@ -70,19 +70,21 @@ Team/Enterprise admins can provision the skill for the whole organization from t
 
 ## Claude API (Skills API)
 
-Upload the `skills/dent` folder as a custom skill through the Skills API (see Anthropic's "Agent Skills" API docs for the current endpoint and required beta headers), then reference the returned skill ID in the container configuration of your Messages API requests. The code-execution tool must be enabled for skills to run.
+Upload the contents of `dist/dent.zip` (the `skills/dent` folder plus `vendor/modern-web-guidance/`) as a custom skill through the Skills API (see Anthropic's "Agent Skills" API docs for the current endpoint and required beta headers), then reference the returned skill ID in the container configuration of your Messages API requests. The code-execution tool must be enabled for skills to run.
 
 ## Agents without native skill support
 
 Windsurf, Cline, Roo, Aider, Zed, Continue and similar tools read a rules/instructions file instead. Copy the skill into the project and point to it:
 
-1. Copy `skills/dent/` to `.dent/` in your project (or anywhere you like).
+1. Copy `skills/dent/` to `.dent/` in your project (or anywhere you like), and `skills/modern-web-guidance/` to `.dent/vendor/modern-web-guidance/`.
 2. Add this to your agent's rules file:
 
 ```markdown
 ## Design work (DENT)
 For any UI, UX, visual design, design-system or front-end styling task, first read `.dent/SKILL.md`
 and follow its workflow. Open files in `.dent/references/` only when SKILL.md points to them.
+For any HTML, CSS or client-side JS, follow Google's Modern Web Guidance first:
+`.dent/vendor/modern-web-guidance/SKILL.md` (DENT's summary: `.dent/references/modern-web-guidance.md`).
 ```
 
 | Agent | Rules file |
@@ -110,6 +112,10 @@ python -m playwright install chromium
 ```
 
 Or use an installed Chrome/Edge with `--channel chrome` / `--channel msedge`. Without it, DENT falls back to manual checks and reports them as "Not run".
+
+## Optional: Modern Web Guidance CLI
+
+With Node.js 22+, DENT queries the always-current guides with `npx -y modern-web-guidance@latest search "<task>"` (on Windows `npx.cmd`; under Git Bash `search` can fail with `'C:\Program' is not recognized`, so run it from PowerShell or cmd). Sandboxed agents should allowlist exactly `npx -y modern-web-guidance@latest *`. Without Node or network, DENT uses the bundled snapshot through `skills/dent/scripts/mwg.py` and says so in its report.
 
 ## Commands
 

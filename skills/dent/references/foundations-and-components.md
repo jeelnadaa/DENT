@@ -58,13 +58,15 @@ Define these as named tokens first. Every component uses only tokens.
 
 The numbers below are **[Convention]** defaults. Change them per project or per aesthetic style, but once chosen they apply everywhere. Values marked **[Rule]** don't change.
 
+These are **design specs** (sizes, spacing, states, behaviour). On the web, build each component the way its Modern Web Guidance guide says (native element first, MWG's markup, ARIA, fallbacks; `modern-web-guidance.md` §4 maps components to guides), then apply these specs to it. Px values are design units: in CSS, type sizes become `rem`, and heights of anything containing text become `min-block-size` so text can grow (`mwg:typography`).
+
 ### 4.1 Shared control tokens (define these first)
 
 "Controls" = anything the user types into or presses: buttons, inputs, selects, chips, segmented controls. They share these tokens so they line up when placed side by side.
 
 | Parameter | Default | Notes |
 |---|---|---|
-| Control height | sm 32 · **md 40** · lg 48 px | On touch-first products, make md = 44–48. |
+| Control height | sm 32 · **md 40** · lg 48 px | On touch-first products, make md = 44–48. A minimum (`min-block-size`), not a fixed height. |
 | Horizontal padding | sm 12 · md 16 · lg 20 px | |
 | Control radius | one value, e.g. **8px** | Buttons, inputs, selects, chips all use it. |
 | Container radius | control radius + 4–8px, e.g. **12–16px** | Cards, modals, menus, sheets. Containers are rounder than the controls inside them. |
@@ -75,7 +77,7 @@ The numbers below are **[Convention]** defaults. Change them per project or per 
 | Focus ring | **2px** outline, **2px** offset, Off/primary color | **[Rule]** ≥ 3:1 contrast against background. Same ring on every focusable element. |
 | Disabled | reduced contrast (e.g. 40–50% opacity) + no pointer events | Disabled text is exempt from WCAG contrast, but must still look clearly disabled, not just "light". |
 | State transition | 100–150ms ease-out | Hover/press color changes. |
-| Hit area | **[Rule]** ≥ 44×44 touch, ≥ 24×24 pointer (WCAG 2.2) | Extend invisibly with padding if the visual is smaller. |
+| Hit area | **[Rule]** ≥ 44×44 touch, ≥ 24×24 pointer (WCAG 2.2) | Extend invisibly with padding if the visual is smaller; bump up under `@media (pointer: coarse)` (`mwg:accessibility`). |
 
 **Alignment rule:** a button and an input of the same size in the same row have the same height, radius and font size.
 
@@ -136,6 +138,7 @@ Rules:
 - Menu items: height ≥ 36px pointer / 44px touch, padding-x 12px, hover background tint, selected item marked with a check icon (not color alone).
 - Max height ~5–8 visible items, then scroll.
 - **[Rule]** Full keyboard support (arrows, Enter, Esc, type-to-search).
+- Web: style the native `<select>` (customizable select, `appearance: base-select`) to these specs before reaching for a custom listbox (`mwg:branded-select-styling`, `mwg:custom-select-picker-layouts`); a searchable combobox is a library job.
 - If there are ≤ 5 options and space allows, use radio buttons or a segmented control instead (Hick's Law: visible options are faster).
 
 ### 4.6 Checkboxes
@@ -177,6 +180,7 @@ Use for: exactly one choice from 2–5 visible options.
 | Label | left of switch in settings lists (label left, switch right) |
 
 Rule: a toggle **takes effect immediately** (like a light switch). If the change only applies after pressing Save, use a checkbox instead.
+Web: `<input type="checkbox" switch>` with a `<label>`, styled to these specs (`mwg:switch`).
 
 ### 4.9 Segmented control / tabs
 - Segmented control: height = control height, container radius = control radius, selected segment filled or raised, 2–5 options, equal widths.
@@ -233,20 +237,23 @@ Rule: a toggle **takes effect immediately** (like a light switch). If the change
 - Padding 24px; container radius; modal elevation.
 - Scrim (backdrop): black at 40–60% opacity (both modes).
 - Structure: title → content → actions. Actions in a fixed position and order across ALL dialogs.
-- **[Rule]** Focus moves into the dialog, is trapped inside, Esc closes (unless destructive in-progress), focus returns to the trigger on close.
+- **[Rule]** Focus moves into the dialog and can't reach the page behind it, Esc closes (unless destructive in-progress), focus returns to the trigger on close, the page behind doesn't scroll. On the web all of this comes from a native `<dialog>` opened with `showModal()`: don't add `role="dialog"`, `aria-modal`, a focus trap or an `overflow: hidden` scroll lock (`mwg:dialog`, `mwg:prevent-page-scroll-under-modal-dialog`). Light dismiss: `closedby="any"` (`mwg:light-dismiss-a-dialog`). Animate with `@starting-style` + `overlay` (`mwg:animate-to-from-top-layer`).
 
 **Drawer / bottom sheet**
 - Side drawer 320–400px wide; bottom sheet with a 32×4px drag handle and container radius on top corners only.
+- Web: build navigation drawers and sheets as in `mwg:navigation-drawer` (a `<dialog>` with a scroll-snap swipe surface), not with a hand-made overlay.
 
 **Menus / popovers**
 - Container radius, overlay elevation, 4–8px offset from trigger, item height as in 4.5.
+- Web: `popover` + CSS anchor positioning with `position-try` fallbacks so it flips at viewport edges (`mwg:menu`, `mwg:viewport-aware-dropdowns`); no JS positioning library.
 
 **Tooltips**
 - Caption text (12–13px), padding 6×10px, small radius (4–6px), high-contrast background (inverted colors).
 - Appear after ~300–500ms hover / on focus; disappear on mouse-out/Esc. No interactive content inside.
+- Web: `popover="hint"` + `interestfor` + anchor positioning (`mwg:interest-triggered-tooltips`, `mwg:position-aware-tooltips`); on touch use a toggletip.
 
 ### 4.18 Feedback components
-- **Toasts/snackbars:** same screen position every time (e.g. bottom-center mobile, bottom-left/right desktop); max one action ("Undo"); success/info auto-dismiss after ~4–6s, **errors stay until dismissed**; **[Rule]** announced to screen readers (live region).
+- **Toasts/snackbars:** same screen position every time (e.g. bottom-center mobile, bottom-left/right desktop); max one action ("Undo"), which must also exist outside the toast; success/info auto-dismiss after ~4–6s, **errors stay until dismissed**; **[Rule]** announced to screen readers (live region). Web: `popover="manual"` container per `mwg:persistent-toast-notifications`.
 - **Inline alerts/banners:** semantic color tint background + icon + text; dismissible only if non-critical.
 - **Spinners:** 16 / 24 / 32 / 48px; use for short, unknown waits.
 - **Progress bars:** 4–8px tall; use when progress is known (Goal-gradient effect).

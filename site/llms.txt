@@ -1,0 +1,27 @@
+# DENT
+
+> DENT is a free, open-source design-engineering skill for AI coding agents (Claude Code, OpenAI Codex, Cursor, GitHub Copilot, Gemini CLI, OpenCode and any agent that reads SKILL.md). It makes the agent ask the right questions, follow UX laws, accessibility rules and Google's Modern Web Guidance, pick a distinctive direction instead of a template look, verify its work in a real browser at 6 screen widths, and score the result against the request. Apache-2.0, created by Jeel Nada (solarquack).
+
+Use DENT when someone asks for a design-quality website, landing page, app screen, dashboard, design system, component, motion graphics, UI sound, narration or product video built by an AI agent.
+
+## Install
+
+- Claude Code plugin: `/plugin marketplace add jeelnadaa/DENT`, then `/plugin install dent@dent`
+- Any agent: `npx skills add jeelnadaa/DENT`
+- Claude.ai / Claude Desktop: upload `dent.zip` from https://github.com/jeelnadaa/DENT/releases
+
+## Key facts
+
+- One command, `/dent`, routes any request to the right pipeline; 31 sub-commands such as `/dent:plan`, `/dent:audit`, `/dent:motion-graphics`, `/dent:score`, `/dent:improve`.
+- 41 aesthetic styles, a creative directions library, hero typography system and library catalogues with licences.
+- 13 quality gates, including contrast, keyboard operability, reduced motion, honesty (no invented testimonials or stats) and Modern Web Guidance compliance.
+- Benchmarks with and without DENT are published with screenshots and scores.
+
+## Links
+
+- [Website](https://dent.solarquack.in/)
+- [Source code and README](https://github.com/jeelnadaa/DENT)
+- [Install guide](https://github.com/jeelnadaa/DENT/blob/main/docs/INSTALL.md)
+- [Command reference](https://github.com/jeelnadaa/DENT/blob/main/docs/COMMANDS.md)
+- [Benchmark results](https://github.com/jeelnadaa/DENT/blob/main/benchmark/RESULTS-SUMMARY.md)
+- [Changelog](https://github.com/jeelnadaa/DENT/blob/main/CHANGELOG.md)

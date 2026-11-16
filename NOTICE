@@ -17,3 +17,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 "DENT" and the DENT logo are trademarks of Jeel Nada. See TRADEMARKS.md.
+
+---------------------------------------------------------------------------
+Third-party component
+
+skills/modern-web-guidance/ contains "Modern Web Guidance"
+(https://github.com/GoogleChrome/modern-web-guidance), by the Google Chrome
+team and contributors, redistributed unmodified under the Apache License,
+Version 2.0. Its license is in skills/modern-web-guidance/LICENSE and the
+exact upstream version is recorded in skills/modern-web-guidance/UPSTREAM.json.
+It is not covered by the DENT trademark.

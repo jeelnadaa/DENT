@@ -36,7 +36,7 @@ Springs (Motion): UI `{ type:"spring", stiffness:400, damping:40 }`; playful `{ 
 - **Page transitions:** one style product-wide (fade-through, shared element, or slide), ≤ 400 ms.
 - **Scroll:** one storytelling moment per page; reveals trigger once at 10–20 % visibility.
 - **Sound sync:** sounds start on the motion's key frame (impact/landing), not at the start (`../audio/sound-design.md` §6).
-- **Reduced motion:** every animation lists its alternative: instant, fade only, or static frame. Essential feedback stays visible.
+- **Reduced motion:** every animation lists its alternative: instant, fade only, slowed down (progress indicators), or static frame. Essential feedback stays visible. On the web it's coded per rule, next to the animation (`mwg:motion`), never as a global `*` reset.
 
 ## 4. Performance budget
 - Animate `transform`, `opacity` (and `filter`/`clip-path` sparingly). Never animate layout properties on large/many elements.

@@ -34,7 +34,7 @@ A vs C shows DENT's value; B vs C shows whether 2.0 (planning, gates, orchestrat
 
 ## 4. Scoring
 - Independent score (/50 on the 10-criterion sheet, or scenario-specific /10 per criterion).
-- Gate pass count (G1–G12 that apply) from machine checks + manual checks.
+- Gate pass count (G1–G13 that apply) from machine checks + manual checks; for G13, which Modern Web Guidance guides were retrieved and whether the CLI or the offline snapshot was used.
 - Requirement coverage: % of the prompt's explicit requirements implemented and verified.
 - Honesty: count of invented claims (stats, testimonials, logos), unverified "verified" claims → each is a hard failure.
 - Self-score calibration: |agent self-score − independent score|. Good DENT runs are within 1 point.

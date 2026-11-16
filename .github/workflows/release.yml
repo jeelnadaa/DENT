@@ -17,12 +17,12 @@ jobs:
           python-version: "3.12"
       - run: python scripts/validate.py
       - run: python scripts/package.py
-      - name: Publish GitHub release with dent.zip
+      - name: Publish GitHub release with dent.zip and modern-web-guidance.zip
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" dist/dent.zip --clobber
+            gh release upload "$GITHUB_REF_NAME" dist/dent.zip dist/modern-web-guidance.zip --clobber
           else
-            gh release create "$GITHUB_REF_NAME" dist/dent.zip --title "DENT $GITHUB_REF_NAME" --notes "See CHANGELOG.md for details."
+            gh release create "$GITHUB_REF_NAME" dist/dent.zip dist/modern-web-guidance.zip --title "DENT $GITHUB_REF_NAME" --notes "See CHANGELOG.md for details."
           fi

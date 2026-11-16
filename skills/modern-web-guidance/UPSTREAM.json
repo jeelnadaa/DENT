@@ -1,0 +1,11 @@
+{
+  "name": "modern-web-guidance",
+  "repository": "https://github.com/GoogleChrome/modern-web-guidance",
+  "commit": "4dd968349e54ca45a05dd5c818fb035c9054b022",
+  "committed": "2026-11-10T03:08:33Z",
+  "skill_version": "2026_11_09-5bcc021b",
+  "license": "Apache-2.0",
+  "guides": 209,
+  "synced": "2026-11-16",
+  "note": "Vendored verbatim by scripts/sync_mwg.py. Do not edit files in this folder; re-run the script."
+}

@@ -4,6 +4,7 @@ Redesign an existing product while preserving the behaviour users rely on.
 
 **Usage:** `/dent:redesign <product or screens>` (also `/dent redesign …` or `dent redesign …`)
 **Default depth:** Advanced. Effort level and the gates in SKILL.md §3 always apply.
+**Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → verify → disclose) before coding; MWG wins any implementation conflict with DENT.
 
 ## Load
 - `references/modes-existing-products.md §3`
@@ -25,4 +26,4 @@ Before/after comparison with reasons, migration plan, updated DESIGN.md, regress
 - Remove existing features silently.
 - Introduce a second design system.
 
-Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8).
+Close with the scorecard summary, attribution (DENT / MWG / user / agent judgment / overrides), the `### Modern Web Guidance` disclosure if guides shaped the code, and a one-line next step (SKILL.md §8).

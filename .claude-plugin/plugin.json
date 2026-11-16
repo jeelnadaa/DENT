@@ -1,7 +1,7 @@
 {
   "name": "dent",
-  "version": "2.2.0",
-  "description": "DENT 2.0: design-engineering skill for interfaces, motion graphics, 3D, sound, narration and video. Routes any request to the right workflow, plans and audits, picks distinctive directions and the right libraries, verifies with real checks, scores itself, and writes DESIGN.md.",
+  "version": "2.3.0",
+  "description": "DENT 2.0: design-engineering skill for interfaces, motion graphics, 3D, sound, narration and video. Routes any request to the right workflow, plans and audits, picks distinctive directions and the right libraries, verifies with real checks, scores itself, and writes DESIGN.md. Bundles Google's Modern Web Guidance as the primary authority for HTML, CSS and client-side JS.",
   "author": {
     "name": "Jeel Nada (solarquack)",
     "url": "https://github.com/jeelnadaa"
@@ -9,5 +9,5 @@
   "homepage": "https://github.com/jeelnadaa/DENT",
   "repository": "https://github.com/jeelnadaa/DENT",
   "license": "Apache-2.0",
-  "keywords": ["design", "ui", "ux", "product-design", "design-system", "accessibility", "frontend", "motion-graphics", "sound-design", "video", "skill"]
+  "keywords": ["design", "ui", "ux", "product-design", "design-system", "accessibility", "frontend", "modern-web-guidance", "web-platform", "motion-graphics", "sound-design", "video", "skill"]
 }

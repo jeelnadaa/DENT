@@ -1,13 +1,13 @@
 # Components — Extended Library
 
-`foundations-and-components.md` §4 defines the foundation components. This file specs the next tier, using the same shared control tokens (§4.1) and the spec template (§4.21). Everything here inherits: control height/radius/font, focus ring, state color formula, hit areas, and the "define once, reuse everywhere" rule. Keyboard/ARIA details: `accessibility.md` §4.
+`foundations-and-components.md` §4 defines the foundation components. This file specs the next tier, using the same shared control tokens (§4.1) and the spec template (§4.21). Everything here inherits: control height/radius/font, focus ring, state color formula, hit areas, and the "define once, reuse everywhere" rule. Keyboard/ARIA details: `accessibility.md` §4. On the web, implement each component the way its Modern Web Guidance guide says (`modern-web-guidance.md` §4) and apply these specs on top.
 
 ---
 
 ## 1. Accordion / disclosure
 - Header row height ≥ 48px; whole row is the button; chevron 16–20px on the trailing side, rotates 180° (or 90°) in 150–250ms.
-- Content padding = card padding; animate height with `grid-template-rows: 0fr → 1fr` or `interpolate-size`, not `max-height` hacks.
-- Default: multiple sections may be open. Only force single-open when sections are mutually exclusive steps.
+- Content padding = card padding. Web: `<details>`/`<summary>`, height animated on `::details-content` with `interpolate-size: allow-keywords`, not `max-height` hacks; no headings inside `summary` and no arrow-key handling (`mwg:accordion`).
+- Default: multiple sections may be open. Avoid exclusive (single-open) accordions; use `<details name>` only when sections are mutually exclusive steps (`mwg:accordion`).
 - Don't hide content users need to compare or scan (prices, specs) in accordions on desktop.
 
 ## 2. Breadcrumbs
@@ -53,7 +53,7 @@
 - Shortcut hint `/` or `⌘K` shown in the field on desktop.
 
 ## 8. Command palette (⌘K / Ctrl+K)
-- Centered modal, width ~560–640px, top offset ~15–20vh, input at top (no border), results list below, max ~8–10 visible rows.
+- Centered modal (a native `<dialog>`, `mwg:dialog`), width ~560–640px, top offset ~15–20dvh, input at top (no border), results list below, max ~8–10 visible rows.
 - Groups (Navigation, Actions, Recent), each row: icon, label, optional description, trailing shortcut hint.
 - Fuzzy match; empty query shows recent and suggested commands.
 - Enter runs; Esc closes; arrows move; nested commands push a breadcrumb chip in the input; Backspace on empty input goes up a level.
@@ -66,8 +66,8 @@
 - Units as suffix ("kg", "%"); right-align or center digits with tabular figures.
 
 ## 10. One-time code (OTP) input
-- 6 boxes (or one field visually split), each ≥ 44px, monospace/tabular, large (20–24px).
-- `autocomplete="one-time-code"`, `inputmode="numeric"`; **paste fills all boxes**; typing advances, Backspace goes back.
+- **One `<input>`**, visually split into 6 cells if the design wants boxes (monospace, `letter-spacing`, a cell background), ≥ 44px tall, tabular, large (20–24px). Never six separate inputs: they break `one-time-code` autofill, paste and screen readers (`mwg:sms-otp-form`).
+- `type="text"`, `autocomplete="one-time-code"`, `inputmode="numeric"`, `pattern`, `maxlength`; paste and SMS autofill (WebOTP where supported) fill the whole code; submit with `requestSubmit()`.
 - Auto-submit when complete; show resend with countdown ("Resend in 0:24"); say where the code was sent ("Sent to ••• 4821").
 
 ## 11. Tag / multi-select input
@@ -128,7 +128,7 @@ Builds on `foundations-and-components.md` §4.15.
 - Markdown shortcuts (`#`, `-`, `**`) for power users.
 
 ## 20. Inline confirmation and popconfirm
-- For low-to-medium risk destructive actions in lists, prefer **undo toast** (`modern-layer.md` §7.8). If confirmation is needed, a small popover anchored to the button ("Delete 'Q3 plan'? [Cancel] [Delete]") beats a full modal.
+- For low-to-medium risk destructive actions in lists, prefer **undo toast** (`modern-layer.md` §7.8), as long as the deleted item can also be restored somewhere permanent (trash, history), since a toast must not be the only place an action lives (`mwg:persistent-toast-notifications`). If confirmation is needed, a small popover anchored to the button ("Delete 'Q3 plan'? [Cancel] [Delete]") beats a full modal.
 - High-risk/irreversible (delete workspace, cancel subscription): modal with consequence summary; for the most severe, type-to-confirm the resource name.
 
 ## 21. Empty state (component)

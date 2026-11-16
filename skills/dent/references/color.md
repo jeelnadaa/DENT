@@ -71,7 +71,7 @@ Dark mode is a **separate palette**, not an inversion.
 - **Shadows → borders and lightness.**
 - **Status colors:** use lighter variants; subtle backgrounds as low-opacity tints (e.g. error at 12–16% over surface).
 - **Charts:** brighter, less saturated series colors; lighter gridlines at very low opacity.
-- **Respect the system setting** (`prefers-color-scheme`) and offer a toggle (System / Light / Dark) where useful. Remember the choice; avoid theme flash.
+- **Respect the system setting** (`prefers-color-scheme`) and offer a toggle (System / Light / Dark) where useful. Remember the choice; avoid theme flash. On the web, build it per `mwg:dark-mode` and `mwg:dark-mode-toggle` (`color-scheme` meta + `:root` property, `light-dark()` tokens, a stored override only when it differs from the system), and support forced colors (`mwg:color`).
 
 ## 8. Accessible color checklist
 - [ ] Body text ≥ 4.5:1; large text ≥ 3:1; UI components/graphics ≥ 3:1.

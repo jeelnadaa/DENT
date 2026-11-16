@@ -34,6 +34,9 @@ Look for, in this order:
 3. **Component library:** `components.json` (shadcn/ui), `@radix-ui/*`, `react-aria`, `@mui/*`, `@chakra-ui/*`, `@mantine/*`, `antd`, `vuetify`, `@angular/material`, `daisyui`, `@headlessui/*`, `bits-ui`, `@ark-ui/*`.
 4. **Existing UI folder:** `components/ui`, `src/components`, `design-system/`, a Storybook (`.storybook/`).
 5. **Icon library and fonts** in `package.json` / font imports.
+6. **Browser-support policy:** `browserslist`, `AGENTS.md`/`CLAUDE.md` notes, build targets. It decides which Modern Web Guidance fallbacks apply (`modern-web-guidance.md` §3).
+
+The project's existing library stays for the widgets it already provides; new work around it follows Modern Web Guidance, native first (`modern-web-guidance.md` §5). Propose migrating library widgets to native ones as a separate, opt-in follow-up.
 
 ### 2.2 Measure drift (quick, objective)
 Count distinct raw values used in styles. High counts mean no system or a broken one.
@@ -106,6 +109,7 @@ Present key screens side by side with 3–5 bullet points on *why* each change h
 6. **Content:** labels, errors, empty states.
 7. **Deceptive patterns** (persuasion-and-ethics.md Part 2).
 8. **Craft & distinctiveness:** anti-patterns list (quality-review.md Part 2 §3).
+9. **Web implementation** (when you can read the code): legacy patterns that Modern Web Guidance replaces (hand-made modals and focus traps, JS tooltips and positioning, global reduced-motion resets, lazy LCP images, split OTP inputs, library widgets the platform now covers). Cite the guide (`mwg:<id>`) per finding. A broad legacy scan runs only on request (`modern-web-guidance.md` §7).
 
 ### 4.3 Report format
 Lead with a 3-line summary (overall score from the rubric, the biggest problem, the quickest big win). Then a table:

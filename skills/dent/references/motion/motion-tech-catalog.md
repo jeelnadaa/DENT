@@ -2,6 +2,8 @@
 
 Pick the **simplest engine that achieves the result**, and only one engine per job. Status legend: ✓ checked 2026-11-14 · K from knowledge, verify · ⚠ caveat. Licences change: confirm on the official page before recommending for production.
 
+On the web this ladder is also Modern Web Guidance's order: retrieve `mwg:motion` and the guide for the effect (`../modern-web-guidance.md` §4) before choosing an engine, follow its reduced-motion and fallback rules whatever engine you pick, and log why a library was needed.
+
 ---
 
 ## 1. Selection ladder (start at the top, go down only when needed)
@@ -21,8 +23,8 @@ Pick the **simplest engine that achieves the result**, and only one engine per j
 | Tech | Role | Environments | Strengths | Weaknesses | Licence | Status |
 |---|---|---|---|---|---|---|
 | [CSS animations/transitions](https://developer.mozilla.org/docs/Web/CSS/CSS_animations) | Declarative motion | All browsers | Free, fast (compositor), reduced-motion via media query | Limited sequencing/control | Web standard | ✓ |
-| [Scroll-driven animations](https://developer.mozilla.org/docs/Web/CSS/CSS_scroll-driven_animations) | Scroll/view timelines in CSS | Chromium; others progressing — check support | No JS, smooth | Needs fallback where unsupported | Web standard | K |
-| [View Transitions API](https://developer.mozilla.org/docs/Web/API/View_Transition_API) | Shared-element and page transitions | Same-document widely supported; cross-document in Chromium — check | Native morphs | Support varies; design fallback (instant) | Web standard | K |
+| [Scroll-driven animations](https://developer.mozilla.org/docs/Web/CSS/CSS_scroll-driven_animations) | Scroll/view timelines in CSS | Baseline newly available (Oct 2026); feature-detect with `@supports` | No JS, smooth | Decorative effects: no fallback needed; essential ones: the guide's fallback, never the scroll-timeline polyfill (`mwg:scroll-entry-exit-effects`) | Web standard | ✓ 2026-11-16 (Baseline data via MWG) |
+| [View Transitions API](https://developer.mozilla.org/docs/Web/API/View_Transition_API) | Shared-element and page transitions | Same-document: Baseline newly available (Oct 2025). Cross-document: Chrome/Edge 126+, Safari 18.2+, not Firefox | Native morphs | Progressive enhancement: unsupported browsers navigate instantly (`mwg:same-document-transitions`, `mwg:cross-document-transitions`) | Web standard | ✓ 2026-11-16 (Baseline data via MWG) |
 | [Web Animations API](https://developer.mozilla.org/docs/Web/API/Web_Animations_API) | JS keyframes with control | All modern browsers | No dependency, `getAnimations()` for testing | Verbose for complex sequences | Web standard | ✓ |
 | [Motion](https://motion.dev) (Framer Motion) | UI animation for React; vanilla `animate()` | React, vanilla, Vue (motion-v) | Layout/shared animations, springs, gestures, `useReducedMotion` | React-centric features; bundle if overused | MIT (paid "Motion+" extras exist) | K |
 | [GSAP](https://gsap.com) | Timelines, ScrollTrigger, SplitText, MorphSVG, DrawSVG, Flip, Observer, etc. | Any (vanilla, React via `useGSAP`) | Industry-standard sequencing and scroll control | Imperative; clean up with `gsap.context()`/`useGSAP` | **Free incl. all plugins and commercial use under GSAP's standard "no charge" licence (Webflow); restriction: tools that compete with Webflow's visual animation builder need permission. Not OSI open source.** | ✓ 2026-11-14 |
@@ -64,10 +66,10 @@ Pick the **simplest engine that achieves the result**, and only one engine per j
 | Tech | Role | Notes | Licence | Status |
 |---|---|---|---|---|
 | GSAP ScrollTrigger | Pin, scrub, snap, scroll-linked timelines | Most capable; `matchMedia` for responsive + reduced motion | GSAP standard licence (free) | ✓ 2026-11-14 |
-| CSS scroll-driven animations | Native scroll timelines | Use with fallbacks | Standard | K |
-| [Lenis](https://lenis.darkroom.engineering) | Smooth scroll | Keep native feel; disable under reduced motion; don't break anchors/keyboard | MIT | K |
+| CSS scroll-driven animations | Native scroll timelines | First choice for scroll-linked effects; `@supports` + the guide's fallback (`mwg:scroll-entry-exit-effects`, `mwg:scrollytelling`) | Standard | ✓ 2026-11-16 |
+| [Lenis](https://lenis.darkroom.engineering) | Smooth scroll | Prefer native `scroll-behavior: smooth` inside `@media (prefers-reduced-motion: no-preference)`; if used, keep native feel, disable under reduced motion, don't break anchors, keyboard or find-in-page | MIT | K |
 | [Locomotive Scroll](https://scroll.locomotive.ca) | Smooth scroll + parallax (v5 built on Lenis) | Same cautions | MIT | K |
-| IntersectionObserver | Trigger on enter | Cheapest reveal trigger | Standard | ✓ |
+| IntersectionObserver | Trigger on enter | Non-animation triggers (lazy start, pause offscreen) and the fallback MWG guides describe for scroll-driven effects | Standard | ✓ |
 
 ## 6. Creative coding and generative
 

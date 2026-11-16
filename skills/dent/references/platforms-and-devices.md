@@ -104,10 +104,12 @@ Labels: **[Rule]** platform requirement or accessibility standard · **[Conventi
 
 ## 3. Web (responsive websites and web apps)
 
+The design rules below are DENT's; **how** to build each of them on the web (layout, units, semantics, focus, performance, forms) follows Google's Modern Web Guidance, which wins any implementation conflict (`modern-web-guidance.md`).
+
 ### Responsive strategy
 - **Mobile-first CSS**: base styles for small screens, add complexity with `min-width` media queries.
 - **Breakpoints from content** (where the layout breaks), typical starting set: 480 · 768 · 1024 · 1280 · 1536px.
-- Use **fluid** values: `clamp()` for type and spacing, `minmax()`/`auto-fit` grids, **container queries** for components that live in different-width containers.
+- Use **fluid** values: `clamp()` for type and spacing (max ≤ 2.5× min), `minmax()`/`auto-fit` grids, **container queries** for components that live in different-width containers, `dvh` instead of `vh` for full-height mobile layouts (`mwg:responsive-design`, `mwg:size-aware-styling`).
 - **[Rule]** Content reflows at 320 CSS px wide without horizontal scrolling for text (WCAG 1.4.10 Reflow), except data tables/maps.
 - **[Rule]** Works at 200% browser zoom.
 - Max content width for reading ~65–75ch; for app layouts ~1200–1440px, or full-width for data-heavy tools.
@@ -128,14 +130,15 @@ Labels: **[Rule]** platform requirement or accessibility standard · **[Conventi
 - **[Rule]** Visible focus (`:focus-visible`), full keyboard support, no keyboard traps.
 - **URLs are UI:** every meaningful state (tab, filter, page, modal with content) should have a shareable URL; Back button works as expected.
 - Links open in the same tab by default; new tab only for external tools/docs while in a task (and indicate it).
-- Use the right input types (`email`, `tel`, `url`, `number` only for real numbers) and `autocomplete` attributes so browsers/password managers autofill.
+- Use the right input types (`email`, `tel`, `url`, `number` only for real numbers, never for codes, cards or ZIPs) and `autocomplete` attributes so browsers/password managers autofill (`mwg:forms`).
 - Hover enhancements only under `@media (hover: hover)`.
 - Respect `prefers-color-scheme`, `prefers-reduced-motion`, `prefers-contrast`.
 
 ### Performance is design [Law: Doherty threshold, response-time limits]
 - Core Web Vitals "good" thresholds: **LCP ≤ 2.5s** (main content visible), **INP ≤ 200ms** (responsiveness), **CLS ≤ 0.1** (layout stability).
-- Reserve space for images/ads/embeds (width/height or aspect-ratio). Use modern image formats (AVIF/WebP), responsive `srcset`, lazy-load below the fold.
-- Fonts: 1–2 families, subset, `font-display: swap`, preload critical.
+- Reserve space for images/ads/embeds (width/height or aspect-ratio). Use modern image formats (AVIF/WebP), responsive `srcset`, lazy-load below the fold, never the LCP image, which gets `fetchpriority="high"` (`mwg:optimize-image-priority`).
+- Fonts: 1–2 families, subset (OFL only), `font-display: swap`, preload critical, stable fallbacks (`mwg:visually-stable-font-fallbacks`).
+- Scripts deferred or modules, long tasks split, INP causes measured (`mwg:performance`, `mwg:break-up-long-tasks`, `mwg:identify-inp-causes`).
 
 ### Cookie/consent banners, popups
 - Don't cover the main content on first load with modals (newsletter popups hurt experience); if legally required, keep banners compact with equally visible accept/reject choices.

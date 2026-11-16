@@ -134,8 +134,8 @@ Audit an existing interface, codebase or screenshot and report findings. Change 
 
 - **Usage:** `/dent:audit <URL, screenshot or path>`
 - **Default depth:** Standard
-- **Loads:** references/modes-existing-products.md §4; templates/AUDIT.md; references/quality-review.md; references/accessibility.md
-- **Does:** Establish scope, goal and main user task → Look first → Evaluate → Write findings with evidence, severity, impact, recommendation and effort; separate verified defects from opinions
+- **Loads:** references/modes-existing-products.md §4; templates/AUDIT.md; references/quality-review.md; references/accessibility.md; references/modern-web-guidance.md
+- **Does:** Establish scope, goal and main user task → Look first → Evaluate → Only if the user asked for code modernization or a legacy-pattern scan, run the MWG legacy scan (references/modern-web-guidance → Write findings with evidence, severity, impact, recommendation and effort; separate verified defects from opinions
 - **Delivers:** templates/AUDIT.md filled in; offer to fix the top items in one line.
 - **Definition:** [`skills/dent/commands/audit.md`](../skills/dent/commands/audit.md)
 
@@ -146,7 +146,7 @@ Deep review of a result: visual quality, UX, accessibility, responsiveness, func
 - **Usage:** `/dent:review <what to review>`
 - **Default depth:** Standard
 - **Loads:** references/workflow/verification.md; references/quality-review.md; templates/REVIEW.md; references/creative/anti-slop.md
-- **Does:** Run the automated pass and look at every screenshot → Walk the main user journey; trigger states; tab through → Check gates G1–G12 that apply → Prioritise issues by severity; mark each as verified defect or subjective recommendation
+- **Does:** Run the automated pass and look at every screenshot → Walk the main user journey; trigger states; tab through → Check gates G1–G13 that apply (G13 → Prioritise issues by severity; mark each as verified defect or subjective recommendation
 - **Delivers:** templates/REVIEW.md + prioritised issue list.
 - **Definition:** [`skills/dent/commands/review.md`](../skills/dent/commands/review.md)
 
@@ -157,7 +157,7 @@ Run the verification suite on built work and report results honestly.
 - **Usage:** `/dent:verify <page, URL or build>`
 - **Default depth:** Standard
 - **Loads:** references/workflow/verification.md; templates/REVIEW.md; scripts/verify_page.py; scripts/contrast.py
-- **Does:** Find available tools; say which checks can and cannot run → Run `python scripts/verify_page → Open the screenshots and inspect them; do functional checks for what is in scope → Record every gate as Passed / Failed / Not run / Blocked / N/A with evidence
+- **Does:** Find available tools; say which checks can and cannot run → Run `python scripts/verify_page → Open the screenshots and inspect them; do functional checks for what is in scope → Check web code against the Modern Web Guidance guides it was built from (G13; references/workflow/verification → Record every gate as Passed / Failed / Not run / Blocked / N/A with evidence
 - **Delivers:** Verification report with evidence and the screenshots' paths.
 - **Definition:** [`skills/dent/commands/verify.md`](../skills/dent/commands/verify.md)
 
@@ -167,8 +167,8 @@ Make layout and interaction work at every size, designed rather than shrunk.
 
 - **Usage:** `/dent:responsive <page or screens>`
 - **Default depth:** Standard
-- **Loads:** references/platforms-and-devices.md §3; references/workflow/verification.md §4; references/foundations-and-components.md §3
-- **Does:** Screenshot at 320, 375, 390, 768, 1024, 1440 and any breakpoint in between → Fix overflow first (header actions, wide tables, fixed widths, long words, 100vw elements) → Re-compose for small screens → Check touch targets, hover-only actions, safe areas, landscape
+- **Loads:** references/platforms-and-devices.md §3; references/workflow/verification.md §4; references/foundations-and-components.md §3; references/modern-web-guidance.md
+- **Does:** Screenshot at 320, 375, 390, 768, 1024, 1440 and any breakpoint in between → Fix overflow first (header actions, wide tables, fixed widths, long words, 100vw elements) the MWG way → Re-compose for small screens → Check touch targets, hover-only actions, safe areas, landscape
 - **Delivers:** Fixed layout + screenshots per width + overflow report.
 - **Definition:** [`skills/dent/commands/responsive.md`](../skills/dent/commands/responsive.md)
 
@@ -178,8 +178,8 @@ Focused accessibility audit and remediation (WCAG 2.2 AA).
 
 - **Usage:** `/dent:accessibility <page or app>`
 - **Default depth:** Standard
-- **Loads:** references/accessibility.md; references/workflow/verification.md §5; scripts/verify_page.py
-- **Does:** Run automated checks (verify script, axe if available) → Manually check landmarks, headings, names/labels, keyboard path, focus, dialogs, errors, contrast (all themes), targets, zoom/reflow, reduced motion, media alternatives → Fix barriers that block task completion first; prefer native semantics over ARIA → Re-verify every fix; list criteria actually checked
+- **Loads:** references/accessibility.md; references/workflow/verification.md §5; scripts/verify_page.py; references/modern-web-guidance.md
+- **Does:** Run automated checks (verify script, axe if available) → Manually check landmarks, headings, names/labels, keyboard path, focus, dialogs, errors, contrast (all themes), targets, zoom/reflow, reduced motion, media alternatives → Fix barriers that block task completion first; on the web use the native elements and patterns from the Modern Web Guidance guides (no ARIA re-added to native elements, no hand-made focus traps around <dialog>) → Re-verify every fix; list criteria actually checked
 - **Delivers:** Findings + fixes + which criteria were checked and how.
 - **Definition:** [`skills/dent/commands/accessibility.md`](../skills/dent/commands/accessibility.md)
 
@@ -201,7 +201,7 @@ Choose, install and customise the right component/UI libraries for this project.
 - **Usage:** `/dent:components <need, e.g. data table + command palette>`
 - **Default depth:** Standard
 - **Loads:** references/catalog/component-selection.md; references/catalog/components-primitives-and-systems.md; references/catalog/components-collections-and-specialized.md
-- **Does:** Detect framework, language, styling, existing libraries → List functional needs and the visual direction → Shortlist 2–3 options per need from the catalogue; compare compatibility, accessibility, customisation, performance, licence, maintenance, design fit → Recommend one per job with trade-offs; check the licence from the official source → Install, theme to DESIGN
+- **Does:** Detect framework, language, styling, existing libraries and browser-support policy → List functional needs and the visual direction → Shortlist 2–3 options per need from the catalogue; compare compatibility, accessibility, customisation, performance, licence, maintenance, design fit → Recommend one per job with trade-offs; check the licence from the official source → Install, theme to DESIGN
 - **Delivers:** Comparison table, recommendation with reasons, install + integration, verification.
 - **Definition:** [`skills/dent/commands/components.md`](../skills/dent/commands/components.md)
 
@@ -267,7 +267,7 @@ Add rich, purposeful motion: ask which kinds (scroll, hover, hero entrance, micr
 - **Usage:** `/dent:motion <area or page>`
 - **Default depth:** Standard
 - **Loads:** references/motion/motion-menu.md; references/modern-layer.md; references/motion/motion-system-and-verification.md; references/motion/motion-tech-catalog.md; templates/MOTION.md
-- **Does:** Ask which kinds of motion the user wants, following motion-menu → Ask Question B → Pick concrete items for every chosen kind from the catalogue (§3) and meet the minimum for the effort level (§2) → Write the motion plan table with an M-ID per item (§5) → Build every M-ID with motion tokens and the right engine (CSS first, GSAP/Motion only where needed) → Verify
+- **Does:** Ask which kinds of motion the user wants, following motion-menu → Ask Question B → Pick concrete items for every chosen kind from the catalogue (§3) and meet the minimum for the effort level (§2) → Write the motion plan table with an M-ID per item (§5) → Build every M-ID with motion tokens and the right engine (CSS first, GSAP/Motion only where needed), coded the way the Modern Web Guidance guide for that effect says (mwg → Verify
 - **Delivers:** Motion plan (M-IDs) + implementation + verification (planned vs built, reduced motion, smoothness).
 - **Definition:** [`skills/dent/commands/motion.md`](../skills/dent/commands/motion.md)
 

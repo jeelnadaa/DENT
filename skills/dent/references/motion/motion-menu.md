@@ -92,7 +92,7 @@ For each chosen category, pick concrete items. Defaults are for **Balanced**; sc
 - **Text highlight on scroll:** words light up as they pass the centre.
 - **Image sequence / frame scrub** (product turntable from rendered frames).
 - **Counters on enter**, **SVG path drawing on scroll**, **scroll-snap** for full-screen chapters (not for reading pages).
-- Tech: CSS `animation-timeline: view()/scroll()` first; GSAP ScrollTrigger for pinning/scrubbing; IntersectionObserver for triggers; Lenis only if it keeps native feel. Never scroll-jack.
+- Tech: CSS `animation-timeline: view()/scroll()` first, built per the matching MWG guide (`mwg:scroll-entry-exit-effects`, `mwg:parallax-scroll-effects`, `mwg:scroll-progress-indicator`, `mwg:shrinking-header-on-scroll`); GSAP ScrollTrigger for pinning/scrubbing the platform can't express; IntersectionObserver only for non-animation triggers and guide fallbacks; Lenis only if it keeps native feel. Never scroll-jack.
 
 ### 3.3 Hover effects (pointer devices only)
 - **Cards:** lift 2–6 px + shadow change, border/tint shift, inner image zoom 1.03–1.06, content reveal (description slides up).
@@ -109,7 +109,7 @@ For each chosen category, pick concrete items. Defaults are for **Balanced**; sc
 Button press (scale 0.97), toggle thumb slide with squash, checkbox tick drawing, radio dot pop, input focus label float/underline grow, copy → check morph, like/favourite pop + burst, add-to-cart fly-to-cart, stepper +/– bump, tab indicator slide, accordion chevron rotate + height animation, tooltip fade-scale, dropdown/menu scale from trigger origin, password show/hide eye morph.
 
 ### 3.5 Page & view transitions
-Cross-fade, slide in navigation direction, shared-element morph (thumbnail → detail), card expands into page, route progress bar. Tech: View Transitions API (same- and cross-document), Motion `layoutId`, FLIP.
+Cross-fade, slide in navigation direction, shared-element morph (thumbnail → detail), card expands into page, route progress bar. Tech: View Transitions API (same- and cross-document) per `mwg:same-document-transitions`, `mwg:cross-document-transitions`, `mwg:directional-navigation-transitions`; Motion `layoutId` or FLIP only where the platform can't do it.
 
 ### 3.6 Text & typography motion
 Split-line or word reveal, word swap carousel, typewriter with correction, scramble/decode, variable-font weight/width shift, marquee/ticker band (pausable), highlight sweep, gradient sweep on one word, kinetic headline sequence. Rules: `../creative/hero-typography.md` §6–7.
@@ -168,7 +168,7 @@ Every chosen category has **at least one** item; Standard+ meets the floor in §
 - Vary effects by element role; never one identical fade-up for the whole page.
 - Content is readable immediately; motion never blocks clicks, never delays prices/CTAs/forms by more than ~300 ms.
 - Animate transform, opacity, filter, clip-path; avoid layout properties on large areas.
-- Every item has a reduced-motion version (`prefers-reduced-motion: reduce` → instant or fade only).
+- Every item has a reduced-motion version (instant, fade only, or slowed for progress indicators), coded per item the `mwg:motion` way: opt in under `prefers-reduced-motion: no-preference`, or soften parameters under `reduce`; never a global `*` reset.
 - Hover-only effects live inside `(hover:hover) and (pointer:fine)`; touch gets tap feedback instead.
 - Loops pause offscreen and after a few cycles on reading pages; anything auto-moving > 5 s has a pause control.
 

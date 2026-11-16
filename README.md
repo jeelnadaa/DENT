@@ -5,15 +5,18 @@
 </picture>
 </a>
 
+# DENT: the AI design skill for Claude Code, Codex, Cursor and Copilot
+
 **DENT is an open-source design-engineering skill for AI agents.** Install it once and your agent (Claude Code, Codex, Cursor, Copilot, Gemini CLI, Antigravity, or anything that reads `SKILL.md`) designs like a senior product designer, builds like a front-end engineer, animates like a motion designer, and scores like a strict reviewer. Interfaces, motion graphics, 3D, sound, narration and video.
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-111?style=flat-square)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-SKILL.md-111?style=flat-square)](https://agentskills.io)
-[![Version](https://img.shields.io/badge/version-2.2.0-E8461E?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.3.0-E8461E?style=flat-square)](CHANGELOG.md)
+[![Modern Web Guidance](https://img.shields.io/badge/web%20authority-Modern%20Web%20Guidance-111?style=flat-square)](#modern-web-guidance-the-authority-for-web-code)
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-111?style=flat-square)](skills/dent/references/styles/_styles-index.md)
 [![Commands](https://img.shields.io/badge/commands-31-111?style=flat-square)](docs/COMMANDS.md)
 
-**[Install](#install)** · **[One command](#one-command-the-right-pipeline)** · **[What it can make](#what-dent-can-make)** · **[Proof](#see-the-difference-run-the-benchmark)** · **[Commands](docs/COMMANDS.md)** · **[Architecture](docs/ARCHITECTURE.md)**
+**[Website](https://dent.solarquack.in)** · **[Install](#install)** · **[One command](#one-command-the-right-pipeline)** · **[What it can make](#what-dent-can-make)** · **[Proof](#see-the-difference-run-the-benchmark)** · **[Commands](docs/COMMANDS.md)** · **[Architecture](docs/ARCHITECTURE.md)**
 
 ---
 
@@ -30,6 +33,7 @@ Ask any agent for a landing page and you get the average of every template: a vi
 | Invents social proof | **Never.** Honesty is a gate: real proof or clearly marked placeholders |
 | "Looks fine on my screen" | `verify_page.py` checks overflow at 6 widths, contrast, labels, reduced motion, autoplay audio |
 | Adds a second UI library to your repo | Detects your design system and extends it; picks libraries from sourced catalogues, licences included |
+| Writes yesterday's web code: JS modals with focus traps, positioning libraries, global animation kill switches | Follows Google's **Modern Web Guidance** first: native `<dialog>`, `popover`, anchor positioning, `<details>`, view transitions, with each guide's fallbacks |
 | Fades everything in | Motion with a purpose, storyboards for motion graphics, reduced-motion versions |
 | Click sounds everywhere, autoplaying music | Sound as a designed, opt-in system; narration with captions |
 | "Done!" | Scores itself against *your* request with evidence; `/dent:improve` raises the score |
@@ -65,12 +69,25 @@ Power users can call any of the [31 commands](docs/COMMANDS.md) directly: `/dent
 |---|---|
 | **Product design** | Six modes (create, redesign, audit, extend, implement, adopt), 4 effort levels, 4 task depths, UX laws labelled Law / Rule / Convention, recipes for landing pages, apps and dashboards |
 | **Creative direction** | Concept sentence, category-cliché check, 41 aesthetic styles, a [library of 25 named directions](skills/dent/references/creative/directions-library.md) plus motion, sound and video directions, a [hero typography system](skills/dent/references/creative/hero-typography.md) with 18 composition techniques |
-| **Front-end engineering** | Tokens first, ~45 component specs, code guides for HTML/CSS, Tailwind, React, Vue, Svelte, Flutter, SwiftUI, Compose, React Native |
+| **Front-end engineering** | Tokens first, ~45 component specs, code guides for HTML/CSS, Tailwind, React, Vue, Svelte, Flutter, SwiftUI, Compose, React Native. On the web, [Modern Web Guidance](#modern-web-guidance-the-authority-for-web-code) decides how each piece is built |
 | **Component intelligence** | A [sourced catalogue](skills/dent/references/catalog/README.md) of primitives (Radix, Base UI, React Aria, Ark…), systems (MUI, Mantine, Ant, Carbon, Fluent…), collections (shadcn/ui, Magic UI, Aceternity…) and specialists (TanStack Table, AG Grid, Tiptap, cmdk, Sonner, dnd-kit, React Flow…), with licences and paid tiers called out |
 | **Motion graphics** | Interface motion vs motion graphics vs 3D, 1D → 2D → 2.5D → 3D → XR, storyboards, kinetic type, scroll stories, generative visuals, and a tech ladder from CSS to GSAP, Rive, PixiJS, Three.js and shaders |
 | **Sound and voice** | UI sound, sonic identity, ambience, interactive and procedural audio, music, narration and TTS, captions; never autoplay, always opt-in |
 | **Video** | Launch (teaser, reveal, feature tour, manifesto), trailers, explainers, demos, social, ads; scripts, storyboards, animatics; generative tools if you have them, otherwise HyperFrames, Remotion, Motion Canvas and FFmpeg |
-| **Quality** | 12 gates, runnable checks, an [All-out protocol](skills/dent/references/workflow/all-out.md) that misses nothing, request-specific self-scoring, and attribution of what came from DENT vs the agent vs you |
+| **Quality** | 13 gates, runnable checks, an [All-out protocol](skills/dent/references/workflow/all-out.md) that misses nothing, request-specific self-scoring, and attribution of what came from DENT vs the agent vs you |
+
+---
+
+## Modern Web Guidance: the authority for web code
+
+DENT bundles Google Chrome's [Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance) skill (stewarded with the Edge, Firefox and MDN teams, Apache-2.0) and makes it the **primary authority for every HTML, CSS and client-side JS task**. DENT decides *what* is designed; MWG decides *how* it is built on the web.
+
+- **Before writing web code** DENT searches and retrieves the relevant guides (`npx -y modern-web-guidance@latest search …`, or offline with `skills/dent/scripts/mwg.py`), applies them, checks the result against them (gate G13) and ends with a short `### Modern Web Guidance` note naming the guides it followed.
+- **MWG wins conflicts.** DENT 2.3 was audited against it: global reduced-motion resets, hand-made modal focus traps, split OTP inputs, library-first widgets and oversized fluid-type ranges were replaced with MWG's patterns ([full table](skills/dent/references/modern-web-guidance.md#6-conflicts-resolved-in-dent-230)).
+- **Native first:** `<dialog>`, `popover`, anchor positioning, `<details>`, `<input switch>`, customizable `<select>` before any library; libraries only where the platform has no primitive.
+- `verify_page.py` flags the mechanical violations (a global `*` reduced-motion reset, a lazy-loaded LCP image, ARIA re-added to `<dialog>`, split one-time-code inputs).
+
+The plugin ships MWG as its own skill too (`skills/modern-web-guidance/`, vendored verbatim and pinned in `UPSTREAM.json`), so it also kicks in on web tasks that never touch DENT.
 
 ---
 
@@ -323,7 +340,7 @@ a short summary of the design decisions you made.
 npx skills add jeelnadaa/DENT
 ```
 
-**Manual:** copy `skills/dent/` into your agent's skills folder:
+**Manual:** copy `skills/dent/` and `skills/modern-web-guidance/` side by side into your agent's skills folder:
 
 | Agent | Personal (all projects) | Project only |
 |---|---|---|
@@ -334,13 +351,13 @@ npx skills add jeelnadaa/DENT
 | Gemini CLI | `~/.gemini/skills/dent/` | `.gemini/skills/dent/` |
 | Antigravity, OpenCode, Goose, Amp & other Agent Skills tools | — | `.agents/skills/dent/` |
 
-Or run the installer: `./scripts/install.sh claude` (macOS/Linux) · `.\scripts\install.ps1 -Agent claude` (Windows).
+Or run the installer (installs both): `./scripts/install.sh claude` (macOS/Linux) · `.\scripts\install.ps1 -Agent claude` (Windows).
 
-**Claude.ai / Claude Desktop:** download `dent.zip` from [Releases](https://github.com/jeelnadaa/DENT/releases) and upload it under **Settings → Capabilities → Skills**. Agents without skill support (Windsurf, Cline, Aider, Zed…): see [docs/INSTALL.md](docs/INSTALL.md#agents-without-native-skill-support).
+**Claude.ai / Claude Desktop:** download `dent.zip` from [Releases](https://github.com/jeelnadaa/DENT/releases) and upload it under **Settings → Capabilities → Skills** (it includes Modern Web Guidance; upload `modern-web-guidance.zip` as well if you want it active outside DENT). Agents without skill support (Windsurf, Cline, Aider, Zed…): see [docs/INSTALL.md](docs/INSTALL.md#agents-without-native-skill-support).
 
 **Updating:** run `/dent:update` in Claude Code, then click **Update** on DENT in Settings → Plugins (or `/plugin update dent@dent`). Turn on auto-update for the DENT marketplace to get new versions automatically. Details: [docs/INSTALL.md](docs/INSTALL.md#updating).
 
-**Optional, for real verification:** `pip install playwright && python -m playwright install chromium` lets DENT run `verify_page.py` on what it builds.
+**Optional, for real verification:** `pip install playwright && python -m playwright install chromium` lets DENT run `verify_page.py` on what it builds. Node.js lets it use the always-current Modern Web Guidance CLI (`npx`); without it DENT reads the bundled guides.
 
 > Skill folder paths change as tools evolve. If a path doesn't work, check your agent's docs for its "skills" directory. Full details: [docs/INSTALL.md](docs/INSTALL.md).
 
@@ -380,9 +397,10 @@ skills/dent/
 │   ├── audio/          # sound design, voice & narration, audio tech, implementation + verification
 │   ├── video/          # video types & craft, tools & pipeline
 │   ├── styles/         # 41 aesthetic styles
-│   └── *.md            # color, typography, accessibility, patterns, platforms, industries, tokens & code…
+│   └── *.md            # modern-web-guidance (web authority), color, typography, accessibility, patterns, platforms, tokens & code…
 ├── templates/          # PLAN, AUDIT, REVIEW, SCORECARD, MOTION, SOUND, VIDEO
-└── scripts/            # verify_page.py, contrast.py
+└── scripts/            # verify_page.py, contrast.py, mwg.py (offline Modern Web Guidance lookup)
+skills/modern-web-guidance/  # Google's Modern Web Guidance skill, vendored verbatim (scripts/sync_mwg.py)
 commands/               # Claude Code plugin wrappers → /dent:<name>
 evals/                  # behaviour cases, 21 scenarios, command + routing tests, fixtures
 benchmark/              # public with/without comparisons
@@ -394,8 +412,8 @@ Progressive disclosure keeps the agent's context small: `SKILL.md` is about 330 
 
 ## Verification and evaluation
 
-- `python scripts/validate.py`: frontmatter, 400+ internal references, the styles index, the command trio (definition ↔ plugin wrapper ↔ router), 200+ catalogue entries with sources and status, and versions.
-- `python scripts/test_tools.py`: `verify_page.py` must fail a deliberately broken page on every gate and pass a clean one.
+- `python scripts/validate.py`: frontmatter, 500+ internal references, the styles index, the command trio (definition ↔ plugin wrapper ↔ router), 200+ catalogue entries with sources and status, versions, the vendored Modern Web Guidance copy, and every `mwg:<guide>` reference in DENT.
+- `python scripts/test_tools.py`: `verify_page.py` must fail a deliberately broken page on every gate (including each Modern Web Guidance rule it breaks) and pass a clean one.
 - [`evals/`](evals/): 15 behaviour cases, 21 scenarios (dashboards, data-heavy apps, checkout, existing design systems, unfamiliar frameworks, strict accessibility, motion graphics, 3D, animated data, audiovisual, launch and explainer videos, sonic identity) and a protocol that records the prompt, **every question asked and the answer chosen**, the output, machine checks, self-score and an independent score.
 - Catalogue licences are marked ✓ (checked against official sources on a date) or K (from knowledge, to verify), so DENT never presents a guess as a fact.
 
@@ -423,3 +441,5 @@ If DENT helps you ship something, a ⭐ on the repo or a mention is the best tha
 DENT is licensed under the [Apache License 2.0](LICENSE). You may use, modify and distribute it, commercially too, as long as you keep the license and the [NOTICE](NOTICE) file (which credits the creator). The license does **not** grant rights to the DENT name or logo; see [TRADEMARKS.md](TRADEMARKS.md).
 
 Designs you create with DENT are yours. DENT claims no rights over its output.
+
+`skills/modern-web-guidance/` is [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance) by the Google Chrome team and contributors, redistributed unmodified under the Apache License 2.0 (its own `LICENSE` is included). It is not part of the DENT trademark.

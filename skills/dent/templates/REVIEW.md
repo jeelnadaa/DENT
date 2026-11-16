@@ -22,6 +22,7 @@
 | G10 Motion | | |
 | G11 Sound | | |
 | G12 Licences | | |
+| G13 Modern Web Guidance (guides retrieved, MANDATORY rules and fallbacks met) | | |
 
 ## Functional checks
 | Area | Check | Result | Evidence |

@@ -51,7 +51,8 @@
 
 ## 7. Technical strategy
 - Components (reuse / extend / new):
-- Libraries (one per job, licence, why — see catalog/component-selection.md):
+- Web platform (Modern Web Guidance): browser-support policy; MWG guides per capability; native elements chosen (see references/modern-web-guidance.md):
+- Libraries (one per job, licence, why, why not native — see catalog/component-selection.md):
 - State and data flow:
 - Persistence, error handling:
 - Media pipeline (motion, audio, video tools):
@@ -72,6 +73,7 @@ Keyboard · Focus management · Semantics · Screen reader · Contrast (all them
 |---|---|---|
 | R-01 | | |
 | G2 Layout | verify_page.py at 320–1440 | No overflow |
+| G13 Modern Web Guidance | MWG guides cross-checked + verify_page.py | MANDATORY rules and fallbacks met |
 
 ## 12. Risks and trade-offs
 | Risk | Likelihood / impact | Mitigation |
@@ -83,6 +85,7 @@ Keyboard · Focus management · Semantics · Screen reader · Contrast (all them
 
 ## 14. Definition of done
 - [ ] All Must requirements implemented and verified
-- [ ] Applicable gates G1–G12 Passed (or reported)
+- [ ] Applicable gates G1–G13 Passed (or reported)
+- [ ] `### Modern Web Guidance` disclosure written for web code
 - [ ] Scorecard ≥ target, or gaps reported with next steps
 - [ ] DESIGN.md / licences updated

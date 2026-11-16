@@ -8,6 +8,8 @@ Checks:
   4. Commands: skills/dent/commands/X.md <-> commands/X.md (plugin wrapper) <-> SKILL.md §4 table
   5. Catalogue rows (entries starting with a link) carry a status marker (✓ date or K)
   6. Templates and scripts referenced by SKILL.md exist; plugin JSON parses; versions agree
+  7. Vendored Modern Web Guidance (skills/modern-web-guidance): intact, provenance recorded, and every
+     `mwg:<id>` mentioned anywhere in DENT names a real guide
 
 Run: python scripts/validate.py   (exit 1 on errors)
 Copyright 2026 Jeel Nada (solarquack). Licensed under the Apache License 2.0.
@@ -23,13 +25,14 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILL = ROOT / "skills" / "dent"
 REFS = SKILL / "references"
 STYLES = REFS / "styles"
+MWG = ROOT / "skills" / "modern-web-guidance"
 errors: list[str] = []
 warnings: list[str] = []
 
 # Bare file names that legitimately refer to user-project files, not skill files.
 PROJECT_FILES = {"DESIGN.md", "PLAN.md", "README.md", "AGENTS.md", "GEMINI.md", "CONVENTIONS.md", "SKILL.md",
                  "SCORECARD.md", "AUDIT.md", "REVIEW.md", "MOTION.md", "SOUND.md", "VIDEO.md", "CHANGELOG.md",
-                 "RESULT.md", "index.md"}
+                 "RESULT.md", "index.md", "CLAUDE.md"}
 
 
 def rel(p: Path) -> str:
@@ -181,6 +184,45 @@ def check_repo(fm: dict[str, str]) -> None:
             errors.append(f"missing script skills/dent/scripts/{s}")
 
 
+def check_mwg() -> int:
+    skill = MWG / "SKILL.md"
+    if not skill.is_file():
+        errors.append("skills/modern-web-guidance/SKILL.md missing (run scripts/sync_mwg.py)")
+        return 0
+    text = skill.read_text(encoding="utf-8")
+    if not re.search(r"^name:\s*modern-web-guidance\s*$", text, re.M):
+        errors.append("skills/modern-web-guidance/SKILL.md: name must be 'modern-web-guidance'")
+    for f in ("LICENSE", "UPSTREAM.json"):
+        if not (MWG / f).is_file():
+            errors.append(f"skills/modern-web-guidance/{f} missing (run scripts/sync_mwg.py)")
+    try:
+        up = json.loads((MWG / "UPSTREAM.json").read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        up = {}
+    sv = up.get("skill_version", "")
+    if not sv or f"--skill-version {sv}" not in text:
+        errors.append("skills/modern-web-guidance/UPSTREAM.json skill_version doesn't match SKILL.md (re-run scripts/sync_mwg.py)")
+    ids: dict[str, Path] = {}
+    for g in (MWG / "guides").rglob("*.md"):
+        if g.stem in ids:
+            errors.append(f"MWG guide id '{g.stem}' is duplicated ({rel(ids[g.stem])}, {rel(g)})")
+        ids[g.stem] = g
+    if up.get("guides") not in (None, len(ids)):
+        errors.append(f"UPSTREAM.json says {up.get('guides')} guides but {len(ids)} exist (vendored copy edited by hand?)")
+    if len(ids) < 100:
+        errors.append(f"only {len(ids)} MWG guides vendored; expected the full corpus")
+    adapter = REFS / "modern-web-guidance.md"
+    if not adapter.is_file():
+        errors.append("references/modern-web-guidance.md (DENT's MWG adapter) is missing")
+    used = 0
+    for f in [*SKILL.rglob("*.md"), ROOT / "README.md", *(ROOT / "docs").glob("*.md")]:
+        for gid in re.findall(r"mwg:([a-z0-9][a-z0-9-]*)", f.read_text(encoding="utf-8")):
+            used += 1
+            if gid not in ids:
+                errors.append(f"{rel(f)}: `mwg:{gid}` is not an MWG guide id")
+    return used
+
+
 def main() -> int:
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -191,6 +233,7 @@ def main() -> int:
     styles = check_styles()
     cmds = check_commands()
     rows = check_catalogues()
+    mwg_refs = check_mwg()
     check_repo(fm)
     for w in warnings:
         print(f"warning: {w}")
@@ -201,7 +244,7 @@ def main() -> int:
         return 1
     refs = len(list(REFS.rglob("*.md"))) - len(list(STYLES.glob("*.md")))
     print(f"OK: SKILL.md v{fm.get('version')} + {refs} reference files + {styles} styles + {cmds} commands + "
-          f"{rows} catalogue entries; {links} internal references resolved")
+          f"{rows} catalogue entries; {links} internal references resolved; {mwg_refs} MWG guide references resolved")
     return 0
 
 

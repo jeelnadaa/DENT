@@ -44,7 +44,7 @@
   --bg:#FFFFFF; --text:#000000; --text-2:#3D3D3D; --rule:#000000; --accent:#E30613; --on-accent:#FFFFFF;
   --font-sans:"Switzer","Helvetica Neue",Arial,sans-serif;
   --radius-control:0; --radius-container:0;
-  --h1:clamp(3rem,2rem + 8vw,10rem); --tracking-h1:-0.04em;
+  --h1:clamp(4rem,2rem + 8vw,10rem); --tracking-h1:-0.04em;
   --dur:180ms; --ease:cubic-bezier(.2,0,0,1);
 }
 ```

@@ -47,6 +47,7 @@ The user decides how deep the design goes. **Ask this first** (question 0), with
 - **Foundation components** needed by the screen (buttons, inputs, selection controls, cards, nav…) with default, hover, focus, disabled and error states.
 - **Core laws:** clear hierarchy, one primary action, proximity/alignment, Fitts, Hick, Jakob.
 - **Accessibility minimum** (SKILL.md › Accessibility) and the pre-ship checklist's core items.
+- **Modern Web Guidance** for any web code (`modern-web-guidance.md`): effort changes how much is built, never whether the guides are followed.
 - **Decision Log**, and DESIGN.md after approval.
 
 ### What each level adds
@@ -129,11 +130,12 @@ When the user asks to add something to an existing design:
 
 | User asks for… | Read |
 |---|---|
+| Any web code change: HTML, CSS, client-side JS, a component, "use the modern way", browser support, Core Web Vitals, "modernize the codebase" | modern-web-guidance.md (search + retrieve the MWG guides first; native first; legacy scan only for broad modernization) |
 | Animations, transitions, micro-interactions, "more motion" | `motion/motion-menu.md` (ask kinds + intensity, minimums) + `modern-layer.md` (motion system, micro-interactions, reduced motion, performance) |
 | Hover effects | `modern-layer.md` §7.4 |
 | Scroll effects, parallax, sticky storytelling | `modern-layer.md` §7.5 |
 | "More modern / premium / polished" | `modern-layer.md` + quality-review.md Part 2 §4 |
-| Dark mode / theme switch | color.md Part 1 §7 + design-tokens-and-code.md Part 1 §4 |
+| Dark mode / theme switch | color.md Part 1 §7 + design-tokens-and-code.md Part 1 §4 + `mwg:dark-mode`, `mwg:dark-mode-toggle` |
 | Change style / "make it look like X style" | styles/_styles-index.md + the style file |
 | "Make it look like this site/screenshot" | inspiration-and-reference-sites.md §2 |
 | Responsive / mobile / tablet / desktop app | platforms-and-devices.md |

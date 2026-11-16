@@ -2,7 +2,8 @@
 """Regression tests for DENT's runnable tools.
 
 - contrast.py: known ratios
-- verify_page.py: evals/fixtures/bad.html must fail G2, G3, G4, G10, G11; good.html must pass all
+- verify_page.py: evals/fixtures/bad.html must fail G2, G3, G4, G10, G11, G13 (each MWG rule it breaks);
+  good.html must pass all (including a slowed progress spinner under reduced motion)
   (skipped with a clear message if Playwright/Chromium isn't installed)
 
 Run: python scripts/test_tools.py   (exit 1 on failure)
@@ -54,11 +55,17 @@ def test_verify() -> None:
     if bad is None:
         return
     g = bad["gates"]
-    for gate in ("G2_layout", "G3_contrast_sample", "G4_operability_auto", "G10_reduced_motion", "G11_no_autoplay_audio"):
+    for gate in ("G2_layout", "G3_contrast_sample", "G4_operability_auto", "G10_reduced_motion", "G11_no_autoplay_audio",
+                 "G13_modern_web_auto"):
         check(g.get(gate) == "Failed", f"bad.html fails {gate}")
+    rules = {f["rule"] for f in bad.get("mwg", {}).get("fails", [])}
+    for rule in ("mwg:motion", "mwg:optimize-image-priority", "mwg:dialog", "mwg:sms-otp-form"):
+        check(rule in rules, f"bad.html: G13 flags {rule}")
     good = run_verify(FIX / "good.html")
     for gate, verdict in good["gates"].items():
         check(verdict == "Passed", f"good.html passes {gate}")
+    check(good.get("motion", {}).get("running_reduced", 0) >= 1, "good.html keeps its slowed progress spinner under reduced motion (allowed)")
+    check(not good.get("mwg", {}).get("warns"), "good.html: no Modern Web Guidance warnings")
     inv = good.get("motion_inventory", {})
     check(inv.get("keyframes", 0) >= 1 and inv.get("reducedMotionQueries", 0) >= 1 and inv.get("transitionRules", -1) >= 0,
           "motion inventory reports keyframes and reduced-motion queries")

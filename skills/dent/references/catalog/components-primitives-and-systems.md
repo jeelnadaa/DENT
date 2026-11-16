@@ -2,6 +2,8 @@
 
 Read `README.md` for field meanings and the status legend (✓ checked 2026-11-14 · K from knowledge, verify · ⚠ caveat). Selection method: `component-selection.md`.
 
+**Native first.** These libraries come *after* the web platform: for modals, popovers, menus, tooltips, disclosure, switches, styled selects, tabs, drawers and toasts, use the native elements per Modern Web Guidance (`../modern-web-guidance.md` §5) unless the project already standardised on a library or the browser-support policy rules the native feature out.
+
 ---
 
 ## 1. Accessible primitives (unstyled behaviour; you own the look)
@@ -18,10 +20,10 @@ Read `README.md` for field meanings and the status legend (✓ checked 2026-11-1
 | [Melt UI](https://melt-ui.com) / [Bits UI](https://bits-ui.com) | Svelte | Builders / headless components for Svelte | Unstyled | Good | MIT | Svelte projects (Bits UI powers shadcn-svelte) | React projects | K |
 | [Reka UI](https://reka-ui.com) (formerly Radix Vue) | Vue | Radix-like primitives for Vue | Unstyled | Good | MIT | Vue projects (powers shadcn-vue) | React | K |
 | [Kobalte](https://kobalte.dev) | Solid | Accessible primitives for SolidJS | Unstyled | Good | MIT | Solid projects | Other frameworks | K |
-| [Floating UI](https://floating-ui.com) | Agnostic + React/Vue | Positioning for tooltips/popovers/menus (collision, flip, shift) | n/a | Provides interaction hooks; you add semantics | MIT | Custom floating elements | You're already using a primitive that includes it | K |
+| [Floating UI](https://floating-ui.com) | Agnostic + React/Vue | Positioning for tooltips/popovers/menus (collision, flip, shift) | n/a | Provides interaction hooks; you add semantics | MIT | Custom floating elements that CSS anchor positioning can't express, or a support policy without anchor positioning and its polyfill | Anchor positioning + `popover` covers it (`mwg:position-aware-tooltips`, `mwg:viewport-aware-dropdowns`), or a primitive already includes it | K |
 | [Downshift](https://www.downshift-js.com) | React | Combobox/select/multiselect hooks | Unstyled | Good (WAI-ARIA combobox) | MIT | Custom autocomplete | You want full component kits | K |
 
-**Default choice (React, custom brand):** shadcn/ui (Radix or Base UI underneath) + your tokens. **Accessibility-critical or date-heavy:** React Aria Components.
+**Default choice (React, custom brand):** native elements per MWG for everything the platform covers; shadcn/ui (Radix or Base UI underneath) + your tokens for the rest. **Accessibility-critical or date-heavy:** React Aria Components.
 
 ## 2. Copy-in foundation: shadcn/ui
 

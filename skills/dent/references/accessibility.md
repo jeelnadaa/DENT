@@ -61,31 +61,33 @@ Microsoft's inclusive design toolkit calls this the persona spectrum: solving fo
 **Robust**
 - [ ] 4.1.2 Name, role, value for all UI components. 4.1.3 Status messages announced (live regions) without moving focus.
 
-## 4. Component accessibility patterns (WAI-ARIA Authoring Practices)
+## 4. Component accessibility patterns (native HTML first, then WAI-ARIA)
+
+On the web the **implementation** of every pattern below comes from Modern Web Guidance (`modern-web-guidance.md`): retrieve `mwg:accessibility` plus the component's guide and follow it. MWG prefers native elements that carry the semantics and keyboard behaviour themselves; the ARIA patterns are for custom widgets with no native equivalent. Native platforms (iOS, Android, desktop) follow their own accessibility APIs.
 
 | Component | Role / markup | Keyboard | Notes |
 |---|---|---|---|
 | Button | `<button>` | Enter, Space | Icon-only needs `aria-label`. Toggle: `aria-pressed`. |
 | Link | `<a href>` | Enter | Don't use for actions. |
-| Dialog (modal) | `<dialog>` or `role="dialog"` + `aria-modal="true"` + `aria-labelledby` | Tab cycles inside, Esc closes | Focus first meaningful element; return focus to trigger. Background inert. |
+| Dialog (modal) | Native `<dialog>` opened with `showModal()` (or `command="show-modal"`) + `aria-labelledby`; **no** `role="dialog"`, `aria-modal`, focus trap, `inert` toggling or Esc handler, the browser provides them | Esc closes; focus can't reach the page behind | Visible close button; `<form method="dialog">` for actions; focus returns to the invoker automatically. Only a custom overlay that can't be a `<dialog>` uses `role="dialog"` + `inert` on the rest (`mwg:dialog`, `mwg:accessibility` §12). |
 | Menu (actions) | button `aria-haspopup="menu"` `aria-expanded` + `role="menu"`/`menuitem` | ↑↓, Home/End, Esc, type-ahead | For site navigation use a plain list of links, not `role="menu"`. |
-| Disclosure / accordion | button `aria-expanded` + `aria-controls` | Enter/Space | Headings wrap the buttons. |
-| Tabs | `role="tablist"`, `tab` (`aria-selected`, `aria-controls`), `tabpanel` | ←→ between tabs, Home/End; Tab into panel | Roving tabindex. |
+| Disclosure / accordion | `<details>` + `<summary>` (group with an accessible name) | Enter/Space | No headings inside `summary`, no arrow-key handling; custom accordion (button `aria-expanded`) only when each item needs its own heading (`mwg:accordion`). |
+| Tabs | `role="tablist"`, `tab` (`aria-selected`), `tabpanel`; no `aria-controls` | ←→ between tabs, Home/End; Tab into panel | Initial state rendered in HTML; selected tab shown by a shape, not color alone; never for page navigation (`mwg:tabs`). |
 | Combobox / autocomplete | input `role="combobox"` `aria-expanded` `aria-controls` `aria-activedescendant` + `listbox`/`option` | ↓ opens, ↑↓ move, Enter select, Esc close | Announce result count. |
-| Listbox / select | Prefer native `<select>`; custom: `role="listbox"` | ↑↓, type-ahead | |
+| Listbox / select | Native `<select>`, styled with customizable select (`appearance: base-select`) | ↑↓, type-ahead | Custom `role="listbox"` only if a guide's fallback calls for it (`mwg:branded-select-styling`, `mwg:select-menu-interaction`). |
 | Checkbox / radio | Native inputs | Space; radios ←→/↑↓ in group | Group with `fieldset` + `legend`. |
-| Switch | `<button role="switch" aria-checked>` | Space/Enter | Label describes the setting. |
+| Switch | `<input type="checkbox" switch>` with a `<label>` | Space | Label describes the setting; conditional polyfill per `mwg:switch`. |
 | Slider | `<input type="range">` or `role="slider"` + `aria-valuemin/max/now/valuetext` | ←→ ↑↓ PgUp/PgDn Home/End | |
-| Tooltip | `role="tooltip"`, trigger `aria-describedby` | Shows on focus; Esc hides | Supplementary info only. |
-| Toast / status | `role="status"` (polite) or `role="alert"` (urgent) | — | Don't steal focus; errors persist. |
+| Tooltip | `popover="hint"` element + trigger `interestfor`, positioned with CSS anchor positioning | Shows on hover and focus; Esc hides | Supplementary info only; hoverable and persistent (WCAG 1.4.13); toggletip for touch (`mwg:interest-triggered-tooltips`). |
+| Toast / status | `role="status"` (polite) or `role="alert"` (urgent) | — | Don't steal focus; errors persist (`mwg:persistent-toast-notifications`). |
 | Tables | `<table>`, `<th scope>`, `<caption>` | — | Sortable: `aria-sort` on header button. |
 | Carousel | region with label; slides `aria-roledescription="slide"` | Prev/next buttons, pause | Auto-rotation pausable; don't auto-advance on focus. |
 | Breadcrumb | `nav aria-label="Breadcrumb"` + list; current `aria-current="page"` | — | |
 | Pagination | `nav aria-label="Pagination"`, current `aria-current="page"` | — | |
-| Form errors | `aria-invalid="true"`, `aria-describedby` → message | Focus first error on submit | Error summary with links on long forms. |
+| Form errors | `aria-invalid` synced with `:user-invalid`, `aria-describedby` → message | Focus first error on submit | Validate after interaction, not on first keystroke; error summary with links on long forms (`mwg:validate-input-after-interaction`, `mwg:accessible-error-announcement`). |
 | Loading | `aria-busy="true"` on region; status text "Loading results" | — | |
 
-**First rule of ARIA:** use native HTML elements when they exist; ARIA changes what's announced, not behavior — you must add keyboard behavior yourself.
+**First rule of ARIA:** use native HTML elements when they exist; ARIA changes what's announced, not behavior — you must add keyboard behavior yourself. Never add ARIA that duplicates a native element's built-in semantics (`role="dialog"` on `<dialog>`, `role="button"` on `<button>`).
 
 ## 5. Screen reader design notes
 - Every page: unique `<title>`, one `h1`, logical heading outline (users navigate by headings).

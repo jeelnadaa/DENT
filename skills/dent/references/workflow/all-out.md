@@ -37,13 +37,14 @@ All-out never means: ignoring the user's scope, adding features they didn't ask 
 - [ ] Product demonstration: interactive or animated, real UI, legible on phones (simplified crop)
 - [ ] Pricing (if any): honest, toggle changes prices, annual savings computed correctly, comparison table, currency/tax notes, accessible toggle
 - [ ] Forms: labels, validation, success, error, loading, autocomplete attributes, no real-person placeholders
-- [ ] Navigation: sticky/condensing header, skip link, mobile menu (focus trap, Esc, scroll lock), active section indicator
+- [ ] Navigation: sticky/condensing header (`mwg:shrinking-header-on-scroll`), skip link, mobile menu as a native drawer (`mwg:navigation-drawer`: Esc, swipe, outside tap, no hand-made trap or scroll lock), active section indicator (`mwg:scrollspy`)
 - [ ] Footer: legal links, licence/privacy, contact, social with accessible names
-- [ ] Dark + light (system default + toggle with persistence, no flash of wrong theme)
+- [ ] Dark + light (system default + toggle with persistence, no flash of wrong theme; `mwg:dark-mode`, `mwg:dark-mode-toggle`)
 - [ ] Motion: hero entrance, one scroll story, hover system (pointer only), reduced-motion versions, no layout shift
 - [ ] Optional sound only if on-brand, opt-in toggle, visual equivalents
 - [ ] SEO/meta: title, description, canonical, OG + Twitter cards with a designed 1200×630 image, favicon set (SVG + 32 px + 180 px apple-touch), theme-color, lang attribute, structured data where honest
-- [ ] Performance: fonts subset + `font-display: swap` + preload critical; images sized + modern formats + lazy; no render-blocking scripts; LCP/CLS/INP measured
+- [ ] Performance: fonts subset (OFL only) + `font-display: swap` + preload critical + stable fallbacks; images sized + modern formats + lazy below the fold, LCP image eager with `fetchpriority="high"`; no render-blocking scripts; LCP/CLS/INP measured (`mwg:performance`, `mwg:optimize-image-priority`)
+- [ ] Modern Web Guidance: every capability's guide retrieved and cross-checked, fallbacks per the support policy, verify_page G13 passed, disclosure written
 - [ ] Accessibility: landmarks, heading order, focus visible, contrast both themes, 200 % zoom, 320 px reflow, link purpose, `prefers-reduced-motion`
 - [ ] Analytics/consent only if asked; no dark patterns in cookie banners
 - [ ] 404 page and print stylesheet (if multi-page)

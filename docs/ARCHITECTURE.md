@@ -8,6 +8,7 @@ How the skill is organised, how a request flows through it, and how to extend it
 3. **Procedures beat prose.** Rules that matter are **gates** inside recipes and commands, with automated checks where possible (`verify_page.py`), because prose rules alone failed in the first benchmark.
 4. **Guidance for weak models, freedom for strong ones.** Recipes are a floor; the override clause lets strong models do better with a logged reason, never breaking a gate.
 5. **Honesty is structural.** Catalogue entries carry a verification status; verification results use Passed / Failed / Not run / Blocked / N/A; self-scores need evidence and are capped without it.
+6. **The web platform has its own authority.** Google's Modern Web Guidance (MWG) is vendored verbatim as a sibling skill and is the primary authority for *how* HTML, CSS and client-side JS are built; DENT keeps authority over *what* is designed. On an implementation conflict MWG wins (`references/modern-web-guidance.md` §1).
 
 ## 2. Request flow
 ```
@@ -22,8 +23,9 @@ user request ──► SKILL.md §0 ──► commands/<name>.md (explicit comma
  (workflow-questions…)         (workflow/planning…)               style, directions, hero type)
      │                                   │                                   │
      └──────────────► build (recipes, foundations, catalogues, motion/audio/video) ◄──────┘
+                                         │   web code: MWG search → retrieve → apply (modern-web-guidance.md)
                                          │
-                       verify (workflow/verification.md, scripts/verify_page.py, gates G1–G12)
+                       verify (workflow/verification.md, scripts/verify_page.py, gates G1–G13)
                                          │
                 score + attribution (workflow/scoring-and-closeout.md) ──► /dent:improve loop
                                          │
@@ -46,11 +48,13 @@ At **All-out** effort, `workflow/all-out.md` adds a mandatory completeness sweep
 | `references/styles/` | 41 aesthetic styles + index + template | A look is named or chosen |
 | `references/*.md` | Foundations & components, modern layer, color, typography, accessibility, patterns, platforms, industries, tokens & code, quality review, i18n, brand, assets, research, ethics, tooling | As routed |
 | `skills/dent/templates/` | PLAN, AUDIT, REVIEW, SCORECARD, MOTION, SOUND, VIDEO | Advanced work, reviews, media |
-| `skills/dent/scripts/` | `verify_page.py`, `contrast.py` | Verification |
+| `references/modern-web-guidance.md` | DENT's adapter for Modern Web Guidance: precedence, workflow, DENT → MWG map, native-first rule, resolved conflicts | Any HTML/CSS/client-side JS work |
+| `skills/modern-web-guidance/` | Google's Modern Web Guidance skill (SKILL.md + 209 guides), vendored verbatim with `LICENSE` and `UPSTREAM.json`; `vendor/modern-web-guidance/` inside zip and rules-file installs | Web work (its own trigger, or via DENT) |
+| `skills/dent/scripts/` | `verify_page.py`, `contrast.py`, `mwg.py` (offline MWG search/retrieve) | Verification, MWG lookups without network |
 | `commands/` (repo root) | Claude Code plugin wrappers (generated) | Plugin installs only |
 | `evals/` | Behaviour cases, scenarios, command/routing tests, protocol, fixtures | Testing DENT |
 | `benchmark/` | Public with/without comparisons and results | Publishing results |
-| `scripts/` (repo root) | validate, build_commands, test_tools, package, install | Maintainers and CI |
+| `scripts/` (repo root) | validate, build_commands, test_tools, package, install, sync_mwg | Maintainers and CI |
 | `assets/` | README visuals and their generator | README |
 
 ## 4. Compatibility with DENT 1.x
@@ -66,3 +70,5 @@ At **All-out** effort, `workflow/all-out.md` adds a mandatory completeness sweep
 | A catalogue entry | Add a row with link, licence and status (`✓ <date>` only after checking the official source) | validate |
 | A reference file | Create it, add rows to SKILL.md §9.2 and the add-on routing table | validate |
 | A gate check | Extend `verify_page.py`, add a failing case to `evals/fixtures/bad.html` | `python scripts/test_tools.py` |
+| Web implementation guidance | Don't write it in DENT: point to the MWG guide (`mwg:<id>`) and keep only the design layer in DENT; if MWG lacks the topic, add it with a note to revisit | validate (checks every `mwg:<id>`) |
+| A newer Modern Web Guidance | `python scripts/sync_mwg.py` (never edit `skills/modern-web-guidance/` by hand), re-read `references/modern-web-guidance.md` §6 for new conflicts | validate + `python scripts/test_tools.py` + CHANGELOG |

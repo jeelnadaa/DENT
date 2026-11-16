@@ -6,7 +6,7 @@
 #   site/404.html          shown for unknown paths (not_found_handling below)
 #   site/assets/           benchmark screenshots, share image, app icon
 #   site/_headers          security and cache headers (supported by Workers static assets)
-#   site/robots.txt, site/sitemap.xml
+#   site/robots.txt, site/sitemap.xml, site/llms.txt (summary for AI assistants)
 #
 # Dashboard settings (Workers & Pages > your "dent" project > Settings > Build):
 #   Build command:   (leave empty)

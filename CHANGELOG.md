@@ -4,6 +4,34 @@ All notable changes to DENT are documented here. Format: [Keep a Changelog](http
 
 ## [Unreleased]
 
+## [2.3.0] — 2026-11-16
+
+Google's **Modern Web Guidance** (MWG) becomes DENT's primary authority for all web development and front-end engineering. DENT keeps deciding *what* is designed; MWG decides *how* HTML, CSS and client-side JS are built, and wins any implementation conflict.
+
+### Added
+- **Bundled MWG skill** (`skills/modern-web-guidance/`): Google Chrome's skill (stewarded with the Edge, Firefox and MDN teams), vendored verbatim with its Apache-2.0 `LICENSE` and an `UPSTREAM.json` pin (commit `4dd9683`, skill version `2026_11_09-5bcc021b`, 209 guides). The plugin exposes it as its own skill, so it also triggers on web tasks outside DENT. `scripts/sync_mwg.py` refreshes it; `NOTICE` credits it.
+- **`references/modern-web-guidance.md`**: precedence rules (user/support policy → MWG → DENT → libraries), the search → retrieve → apply → verify → disclose workflow, CLI notes (Windows/Git Bash quirk, sandbox allowlisting), browser-support policy, a DENT → MWG map covering 131 guides, the **native-first** component rule, the table of resolved conflicts, and the legacy-scan flow for modernisation requests.
+- **`mwg:<id>` references** throughout DENT; `validate.py` fails on any id that isn't a real guide and checks the vendored copy's integrity and version pin.
+- **Gate G13 (Modern Web Guidance)** in SKILL.md, PLAN/REVIEW templates, verification, plan audit, scorecard and close-out (including MWG's `### Modern Web Guidance` disclosure). Decision Log sources gain `MWG <guide-id>`; DESIGN.md gains a "Web platform" section.
+- **`skills/dent/scripts/mwg.py`**: offline search/retrieve/list over the bundled guides (same output shape as the CLI) for sandboxes without Node or network.
+- **`verify_page.py` G13 checks**: fails on a global `*` reduced-motion reset, a lazy-loaded LCP image, `fetchpriority="high"` with `loading="lazy"`, `role="dialog"`/`aria-modal` re-added to a native `<dialog>`, and one-time codes split across inputs; warns on an LCP image without `fetchpriority="high"`, too many high-priority images, custom ARIA dialogs and dark-mode CSS without `color-scheme`. New fixture cases in `evals/fixtures/` (+ `lcp.png`) and `test_tools.py` assertions.
+- `dist/modern-web-guidance.zip` release asset; `dent.zip` now carries MWG under `vendor/modern-web-guidance/`. Both installers copy MWG next to DENT (never overwriting a separately installed official copy) and add it to the rules-file snippet.
+
+### Changed (conflicts with MWG resolved in MWG's favour)
+- **Reduced motion:** the global `*{animation-duration:.01ms!important}` reset (in `design-tokens-and-code.md` and `modern-layer.md`) is replaced by per-rule handling: opt in under `no-preference`, or soften parameters under `reduce`. Running the new G13 on the 2.2 benchmark pages shows this snippet had propagated into DENT's builds; the published results are left as recorded.
+- **Base CSS:** element-scoped, zero-specificity resets in a cascade layer instead of rules on `*`; type in `rem`, `min-block-size` instead of fixed control heights, `dvh` for mobile full-height.
+- **Dialogs and drawers:** native `<dialog>` + `showModal()` without `role="dialog"`, `aria-modal`, hand-made focus traps or `overflow: hidden` scroll locks; mobile menus per `mwg:navigation-drawer`.
+- **Component patterns:** switch → `<input type="checkbox" switch>`; tooltip → `popover="hint"` + `interestfor` + anchor positioning; accordion → `<details>` + `::details-content` + `interpolate-size`; tabs without `aria-controls`; styled native `<select>`; toasts must not be the only home of an action.
+- **One-time codes:** one input with `autocomplete="one-time-code"` (styled as boxes if wanted) instead of six auto-advancing inputs; password rules shown as a checklist, errors only after leaving the field.
+- **Libraries:** native platform first (`component-selection.md`, catalogue defaults, `design-tokens-and-code.md`, app recipe); Floating UI only where anchor positioning can't help; animation libraries only for choreography the platform can't express.
+- **Fluid type:** `clamp()` maxima capped at 2.5× the minimum (hero statements, wordmarks, Swiss and Kinetic Typography styles) so zoom still reaches 200%.
+- **Performance and theming:** never lazy-load the LCP image and give it `fetchpriority="high"`; `font-size-adjust` for stable fallbacks; dark mode via `color-scheme` + `light-dark()` with a toggle that stores only real overrides.
+- **Motion catalogue:** scroll-driven animations and view transitions updated to current Baseline data (from MWG); Lenis demoted behind native `scroll-behavior`.
+- `verify_page.py` G10 no longer fails essential progress indicators that keep a slowed loop under reduced motion (MWG's "adjust parameters" strategy).
+- **Landing page (`site/`) brought in line with MWG** (G13 now passes with no warnings): per-rule reduced motion instead of the global reset; the mobile menu is a native modal `<dialog>` with `command`/`commandfor` (fixes a real bug: the old panel was `position: fixed` inside the blurred header, so it collapsed to one row); element-scoped resets, type in `rem`, no `aria-controls` on tabs, forced-colors tab indicator, `color-scheme` follows the theme toggle, which stores an override only when it differs from the system; the terminal cursor stops within 5 s.
+- **Discoverability:** keyword-bearing `<title>` and description, `robots` preview hints, WebSite/Person/SoftwareApplication/FAQPage structured data (FAQ generated from the visible answers), `site/llms.txt` for AI assistants, fresh sitemap date; README gains a text H1 and a link to the website.
+- Every generated command carries the MWG rule; `/dent:audit`, `/dent:verify`, `/dent:review`, `/dent:accessibility`, `/dent:components`, `/dent:responsive`, `/dent:motion` and `/dent:motion-graphics` gained MWG steps. The router (SKILL.md §0) adds "Web code? Modern Web Guidance first".
+
 ## [2.2.0] — 2026-11-15
 
 ### Added

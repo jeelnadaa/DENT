@@ -102,7 +102,7 @@ Labels: **[Law]** research-backed · **[Rule]** standard/accessibility · **[Con
 ### Sign up
 - Minimum fields (often just email + password, or email-only magic link/passkey). Collect profile details later.
 - Offer **social/SSO** and **passkeys** where appropriate; email option always available.
-- Password: show requirements **before** typing, validate live, **show/hide toggle**, allow paste and password managers (`autocomplete="new-password"`).
+- Password: show requirements **before** typing and tick them off as they're met (a checklist, not error messages), show errors only once the user leaves the field, **show/hide toggle**, allow paste and password managers (`autocomplete="new-password"`; `mwg:autofill-sign-up-form`).
 - Don't ask to confirm password twice when there's a show toggle.
 - Clear legal consent (link to terms), no pre-checked marketing opt-ins.
 
@@ -111,7 +111,7 @@ Labels: **[Law]** research-backed · **[Rule]** standard/accessibility · **[Con
 - `autocomplete="username"` / `"current-password"`; "Forgot password?" next to the password field.
 - **[Rule: security UX]** Error message shouldn't reveal whether the account exists: "Email or password is incorrect."
 - "Stay signed in" option where appropriate.
-- One-time codes: `autocomplete="one-time-code"`, numeric keyboard, auto-advance, paste whole code, resend with countdown.
+- One-time codes: a single input with `autocomplete="one-time-code"` and a numeric keyboard (styled as boxes if wanted, never split into several inputs), paste and autofill fill the whole code, resend with countdown (`mwg:sms-otp-form`). Sign-in and sign-up fields follow `mwg:autofill-sign-in-form` / `mwg:autofill-sign-up-form`; offer passkeys where the product supports them (`mwg:passkeys`).
 
 ### Reset / recovery
 - One field (email), same confirmation message regardless of account existence, link expiry explained, new password screen with same rules as sign up.
@@ -119,6 +119,8 @@ Labels: **[Law]** research-backed · **[Rule]** standard/accessibility · **[Con
 ---
 
 ## 6. Forms (general)
+
+Implementation on the web (markup, autofill, validation timing with `:user-invalid`, error announcements) follows `mwg:forms` and `mwg:validate-input-after-interaction`; the rules below are the design layer.
 
 ### Proven rules
 - **[Law]** **Single-column** forms are completed faster and with fewer errors than multi-column (CXL/Baymard research); exceptions: short related pairs (City + ZIP, First + Last name).
@@ -249,7 +251,7 @@ Rule: navigation structure follows the **user's mental model** (validate with ca
 
 ## 15. Notifications and messaging
 
-- **Toast/snackbar:** confirmation of a completed action, with Undo when reversible.
+- **Toast/snackbar:** confirmation of a completed action, with Undo when reversible; the information and any action in it must also be available elsewhere, and no toasts inside or behind an open modal (`mwg:persistent-toast-notifications`).
 - **Inline banner:** persistent info about the current page (trial ending, maintenance).
 - **Badge:** count of new items; clear it when seen.
 - **Notification center:** history of events, grouped by time/type, mark as read.

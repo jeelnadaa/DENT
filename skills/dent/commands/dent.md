@@ -4,6 +4,7 @@ The main entry point: understand any design, front-end or media request, pick th
 
 **Usage:** `/dent <anything you want designed, built, fixed, reviewed or produced>`
 **Default depth:** decided by the router. Effort level and the gates in SKILL.md §3 always apply.
+**Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → verify → disclose) before coding; MWG wins any implementation conflict with DENT.
 
 ## Load
 - `references/workflow/orchestration.md (the router: follow it step by step)`
@@ -26,4 +27,4 @@ Whatever the pipeline produces, plus the gate results, scorecard(s), attribution
 - Skip verify/score because the user only typed /dent.
 - Load every reference "just in case".
 
-Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8).
+Close with the scorecard summary, attribution (DENT / MWG / user / agent judgment / overrides), the `### Modern Web Guidance` disclosure if guides shaped the code, and a one-line next step (SKILL.md §8).

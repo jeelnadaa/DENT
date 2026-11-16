@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- DENT test fixture: deliberately broken. verify_page.py must FAIL G2, G3, G4, G10 and G11. -->
+<!-- DENT test fixture: deliberately broken. verify_page.py must FAIL G2, G3, G4, G10, G11 and G13. -->
 <html>
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -10,9 +10,12 @@
   .faint{color:#bbbbbb}                                        /* G3: ~1.9:1 on white */
   .spin{width:40px;height:40px;background:#e33;animation:spin 1s linear infinite}  /* G10: no reduced-motion guard */
   @keyframes spin{to{transform:rotate(360deg)}}
+  .hero-img{display:block;width:320px;height:200px}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}  /* G13: global reset (mwg:motion) */
 </style>
 </head>
 <body>
+  <img class="hero-img" src="lcp.png" alt="Noise" width="320" height="200" loading="lazy">  <!-- G13: lazy LCP image (mwg:optimize-image-priority) -->
   <h1>Bad fixture</h1>
   <div class="wide">This box is 620px wide.</div>
   <p class="faint">Low contrast text that nobody can read.</p>
@@ -20,6 +23,8 @@
   <button><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6"/></svg></button>  <!-- G4: unnamed -->
   <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">     <!-- G4: no alt; also no lang on html -->
   <div class="spin"></div>
+  <dialog role="dialog" aria-modal="true" aria-label="Settings"><p>Re-added ARIA</p></dialog>  <!-- G13: ARIA on native dialog (mwg:dialog) -->
+  <div class="otp"><input maxlength="1" aria-label="Digit 1"><input maxlength="1" aria-label="Digit 2"><input maxlength="1" aria-label="Digit 3"><input maxlength="1" aria-label="Digit 4"></div>  <!-- G13: split one-time code (mwg:sms-otp-form) -->
   <script>
     // G11: audio context running before any user gesture (Chromium headless allows it to run)
     const ctx = new AudioContext(); const o = ctx.createOscillator(); const g = ctx.createGain(); g.gain.value = 0.0001;

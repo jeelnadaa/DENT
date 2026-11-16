@@ -106,10 +106,11 @@ COMMANDS = [
 
     ("audit", "Audit an existing interface, codebase or screenshot and report findings. Change nothing.", "<URL, screenshot or path>",
      "Standard",
-     ["references/modes-existing-products.md §4", "templates/AUDIT.md", "references/quality-review.md", "references/accessibility.md"],
+     ["references/modes-existing-products.md §4", "templates/AUDIT.md", "references/quality-review.md", "references/accessibility.md", "references/modern-web-guidance.md (web code)"],
      ["Establish scope, goal and main user task.",
       "Look first: render/screenshot, run verify_page.py and drift measures when possible.",
-      "Evaluate: task success, heuristics, [Rule] failures, hierarchy, consistency, content, deceptive patterns, distinctiveness.",
+      "Evaluate: task success, heuristics, [Rule] failures, hierarchy, consistency, content, deceptive patterns, distinctiveness; for web code, also the implementation against the Modern Web Guidance guides for the patterns you find (search → retrieve).",
+      "Only if the user asked for code modernization or a legacy-pattern scan, run the MWG legacy scan (references/modern-web-guidance.md §7); otherwise offer it as a follow-up for a whole-codebase audit.",
       "Write findings with evidence, severity, impact, recommendation and effort; separate verified defects from opinions."],
      "templates/AUDIT.md filled in; offer to fix the top items in one line.",
      ["Silently redesign or fix things.", "Give vague feedback without evidence."]),
@@ -119,7 +120,7 @@ COMMANDS = [
      ["references/workflow/verification.md", "references/quality-review.md", "templates/REVIEW.md", "references/creative/anti-slop.md"],
      ["Run the automated pass and look at every screenshot.",
       "Walk the main user journey; trigger states; tab through.",
-      "Check gates G1–G12 that apply.",
+      "Check gates G1–G13 that apply (G13: the web code against the Modern Web Guidance guides for what it builds).",
       "Prioritise issues by severity; mark each as verified defect or subjective recommendation."],
      "templates/REVIEW.md + prioritised issue list.",
      ["Report checks you didn't run as passed."]),
@@ -130,15 +131,16 @@ COMMANDS = [
      ["Find available tools; say which checks can and cannot run.",
       "Run `python scripts/verify_page.py <target> --out <dir>` and `scripts/contrast.py` on token pairs.",
       "Open the screenshots and inspect them; do functional checks for what is in scope.",
+      "Check web code against the Modern Web Guidance guides it was built from (G13; references/workflow/verification.md §9).",
       "Record every gate as Passed / Failed / Not run / Blocked / N/A with evidence."],
      "Verification report with evidence and the screenshots' paths.",
      ["Fix things during verify unless asked (report first)."]),
 
     ("responsive", "Make layout and interaction work at every size, designed rather than shrunk.", "<page or screens>",
      "Standard",
-     ["references/platforms-and-devices.md §3", "references/workflow/verification.md §4", "references/foundations-and-components.md §3 (grid)"],
+     ["references/platforms-and-devices.md §3", "references/workflow/verification.md §4", "references/foundations-and-components.md §3 (grid)", "references/modern-web-guidance.md (mwg:responsive-design, mwg:size-aware-styling, mwg:fluid-scaling)"],
      ["Screenshot at 320, 375, 390, 768, 1024, 1440 and any breakpoint in between.",
-      "Fix overflow first (header actions, wide tables, fixed widths, long words, 100vw elements).",
+      "Fix overflow first (header actions, wide tables, fixed widths, long words, 100vw elements) the MWG way: container queries for components, dvh for full-height, fluid type with max ≤ 2.5× min.",
       "Re-compose for small screens: simplify mockups, stack with intent, sticky primary action, readable type.",
       "Check touch targets, hover-only actions, safe areas, landscape."],
      "Fixed layout + screenshots per width + overflow report.",
@@ -146,10 +148,10 @@ COMMANDS = [
 
     ("accessibility", "Focused accessibility audit and remediation (WCAG 2.2 AA).", "<page or app>",
      "Standard",
-     ["references/accessibility.md", "references/workflow/verification.md §5", "scripts/verify_page.py"],
+     ["references/accessibility.md", "references/workflow/verification.md §5", "scripts/verify_page.py", "references/modern-web-guidance.md (mwg:accessibility + the component guides)"],
      ["Run automated checks (verify script, axe if available).",
       "Manually check landmarks, headings, names/labels, keyboard path, focus, dialogs, errors, contrast (all themes), targets, zoom/reflow, reduced motion, media alternatives.",
-      "Fix barriers that block task completion first; prefer native semantics over ARIA.",
+      "Fix barriers that block task completion first; on the web use the native elements and patterns from the Modern Web Guidance guides (no ARIA re-added to native elements, no hand-made focus traps around <dialog>).",
       "Re-verify every fix; list criteria actually checked."],
      "Findings + fixes + which criteria were checked and how.",
      ["Claim full compliance from an automated scan."]),
@@ -167,13 +169,13 @@ COMMANDS = [
     ("components", "Choose, install and customise the right component/UI libraries for this project.", "<need, e.g. data table + command palette>",
      "Standard",
      ["references/catalog/component-selection.md", "references/catalog/components-primitives-and-systems.md", "references/catalog/components-collections-and-specialized.md"],
-     ["Detect framework, language, styling, existing libraries.",
-      "List functional needs and the visual direction.",
+     ["Detect framework, language, styling, existing libraries and browser-support policy.",
+      "List functional needs and the visual direction. For each need, search Modern Web Guidance first: if the platform covers it natively (dialog, popover, menu, tooltip, accordion, switch, select, tabs, drawer, toast, carousel), recommend the native build instead of a library (references/modern-web-guidance.md §5).",
       "Shortlist 2–3 options per need from the catalogue; compare compatibility, accessibility, customisation, performance, licence, maintenance, design fit.",
       "Recommend one per job with trade-offs; check the licence from the official source.",
       "Install, theme to DESIGN.md tokens, and verify keyboard/a11y behaviour."],
      "Comparison table, recommendation with reasons, install + integration, verification.",
-     ["Pick by popularity.", "Install two libraries that do the same job."]),
+     ["Pick by popularity.", "Install two libraries that do the same job.", "Add a dependency for something the web platform does natively."]),
 
     ("directions", "Explore 2–4 genuinely different creative directions before committing.", "<product>",
      "Standard",
@@ -232,7 +234,7 @@ COMMANDS = [
       "Ask Question B: intensity (Subtle / Balanced (Recommended) / Expressive / Cinematic).",
       "Pick concrete items for every chosen kind from the catalogue (§3) and meet the minimum for the effort level (§2). If the user chose 'You choose', show the list and let them remove items.",
       "Write the motion plan table with an M-ID per item (§5): element, trigger, effect, duration/easing scaled to the intensity, reduced-motion version, tech.",
-      "Build every M-ID with motion tokens and the right engine (CSS first, GSAP/Motion only where needed). Vary effects by element role; never one fade-up for everything.",
+      "Build every M-ID with motion tokens and the right engine (CSS first, GSAP/Motion only where needed), coded the way the Modern Web Guidance guide for that effect says (mwg:motion plus e.g. mwg:scroll-entry-exit-effects, mwg:animate-to-from-top-layer); reduced motion per rule, never a global reset. Vary effects by element role; never one fade-up for everything.",
       "Verify: observe every M-ID working (recording or Animations panel), run verify_page.py (motion inventory + reduced motion), check smoothness; report planned vs built."],
      "Motion plan (M-IDs) + implementation + verification (planned vs built, reduced motion, smoothness).",
      ["Deliver only a fade-in and call it motion.", "Skip the motion question.", "Ignore reduced motion or hover-only on touch."]),
@@ -242,7 +244,7 @@ COMMANDS = [
      ["references/motion/motion-graphics.md", "references/motion/motion-menu.md", "references/motion/motion-tech-catalog.md", "references/motion/motion-system-and-verification.md", "references/creative/directions-library.md (motion section)", "templates/MOTION.md"],
      ["Ask (if unknown): where it lives (web page, README GIF/SVG, video), length, sound on/off, dimension (1D/2D/2.5D/3D), and which motion kinds and intensity (references/motion/motion-menu.md §1).",
       "Concept → 2–3 motion directions (All-out) → storyboard with timing → animatic.",
-      "Choose technology with the selection ladder; justify it.",
+      "Choose technology with the selection ladder; justify it. For web pieces, retrieve the Modern Web Guidance guides for the effect first (scrollytelling, view transitions, motion).",
       "Build with a timeline; design the reduced-motion version; budget performance.",
       "Verify play-through, sync, loop point, frame rate, reduced motion, cleanup; capture video/GIF if useful."],
      "MOTION.md (concept, storyboard, timing, tech), the piece, verification evidence.",
@@ -344,15 +346,23 @@ COMMANDS = [
 ]
 
 
+MWG_LINE = ("**Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance "
+            "is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → "
+            "verify → disclose) before coding; MWG wins any implementation conflict with DENT.")
+NO_WEB = {"update"}
+
+
 def skill_file(name, summary, hint, depth, load, steps, output, never):
     lines = [f"# /dent:{name}" if name != "dent" else "# /dent", "", summary, "",
              f"**Usage:** `/dent:{name} {hint}` (also `/dent {name} …` or `dent {name} …`)" if name != "dent" else f"**Usage:** `/dent {hint}`",
-             f"**Default depth:** {depth}. Effort level and the gates in SKILL.md §3 always apply.", "",
+             f"**Default depth:** {depth}. Effort level and the gates in SKILL.md §3 always apply.",
+             *([] if name in NO_WEB else [MWG_LINE]), "",
              "## Load", *[f"- `{r}`" if not r.startswith(("the ", "DENT", "SKILL")) else f"- {r}" for r in load], "",
              "## Steps", *[f"{i}. {s}" for i, s in enumerate(steps, 1)], "",
              "## Output", output, "",
              "## Never", *[f"- {n}" for n in never], "",
-             "Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8).", ""]
+             "Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8)." if name in NO_WEB
+             else "Close with the scorecard summary, attribution (DENT / MWG / user / agent judgment / overrides), the `### Modern Web Guidance` disclosure if guides shaped the code, and a one-line next step (SKILL.md §8).", ""]
     return "\n".join(lines)
 
 

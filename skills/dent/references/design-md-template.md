@@ -124,6 +124,12 @@ Sizes: sm/md/lg heights <..>, padding <..>, font <..>, radius <..>
 - Target: WCAG 2.2 AA
 - Notes specific to this design: <e.g. glass panels use 70% tint for contrast>
 
+## 11b. Web platform (Modern Web Guidance)
+- Browser-support policy: <e.g. MWG default: Baseline Widely available without fallbacks, newer features with the guide's fallback>
+- Native elements used: <e.g. `<dialog>` drawer, `popover="hint"` tooltips, `<details>` FAQ, customizable `<select>`>
+- MWG guides applied (snapshot or CLI version): <e.g. navigation-drawer, accordion, motion, dark-mode, optimize-image-priority>
+- Libraries kept and why the platform didn't cover them: <...>
+
 ## 12. Tokens (copy-paste)
 ```css
 :root { /* all tokens above as CSS variables */ }
@@ -132,7 +138,7 @@ Sizes: sm/md/lg heights <..>, padding <..>, font <..>, radius <..>
 ## 13. Decision log
 | # | Decision | Choice | Why | Source |
 |---|---|---|---|---|
-| 1 | Style | | | (user)/(default) |
+| 1 | Style | | | User / DENT <file §> / MWG <guide-id> / Agent judgment / Override |
 | ... | | | | |
 
 ## 14. Changelog

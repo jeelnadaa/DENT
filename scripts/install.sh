@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# DENT installer — copies skills/dent into an agent's skills folder.
+# DENT installer — copies skills/dent (and the bundled Modern Web Guidance skill) into an agent's skills folder.
 # Usage: ./scripts/install.sh <agent> [--project] [--path DIR]
 #        ./scripts/install.sh --list
 # Copyright 2026 Jeel Nada (solarquack). Licensed under the Apache License 2.0.
@@ -7,6 +7,7 @@ set -eu
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 SRC="$SCRIPT_DIR/../skills/dent"
+MWG="$SCRIPT_DIR/../skills/modern-web-guidance"
 AGENT=""
 PROJECT=0
 CUSTOM=""
@@ -45,13 +46,16 @@ done
 if [ "$AGENT" = "rules" ]; then
   DEST="${CUSTOM:-.dent}"
   rm -rf "$DEST"; mkdir -p "$(dirname "$DEST")"; cp -R "$SRC" "$DEST"
-  echo "DENT copied to $DEST"
+  if [ -f "$MWG/SKILL.md" ]; then mkdir -p "$DEST/vendor"; cp -R "$MWG" "$DEST/vendor/modern-web-guidance"; fi
+  echo "DENT copied to $DEST (Modern Web Guidance in $DEST/vendor/modern-web-guidance)"
   echo
   echo "Add this to your agent's rules file (AGENTS.md, .windsurf/rules/dent.md, .clinerules/dent.md, CONVENTIONS.md…):"
   echo
   echo "## Design work (DENT)"
   echo "For any UI, UX, visual design, design-system or front-end styling task, first read \`$DEST/SKILL.md\`"
   echo "and follow its workflow. Open files in \`$DEST/references/\` only when SKILL.md points to them."
+  echo "For any HTML, CSS or client-side JS, follow Google's Modern Web Guidance first:"
+  echo "\`$DEST/vendor/modern-web-guidance/SKILL.md\` (DENT's summary: \`$DEST/references/modern-web-guidance.md\`)."
   exit 0
 fi
 
@@ -74,4 +78,14 @@ mkdir -p "$BASE"
 rm -rf "$DEST"
 cp -R "$SRC" "$DEST"
 echo "DENT installed to $DEST"
+# Modern Web Guidance ships next to DENT. Refresh our copy; never overwrite a separate install of the official skill.
+MDEST="$BASE/modern-web-guidance"
+if [ -f "$MWG/SKILL.md" ]; then
+  if [ -d "$MDEST" ] && [ ! -f "$MDEST/UPSTREAM.json" ]; then
+    echo "Modern Web Guidance already installed at $MDEST (not by DENT): kept as is"
+  else
+    rm -rf "$MDEST"; cp -R "$MWG" "$MDEST"
+    echo "Modern Web Guidance installed to $MDEST"
+  fi
+fi
 echo "Start a new agent session, then ask for design work (e.g. \"Design a sign-up screen for a recipe app\")."

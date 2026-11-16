@@ -9,6 +9,7 @@ This repository **is** a skill. If you're an AI agent editing it:
 - Commands are generated: edit `COMMANDS` in `scripts/build_commands.py`, run it (writes `skills/dent/commands/`, root `commands/` and `docs/COMMANDS.md`), and add a routing row in `references/workflow/orchestration.md`. Never hand-edit generated files.
 - Catalogue rows need a link, licence and status (`✓ <date>` only after checking the official source, else `K`).
 - Changing `verify_page.py`? Add a case to `evals/fixtures/bad.html` and run `python scripts/test_tools.py` (needs Playwright).
+- **Modern Web Guidance (MWG) is the authority for web implementation.** `skills/modern-web-guidance/` is Google's skill vendored verbatim: never edit it; refresh with `python scripts/sync_mwg.py`. In DENT files, don't write HTML/CSS/JS technique that MWG covers; keep the design layer and point to the guide as `mwg:<id>` (validate checks the ids). DENT text that contradicts MWG is a bug: fix it and list it in `references/modern-web-guidance.md` §6.
 - README visuals come from `assets/build_assets.py`; regenerate, don't hand-edit the SVGs.
 - Architecture: `docs/ARCHITECTURE.md`. DENT 2.0 audit/plan/progress: `docs/dent-2/`.
 - Run `python scripts/validate.py` after every change; it must print `OK`. Keep SKILL.md under ~450 lines (router only).

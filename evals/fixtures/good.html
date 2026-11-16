@@ -6,7 +6,7 @@
 <title>Good fixture</title>
 <style>
   :root{--bg:#FBFAF6;--text:#141414;--muted:#55534E;--accent:#1F4FD8}
-  *{box-sizing:border-box}
+  :where(html){box-sizing:border-box} :where(body,main,form,input,button,div,progress){box-sizing:inherit}  /* no * reset (mwg:css) */
   body{margin:0;font:16px/1.6 system-ui,sans-serif;background:var(--bg);color:var(--text)}
   main{max-width:40rem;margin:0 auto;padding:1.5rem}
   h1{font-size:clamp(2rem,1rem + 5vw,4rem);line-height:1;letter-spacing:-.03em;text-wrap:balance}
@@ -18,6 +18,11 @@
   .dot{width:12px;height:12px;border-radius:50%;background:var(--accent)}
   @media (prefers-reduced-motion:no-preference){.dot{animation:pulse 1.6s ease-in-out infinite}}
   @keyframes pulse{50%{opacity:.4}}
+  /* Essential progress indicator: slowed, not removed, under reduced motion (mwg:motion, mwg:spinner) */
+  .loader{appearance:none;display:block;width:2rem;height:2rem;border:3px solid #6B6963;border-top-color:var(--accent);border-radius:50%;background:none;animation:spin .8s linear infinite}
+  .loader::-webkit-progress-bar{background:none}
+  @media (prefers-reduced-motion:reduce){.loader{animation-duration:2.4s}}
+  @keyframes spin{to{rotate:1turn}}
 </style>
 </head>
 <body>
@@ -25,6 +30,7 @@
   <h1>Good fixture</h1>
   <p>Readable text with enough contrast on a warm paper background.</p>
   <div class="dot" aria-hidden="true"></div>
+  <progress class="loader" aria-label="Loading results"></progress>
   <form>
     <label for="email">Email</label>
     <input id="email" type="email" autocomplete="email" placeholder="you@example.com">

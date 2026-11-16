@@ -61,12 +61,19 @@ Naming rules: lowercase, hyphenated, purpose not appearance (`color-accent` not 
 ## 4. Theming
 
 - Light/dark/high-contrast/brand themes = different **tier 2** mappings.
+- Light/dark on the web follows `mwg:dark-mode`: declare `<meta name="color-scheme" content="light dark">`, set `color-scheme` on `:root` (not `body`), and map tier 2 tokens with `light-dark()` (with the guide's fallback for older browsers). A user toggle only overrides `color-scheme` (`mwg:dark-mode-toggle`).
 ```css
-:root{ --color-bg: var(--gray-0); --color-text: var(--gray-900); --color-accent: var(--blue-600); }
-[data-theme="dark"]{ --color-bg: var(--gray-950); --color-text: var(--gray-100); --color-accent: var(--blue-400); }
+:root{
+  color-scheme: light dark;
+  --color-bg: light-dark(var(--gray-0), var(--gray-950));
+  --color-text: light-dark(var(--gray-900), var(--gray-100));
+  --color-accent: light-dark(var(--blue-600), var(--blue-400));
+}
+:root[data-theme="light"]{ color-scheme: light; }   /* stored override from a toggle */
+:root[data-theme="dark"]{ color-scheme: dark; }
 @media (prefers-contrast: more){ :root{ --color-border: var(--gray-700); --color-text-muted: var(--gray-800);} }
 ```
-- Avoid flash of wrong theme: set the theme attribute in a tiny inline script in `<head>` before CSS paints.
+- Avoid flash of wrong theme: the `<meta name="color-scheme">` plus, with a toggle, a tiny classic inline script right after it that applies the stored override (not `type=module`, not `defer`; `mwg:dark-mode-toggle`). Store an override only when it differs from the system setting.
 - Multi-brand: same tier 3 and tier 2 names; each brand provides its own primitives + tier 2 mapping.
 
 ---
@@ -129,24 +136,39 @@ Labels: **[Rule]** must · **[Convention]** default.
 - **One component = one source.** Variants via props/classes (`variant="primary" size="md"`), never copy-pasted styles.
 - **Mobile-first** responsive CSS; use the breakpoints from DESIGN.md.
 - **Real content** for building and testing (and long/edge content), not lorem ipsum.
-- **Performance:** animate `transform`/`opacity`, lazy-load images below the fold, set width/height or aspect-ratio on media, load only needed font weights.
+- **Performance:** animate `transform`/`opacity`, lazy-load images below the fold but never the LCP image (give it `fetchpriority="high"`), set width/height or aspect-ratio on media, load only needed font weights (`mwg:optimize-image-priority`, `mwg:performance`).
+- **[Rule] Web implementation follows Modern Web Guidance.** Before writing any HTML/CSS/client-side JS capability, search and retrieve its MWG guide and apply it (`modern-web-guidance.md`). Where this file and a guide differ, the guide wins.
 
 ---
 
 ## 3. Plain HTML + CSS
 
-- One stylesheet with: `:root` tokens → reset → base (body, headings, links) → layout utilities → components (BEM-like or simple class names) → page-specific (minimal).
-- Use CSS custom properties for tokens; dark mode overrides semantic tokens only (Part 1 §4).
-- Use modern CSS: grid/flex, `gap`, `clamp()`, container queries, `:focus-visible`, `:has()` where supported, logical properties (`margin-inline`, `padding-block`) for RTL readiness.
-- Minimal base reset:
+- One stylesheet in cascade layers: `@layer reset, base, layout, components, utilities;` with `:root` tokens, then reset → base (body, headings, links) → layout → components (BEM-like or simple class names) → page-specific (minimal). Use native CSS nesting where it helps readability (`mwg:css`).
+- Use CSS custom properties for tokens; dark mode overrides semantic tokens only (Part 1 §4), with `color-scheme` and `light-dark()` (`mwg:dark-mode`).
+- Use modern CSS: grid/flex, `gap`, `clamp()`, container queries, `:focus-visible`, `:has()`, logical properties (`margin-inline`, `padding-block`) for RTL readiness. Browser support and fallbacks come from each feature's MWG guide.
+- Type sizes in `rem` (px values in DESIGN.md are design units: 16 px = 1 rem). Controls and anything containing text get `min-block-size`, never a fixed `height` (`mwg:typography`). Mobile full-height sections use `dvh`, not `vh` (`mwg:responsive-design`).
+- Minimal base reset: element-scoped and zero-specificity in the lowest layer, **no rules on `*`** (they can't be overridden by web components or later layers; `mwg:css`) and **no global reduced-motion kill switch** (`mwg:motion`):
 ```css
-*,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{margin:0;font-family:var(--font-sans);font-size:var(--text-body);line-height:1.5;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
-img,svg,video{display:block;max-width:100%;height:auto}
-button,input,select,textarea{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@layer reset, base, layout, components, utilities;
+@layer reset {
+  :where(html){-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box}
+  :where(body,div,section,article,aside,header,footer,main,nav,form,fieldset,ul,ol,li,dialog,[popover],a,button,input,select,textarea,img,video,canvas,svg){box-sizing:inherit}
+  :where(body){margin:0}
+  :where(img,svg,video,canvas,picture){display:block;max-inline-size:100%;block-size:auto}
+  :where(button,input,select,textarea){font:inherit;color:inherit}
+}
+@layer base {
+  body{font-family:var(--font-sans);font-size:var(--text-body);line-height:1.5;color:var(--text);background:var(--bg)}
+  :where(a:any-link,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+}
+```
+- **Reduced motion is handled per rule, next to the animation** (`mwg:motion`): if reduced motion means *no animation*, declare it only inside `@media (prefers-reduced-motion: no-preference)`; if it means *gentler animation* (spinners, progress), override only the changed parameters inside `@media (prefers-reduced-motion: reduce)`. Keep color/opacity feedback transitions; drop movement, scaling, parallax and loops.
+```css
+.card{
+  transition:background-color var(--dur-fast) var(--ease-standard);
+  @media (prefers-reduced-motion:no-preference){transition:background-color var(--dur-fast) var(--ease-standard),translate var(--dur-base) var(--ease-out)}
+}
+html{@media (prefers-reduced-motion:no-preference){scroll-behavior:smooth}}
 ```
 
 ## 4. Tailwind CSS
@@ -156,21 +178,22 @@ button,input,select,textarea{font:inherit;color:inherit}
 - Extract repeated class groups into components (React/Vue components or `@apply` in a small component layer) — don't repeat 20-class strings across files.
 - Use `class-variance-authority` (cva) or similar for variants; `tailwind-merge` to merge classes safely.
 - Dark mode: prefer semantic CSS variables that switch (Part 1 §4) so components don't need `dark:` everywhere; use the `dark:` variant only for exceptions.
-- Use `motion-safe:` / `motion-reduce:` for animations.
+- Use `motion-safe:` for animations that reduced motion removes, and `motion-reduce:` only to soften parameters (the per-rule strategy of `mwg:motion`); never a global reset. Tailwind's preflight is acceptable as the project's existing reset; don't add a second `*` reset on top.
 
 ## 5. React (and similar component frameworks)
 
-- **Headless/accessible primitives** for complex widgets (dialog, popover, menu, combobox, tabs, tooltip, select): Radix UI, React Aria, Headless UI, Ark UI. Don't hand-roll focus traps and keyboard handling unless necessary.
-- **shadcn/ui** is a good base (copy-in components on Radix + Tailwind): restyle its tokens to DESIGN.md, don't ship its default look unchanged (avoid the generic look — see quality-review.md anti-patterns).
+- **Native first** (`modern-web-guidance.md` §5): `<dialog>` + `showModal()`, `popover`/`popover="hint"` + anchor positioning, `<details name>`, `<input type="checkbox" switch>`, customizable `<select>`, rendered from components via refs, with MWG's framework adaptations (typed new attributes, SSR guards, `useId()` for ids and anchor names). Never hand-roll focus traps or scroll locks around a native modal.
+- **Headless/accessible primitives** (Radix UI, Base UI, React Aria, Headless UI, Ark UI) when the project already uses them, or for widgets the platform doesn't cover (async combobox, date-range picker, data grid). Don't hand-roll complex keyboard handling.
+- **shadcn/ui** is a fine base when a project already uses it or needs many library-only widgets: restyle its tokens to DESIGN.md, don't ship its default look unchanged (avoid the generic look — see quality-review.md anti-patterns). Use its native-capable parts the MWG way rather than adding new JS overlays.
 - Component API: `variant`, `size`, `disabled`, `loading`, `asChild`/polymorphic where useful; forward refs; spread remaining props.
 - Folder structure: `tokens/` (or `styles/tokens.css`), `components/ui/` (primitives: Button, Input…), `components/` (composed: PricingCard…), `pages|app/`.
-- Animation: CSS transitions for simple states; **Motion (Framer Motion)** for layout animations, shared elements, gestures, springs; respect `useReducedMotion`.
+- Animation: CSS transitions, `@starting-style` and view transitions for states, entry/exit and shared elements (`mwg:animate-element-entry-exit`, `mwg:same-document-transitions`); **Motion (Framer Motion)** for gesture physics and layout choreography the platform can't express; respect `useReducedMotion` with the same per-rule strategy.
 - Icons: one library (Lucide, Phosphor, Heroicons, Material Symbols) imported per icon; consistent size/stroke via a wrapper.
 - Forms: React Hook Form + schema validation (Zod); show errors per field per forms pattern.
 - Charts: Recharts, Visx, ECharts, Chart.js, Observable Plot — style with chart tokens (see data-visualization.md).
 
 ## 6. Vue / Svelte
-- Same principles: tokens as CSS variables, primitives from accessible headless libs (Radix Vue / Reka UI, Headless UI, Bits UI/Melt UI for Svelte), variants via props, one component per element type.
+- Same principles: tokens as CSS variables, native elements first per MWG, then accessible headless libs where needed (Reka UI, Headless UI, Bits UI/Melt UI for Svelte), variants via props, one component per element type.
 
 ## 7. Flutter
 - Define `ThemeData` with `ColorScheme` (from DESIGN.md colors), `TextTheme` (type scale), and component themes (`FilledButtonThemeData`, `InputDecorationTheme`, `CardTheme`…). Put extra tokens in a `ThemeExtension` (spacing, radii, durations).
@@ -212,8 +235,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 - [ ] Each UI element type implemented once and reused.
 - [ ] All component states implemented.
 - [ ] Semantic HTML / native components; keyboard and screen reader work.
+- [ ] MWG guides retrieved for every web capability built; their MANDATORY rules and fallbacks applied (G13).
 - [ ] Responsive at all breakpoints; no horizontal scroll at 320px (except tables/media).
-- [ ] Reduced motion respected; animations only on transform/opacity.
+- [ ] Reduced motion respected per rule (no global `*` reset); animations only on transform/opacity.
 - [ ] Dark mode (if in scope) switches semantic tokens only.
 - [ ] No console errors; fonts and images load; no layout shift.
 - [ ] Visual verification done (see `quality-review.md` Part 1).

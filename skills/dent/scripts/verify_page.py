@@ -5,8 +5,14 @@ Checks (DENT gates in SKILL.md §3):
   G2  horizontal overflow at each width, with the offending elements
   G3  sampled text contrast (computed colors; skips text over images/gradients)
   G4  unlabeled form controls, unnamed buttons/links, images without alt, missing lang
-  G10 animations still running under prefers-reduced-motion: reduce
+  G10 animations still running under prefers-reduced-motion: reduce (slowed progress indicators are allowed,
+      as Modern Web Guidance's "adjust parameters" strategy recommends)
   G11 audio started before any user gesture (Web Audio sources or unmuted media); early AudioContext creation is reported as info
+  G13 mechanical Modern Web Guidance checks (fail): global reduced-motion reset on `*`, lazy-loaded LCP image,
+      fetchpriority="high" combined with loading="lazy", role="dialog"/aria-modal added to a native <dialog>,
+      one-time codes split across several inputs. Warnings: LCP image without fetchpriority="high", more than
+      two high-priority images, custom ARIA dialogs instead of <dialog>, dark-mode rules without color-scheme.
+      The rest of G13 (code checked against the retrieved guides) is a manual step: references/modern-web-guidance.md
   +   motion inventory (keyframes, transitions, hover, scroll-driven, view transitions, motion libraries)
   +   console errors, page errors; full-page screenshots per width
 
@@ -130,7 +136,9 @@ ANIM_JS = r"""
 () => (document.getAnimations ? document.getAnimations() : []).filter(a => a.playState === 'running').map(a => {
   const t = a.effect && a.effect.getTiming ? a.effect.getTiming() : {};
   const tgt = a.effect && a.effect.target; const cls = tgt && typeof tgt.className === 'string' ? tgt.className.split(' ')[0] : '';
-  return { name: a.animationName || a.constructor.name, target: tgt ? tgt.tagName.toLowerCase() + (cls ? '.' + cls : '') : '', iterations: String(t.iterations), duration: t.duration };
+  const el = tgt && tgt.nodeType === 1 ? tgt : null;
+  const essential = !!(el && el.closest('progress, [role="progressbar"], [role="status"], [aria-busy="true"]'));
+  return { name: a.animationName || a.constructor.name, target: tgt ? tgt.tagName.toLowerCase() + (cls ? '.' + cls : '') : '', iterations: String(t.iterations), duration: t.duration, essential };
 })
 """
 
@@ -165,6 +173,66 @@ INVENTORY_JS = r"""
                  webAnimations: /\.animate\(/.test(srcs), viewTransitionsApi: /startviewtransition/.test(srcs) };
   inv.libraries = Object.entries(libs).filter(([, v]) => v).map(([k]) => k);
   return inv;
+}
+"""
+
+MWG_JS = r"""
+async () => {
+  const fails = [], warns = [];
+  const star = /(^|[\s,>+~(])\*(?![=])/;
+  const walk = (rules, inReduce) => {
+    for (const r of rules) {
+      if (r.media) { walk(r.cssRules, inReduce || /prefers-reduced-motion:\s*reduce/.test(r.media.mediaText || '')); continue; }
+      if (r.cssRules && r.cssRules.length && !r.selectorText) { walk(r.cssRules, inReduce); continue; }
+      if (inReduce && r.selectorText && star.test(r.selectorText) && /animation|transition/.test(r.style ? r.style.cssText : '')) {
+        fails.push({ rule: 'mwg:motion', detail: 'global reduced-motion reset on * (' + r.selectorText.slice(0, 40) + '): handle reduced motion per animation' });
+        return;
+      }
+      if (r.cssRules && r.cssRules.length) walk(r.cssRules, inReduce);
+    }
+  };
+  for (const sh of document.styleSheets) { try { walk(sh.cssRules, false); } catch (e) {} }
+
+  const lcp = await new Promise(res => {
+    try {
+      new PerformanceObserver(l => { const e = l.getEntries(); res(e.length ? e[e.length - 1] : null); })
+        .observe({ type: 'largest-contentful-paint', buffered: true });
+      setTimeout(() => res(null), 1500);
+    } catch (e) { res(null); }
+  });
+  const el = lcp && lcp.element;
+  const lcpInfo = el ? { tag: el.tagName.toLowerCase(), src: (el.currentSrc || el.src || '').slice(0, 80) } : null;
+  if (el && el.tagName === 'IMG') {
+    if ((el.getAttribute('loading') || '').toLowerCase() === 'lazy')
+      fails.push({ rule: 'mwg:optimize-image-priority', detail: 'the LCP image has loading="lazy"' });
+    if ((el.getAttribute('fetchpriority') || '').toLowerCase() !== 'high')
+      warns.push({ rule: 'mwg:optimize-image-priority', detail: 'the LCP image has no fetchpriority="high"' });
+  }
+  const high = [...document.querySelectorAll('img[fetchpriority="high" i]')];
+  if (high.some(i => (i.getAttribute('loading') || '').toLowerCase() === 'lazy'))
+    fails.push({ rule: 'mwg:optimize-image-priority', detail: 'fetchpriority="high" combined with loading="lazy"' });
+  if (high.length > 2) warns.push({ rule: 'mwg:optimize-image-priority', detail: high.length + ' images with fetchpriority="high" (use 1-2)' });
+  if (document.querySelector('[importance]')) warns.push({ rule: 'mwg:optimize-image-priority', detail: 'deprecated importance attribute' });
+
+  const nativeAria = [...document.querySelectorAll('dialog[role], dialog[aria-modal]')];
+  if (nativeAria.length) fails.push({ rule: 'mwg:dialog', detail: nativeAria.length + ' <dialog> element(s) with role/aria-modal re-added' });
+  const custom = document.querySelectorAll('[role="dialog"]:not(dialog), [role="alertdialog"]:not(dialog), [aria-modal="true"]:not(dialog)').length;
+  if (custom) warns.push({ rule: 'mwg:dialog', detail: custom + ' custom ARIA dialog(s): prefer a native <dialog> with showModal()' });
+
+  const groups = new Map();
+  for (const i of document.querySelectorAll('input[maxlength="1"]')) {
+    const k = i.parentElement; groups.set(k, (groups.get(k) || 0) + 1);
+  }
+  if ([...groups.values()].some(n => n >= 4))
+    fails.push({ rule: 'mwg:sms-otp-form', detail: 'a code split across several maxlength=1 inputs: use one input with autocomplete="one-time-code"' });
+
+  let darkRules = 0;
+  const scan = rules => { for (const r of rules) { if (r.media && /prefers-color-scheme:\s*dark/.test(r.media.mediaText || '')) darkRules++; if (r.cssRules) scan(r.cssRules); } };
+  for (const sh of document.styleSheets) { try { scan(sh.cssRules); } catch (e) {} }
+  const cs = getComputedStyle(document.documentElement).colorScheme || 'normal';
+  if (darkRules && cs === 'normal' && !document.querySelector('meta[name="color-scheme"]'))
+    warns.push({ rule: 'mwg:dark-mode', detail: 'dark-mode styles without a color-scheme declaration (meta + :root)' });
+  return { fails, warns, lcp: lcpInfo };
 }
 """
 
@@ -234,6 +302,7 @@ def main() -> int:
         # G3, G4, G11 at the widest width; G10 reduced motion
         wide = max(args.widths)
         ctx, pg = new_page(wide)
+        report["mwg"] = pg.evaluate(MWG_JS)
         report["a11y"] = pg.evaluate(A11Y_JS)
         pg.evaluate(SCROLL_JS); pg.wait_for_timeout(300)
         report["contrast_failures"] = pg.evaluate(CONTRAST_JS)
@@ -260,8 +329,12 @@ def main() -> int:
     a = report["a11y"]
     g4_fail = a["unlabeledControls"] or a["unlabeledHiddenControls"] or a["unnamedButtonsLinks"] or a["imagesWithoutAlt"] or not a["lang"]
     g["G4_operability_auto"] = "Failed" if g4_fail else "Passed"
-    loops_reduced = [x for x in reduced_anims if x["iterations"] in ("Infinity", "inf")]
-    g["G10_reduced_motion"] = "Failed" if loops_reduced or len(reduced_anims) > max(2, len(normal_anims) // 4) else "Passed"
+    # Slowed loops on progress indicators are allowed under reduced motion (MWG `motion`: adjust parameters).
+    decorative_reduced = [x for x in reduced_anims if not x.get("essential")]
+    decorative_normal = [x for x in normal_anims if not x.get("essential")]
+    loops_reduced = [x for x in decorative_reduced if x["iterations"] in ("Infinity", "inf")]
+    g["G10_reduced_motion"] = "Failed" if loops_reduced or len(decorative_reduced) > max(2, len(decorative_normal) // 4) else "Passed"
+    g["G13_modern_web_auto"] = "Failed" if report["mwg"]["fails"] else "Passed"
     au = report["audio"]
     audible_media = [m for m in au["mediaPlayBeforeGesture"] if not m["muted"]] + a["autoplayMedia"]
     g["G11_no_autoplay_audio"] = "Failed" if audible_media or au["sourcesBeforeGesture"] else "Passed"
@@ -293,6 +366,14 @@ def main() -> int:
     if mi["keyframes"] + mi["transitionRules"] + mi["scrollDriven"] < 3 and not mi["libraries"]:
         print("  note: very little motion detected. If the effort is Standard+ this is probably under-animated (motion-menu.md §2).")
     print(f"  audio before gesture: sounds started={au['sourcesBeforeGesture']} audible media={len(audible_media)} (contexts created={au['ctxBeforeGesture']}, running={au['runningCtx']}: info only)")
+    mw = report["mwg"]
+    print(f"  modern web guidance (mechanical): {len(mw['fails'])} failure(s), {len(mw['warns'])} warning(s)"
+          + (f"; LCP element <{mw['lcp']['tag']}>" if mw.get("lcp") else ""))
+    for f in mw["fails"]:
+        print(f"      FAIL {f['rule']}: {f['detail']}")
+    for w_ in mw["warns"]:
+        print(f"      warn {w_['rule']}: {w_['detail']}")
+    print("    (G13 also needs the code checked against the retrieved MWG guides: references/modern-web-guidance.md)")
     print(f"  console errors: {len(report['console_errors'])}")
     print("  gates: " + "  ".join(f"{k}={v}" for k, v in g.items()))
     print(f"  report: {out / 'report.json'}")

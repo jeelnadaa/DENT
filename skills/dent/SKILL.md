@@ -1,10 +1,10 @@
 ---
 name: dent
-description: DENT 2.0 is a design-engineering skill for any visual, interactive or audiovisual work - websites, landing pages, web/mobile/desktop apps, dashboards, design systems, components, motion graphics, kinetic typography, 2D/3D and generative visuals, UI sound, sonic identity, narration and voice-over, launch/explainer/trailer videos, brand and marketing assets. Use it whenever a task touches layout, visual style, typography, UX flows, accessibility, design tokens, component or animation library choice, DESIGN.md, or turning a design into front-end code. It classifies the task, asks focused questions, plans and audits its plan, picks a distinctive creative direction (41 styles plus a directions library), selects libraries with licence awareness, builds, verifies with real checks, scores its own work against the request, and records everything in DESIGN.md. Commands include /dent:plan, /dent:create, /dent:audit, /dent:motion-graphics, /dent:sound, /dent:video, /dent:score and /dent:improve.
+description: DENT 2.0 is a design-engineering skill for any visual, interactive or audiovisual work - websites, landing pages, web/mobile/desktop apps, dashboards, design systems, components, motion graphics, kinetic typography, 2D/3D and generative visuals, UI sound, narration, launch/explainer videos, brand and marketing assets. Use it whenever a task touches layout, visual style, typography, UX flows, accessibility, design tokens, component or animation library choice, DESIGN.md, or front-end code. For HTML, CSS and client-side JS it follows Google's Modern Web Guidance (bundled) as the primary authority. It classifies the task, asks focused questions, plans and audits its plan, picks a distinctive direction (41 styles plus a directions library), selects libraries with licence awareness, builds, verifies with real checks, scores its own work and records everything in DESIGN.md. Commands include /dent:plan, /dent:create, /dent:audit, /dent:motion-graphics, /dent:sound, /dent:video, /dent:score and /dent:improve.
 license: Apache-2.0
 metadata:
   author: Jeel Nada (solarquack)
-  version: "2.2.0"
+  version: "2.3.0"
   homepage: https://github.com/jeelnadaa/DENT
 ---
 
@@ -22,9 +22,10 @@ Labels: **[Law]** research-backed · **[Rule]** measurable standard, never overr
 
 1. **Route.** If the message starts with `/dent:<name>`, `/dent <name>` or `dent <name>`, open `commands/<name>.md` and follow it (§4). **Anything else (plain `/dent`, or just a request in words) goes through `references/workflow/orchestration.md`:** it detects what the user actually wants, picks the sub-commands, chains them into a pipeline and runs them. Users should never need to know the sub-commands.
 2. **Classify** the task (§1.0). This decides how much planning, which recipe and which references.
-3. **Follow the recipe** for the deliverable if one exists (`references/recipes/`, or the media pipelines in `references/motion/`, `references/audio/`, `references/video/`).
-4. **Pass every gate** in §3 that applies and report each one.
-5. **Score and close out** (§8). Offer `/dent:improve` when below target.
+3. **Web code? Modern Web Guidance first.** If the task writes, changes or reviews HTML, CSS or client-side JS (any framework), Google's **Modern Web Guidance (MWG)** is the primary authority for *how* it is built: search and retrieve the relevant guides before writing code, and MWG wins any conflict with DENT on implementation. DENT still decides *what* is designed. Procedure: `references/modern-web-guidance.md`.
+4. **Follow the recipe** for the deliverable if one exists (`references/recipes/`, or the media pipelines in `references/motion/`, `references/audio/`, `references/video/`).
+5. **Pass every gate** in §3 that applies and report each one.
+6. **Score and close out** (§8). Offer `/dent:improve` when below target.
 
 ---
 
@@ -51,7 +52,7 @@ A small change to a payment flow is still Critical. Depth rules: `references/wor
 
 ### 1.1 Understand before touching anything
 - Restate the goal, deliverable and what success looks like.
-- In a codebase: detect framework, styling, tokens, component library, icons, fonts, tests. **Adopt and extend an existing design system; never create a second one** (`references/modes-existing-products.md` §2).
+- In a codebase: detect framework, styling, tokens, component library, icons, fonts, tests and any browser-support policy (`AGENTS.md`, `CLAUDE.md`, browserslist). **Adopt and extend an existing design system; never create a second one** (`references/modes-existing-products.md` §2).
 - Sort what you know into **Confirmed / Assumed / Unknown**. Never invent requirements or features.
 - Check what tools you have (browser, screenshots, Playwright, Python, audio/video tools, generative media access). Plan verification around real tools.
 
@@ -79,11 +80,11 @@ Open `references/creative-direction.md` (process) and `references/creative/direc
 
 ### 1.5 Build
 1. **Foundations** (tokens) then **components** from `references/foundations-and-components.md` (+ `references/components-extended.md`), applying the style's overrides (§9.1).
-2. **Choose libraries deliberately**: reuse what the project has; otherwise follow `references/catalog/component-selection.md`. One library per job.
+2. **Choose implementations deliberately, native first**: reuse what the project has; otherwise the native platform per MWG (`references/modern-web-guidance.md` §5), and a library only for jobs the platform doesn't cover (`references/catalog/component-selection.md`). One library per job.
 3. **Screens** with the matching recipe/pattern (`references/recipes/`, `references/page-and-flow-patterns.md`, `references/complex-product-patterns.md`) and platform rules (`references/platforms-and-devices.md`).
 4. **Modern layer** (`references/modern-layer.md`) only after the screen works without it.
 5. **Media**: motion graphics/3D → `references/motion/`; sound/voice → `references/audio/`; video → `references/video/`. Each has its own pipeline, tech choice and verification.
-6. Code: `references/design-tokens-and-code.md` Part 2. Tokens first, no magic numbers.
+6. Code: `references/design-tokens-and-code.md` Part 2. Tokens first, no magic numbers. Every web capability goes through MWG search → retrieve → apply before you write it (`references/modern-web-guidance.md` §2).
 
 ### 1.6 Verify for real
 Follow `references/workflow/verification.md`. When a browser is available run `python scripts/verify_page.py <page or URL>` (overflow, labels, names, alt text, contrast sample, reduced motion, autoplay, console errors, screenshots). Look at the screenshots yourself. Report every check as **Passed / Failed / Not run / Blocked / N/A**. Never claim a check you didn't run.
@@ -97,7 +98,7 @@ With each draft show the key decisions (5–8 rows in chat; the full log goes in
 | Hero type | 18vw cropped wordmark | Category cliché is centered gradient headline | Agent judgment |
 | Accent | #2F5BEA (5.2:1 on white) | Calm, trustworthy | DENT `color.md` Part 2 |
 
-**Source** is one of: `User`, `DENT <file §>`, `Agent judgment`, or `Override` (§1.10). This is the attribution the user asked for: they can see what came from DENT and what came from you.
+**Source** is one of: `User`, `DENT <file §>`, `MWG <guide-id>` (web implementation), `Agent judgment`, or `Override` (§1.10). This is the attribution the user asked for: they can see what came from DENT and what came from you.
 
 ### 1.8 Changes and add-ons: change only what was asked
 - **Change request:** restate it in one line; if vague ("make it pop") ask one question with 2–4 explained interpretations; change only that; if it breaks a [Rule] say so and propose the smallest fix; log it.
@@ -107,7 +108,7 @@ With each draft show the key decisions (5–8 rows in chat; the full log goes in
 When the user approves, create `DESIGN.md` from `references/design-md-template.md` (motion, sound and video specs go in its sections or in `templates/MOTION.md`, `templates/SOUND.md`, `templates/VIDEO.md`). From then on it is the source of truth: read it before any future work and update it with a changelog line on every change.
 
 ### 1.10 Override clause (for strong models)
-Recipes, defaults, pairings and compositions in DENT are a floor, not a ceiling. If you have a better idea (a sharper concept, a better font pairing, a bolder composition, a smarter library), use it and log it as `Override` with one line on why it's better. **Never override** a [Rule], a gate in §3, honesty, licensing or the user's explicit instructions.
+Recipes, defaults, pairings and compositions in DENT are a floor, not a ceiling. If you have a better idea (a sharper concept, a better font pairing, a bolder composition, a smarter library), use it and log it as `Override` with one line on why it's better. **Never override** a [Rule], a gate in §3, an MWG MANDATORY rule or fallback (only the user or the project's browser-support policy can relax those), honesty, licensing or the user's explicit instructions.
 
 ### 1.11 Adapt to the environment, don't overwhelm the user
 - Questions: question tool if available, otherwise numbered options.
@@ -173,6 +174,7 @@ Motion explains change (object constancy) and must never carry meaning alone. So
 | G10 Motion | Every planned motion item (M-ID) built and observed; minimum for the effort level met (`references/motion/motion-menu.md` §2); purpose for each; reduced-motion version works; no essential info only in motion | Motion plan + verify script (motion inventory, reduced-motion run) + look |
 | G11 Sound | No autoplay; mute/volume control; visual equivalent; loudness sane; works muted | `references/audio/audio-implementation-and-verification.md` |
 | G12 Licences | Fonts, icons, images, libraries, audio, voice, video sources recorded | Licence table in DESIGN.md |
+| G13 Modern Web Guidance | Web code: relevant MWG guides searched and retrieved, MANDATORY rules and fallbacks met for the support policy, usage disclosed | `references/modern-web-guidance.md` §2 + `scripts/verify_page.py` |
 
 A failed gate is fixed before presenting, or reported plainly with the reason.
 
@@ -228,7 +230,7 @@ Every command is a thin entry point into this same skill. Open the command file 
 - Errors say what happened and how to fix it.
 - Respect `prefers-reduced-motion`; nothing flashes more than 3×/s; auto-moving content > 5 s can be paused.
 
-Deeper: `references/accessibility.md`.
+These are the outcomes; on the web, *how* to achieve them (native elements, ARIA, focus, reduced-motion CSS) comes from MWG (`mwg:accessibility` and the component guides). Deeper: `references/accessibility.md`.
 
 ## 6. Content minimum
 Front-load key words; use the user's words; be specific ("Password needs 8+ characters", not "Invalid input"); one term per concept; errors explain what, why and what next, without blame; real or clearly bracketed placeholder content only (§3). Deeper: `references/ux-writing.md`.
@@ -246,6 +248,7 @@ Run with the gates (§3) before presenting anything.
 **Modern layer:** every effect has a job · durations/easings from motion tokens, no linear UI movement · hover is pointer-only and never required · no scroll-jacking · key content never waits for an animation · only transform/opacity animated · no layout shift.
 **Content:** button labels describe outcomes · errors explain the fix.
 **Distinctiveness:** the concept explains the main color, type and motion choices · a signature element exists · nothing generic by accident.
+**Web platform:** MWG guides retrieved for every capability built · native elements before libraries · fallbacks match the browser-support policy · no global `*` resets or global reduced-motion kill switch.
 **Codebase:** no second design system; new values added as tokens in the existing convention; diff contains only in-scope changes.
 
 ---
@@ -256,7 +259,7 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 1. **Scorecard** built from the request: requirements coverage first, then the criteria that matter for this deliverable (design, usability, accessibility, function, responsiveness, distinctiveness, motion, sound, video). 0–10 each **with evidence**. Unverified lines are capped at 6.
 2. **Target:** overall ≥ 8 and no line < 6. Below target → list the 3 highest-impact fixes and offer `/dent:improve`.
 3. **Attribution:** summarise which key decisions came from DENT, from the user, from your own judgment, and any Overrides.
-4. **Close-out:** what was built, requirements met, checks run and results, deviations, known issues, next step (one line).
+4. **Close-out:** what was built, requirements met, checks run and results, deviations, known issues, next step (one line). If MWG was consulted, end the delivering response with the `### Modern Web Guidance` disclosure (`references/modern-web-guidance.md` §2 step 5).
 5. **Approval:** end every delivered design with one question: "Approve it so I write DESIGN.md?" (or write DESIGN.md directly at All-out, marked Draft until approved). Then stop: no endless polishing.
 
 ---
@@ -277,6 +280,7 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 | Need | Open |
 |---|---|
 | **Routing any request to the right commands and pipeline** | `references/workflow/orchestration.md` |
+| **Any HTML/CSS/client-side JS: Modern Web Guidance (primary web authority), precedence, DENT → MWG map, native-first, offline lookup** | `references/modern-web-guidance.md` (MWG skill itself: `../modern-web-guidance/SKILL.md`) |
 | Questions, effort levels, add-on routing, "don't ask" defaults | `references/workflow-questions-and-effort.md` |
 | Task depth, PLAN.md, plan audit, approval, traceability, decisions | `references/workflow/planning-and-plan-audit.md` |
 | Phased execution, scope protection, design-system inventory, definition of done | `references/workflow/execution-and-scope.md` |
@@ -325,6 +329,6 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 | Reference sites and inspiration | `references/inspiration-and-reference-sites.md` |
 | DESIGN.md | `references/design-md-template.md` |
 | Templates | `templates/PLAN.md`, `templates/AUDIT.md`, `templates/REVIEW.md`, `templates/SCORECARD.md`, `templates/MOTION.md`, `templates/SOUND.md`, `templates/VIDEO.md` |
-| Checks you can run | `scripts/verify_page.py`, `scripts/contrast.py`; plugin updater `scripts/update_plugin.py` |
+| Checks you can run | `scripts/verify_page.py`, `scripts/contrast.py`, offline MWG lookup `scripts/mwg.py`; plugin updater `scripts/update_plugin.py` |
 
 To extend DENT: new styles follow `references/styles/_style-template.md` + a row in the index; new catalogue entries follow `references/catalog/README.md`; new topics get a reference file, a row above, and a row in the add-on routing table.

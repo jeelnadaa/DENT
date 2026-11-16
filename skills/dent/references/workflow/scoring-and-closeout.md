@@ -18,6 +18,7 @@ Every substantial deliverable ends with an honest scorecard, an attribution summ
 | Consistency | Every component matches its spec on every screen |
 | States & feedback | All states designed and working |
 | Accessibility | All gates G3–G4, G10–G11 pass; keyboard path verified |
+| Web platform | Native, modern implementation per the retrieved Modern Web Guidance guides; fallbacks match the support policy; G13 passes |
 | Responsiveness | Designed (not shrunk) at phone, tablet, desktop; zero overflow |
 | Function | Every control does what it claims; journeys complete |
 | Distinctiveness | Unmistakably *this* product; category cliché avoided; signature element |
@@ -49,6 +50,7 @@ Every substantial deliverable ends with an honest scorecard, an attribution summ
 ## 4. Attribution (what came from where)
 Summarise the Decision Log's Source column in 3–6 lines:
 - **From DENT:** e.g. "Swiss base style and its overrides (`styles/swiss.md`), landing-page section order (`recipes/landing-page.md` §3), motion tokens (`modern-layer.md` §7.2)."
+- **From Modern Web Guidance:** the guides that shaped the web code (e.g. "native `<dialog>` mobile menu (`navigation-drawer`), per-rule reduced motion (`motion`)").
 - **From you (the user):** effort level, brand color, chosen direction…
 - **Agent judgment:** choices DENT left open (e.g. the exact hero crop, the second font).
 - **Overrides:** any place you deliberately departed from a DENT default, and why it is better.
@@ -61,5 +63,6 @@ Summarise the Decision Log's Source column in 3–6 lines:
 5. Attribution summary.
 6. Known issues and anything that needs the user (real content, licences, accounts).
 7. One-line next step (e.g. "Score is 7.6, below your 8 target: want me to run /dent:improve?").
+8. If MWG was consulted, end with the `### Modern Web Guidance` section in MWG's own format: one first-person bullet per guide that shaped the code, with a short verbatim quote of the specific rule (`../modern-web-guidance.md` §2 step 5). Never cite a guide or quote you didn't retrieve in this session.
 
 Write `SCORECARD.md` into the project (from `templates/SCORECARD.md`) at Standard effort and above, and for every showcase or benchmark run. A score that only exists in chat is lost.

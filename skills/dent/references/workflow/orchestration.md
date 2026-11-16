@@ -30,6 +30,7 @@ Use the **first matching row** for the main command, then add **companion comman
 | Asks what is wrong / for feedback / critique, without asking for changes ("review", "audit", "what do you think", screenshot + question) | `audit` (existing product) or `review` (something just built) | `accessibility` if a11y is mentioned |
 | Asks to check / test / confirm it works ("does it work on mobile?", "test it") | `verify` | `responsive`, `accessibility` |
 | Asks for a plan, approach, estimate or "how would you…" without building | `plan` | `directions` for new visual work |
+| Asks to modernize the *code* ("legacy patterns", "use modern CSS/HTML", "update to current web APIs") of an existing codebase, not its look | `audit` (with the Modern Web Guidance legacy scan, `../modern-web-guidance.md` §7) | `fix` or `implement` for the approved changes, `verify` |
 | Mentions an existing product + "redesign / modernize / refresh / make it look better" | `redesign` | `directions`, `system`, `polish` |
 | Mentions an existing product + "add / new page / new feature / also needs" | `extend` | `components` for complex widgets |
 | Has a PLAN.md / DESIGN.md / spec and says "build / implement / code it" | `implement` | `components`, `verify` |
@@ -62,7 +63,7 @@ Use the **first matching row** for the main command, then add **companion comman
 
 ## Step 3: Expand into a pipeline
 
-Each deliverable has a default pipeline. Commands in brackets run only at the effort levels shown. Every pipeline ends with **verify → score**, and with **improve** when below target (automatically at All-out).
+Each deliverable has a default pipeline. Commands in brackets run only at the effort levels shown. Every pipeline ends with **verify → score**, and with **improve** when below target (automatically at All-out). Every pipeline step that writes or changes web code runs the Modern Web Guidance workflow first (`../modern-web-guidance.md` §2: search → retrieve → apply → verify → disclose); it is part of the step, not a separate command.
 
 | Deliverable | Pipeline |
 |---|---|
@@ -94,11 +95,11 @@ Merge the questions all commands in the pipeline need; remove duplicates; ask th
 
 ## Step 5: Run, carrying context forward
 - Each command's output feeds the next: chosen direction → DESIGN.md → used by create, motion-graphics, video and sound so everything shares one identity (same type, color, motion personality, sonic palette).
-- Keep one Decision Log across the pipeline.
+- Keep one Decision Log across the pipeline, including the MWG guides each step used (Source `MWG <id>`); retrieve a guide once and reuse it across steps.
 - If a step reveals a different need (audit finds the problem is IA, not visuals), update the pipeline and say so in one line.
 
 ## Step 6: Close
-One close-out for the whole pipeline (`scoring-and-closeout.md`): what was built, gates, scorecard, attribution, next step. If several deliverables, one scorecard each.
+One close-out for the whole pipeline (`scoring-and-closeout.md`): what was built, gates, scorecard, attribution, next step, and one `### Modern Web Guidance` disclosure covering every guide that shaped the code. If several deliverables, one scorecard each.
 
 ---
 
