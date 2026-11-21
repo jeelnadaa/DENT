@@ -1,21 +1,124 @@
 {
-  "_doc": "Single source of timing for picture (composition.html) AND sound (score.py). Put every event on the beat grid: t = beat(n) = n * 60 / bpm. Fill motion-blur windows around fast moves.",
-  "bpm": 120,
-  "fps": 60,
-  "duration": 12.0,
-  "scenes": [0.0, 3.0, 7.0, 9.0],
-  "events": { "hook": 0.0, "type": 4.0 },
-  "proof": { "value": 43, "unit": "/50" },
-  "blur": [[2.6, 3.4], [6.6, 7.4], [8.6, 9.4]],
-  "sfx": [
-    { "t": 0.0, "kind": "hit" }, { "t": 0.5, "kind": "hit" },
-    { "t": 3.0, "kind": "whoosh" }, { "t": 4.0, "kind": "type", "dur": 1.0 },
-    { "t": 7.0, "kind": "whoosh" }, { "t": 8.2, "kind": "stab" },
-    { "t": 9.0, "kind": "impact" }, { "t": 9.5, "kind": "logo" }
+ "_doc": "Single source of timing for picture (composition.html) AND sound (score.py). Put every event on the beat grid: t = beat(n) = n * 60 / bpm. Fill motion-blur windows around fast moves.",
+ "bpm": 120,
+ "fps": 60,
+ "duration": 12.0,
+ "scenes": [
+  0.0,
+  3.0,
+  7.0,
+  9.0
+ ],
+ "events": {
+  "hook": 0.0,
+  "type": 4.0
+ },
+ "proof": {
+  "value": 43,
+  "unit": "/50"
+ },
+ "blur": [
+  [
+   2.6,
+   3.4
   ],
-  "music": { "from": 0.0, "to": 9.0, "key_hz": 146.83, "progression": [[0, 3, 7, 10], [-4, 0, 3, 7], [3, 7, 10, 14], [-2, 2, 5, 9]] },
-  "cues": [
-    { "s": 0.2, "e": 2.8, "t": "Your product. Its own look." },
-    { "s": 3.2, "e": 6.8, "t": "It asks before it guesses." }
+  [
+   6.6,
+   7.4
+  ],
+  [
+   8.6,
+   9.4
   ]
+ ],
+ "sfx": [
+  {
+   "t": 0.0,
+   "kind": "hit"
+  },
+  {
+   "t": 0.5,
+   "kind": "hit"
+  },
+  {
+   "t": 3.0,
+   "kind": "whoosh"
+  },
+  {
+   "t": 4.0,
+   "kind": "type",
+   "dur": 1.0
+  },
+  {
+   "t": 7.0,
+   "kind": "whoosh"
+  },
+  {
+   "t": 9.0,
+   "kind": "riser"
+  },
+  {
+   "t": 8.2,
+   "kind": "stab"
+  },
+  {
+   "t": 9.0,
+   "kind": "impact"
+  },
+  {
+   "t": 9.5,
+   "kind": "logo"
+  }
+ ],
+ "music": {
+  "style": "pulse",
+  "from": 0.0,
+  "to": 9.0,
+  "key_hz": 146.83,
+  "lift": 5.0,
+  "drop": [
+   [
+    8.5,
+    9.0
+   ]
+  ],
+  "progression": [
+   [
+    0,
+    3,
+    7,
+    10
+   ],
+   [
+    -4,
+    0,
+    3,
+    7
+   ],
+   [
+    3,
+    7,
+    10,
+    14
+   ],
+   [
+    -2,
+    2,
+    5,
+    9
+   ]
+  ]
+ },
+ "cues": [
+  {
+   "s": 0.2,
+   "e": 2.8,
+   "t": "Your product. Its own look."
+  },
+  {
+   "s": 3.2,
+   "e": 6.8,
+   "t": "It asks before it guesses."
+  }
+ ]
 }

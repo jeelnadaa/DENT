@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DENT video kit: technique gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Datatype:wdth,wght@75..100,400..700&display=block">
+<style>
+/* A test bench, not a style: every tile demonstrates one module from techniques.js at time t. */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#101214;color:#EDEFF1;font-family:"Datatype",monospace;overflow:hidden}
+#grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:10px;width:1920px;height:1080px;padding:10px}
+.tile{position:relative;overflow:hidden;background:#1A1D20;border-radius:10px}
+.tag{position:absolute;left:12px;top:10px;font-size:15px;color:#8B949B;z-index:5;text-transform:uppercase;letter-spacing:.08em}
+.c{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%)}
+.glyph{fill:#FF6A57;stroke:#FF6A57;stroke-width:3}
+#ring{position:absolute;left:50%;top:60%;border:4px solid #FF6A57;border-radius:50%}
+.layer{position:absolute;inset:0;display:grid;place-items:center}
+</style>
+</head>
+<body>
+<div id="grid">
+  <div class="tile"><div class="tag">1 · custom lettering</div>
+    <svg id="let" class="c" viewBox="0 0 470 140" width="420"><g transform="translate(10 10)">
+      <path class="glyph" d="M0 0H70Q120 0 120 60Q120 120 70 120H0Z M30 30V90H66Q90 90 90 60Q90 30 66 30Z"/>
+      <path class="glyph" transform="translate(140 0)" d="M0 0H100V28H30V46H88V74H30V92H100V120H0Z"/>
+      <path class="glyph" transform="translate(260 0)" d="M0 0H30L82 76V0H110V120H82L30 44V120H0Z"/>
+      <path class="glyph" transform="translate(370 0)" d="M0 0H100V28H64V120H36V28H0Z"/></g></svg></div>
+  <div class="tile"><div class="tag">2 · variable-axis kinetic type</div>
+    <div id="kin" class="c" style="font-family:Anybody;font-size:96px;line-height:1;white-space:nowrap">MOTION</div></div>
+  <div class="tile"><div class="tag">3 · hand-made boil</div>
+    <svg class="c" viewBox="0 0 300 200" width="360" style="filter:url(#boil)"><path d="M40 160 Q150 10 260 160 Z" fill="none" stroke="#EDEFF1" stroke-width="6"/><circle cx="150" cy="120" r="30" fill="#FFD166"/></svg></div>
+  <div class="tile"><div class="tag">4 · morph</div>
+    <svg class="c" viewBox="0 0 200 200" width="240"><path id="mor" fill="#5AC8E8"/></svg></div>
+  <div class="tile"><div class="tag">5 · parallax camera + rack focus</div>
+    <div id="par" style="position:absolute;inset:0">
+      <div class="layer" data-z="3.2"><div style="width:520px;height:220px;background:linear-gradient(#2B3A55,#1A1D20);border-radius:12px"></div></div>
+      <div class="layer" data-z="1.6"><div style="width:120px;height:120px;border-radius:50%;background:#7FB2C9;margin-left:-180px"></div></div>
+      <div class="layer" data-z="1"><div style="font:700 54px Anybody">DEPTH</div></div>
+      <div class="layer" data-z=".7"><div style="width:60px;height:60px;background:#FF6A57;margin-left:260px;margin-top:120px"></div></div></div></div>
+  <div class="tile"><div class="tag">6 · glitch</div>
+    <div id="gl" class="c" style="font:900 90px Anybody;font-stretch:130%">SIGNAL</div></div>
+  <div class="tile"><div class="tag">7 · physics: bounce + squash</div>
+    <div id="ball" style="position:absolute;left:50%;top:78%;width:70px;height:70px;margin:-70px 0 0 -35px;border-radius:50%;background:#FFD166;transform-origin:50% 100%"></div>
+    <div style="position:absolute;left:20%;right:20%;top:78%;height:2px;background:#3A4046"></div></div>
+  <div class="tile"><div class="tag">7b · shockwave</div><div id="ring"></div><div style="position:absolute;left:50%;top:60%;width:24px;height:24px;margin:-12px;border-radius:50%;background:#FF6A57"></div></div>
+  <div class="tile"><div class="tag">8 · collage: torn paper + halftone</div>
+    <div id="paper" style="position:absolute;left:12%;right:12%;top:22%;bottom:14%;background:#F1E9DA;color:#1A1D20;display:grid;place-items:center;font:800 64px Anybody;overflow:hidden">
+      <div id="ht" style="position:absolute;inset:-40%"></div><span style="position:relative">PRINT</span></div></div>
+  <div class="tile"><div class="tag">9 · data: count + line</div>
+    <div id="num" style="position:absolute;left:24px;top:48px;font:800 80px Anybody;color:#EDEFF1"></div>
+    <svg id="chart" style="position:absolute;left:24px;right:24px;bottom:24px;height:150px;width:calc(100% - 48px);color:#5AC8E8"></svg></div>
+  <div class="tile" id="t3d"><div class="tag">10 · 3D (three.js, t-driven)</div></div>
+  <div class="tile"><div class="tag">all modules: deterministic in t</div>
+    <div id="clock" class="c" style="font-size:40px;color:#8B949B"></div></div>
+</div>
+<script src="techniques.js"></script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+window.THREE = THREE;
+const F = window.DENTFX;
+const turb = F.boilFilter(document.body, 'boil', 4);
+const morA = 'M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20 Z';
+const morB = 'M100 10 C120 70 190 80 190 100 C190 120 120 130 100 190 C80 130 10 120 10 100 C10 80 80 70 100 10 Z';
+const par = [...document.querySelectorAll('#par .layer')].map(el => ({ el, z: +el.dataset.z }));
+F.tornEdge(document.getElementById('paper'), 5); F.halftone(document.getElementById('ht'), { size: 10, color: 'rgba(255,106,87,.35)' });
+const tile = document.getElementById('t3d'); const s3 = F.scene3d(tile, 465, 343);
+const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1, .32, 160, 24), new THREE.MeshStandardMaterial({ color: 0xff6a57, roughness: .35, metalness: .2 }));
+s3.root.add(knot);
+window.render = (t) => {
+  F.lettering(document.getElementById('let'), t, 0, { draw: .8, stagger: .15 });
+  F.axisWave(document.getElementById('kin'), t);
+  F.boil(turb, t, 12);
+  F.morph(document.getElementById('mor'), morA, morB, .5 - .5 * Math.cos(t * 1.6));
+  F.camera(par, { x: Math.sin(t * .8) * 120, y: Math.cos(t * .6) * 30, zoom: 1 + .15 * Math.sin(t * .5), focus: t % 4 < 2 ? 1 : 3.2, aperture: 3 });
+  F.glitch(document.getElementById('gl'), t, (t % 2) < .35 ? .9 : 0);
+  const b = F.bounce(t % 3, 0, { h: 180 }); const ball = document.getElementById('ball'); ball.style.transform = `translateY(${b.y}px) scale(${b.sx},${b.sy})`;
+  F.shockwave(document.getElementById('ring'), t % 1.5, 0, { maxR: 200, dur: 1.2 });
+  F.count(document.getElementById('num'), t, 0, 1.5, 43.8, { decimals: 1 });
+  F.lineChart(document.getElementById('chart'), [12, 18, 15, 26, 31, 29, 38, 44], t, .2, 1.6, { w: 420, h: 150 });
+  s3.render(t, (root, t) => { root.rotation.y = t * .9; root.rotation.x = .4 + .2 * Math.sin(t); });
+  document.getElementById('clock').textContent = `t = ${t.toFixed(2)} s`;
+};
+await document.fonts.ready;
+window.render(+new URLSearchParams(location.search).get('t') || 0);
+window.READY = true;
+</script>
+</body>
+</html>

@@ -123,20 +123,22 @@ Log the guard's result in VIDEO.md.
 - **The meta moment:** the film reveals how it was made, or the viewer's own screen becomes part of it (use sparingly; DENT's film already used one).
 
 ## 7. From answers to the build (all inside the kit's browser engine)
-| Choice | How to build it |
+Every row has a tested module in `templates/video-kit/techniques.js` (`DENTFX.<name>`); combine and restyle them as the bible says. Sound worlds start from the instruments and presets in `templates/video-kit/score.py`, shaped to the bible.
+
+| Choice | How to build it (module) |
 |---|---|
-| Custom lettering | Draw SVG paths for the letters; animate path strokes, masks or per-letter transforms; keep real text for captions |
-| Kinetic type | Split into lines/words/letters; masked reveals, variable-font axes (`wdth`, `wght`, `opsz`) animated over time, per-glyph springs |
-| Physical motion | `fall()`, `spring()`, squash and stretch from velocity, shockwaves as expanding rings; motion blur windows on every fast move |
-| Cinematic camera | A camera layer with `perspective` and `translateZ` per layer for parallax; slow push; rack focus with `filter: blur()` on depth layers |
-| Hand-made | Re-seed an SVG turbulence displacement every 2 frames (boiling lines); hold poses 2 frames ("on twos"); paper textures |
-| Morph and match | Interpolate SVG paths with the same point count; align shapes across a cut so the eye continues |
+| Custom lettering | `lettering()`: draw SVG paths for the letters; animate path strokes, masks or per-letter transforms; keep real text for captions |
+| Kinetic type | `splitLetters()`, `axisWave()`: split into lines/words/letters; masked reveals, variable-font axes (`wdth`, `wght`, `opsz`) animated over time, per-glyph springs |
+| Physical motion | `bounce()`, `shockwave()`, kit `fall()`, `spring()`, squash and stretch from velocity, shockwaves as expanding rings; motion blur windows on every fast move |
+| Cinematic camera | `camera()`: a camera layer with `perspective` and `translateZ` per layer for parallax; slow push; rack focus with `filter: blur()` on depth layers |
+| Hand-made | `boilFilter()` + `boil()`: re-seed an SVG turbulence displacement every 2 frames (boiling lines); hold poses 2 frames ("on twos"); paper textures |
+| Morph and match | `morph()`: interpolate SVG paths with the same point count; align shapes across a cut so the eye continues |
 | Mechanical | Grids snapping on the beat, counters with `font-variant-numeric: tabular-nums`, stepped easing |
 | Liquid and organic | SVG goo filters (blur + colour matrix), noise-driven blobs, metaballs in Canvas or WebGL |
-| Glitch | Offset RGB channels, slice-and-shift strips, scanline overlays; keep flashes under 3/s |
-| 3D | Three.js inside the composition, its clock driven by `render(t)` (never by real time) |
-| Illustration and collage | SVG or Canvas layers, masked images, torn-edge masks, halftone via SVG filters |
-| Data | Real values, scales computed in JS, axis and source on screen |
+| Glitch | `glitch()`: offset RGB channels, slice-and-shift strips, scanline overlays; keep flashes under 3/s |
+| 3D | `scene3d()`: Three.js inside the composition, its clock driven by `render(t)` (never by real time) |
+| Illustration and collage | `tornEdge()`, `halftone()`: SVG or Canvas layers, masked images, torn-edge masks, halftone via SVG filters |
+| Data | `count()`, `lineChart()`: real values, scales computed in JS, axis and source on screen |
 | Generative | Seeded noise and shaders driven by `t` so every render is identical |
 
 Licences for any library or asset go into VIDEO.md §10 (`../catalog/asset-sources.md`).

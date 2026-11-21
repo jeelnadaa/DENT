@@ -11,6 +11,8 @@ Checks (references/video/video-tools-and-pipeline.md §6):
   motion    share of the film that is frozen (no visible change) and the longest frozen hold, excluding the
             final end-card hold. Trailers and launch films: frozen ≤ 20 %, no hold > 2.5 s; explainers ≤ 35 % / 4 s;
             tutorials ≤ 50 % / 6 s. A deliberate still must be a decision, not the default.
+  variety   longest stretch where the picture stays visually the same (trailer ≤ 6 s, explainer ≤ 10 s, tutorial ≤ 20 s)
+  energy    mean picture change per second (trailers and loops ≥ 15/255; calibrated on DENT's launch film = 35)
   rhythm    shot changes per minute and the longest shot (information only)
   black     black frames outside the first/last 0.5 s
   captions  SRT/VTT: ≤ 42 characters × 2 lines, ≥ 1 s per cue, cues inside the film
@@ -60,6 +62,32 @@ def frozen(p: Path, dur: float, end_hold: float) -> tuple[float, float, list]:
     total = sum(e - s for s, e in segs)
     longest = max((e - s for s, e in segs), default=0.0)
     return total, longest, segs
+
+
+SAME_LIMIT = {"trailer": 6.0, "explainer": 10.0, "tutorial": 20.0, "loop": 6.0}
+# Calibrated on four measured films: DENT launch film 35.1, a good GPT film 18.6, two flat films 11.3 and 4.2.
+ENERGY_MIN = {"trailer": 15.0, "loop": 15.0}
+
+
+def sameness(p: Path, dur: float, end_hold: float) -> tuple[float, float]:
+    """Longest stretch where the picture stays visually the same (tiny grey thumbnails at 4 fps stay within a small
+    mean difference of the stretch's first frame). Catches 'technically moving but nothing new' (slow drifts, a
+    shimmering hold) that freeze detection misses. Pure standard library."""
+    w, h, fps = 48, 27, 4
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", str(p), "-vf", f"fps={fps},scale={w}:{h},format=gray",
+                        "-f", "rawvideo", "-"], capture_output=True)
+    raw, n = r.stdout, w * h
+    frames = [raw[i:i + n] for i in range(0, len(raw) - n + 1, n)]
+    limit_frames = int(max(0.0, dur - end_hold) * fps)
+    frames = frames[:limit_frames]
+    best, start = 0, 0
+    for i in range(1, len(frames) + 1):
+        if i == len(frames) or sum(abs(a - b) for a, b in zip(frames[start], frames[i])) / n > 10:
+            best = max(best, i - start)
+            start = i
+    diffs = [sum(abs(a - b) for a, b in zip(frames[i - fps], frames[i])) / n for i in range(fps, len(frames))]
+    change = sum(diffs) / len(diffs) if diffs else 0.0
+    return best / fps, change
 
 
 def shots(p: Path) -> list[float]:
@@ -148,6 +176,13 @@ def main() -> int:
     report["motion"] = {"frozen_s": round(total, 2), "frozen_share": round(total / body, 3), "longest_hold_s": round(longest, 2), "segments": segs}
     check(total / body <= share_max, f"motion: {total:.1f} s of {body:.1f} s frozen ({100 * total / body:.0f} %, limit {100 * share_max:.0f} % for a {a.kind})")
     check(longest <= hold_max, f"motion: longest frozen hold {longest:.1f} s (limit {hold_max} s; closing {a.end_hold} s end card excluded)")
+    same_s, change = sameness(p, dur, a.end_hold)
+    report["variety"] = {"longest_same_s": same_s, "mean_change_per_s": round(change, 2)}
+    check(same_s <= SAME_LIMIT[a.kind], f"variety: longest visually-unchanged stretch {same_s:.1f} s (limit {SAME_LIMIT[a.kind]} s for a {a.kind})")
+    if a.kind in ENERGY_MIN:
+        check(change >= ENERGY_MIN[a.kind], f"energy: mean picture change {change:.1f}/255 per second (floor {ENERGY_MIN[a.kind]} for a {a.kind}; DENT's launch film: 35)")
+    else:
+        print(f"  info  energy: mean picture change {change:.1f}/255 per second (DENT's launch film: 35)")
     cuts = shots(p)
     report["shots"] = {"cuts": len(cuts), "per_minute": round(len(cuts) / dur * 60, 1)}
     gaps = [b - a_ for a_, b in zip([0.0] + cuts, cuts + [dur])]

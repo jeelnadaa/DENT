@@ -7,7 +7,8 @@
 - tts.py: engine listing, install needs --yes, post (loudness, captions, timing) on synthetic tones
 - doctor.py: JSON capability report
 - tts.py home: a registered engine folder is found by new processes without env vars
-- video_qa.py: frozen and full-range clips fail, a moving clip passes; the video kit is complete and marked as placeholders
+- video_qa.py: frozen and full-range clips fail (motion, variety, energy), a moving clip passes; the video kit is complete and marked as
+  placeholders; its technique bench renders with no page errors; the render-time layout check flags tiny text
 - verify_page.py (run with --surfaces match): evals/fixtures/bad.html must fail G2, G3, G4, G8_surfaces, G10, G11,
   G13 (each MWG rule and default surface it has);
   good.html must pass all (including a slowed progress spinner under reduced motion)
@@ -231,7 +232,26 @@ def test_video_qa() -> None:
         check(rep["motion"]["frozen_share"] == 0 and "motion:" in r.stdout and "FAIL  motion" not in r.stdout, "a moving clip passes the motion check")
         r = q(full)
         check("FAIL  pixel format yuvj420p" in r.stdout, "full-range yuvj420p frames are flagged")
+        r = q(still)
+        check("FAIL  variety" in r.stdout and "FAIL  energy" in r.stdout, "a static clip also fails the variety and energy checks")
     kit = ROOT / "skills" / "dent" / "templates" / "video-kit"
+    try:
+        import playwright  # noqa: F401
+        with tempfile.TemporaryDirectory() as d:
+            k = Path(d) / "kit"
+            shutil.copytree(kit, k)
+            r = subprocess.run([sys.executable, "render.py", "stills", "--page", "techniques", "--times", "0.4", "2.3"],
+                               cwd=k, capture_output=True, text=True, timeout=300)
+            check(r.returncode == 0 and "page errors: none" in r.stdout and (k / "out" / "stills" / "_sheet-techniques.jpg").is_file(),
+                  "technique bench renders every module with no page errors")
+            html = (k / "composition.html").read_text(encoding="utf-8")
+            (k / "composition.html").write_text(html.replace("one-line promise", "a deliberately tiny line").replace(
+                'class="a soul" style="left:0;right:0;text-align:center;top:${PORT ? 960 * U : 560 * U}px;font-size:${54 * U}px"',
+                'class="a soul" style="left:0;right:0;text-align:center;top:${PORT ? 960 * U : 560 * U}px;font-size:${10 * U}px"'), encoding="utf-8")
+            r = subprocess.run([sys.executable, "render.py", "stills", "--ratio", "16x9", "--times", "10"], cwd=k, capture_output=True, text=True, timeout=300)
+            check("layout" in r.stdout and "small" in r.stdout and "deliberately tiny" in r.stdout, "layout check flags text too small for a phone")
+    except ImportError:
+        print("  skip  kit render tests: Playwright not installed")
     check(all((kit / f).is_file() for f in ("README.md", "composition.html", "timeline.json", "render.py", "score.py")), "video kit is complete")
     check("PLACEHOLDERS ONLY" in (kit / "composition.html").read_text(encoding="utf-8"), "kit scenes are marked as placeholders (originality guard)")
 
