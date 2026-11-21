@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | White/light-grey backgrounds; **navy/blue primary** (#0B3B8C / #1A56DB) or deep teal; neutral greys; clear semantic colors (critical for data/status). |
-| Typography | Highly legible sans (Switzer, IBM Plex Sans, Hanken Grotesk, Public Sans). Regular/medium/semibold only. Tabular numbers. |
+| Typography | Highly legible sans (IBM Plex Sans, Hanken Grotesk, Public Sans, Zalando Sans). Regular/medium/semibold only. Tabular numbers. |
 | Spacing / layout | Structured, predictable grids; sidebar + top bar apps; information density medium-high (compact rows available). |
 | Radius | Small-medium: 4–8px. |
 | Borders | 1px light borders on cards, tables, inputs. |
@@ -43,7 +43,7 @@
   --bg:#FFFFFF; --surface:#F7F9FC; --text:#111827; --text-2:#4B5563; --border:#E5E7EB; --border-input:#9CA3AF;
   --accent:#1A56DB; --on-accent:#FFFFFF; --navy:#0B2559;
   --success:#047857; --warning:#B45309; --error:#B91C1C; --info:#1D4ED8;
-  --font-sans:"Switzer","IBM Plex Sans",system-ui,sans-serif;
+  --font-sans:"Hanken Grotesk","IBM Plex Sans",system-ui,sans-serif;
   --radius-control:6px; --radius-container:8px;
   --shadow-2:0 4px 12px rgb(17 24 39 / .08);
   --dur:150ms; --ease:cubic-bezier(.2,0,0,1);

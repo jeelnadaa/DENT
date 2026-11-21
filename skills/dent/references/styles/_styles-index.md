@@ -6,8 +6,9 @@ Read this file first when the user names a style or describes a look. Find the s
 1. Look for the style name or any alias in the table below.
 2. If the user describes a feeling instead of a name, use "Pick by feeling" further down.
 3. If two styles fit, pick the one that matches the **product type** better (each file's "Use for").
-4. If nothing fits, use the closest style and say which one you used.
-5. If the user gave no style at all, do not pick a loud one: use **Minimal** (tools, SaaS, docs) or **Premium Product** (marketing pages), with a default palette from `../color.md` (Part 2).
+4. If nothing fits, or the closest style is the category cliché, **bend**, **blend** or **leave** the catalogue with a style card (`../creative-direction.md` §3b) instead of forcing the nearest file.
+5. If the user gave no style at all, derive the direction from the concept sentence (`../creative-direction.md` §1) and pick the move from §3b. Minimal (tools, SaaS, docs) or Premium Product (marketing) are fallbacks only when nothing in the concept points elsewhere, and still get a concept-led palette (`../color.md` §12) and type voice (`../typography.md` §0), never a template default.
+6. Every style's starter tokens (fonts, colors) are **starting points**: swap them for faces and palettes that fit the concept and avoid the overused registries (`../typography.md` §0.1, `scripts/palette.py`), and log the swap.
 
 ## All styles
 

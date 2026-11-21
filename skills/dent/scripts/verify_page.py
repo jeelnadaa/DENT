@@ -18,7 +18,8 @@ Checks (DENT gates in SKILL.md §3):
       placeholder, autofill, disclosure markers, dialog backdrops) and whether each is styled; fails when the
       chosen level isn't met. Without the flag the inventory is reported only. See references/built-in-surfaces.md
   +   motion inventory (keyframes, transitions, hover, scroll-driven, view transitions, motion libraries)
-  +   console errors, page errors; full-page screenshots per width
+  +   console errors, page errors; full-page screenshots per width (with reduced motion when the page has
+      scroll-driven animations, which a full-page capture can't scroll into view)
 
 Usage:
   python verify_page.py index.html --out .dent/verify
@@ -336,13 +337,26 @@ def main() -> int:
             return ctx, pg
 
         # G2 layout per width (+ screenshots)
+        # A full-page capture never scrolls, so scroll-driven entry effects below the fold stay in their
+        # "before entry" state and content looks missing. Such pages are captured with reduced motion,
+        # whose version must show all content anyway (mwg:scroll-entry-exit-effects, mwg:motion).
+        scroll_driven_js = ("() => { let n = 0; for (const s of document.styleSheets) { let rules; try { rules = s.cssRules; } catch { continue; }"
+                            " const walk = rs => { for (const r of rs) { if (r.cssText && r.cssText.includes('animation-timeline')) n++;"
+                            " if (r.cssRules) walk(r.cssRules); } }; walk(rules); } return n; }")
         for w in args.widths:
             ctx, pg = new_page(w)
             pg.evaluate(SCROLL_JS); pg.wait_for_timeout(500)
             r = pg.evaluate(OVERFLOW_JS)
             if not args.no_screenshots:
                 shot = out / f"page-{w}.jpg"
-                pg.screenshot(path=str(shot), full_page=True, type="jpeg", quality=80)
+                if pg.evaluate(scroll_driven_js):
+                    sctx, spg = new_page(w, reduced=True)
+                    spg.screenshot(path=str(shot), full_page=True, type="jpeg", quality=80)
+                    sctx.close()
+                    report["screenshot_mode"] = "reduced-motion (page has scroll-driven animations)"
+                else:
+                    pg.screenshot(path=str(shot), full_page=True, type="jpeg", quality=80)
+                    report.setdefault("screenshot_mode", "normal")
                 r["screenshot"] = str(shot)
             report["widths"][w] = r
             ctx.close()
@@ -446,6 +460,8 @@ def main() -> int:
         print(f"  note: {sf['nativeValidationForms']} form(s) rely on browser validation bubbles, which can't be styled: use inline messages (mwg:forms)")
     print(f"  console errors: {len(report['console_errors'])}")
     print("  gates: " + "  ".join(f"{k}={v}" for k, v in g.items()))
+    if report.get("screenshot_mode", "normal") != "normal":
+        print(f"  screenshots: {report['screenshot_mode']}; look at the motion version in a real browser too")
     print(f"  report: {out / 'report.json'}")
     return 1 if any(v == "Failed" for v in g.values()) else 0
 

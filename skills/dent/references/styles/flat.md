@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Bright, saturated but harmonious palette (4–6 colors) used as solid fills; white or light-grey background. |
-| Typography | Friendly clean sans (Open Sans, Lato, Source Sans 3, Roboto, Poppins). |
+| Typography | Friendly clean sans (Radio Canada Big, Public Sans, Albert Sans, Rethink Sans); Open Sans/Roboto/Poppins only when the brand already uses them. |
 | Spacing / layout | Grid of color blocks/tiles; clear sections with colored backgrounds. |
 | Radius | 0–6px (classic flat) or 8–12px (flat 2.0). |
 | Borders | None; separation by color. |
@@ -43,7 +43,7 @@
   --bg:#FFFFFF; --surface:#F3F5F8; --text:#1F2933; --text-2:#52606D;
   --c1:#2E86DE; --c2:#10AC84; --c3:#EE5253; --c4:#FF9F43; --c5:#8854D0;
   --accent:#2E86DE; --on-accent:#FFFFFF;
-  --font-sans:"Source Sans 3",system-ui,sans-serif;
+  --font-sans:"Radio Canada Big","Public Sans",system-ui,sans-serif;
   --radius-control:6px; --radius-container:8px;
   --shadow-1:0 1px 2px rgb(0 0 0 / .08);
   --dur:180ms; --ease:cubic-bezier(.2,0,0,1);

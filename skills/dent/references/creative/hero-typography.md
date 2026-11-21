@@ -28,25 +28,24 @@ Pick one per page (plus at most one secondary moment).
 
 ## 3. Choosing faces (pairing matrix)
 
-Use a **contrast axis**: pair faces that differ clearly in one dimension (classification, width, weight) and agree in another (x-height, mood). DENT's default text face is **Satoshi** (font priority: `../typography.md` §0); the full pairing library is `../typography.md` §3. Best hero pairings:
+Use a **contrast axis**: pair faces that differ clearly in one dimension (classification, width, weight) and agree in another (x-height, mood). DENT has no default face: choose by voice and check overuse with `scripts/fonts.py` (`../typography.md` §0); the full pairing library is `../typography.md` §3. Strong hero pairings (free, OFL, verified 2026-11-21):
 
 | Display (hero) | Text | Mood | Licence |
 |---|---|---|---|
-| **Cabinet Grotesk** 800, tracking −3% | Satoshi | Bold, modern, confident | ITF FFL (Fontshare) |
-| **Clash Display** 600 | General Sans | Punchy, contemporary | ITF FFL |
-| **Gambetta** (italic for the key word) | Satoshi | Warm editorial-modern | ITF FFL |
-| **Zodiak** | General Sans | Premium, elegant | ITF FFL |
-| **Boska** | Switzer | Fashion, dramatic | ITF FFL |
-| **Panchang** 700 (wide) | Satoshi + Geist Mono labels | Architectural, technical | ITF FFL / OFL |
-| **Instrument Serif** (italic accent) | Satoshi | Elegant tech | OFL / ITF FFL |
-| **Fraunces** (SOFT, WONK, opsz 144) | Satoshi or Manrope | Warm, characterful | OFL / ITF FFL |
-| **Bricolage Grotesque** (opsz) | Instrument Sans | Indie, playful-modern | OFL |
-| **Mona Sans** (wdth 125, 800) | Hubot Sans | Tech-expressive | OFL |
-| **Satoshi** 900 (one family) | Satoshi 400 | Minimal, confident | ITF FFL |
-| **Geist** 700 / Geist Mono | Geist | Developer precision | OFL |
-| **Newsreader** (display opsz) | Onest | Journalism, calm authority | OFL |
-| **Big Shoulders Display** | Switzer | Industrial signage | OFL / ITF FFL |
-| **Young Serif** | Figtree | Soft vintage | OFL |
+| **Mozilla Headline** 800, condensed `wdth`, tracking −3% | Mozilla Text | Bold, opinionated | OFL |
+| **Zalando Sans Expanded** 800 | Zalando Sans | Wide, engineered | OFL |
+| **Gloock** | Hanken Grotesk | Premium editorial | OFL |
+| **Redaction 50** (one degraded word) | Redaction / Inclusive Sans | Archival, civic, investigative | OFL |
+| **Kalnia** (wide, 600) | Familjen Grotesk | Cultural, expressive | OFL |
+| **Science Gothic** (wide, high contrast) | Golos Text | Architectural, technical | OFL |
+| **Bodoni Moda** (opsz 96) | Albert Sans | Fashion, dramatic | OFL |
+| **Imbue** (condensed didone) | Epilogue | Magazine cover | OFL |
+| **Anybody** (wdth 150, 900) | Anybody (wdth 100) | Sport, games, launch energy | OFL |
+| **Special Gothic Expanded One** | Special Gothic | Poster, events | OFL |
+| **Young Serif** | Rethink Sans | Soft vintage, craft | OFL |
+| **Montagu Slab** (opsz 144) | SUSE | Sturdy, outdoorsy | OFL |
+| **Doto** (dot matrix) | Reddit Sans | Screen-native, transit | OFL |
+| **Erode** or **Zodiak** (Fontshare, ITF FFL) | Hanken Grotesk | Calm or premium serif | ITF FFL / OFL |
 
 Avoid as automatic choices (use only deliberately, logged): Inter-only headlines, Playfair Display as "luxury", Bebas Neue/Anton for everything, Montserrat/Poppins headings. Paid families (Söhne, GT America, Neue Haas, PP Editorial, Canela…) are excellent; recommend only if the user owns a licence. Fontshare fonts: no subsetting or modification, don't commit them to public repos (load via the Fontshare API). Record every licence (`../catalog/asset-sources.md` §1).
 
@@ -91,8 +90,8 @@ Each technique: **what**, **when**, **build notes**, **watch-out**.
 <span class="line"><span>doesn't look <em>generated</em>.</span></span></h1>
 ```
 ```css
-.hero{font: 800 clamp(3rem,1rem + 7vw,7.5rem)/.95 "Cabinet Grotesk","Satoshi",sans-serif;letter-spacing:-.035em;text-wrap:balance}
-.hero em{font-family:"Gambetta","Instrument Serif",serif;font-style:italic;font-weight:500;letter-spacing:-.02em}
+.hero{font: 800 clamp(3rem,1rem + 7vw,7.5rem)/.95 "Mozilla Headline","Zalando Sans",sans-serif;font-stretch:75%;letter-spacing:-.03em;text-wrap:balance}
+.hero em{font-style:normal;font-stretch:125%;font-weight:300;letter-spacing:-.01em} /* width contrast, not the italic-serif-word cliché */
 .line{display:block;overflow:clip}
 @media (prefers-reduced-motion:no-preference){
   .line>span{display:inline-block;translate:0 105%;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}

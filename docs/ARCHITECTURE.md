@@ -37,7 +37,7 @@ At **All-out** effort, `workflow/all-out.md` adds a mandatory completeness sweep
 | Path | Holds | Loaded when |
 |---|---|---|
 | `skills/dent/SKILL.md` | Router, workflow summary, laws, non-negotiables, gates, command table, reference map | Always |
-| `skills/dent/commands/` | 32 command definitions: load list, steps, output, never-list | When a command runs (or the router picks it) |
+| `skills/dent/commands/` | 34 command definitions: load list, steps, output, never-list | When a command runs (or the router picks it) |
 | `references/workflow/` | Orchestration, planning + plan audit, execution + scope, verification, scoring + close-out, All-out protocol | Every non-trivial task (only the relevant file) |
 | `references/recipes/` | Step-by-step procedures with gates (landing page, app & dashboard) | Building those deliverables |
 | `references/creative/` | Directions library, hero typography, anti-slop detector | Direction, polish, review |
@@ -51,7 +51,7 @@ At **All-out** effort, `workflow/all-out.md` adds a mandatory completeness sweep
 | `references/built-in-surfaces.md` | Built-in surfaces (tooltips, scrollbars, sliders, form controls, selection, caret, placeholder, autofill): Match / Tint / Native question, surface tokens, inventory, style personalities, verification | Any visual web build at Standard+, `/dent:surfaces` |
 | `references/modern-web-guidance.md` | DENT's adapter for Modern Web Guidance: precedence, workflow, DENT → MWG map, native-first rule, resolved conflicts | Any HTML/CSS/client-side JS work |
 | `skills/modern-web-guidance/` | Google's Modern Web Guidance skill (SKILL.md + 209 guides), vendored verbatim with `LICENSE` and `UPSTREAM.json`; `vendor/modern-web-guidance/` inside zip and rules-file installs | Web work (its own trigger, or via DENT) |
-| `skills/dent/scripts/` | `verify_page.py`, `contrast.py`, `mwg.py` (offline MWG search/retrieve) | Verification, MWG lookups without network |
+| `skills/dent/scripts/` | `verify_page.py`, `contrast.py`, `palette.py` (concept palettes + cliché check), `fonts.py` (+ `data/google-fonts.json` snapshot), `tts.py` (narration over many engines, mastering, captions), `doctor.py` (capabilities), `mwg.py` (offline MWG search/retrieve), `update_plugin.py` | Verification, design tooling, media production, MWG lookups without network |
 | `commands/` (repo root) | Claude Code plugin wrappers (generated) | Plugin installs only |
 | `evals/` | Behaviour cases, scenarios, command/routing tests, protocol, fixtures | Testing DENT |
 | `benchmark/` | Public with/without comparisons and results | Publishing results |
@@ -71,5 +71,8 @@ At **All-out** effort, `workflow/all-out.md` adds a mandatory completeness sweep
 | A catalogue entry | Add a row with link, licence and status (`✓ <date>` only after checking the official source) | validate |
 | A reference file | Create it, add rows to SKILL.md §9.2 and the add-on routing table | validate |
 | A gate check | Extend `verify_page.py`, add a failing case to `evals/fixtures/bad.html` | `python scripts/test_tools.py` |
+| A palette in the library | `skills/dent/scripts/palette.py make --accent … --second … --neutral …`, paste the rows into `color.md` §13 (never hand-pick hex values) | `python scripts/test_tools.py` (re-checks every palette in both themes) |
+| A font pairing or type voice | `fonts.py suggest` / `fonts.py check --verify`, then `typography.md` §2–§3 | `python scripts/test_tools.py` (every pairing face must exist and not be overused); refresh the snapshot with `fonts.py refresh` |
+| A TTS engine or media provider | an engine entry in `tts.py` (`ENGINES` + `render_local`/`render_cloud`), rows in `references/media-sourcing.md` and `audio/voice-and-narration.md` §5 with link, licence and status | render one line on a real machine; `python scripts/test_tools.py` |
 | Web implementation guidance | Don't write it in DENT: point to the MWG guide (`mwg:<id>`) and keep only the design layer in DENT; if MWG lacks the topic, add it with a note to revisit | validate (checks every `mwg:<id>`) |
 | A newer Modern Web Guidance | `python scripts/sync_mwg.py` (never edit `skills/modern-web-guidance/` by hand), re-read `references/modern-web-guidance.md` §6 for new conflicts | validate + `python scripts/test_tools.py` + CHANGELOG |

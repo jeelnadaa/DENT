@@ -40,7 +40,7 @@
 - Concept sentence:
 - Mood words / anti-words:
 - Category cliché (named) and how we diverge (≥ 2 axes):
-- Base style + accent (max one):
+- Style move (apply / bend / blend / leave) and the style or style card:
 - Signature element(s):
 - Typography (display / text / mono) and hero type move:
 - Color roles and modes:
@@ -56,7 +56,8 @@
 - Libraries (one per job, licence, why, why not native — see catalog/component-selection.md):
 - State and data flow:
 - Persistence, error handling:
-- Media pipeline (motion, audio, video tools):
+- Media pipeline (motion, audio, video tools) and where each kind of media comes from (`references/media-sourcing.md`; `scripts/doctor.py` output):
+- All-out only: the capability list (`references/workflow/all-out.md` §0), each row Included / Declined / N/A with a reason:
 
 ## 8. States and edge cases
 Loading · Empty · Error · Success · Offline · Permissions · Validation · Long content · 0/1/many · No JS / no motion / muted

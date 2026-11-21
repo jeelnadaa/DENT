@@ -4,6 +4,40 @@ All notable changes to DENT are documented here. Format: [Keep a Changelog](http
 
 ## [Unreleased]
 
+## [2.5.0] — 2026-11-21
+
+"Go all out" now means everything, narration sounds human, and DENT stops reaching for the same fonts and colours. Specification: `docs/dent-3/SPEC.md`; evidence: `docs/dent-3/VERIFICATION.md`.
+
+### Added
+- **All-out capability list** (`references/workflow/all-out.md` §0): motion, surfaces, type, copy, assets, directions and independent review run as their own commands; sound, voice, video, 3D and brand are offered in one multi-select question; every row ends Included, Declined or N/A with a reason, and the list is repeated in the close-out.
+- **Media sourcing** (`references/media-sourcing.md`): for voice, music, SFX, images, illustration, video, 3D, fonts and clean-up, DENT asks whether to use a local model (installed only after a yes), a free cloud tier, a paid provider or connector, **any provider not listed** (researched from official docs), or the user's own assets; it finds free models when the user knows none, shows costs before paid calls, and reads keys only from environment variables.
+- **`scripts/tts.py`**: one interface over Qwen3-TTS, Kitten TTS 2, Chatterbox, Kokoro, Piper, system voices, OpenAI, ElevenLabs and any OpenAI-compatible endpoint (Voxtral via vLLM or gateways); one virtual environment per engine; `install` asks first (`--yes`); `compare` makes blind A/B sets; `post` trims, places, high-passes and loudness-normalises (two-pass) and writes SRT, VTT and a timing JSON. Per-engine guidance in `references/audio/voice-and-narration.md` §5.
+- **`scripts/palette.py`**: concept-seed palettes in OKLCH with tinted neutrals, light and dark role tokens, automatic contrast repair and a 2026 cliché detector (Tailwind indigo/violet, zinc backgrounds, cream + terracotta, acid lime on black…).
+- **`scripts/fonts.py`** + a Google Fonts metadata snapshot: overuse check (first- and second-order registries, popularity rank), licence verification against github.com/google/fonts, script/axis-aware suggestions of fresh faces, `refresh`.
+- **`scripts/doctor.py`** and **`/dent:doctor`**: what this machine can do (browser checks, FFmpeg, GPU/VRAM, TTS engines, provider keys by name) before DENT promises anything.
+- **`/dent:brainstorm`** (`references/workflow/brainstorm.md`): a candid design partner that steelmans, pushes back with labelled reasons (rule / evidence / taste), changes its mind only on new information, respects the user's decision and ends with a direction brief.
+- **Three independent evaluators** (visual, UX, engineering) at Polished and All-out, in fresh contexts where subagents exist; any can reject the work (`scoring-and-closeout.md` §3b, `templates/REVIEW.md`, `/dent:review`).
+- **Severity scale** and **visible blockers**: an open Blocker is listed first and caps the overall score at 6.
+- **Dependency checklist** (`catalog/component-selection.md` §4b).
+- **Style moves** (`creative-direction.md` §3b): apply, bend, blend or leave the catalogue with a style card; propose alternatives with reasons.
+- `validate.py` **`check_capabilities`**: fails when a pipeline, example or command promises a capability another file never triggers; warns when a style's starter font is on the overused registry. `test_tools.py` covers the four new scripts and re-verifies every library palette and pairing face.
+- **Measured voice ranking** (`audio/voice-and-narration.md` §5.5): Qwen3-TTS > Chatterbox > Kokoro > Kitten TTS 2 from signal quality, pitch variation, pace and Whisper word error rate on four contrasting lines, matching a blind listening test; the default engine order, per-engine notes and tips follow it. A pronunciation-trap step covers acronyms and invented names.
+- `tts.py post --tempo`: pitch-preserving speed change for engines that rush (Chatterbox).
+- Eval scenarios S22–S26 (All-out completeness, narration, unlisted provider, brainstorm pushback, fresh type and colour) and a previous-version-vs-current benchmark condition.
+
+### Changed
+- **Typography:** no house font. The Satoshi/Cabinet Grotesk/Clash Display priority is replaced by a method (voice → `fonts.py` → render → rotate), 13 type voices and 25 pairings from verified OFL faces, free and paid foundry options, and a font-source question.
+- **Colour:** the ten default palettes (which matched the "tasteful AI" look) are replaced by a method and 20 concept palettes generated and verified in both themes.
+- Style starter fonts swapped away from overused faces in 22 style files; Minimal's and Editorial's starter colours changed; style tokens are documented as starting points.
+- G8 accepts a bent style or an off-catalogue style card as a coherent system; G9 includes the font and palette registries.
+- `create`, `redesign` and `extend` run motion and surfaces as part of the build; all media commands ask the sourcing question; the video pipeline's first question covers every media type.
+- Router: All-out expands every pipeline; brainstorm and doctor routes; the All-out worked example now includes motion.
+
+### Fixed
+- "Go all out" skipped motion (the worked example and the create command never ran `/dent:motion`).
+- The command generator put annotations inside backticked paths and gave non-building commands a scorecard close.
+- `SKILL.md`'s decision-log example cited a palette that no longer existed.
+
 ## [2.4.0] — 2026-11-16
 
 Nothing ships with a default look by accident: DENT now designs the parts the browser draws for you.

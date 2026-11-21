@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | **2–3 spot "inks"**: fluorescent pink #FF48B0, blue #0078BF, yellow #FFE800, teal #00A95C, orange #FF6C2F — on off-white paper #F8F4EC. Overlaps create mixes (use `mix-blend-mode: multiply`). |
-| Typography | Bold grotesk or quirky serif for headlines ("Bricolage Grotesque", "Space Grotesk", "Young Serif"), simple body; printed-looking (optional slight roughness). |
+| Typography | Bold grotesk or quirky serif for headlines ("Anybody" at heavy widths, "Familjen Grotesk", "Young Serif"), simple body; printed-looking (optional slight roughness). |
 | Spacing / layout | Zine/poster layouts; blocks of solid ink color; overlapping shapes. |
 | Radius | 0 or organic. |
 | Borders | Thick ink lines. |
@@ -42,7 +42,7 @@
 :root{
   --paper:#F8F4EC; --ink-blue:#0078BF; --ink-pink:#FF48B0; --ink-yellow:#FFE800; --ink-dark:#1B1B3A;
   --text:#1B1B3A; --text-2:#3F3F5C; --accent:var(--ink-blue); --on-accent:#F8F4EC;
-  --font-display:"Bricolage Grotesque","Space Grotesk",sans-serif; --font-sans:"Space Grotesk",system-ui,sans-serif;
+  --font-display:"Anybody","Familjen Grotesk",sans-serif; --font-sans:"Epilogue",system-ui,sans-serif;
   --radius-control:0; --radius-container:0;
   --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.25'/></svg>");
   --dur:200ms; --ease:steps(3,end);

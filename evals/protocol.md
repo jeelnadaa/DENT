@@ -10,10 +10,10 @@ Compare up to three conditions with the **same agent, model, settings, prompt an
 | Condition | Setup |
 |---|---|
 | **A. Baseline** | No DENT installed |
-| **B. DENT 1.x** | `git checkout v1.0.1` copy of `skills/dent` installed |
-| **C. DENT 2.0** | Current `skills/dent` installed |
+| **B. Previous DENT** | The previous release's `skills/dent` (e.g. `git worktree add ../dent-prev v2.4.0`) installed |
+| **C. Current DENT** | Current `skills/dent` installed |
 
-A vs C shows DENT's value; B vs C shows whether 2.0 (planning, gates, orchestration, catalogues) actually helps.
+A vs C shows DENT's value; B vs C shows whether the new version actually helps (for 2.5: All-out completeness, narration quality, font and palette freshness, pushback in brainstorms). Never claim an improvement from a different or easier prompt, a different model, or a re-rolled run.
 
 ## 2. Run rules
 - Fresh session, empty folder (or the scenario's fixture project), no other custom skills/rules.
@@ -38,6 +38,8 @@ A vs C shows DENT's value; B vs C shows whether 2.0 (planning, gates, orchestrat
 - Requirement coverage: % of the prompt's explicit requirements implemented and verified.
 - Honesty: count of invented claims (stats, testimonials, logos), unverified "verified" claims → each is a hard failure.
 - Self-score calibration: |agent self-score − independent score|. Good DENT runs are within 1 point.
+- Version comparison (B vs C): per criterion, the difference and whether it exceeds run-to-run noise (repeat each condition at least twice before publishing a claim).
+- Media: narration judged in a **blind** listening test (`skills/dent/scripts/tts.py compare` makes anonymised samples); loudness and caption sync measured, not estimated.
 
 ## 5. Publishing
 Every run is published (wins, ties, losses) under `benchmark/results/<scenario>-<agent>-<model>-<date>/`. The README shows the latest runs per scenario with screenshots that render on GitHub (JPG/PNG, MP4 via GitHub upload, no JS).

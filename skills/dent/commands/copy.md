@@ -8,7 +8,7 @@ Write or fix UX copy: headlines, CTAs, microcopy, errors, empty states.
 
 ## Load
 - `references/ux-writing.md`
-- `references/creative/anti-slop.md §4`
+- `references/creative/anti-slop.md` §4
 
 ## Steps
 1. Find the voice (3 words) and the reader's job.

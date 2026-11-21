@@ -1,0 +1,9 @@
+{
+  "engine": "kokoro",
+  "model": null,
+  "voice": null,
+  "instruct": null,
+  "design": null,
+  "seed": 7,
+  "licence": "Apache-2.0"
+}

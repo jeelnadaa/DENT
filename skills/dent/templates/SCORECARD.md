@@ -1,7 +1,19 @@
 # Scorecard: <deliverable>
 
-> DENT self-score (`/dent:score`). Rules: evidence for every line · unverified lines max 6 · failed gate caps its line at 4 · a missing Must requirement caps overall at 6 · requirement lines count double. See references/workflow/scoring-and-closeout.md.
+> DENT self-score (`/dent:score`). Rules: evidence for every line · unverified lines max 6 · failed gate caps its line at 4 · a missing Must requirement or an open Blocker caps overall at 6 · requirement lines count double. See references/workflow/scoring-and-closeout.md.
 > Target: overall ≥ <8> and no line < <6>. Date: <yyyy-mm-dd> · Round: <1 | improve-1 | improve-2>
+
+## Open blockers (listed first; any open blocker caps overall at 6)
+| # | Blocker | Found by | Evidence | Status |
+|---|---|---|---|---|
+| — | none | | | |
+
+## Independent evaluators (Polished+ / All-out)
+| Evaluator | Verdict (Accept / Accept with fixes / Reject) | Independent context? | Key findings |
+|---|---|---|---|
+| Visual | | | |
+| UX | | | |
+| Engineering | | | |
 
 ## Requirements (from the request)
 | ID | Requirement | Score /10 | Evidence |

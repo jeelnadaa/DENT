@@ -16,7 +16,7 @@ Two levels:
 | Area | Override |
 |---|---|
 | Color | Material colors: metals (silver/graphite gradients), warm paper, deep plastics. Accent for indicator lights (LED green/red/orange). |
-| Typography | Sans or slightly technical type (Satoshi, SF Pro Rounded, Barlow); engraved/embossed labels for controls (text-shadow). |
+| Typography | Sans or slightly technical type (Radio Canada Big, SF Pro Rounded, Barlow); engraved/embossed labels for controls (text-shadow). |
 | Spacing / layout | Layout like a physical device or panel: grouped controls in "housings". |
 | Radius | Realistic radii matched to object type: keys 8–14px, panels 16–28px, knobs circular. |
 | Borders | Highlight edge (1px light at top) + dark edge at bottom to simulate bevel. |
@@ -47,7 +47,7 @@ Two levels:
   --bg:#D9DCE1; --panel:linear-gradient(180deg,#F4F5F7 0%,#D5D8DD 100%);
   --key:linear-gradient(180deg,#FFFFFF 0%,#E3E5E9 100%); --key-pressed:linear-gradient(180deg,#D3D6DB 0%,#E8EAED 100%);
   --text:#1E2228; --text-2:#4A505A; --led:#2BD96B; --accent:#FF6A13; --on-accent:#1E2228;
-  --font-sans:"Satoshi","Manrope",system-ui,sans-serif;
+  --font-sans:"Radio Canada Big","Barlow",system-ui,sans-serif;
   --radius-control:12px; --radius-container:24px;
   --shadow-key:0 1px 0 rgb(255 255 255 / .9) inset, 0 -1px 0 rgb(0 0 0 / .08) inset, 0 2px 3px rgb(0 0 0 / .18), 0 8px 16px rgb(0 0 0 / .12);
   --shadow-pressed:inset 0 2px 6px rgb(0 0 0 / .25);

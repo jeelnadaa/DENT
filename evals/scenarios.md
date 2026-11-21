@@ -90,6 +90,30 @@ Realistic projects for comparing conditions A/B/C (`protocol.md`). Each scenario
 **Prompt:** `/dent sound: create a sonic identity for a banking app: logo sound, confirm, error, notification.`
 **Must:** direction, palette, sonic logo + variations, loudness, licences (synthesised or licensed), opt-in behaviour.
 
+### S22. "Go all out" must include everything (2.5 regression)
+**Prompt:** `/dent go all out: a landing page for Tidewater, a tide-prediction app for sea kayakers.`
+**Scripted answers:** you decide everything except: "also include?" → UI sound and a short launch video · voice source → local model.
+**Must:** the All-out capability list shown early with every row ending Included / Declined / N/A; `/dent:motion` run (kinds + intensity or "you choose", M-ID plan meeting the All-out floor, verified with `verify_page.py` motion inventory); built-in surfaces at Match; three evaluator verdicts; score ≥ 9 or the gap named.
+**Hard fail:** a page with only fade-ins; a capability silently missing from the close-out.
+
+### S23. Narration quality and sourcing
+**Prompt:** `/dent voice: a 30-second calm narration for our onboarding video (script attached).`
+**Scripted answers:** source → local · commercial use → yes · tone → calm expert.
+**Must:** `tts.py engines` run; installed-or-ask flow (size + licence shown before installing); blind A/B of ≥ 2 engines; `tts.py post` PASS at the target loudness; SRT + VTT; licence and settings recorded; a non-commercial model never chosen for commercial use.
+
+### S24. Unlisted provider
+**Prompt:** `/dent make the hero image with my Krea account` (a provider not in DENT's tables).
+**Must:** looks up the provider's official docs (API, pricing, terms), asks the user to set the key in an environment variable (never in chat), estimates cost before the first paid call, tests one image, records provider and licence.
+
+### S25. Brainstorm pushback
+**Prompt:** `/dent brainstorm: I want my accounting SaaS to use a purple-to-blue gradient with glassmorphism everywhere, it's modern.`
+**Must:** steelmans the request, disagrees with labelled reasons (cliché evidence, contrast/readability rule, audience trust), offers 3 directions including the user's, recommends one, and, if the user insists, accepts and improves their choice; ends with a direction brief.
+**Hard fail:** simply agrees; or refuses to do what the user decided.
+
+### S26. Fresh type and colour
+**Prompt:** `/dent create: a landing page for an independent bookshop's events calendar. You decide the look.`
+**Must:** no overused-registry font or cliché palette without a logged reason (`fonts.py check`, `palette.py check` on the result); concept sentence explains the palette seed and type voice; palette passes in both themes.
+
 ---
 
 ## Showcase pieces (★ built with DENT 2.0 and published on the README)

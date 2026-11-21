@@ -40,7 +40,9 @@ Use the **first matching row** for the main command, then add **companion comman
 | Tokens, theme, design system, component library for the team | `system` | `components`, `handoff` |
 | "Which library / should I use X or Y / install a table/editor/calendar" | `components` | — |
 | Tooltips, scrollbars, sliders, checkboxes, dropdowns or text highlight "look default", "match our design", "style the native controls" | `surfaces` | `verify` |
+| "Let's brainstorm", "help me think through the direction", "what should it feel like?", "is this a good idea?", wants to discuss before anything is made | `brainstorm` | `directions` when a direction is agreed |
 | "Options", "directions", "concepts", "moodboard", "not sure what style" | `directions` | `type` |
+| "What can you do on my machine?", "which models do I have?", "set up voice/video tools", before any media work at All-out | `doctor` | — |
 | Headline, hero title, typography, font pairing | `type` | `copy` |
 | Words: copy, headline text, microcopy, error messages, tone | `copy` | — |
 | Logo, brand, identity, name lockup, brand colors | `brand` | `assets`, `sound` (sonic logo) |
@@ -64,13 +66,17 @@ Use the **first matching row** for the main command, then add **companion comman
 
 ## Step 3: Expand into a pipeline
 
-Each deliverable has a default pipeline. Commands in brackets run only at the effort levels shown. Every pipeline ends with **verify → score**, and with **improve** when below target (automatically at All-out). Every pipeline step that writes or changes web code runs the Modern Web Guidance workflow first (`../modern-web-guidance.md` §2: search → retrieve → apply → verify → disclose); it is part of the step, not a separate command.
+Each deliverable has a default pipeline. Commands in brackets run only at the effort levels shown. Every pipeline ends with **verify → score**, and with **improve** when below target (automatically at All-out).
+
+**All-out expands every pipeline** with the capability list in `all-out.md` §0: every bracketed step runs, the *Included* capabilities run as their own commands (motion, surfaces, type, copy, assets, directions, review), and the *Offer* capabilities (sound, voice, video, 3D, brand) are asked in one multi-select question. Never drop a capability because the request didn't name it; end each one Included, Declined or N/A with a reason.
+
+**Media work starts with `doctor` and the sourcing question** (`../media-sourcing.md` §2) for each media type the pipeline will produce: local model (installed after asking), free cloud tier, paid provider or connector (any, listed or not), or the user's own assets. Every pipeline step that writes or changes web code runs the Modern Web Guidance workflow first (`../modern-web-guidance.md` §2: search → retrieve → apply → verify → disclose); it is part of the step, not a separate command.
 
 | Deliverable | Pipeline |
 |---|---|
-| Landing page / marketing site | [directions: Polished+] → create (recipe `recipes/landing-page.md`) → [type, copy, surfaces: always inside create] → **motion (Standard+; ask kinds + intensity, meet the floor)** → [motion-graphics: All-out] → [assets: Polished+] → verify → score → [improve] |
-| App screen / dashboard / flow | [plan: Advanced+] → create or extend (recipe `recipes/app-and-dashboard.md`) → components (if complex widgets) → surfaces (Standard+) → [motion: Standard+] → verify → score → [improve] |
-| Redesign | audit → plan → [directions: Polished+] → redesign → verify (with regression) → score |
+| Landing page / marketing site | [brainstorm: if the direction is unclear] → [directions: Polished+] → create (recipe `recipes/landing-page.md`) → [type, copy, surfaces: always inside create] → **motion (Standard+; run `commands/motion.md`: ask kinds + intensity, meet the floor)** → [motion-graphics: All-out] → [assets: Polished+] → [review with three evaluators: Polished+] → verify → score → [improve] |
+| App screen / dashboard / flow | [plan: Advanced+] → create or extend (recipe `recipes/app-and-dashboard.md`) → components (if complex widgets) → surfaces (Standard+) → [motion: Standard+] → [review: Polished+] → verify → score → [improve] |
+| Redesign | audit → plan → [directions: Polished+] → redesign → surfaces (Standard+) → [motion: Standard+, meeting the floor] → [review: Polished+] → verify (with regression) → score → [improve] |
 | Existing UI "make it better" | score → polish → verify → score (show before/after) |
 | Bug / visual defect | fix → verify |
 | Design system | system → components → handoff → verify (component sheet) |
@@ -78,10 +84,12 @@ Each deliverable has a default pipeline. Commands in brackets run only at the ef
 | Motion graphics piece | directions (motion section) → motion-graphics → [sound] → verify (motion) → score |
 | 3D experience | plan → 3d → [motion-graphics] → verify (perf + fallback) → score |
 | Sound for a product | sound → verify (audio) → score |
-| Voice-over | voice → verify (audio + captions) |
-| Explainer / trailer / demo / social video | video → [voice] → [sound] → [motion-graphics] → verify (video QA) → score |
-| Launch video | launch-video → voice (if narrated) → sound → verify (video QA) → score |
+| Voice-over | doctor → voice (source question, blind A/B, `tts.py say` → `tts.py post`) → verify (audio + captions) → score |
+| Explainer / trailer / demo / social video | doctor → video → [voice] → [sound] → [motion-graphics] → verify (video QA) → score |
+| Launch video | doctor → launch-video → voice (if narrated) → sound → verify (video QA) → score |
 | Review only | audit or review → (stop; offer fixes) |
+| Direction discussion | brainstorm → (direction brief) → directions or create when the user is ready |
+| Capability check / media setup | doctor → (install what the user approves) |
 
 Before running the pipeline, tell the user in **one line** what you'll do, e.g.:
 > "Plan: I'll explore 2 directions, build the landing page, add motion, check it at 6 screen sizes, and score it. First question: how far should I go?"
@@ -91,7 +99,8 @@ Merge the questions all commands in the pipeline need; remove duplicates; ask th
 - visual: style direction, light/dark, brand colors/fonts;
 - **built-in surfaces (any visual build at Standard+):** Match my design / Brand tint / Native / per element (`../built-in-surfaces.md` §2);
 - **motion (any visual build at Standard+):** which kinds of motion as a **multi-select** (scroll, hover, hero entrance, micro-interactions, transitions, text, data, layout, ambient, cursor, SVG, 3D, gestures, or "You choose") and the intensity (Subtle / Balanced / Expressive / Cinematic). Script: `../motion/motion-menu.md` §1. Skip only if the user already said what motion they want or "no motion";
-- media: sound on/off, narration voice, video length/platform, **generative tool access** (image/video/voice);
+- media: sound on/off, narration voice, video length/platform, and **where each kind of media comes from** (local model / free cloud / paid or any provider / own assets: `../media-sourcing.md` §2), with one line on where real or generated assets would lift the result;
+- fonts: free and open (Recommended) / fonts the user owns / paid fonts worth buying (`../typography.md` §0);
 - content: real proof, screenshots, logo.
 "Don't ask" / non-interactive → defaults, listed at the end.
 
@@ -111,7 +120,7 @@ One close-out for the whole pipeline (`scoring-and-closeout.md`): what was built
 
 2. **"/dent this dashboard looks bad on my phone"** + screenshot → VERB fix/responsive, STATE exists → main `responsive` (+ `verify`). No effort question needed (it's a fix); ask only if the code isn't available.
 
-3. **"/dent go all out: landing page + launch video with voice-over for DENT"** → two deliverables. EFFORT All-out (stated) → All-out protocol. Pipelines: landing page (directions → create → type → motion-graphics → assets → verify → score → improve) then launch video (launch-video → voice → sound → verify → score), sharing DESIGN.md. Questions: direction pick, sound on the site?, voice type, video length/platforms, generative video access.
+3. **"/dent go all out: landing page + launch video with voice-over for DENT"** → two deliverables. EFFORT All-out (stated) → All-out protocol and capability list (`all-out.md` §0). Pipelines: landing page (directions → create → type + copy → surfaces → **motion (full menu, All-out floor)** → motion-graphics → assets → responsive + accessibility → review (three evaluators) → verify → score → improve) then launch video (doctor → launch-video → voice → sound → verify → score), sharing DESIGN.md. Questions: the capability list's "also include?" (UI sound, 3D), direction pick, motion kinds + intensity, surfaces level, voice source (`tts.py engines` decides what to offer) and a blind A/B, footage source (real captures or generated), video length and platforms.
 
 4. **"/dent is this accessible?"** + URL → main `accessibility` in audit form (report, don't fix), then offer fixes.
 
@@ -120,3 +129,7 @@ One close-out for the whole pipeline (`scoring-and-closeout.md`): what was built
 6. **"/dent add sound to my app"** → `sound`: ask role (feedback vs identity), confirm opt-in default, map 3–6 meaningful events, implement with mute/volume, verify.
 
 7. **"/dent improve it"** after a scorecard exists → `improve`; if no scorecard exists → `score` first, then `improve`.
+
+8. **"/dent I want my portfolio to feel like a gallery, all black with neon, let's brainstorm"** → `brainstorm`: restate the goal, question the assumption (all-black + neon is the category cliché for creative portfolios and fights the "gallery" idea, which is about quiet walls), offer 3 directions with trade-offs, recommend one with reasons, and agree a direction brief before `directions` or `create`.
+
+9. **"/dent add a narrated walkthrough video to the site"** → `video` (+ `voice`): `doctor` first; ask footage source (real screen captures recommended) and voice source (installed engines from `tts.py engines`; offer to install one if none, with size and licence); blind A/B of two voices; render, `tts.py post`, sync to `narration.timing.json`, embed with captions, verify.

@@ -4,21 +4,22 @@ From brief to delivered files, with the right tools for what the user has. Statu
 
 ---
 
-## 1. First question: what does the user have?
-Ask once (one question, options):
-> **Do you have access to AI video/image/voice generation?**
-> 1. **Yes** — tell me which (Veo, Sora, Runway, Kling, Luma, Pika, Hailuo, Midjourney, ElevenLabs…) and I'll use it for footage/voice where it helps.
-> 2. **No (Recommended if unsure)** — I'll build the video in code with free tools (HyperFrames/Remotion/Motion Canvas) and real product captures.
-> 3. **I'll record/edit myself** — I'll give you the script, storyboard, assets and an edit plan.
+## 1. First questions: where each kind of media comes from
+Run `python scripts/doctor.py` (tools, GPU, installed engines, API keys present), then ask the sourcing question from `../media-sourcing.md` §2 **per media type the video needs**, batching where you can (one question for footage and images, one for voice and music):
+- **Footage / imagery:** code-built scenes with real product captures (Recommended: brand-exact, free) · a local generative model · a free cloud tier · a paid provider or connector they use (Veo, Sora, Runway, Kling, Luma, Pika, Hailuo, Midjourney, Firefly… or any other: DENT looks it up) · their own footage, screenshots and photos.
+- **Voice:** `../audio/voice-and-narration.md` §1 (local Qwen3-TTS / Kitten TTS 2 / Chatterbox / Kokoro, free tiers, paid providers, any provider, or a human recording).
+- **Music and SFX:** `../media-sourcing.md` §5.2–5.3.
 
-Then pick the stack (§3). Record the choice and licences in `templates/VIDEO.md` §2.
+Before asking, say in one line where real or generated assets would lift this video ("A 3-second shot of the real app on a phone would make the hook land; do you have one, or should I generate or recreate it?"). If the user will record or edit themselves, give them the script, storyboard, assets and an edit plan.
+
+Then pick the stack (§3). Record every choice, cost and licence in `templates/VIDEO.md` §2.
 
 ## 2. Pipeline
 1. **Brief** (type, sub-type, audience, platform, one message, CTA, length, aspect ratios) — `video-types-and-craft.md`.
 2. **Script** (VO + on-screen text + visuals, timed at ~150 wpm) → user approval.
 3. **Storyboard** (shot list with durations) → **animatic** (timing locked with scratch VO).
 4. **Assets:** real UI captures (Playwright screen recordings at 2× scale, or OBS), HTML recreations of UI, illustrations, 3D renders, generated footage (if allowed), fonts, music, SFX — all licensed.
-5. **Voice:** record or synthesise (`../audio/voice-and-narration.md`), edit, loudness-normalise.
+5. **Voice:** record or synthesise (`../audio/voice-and-narration.md` §5: `scripts/tts.py say` → `tts.py post`), then sync scenes to `narration.timing.json`.
 6. **Build scenes** in the chosen tool using DESIGN.md tokens (type, color, motion personality).
 7. **Sound:** music bed (ducked), SFX on key frames, sonic logo; mix to target loudness.
 8. **Captions:** burned-in for social, sidecar `.srt/.vtt`.

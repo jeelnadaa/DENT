@@ -8,7 +8,7 @@ Implement an approved PLAN.md or DESIGN.md accurately.
 
 ## Load
 - the plan/spec itself
-- `references/design-tokens-and-code.md Part 2`
+- `references/design-tokens-and-code.md` Part 2
 - `references/workflow/execution-and-scope.md`
 - `references/workflow/verification.md`
 

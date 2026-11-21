@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Scroll-driven reveal fixture</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; font: 1rem/1.5 system-ui, sans-serif; color: #111; background: #fff; }
+  section { min-height: 90vh; padding: 2rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports ((animation-timeline: view()) and (animation-range: entry)) {
+      .reveal { animation: fade linear backwards; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+    }
+  }
+  @keyframes fade { from { opacity: 0; translate: 0 2rem; } }
+</style>
+</head>
+<body>
+  <main>
+    <section><h1>Fixture: content below the fold reveals on scroll</h1></section>
+    <section class="reveal"><h2>Below the fold</h2><p>A full-page capture never scrolls; verify_page.py must take its screenshots with reduced motion so this text is visible.</p></section>
+  </main>
+</body>
+</html>

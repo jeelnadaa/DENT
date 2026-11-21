@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Warm retro: cream #F2E8D5, burnt orange #D9541E, mustard #E3A81B, avocado/teal #2F6F6A, brown #3B2A20, off-black. |
-| Typography | Space-age display ("Space Mono" for data, "Michroma", "Orbitron" lightly, "Eurostile"-like "Audiowide", rounded "Righteous"); NASA-like wide caps for labels. |
+| Typography | Space-age display ("Martian Mono" for data, "Michroma", "Orbitron" lightly, "Eurostile"-like "Audiowide", rounded "Righteous"); NASA-like wide caps for labels. |
 | Spacing / layout | Panel/console layouts, stripes, rounded screens; strong horizontal bands. |
 | Radius | Rounded-rectangle "TV screen" shapes (16–32px), pills, circles (portholes). |
 | Borders | Thick colored stripes (racing stripes, multi-band lines). |
@@ -42,7 +42,7 @@
   --orange:#C2481A; --mustard:#E3A81B; --teal:#2F6F6A; --brown:#3B2A20;
   --accent:var(--orange); --on-accent:#FFFFFF;
   --stripes:linear-gradient(180deg,#E3A81B 0 33%,#D9541E 33% 66%,#8C2F1B 66% 100%);
-  --font-display:"Michroma","Audiowide",sans-serif; --font-mono:"Space Mono",monospace; --font-sans:"Outfit",system-ui,sans-serif;
+  --font-display:"Michroma","Audiowide",sans-serif; --font-mono:"Martian Mono",monospace; --font-sans:"SUSE",system-ui,sans-serif;
   --radius-control:999px; --radius-container:24px;
   --dur:250ms; --ease:cubic-bezier(.65,0,.35,1);
 }

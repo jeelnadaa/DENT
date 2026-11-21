@@ -7,11 +7,11 @@ Audit an existing interface, codebase or screenshot and report findings. Change 
 **Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → verify → disclose) before coding; MWG wins any implementation conflict with DENT.
 
 ## Load
-- `references/modes-existing-products.md §4`
+- `references/modes-existing-products.md` §4
 - `templates/AUDIT.md`
 - `references/quality-review.md`
 - `references/accessibility.md`
-- `references/modern-web-guidance.md (web code)`
+- `references/modern-web-guidance.md` (web code)
 
 ## Steps
 1. Establish scope, goal and main user task.

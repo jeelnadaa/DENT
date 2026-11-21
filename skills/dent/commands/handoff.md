@@ -8,8 +8,8 @@ Write DESIGN.md and developer handoff (tokens, specs, states, a11y notes, licenc
 
 ## Load
 - `references/design-md-template.md`
-- `references/tooling-and-handoff.md §4`
-- `references/design-tokens-and-code.md Part 1`
+- `references/tooling-and-handoff.md` §4
+- `references/design-tokens-and-code.md` Part 1
 
 ## Steps
 1. Collect final values, decisions and licences.

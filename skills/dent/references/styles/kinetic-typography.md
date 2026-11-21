@@ -41,7 +41,7 @@
 ```css
 :root{
   --bg:#0F0F0F; --text:#F4F1EA; --accent:#FF4D00; --on-accent:#0F0F0F;
-  --font-display:"Unbounded","Anton",sans-serif; --font-sans:"Satoshi","Manrope",system-ui,sans-serif;
+  --font-display:"Anybody","Special Gothic Expanded One",sans-serif; --font-sans:"Special Gothic","Hanken Grotesk",system-ui,sans-serif;
   --mega:clamp(6rem,2rem + 15vw,15rem); --leading-mega:.85; --tracking-mega:-0.04em;
   --dur:600ms; --ease:cubic-bezier(.16,1,.3,1);
 }

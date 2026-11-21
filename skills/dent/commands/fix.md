@@ -8,7 +8,7 @@ Diagnose and fix one specific UI/UX problem with the smallest correct change.
 
 ## Load
 - `references/workflow/verification.md`
-- `references/foundations-and-components.md (if a component is involved)`
+- `references/foundations-and-components.md` (if a component is involved)
 
 ## Steps
 1. Reproduce or precisely understand the problem (screenshot, steps, viewport).

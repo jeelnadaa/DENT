@@ -30,26 +30,30 @@ Rules for writing it:
 - **Signature element(s):** <the one or two things that make this product recognisable>
 - **Design principles:** <3–5 trade-offs, e.g. "Clarity over density">
 - **Existing system:** <none / adopted <library> / re-themed <library> — see modes-existing-products.md §2>
-- **Aesthetic style:** <style name> (+ accent style if any) — why: <reason>
+- **Aesthetic style and move:** <style name> (+ accent style if any) — move: <apply | bend (axes changed) | blend | leave (style card below)> — why: <reason>
+- **Style card** (only for leave, or a blend that changes tokens; `creative-direction.md` §3b): <name · concept · axes · starter tokens · signature moves · never · accessibility watch-outs>
+- **Direction brief** (if `/dent:brainstorm` ran): <link or paste; chosen and rejected options with reasons>
 - **Mode:** <light / dark / both> — why: <reason>
 
 ## 2. Color
 | Token | Value | Role | Source |
 |---|---|---|---|
-| --bg | #...... | Page background (Dominant) | (user)/(default) |
+| --bg | #...... | Page background | (user) / (`palette.py make --accent <seed> --second <hex> --neutral <temp>`) |
 | --surface | #...... | Cards, panels | |
-| --text | #...... | Primary text (Complement) | |
+| --text | #...... | Primary text | |
 | --text-2 | #...... | Secondary text | |
 | --border | #...... | Dividers, decorative borders | |
 | --border-input | #...... | Input borders (≥ 3:1) | |
-| --accent | #...... | Primary actions, links (Off color) | |
+| --accent | #...... | Primary actions, links (`palette.py` role `accent`) | |
 | --on-accent | #...... | Text on accent | |
 | --success / --warning / --error / --info | #...... | Status | |
 
+Palette seed and concept: <seed hex, second hex, neutral temperature, the scene it comes from> · cliché check (`palette.py check`): <none | logged exception>
 Contrast checks: text/bg = x.x:1 · text-2/bg = x.x:1 · on-accent/accent = x.x:1 · border-input/bg = x.x:1
 Dark-mode values (if both modes): <table>
 
 ## 3. Typography
+- **Type voice:** <voice from `typography.md` §2> · **Font source:** <free and open | user-owned | bought> · overuse check (`fonts.py check`): <fresh | logged exception>
 - **Display font:** <name>, weights <...> — why
 - **Body/UI font:** <name>, weights <...>
 - **Mono font:** <name> (if used)
@@ -120,7 +124,7 @@ Level: <Match | Tint | Native> (why: <...>) · surface sheet: <path or story>
 - Narration voice, script versions, captions; videos with specs and versions (`templates/VIDEO.md`).
 
 ## 8c. Licences
-| Asset / library | Source | Licence | Attribution | Commercial OK? |
+| Asset / library / model | Source (incl. local model, provider, own asset) + version | Licence | Attribution | Commercial OK? |
 |---|---|---|---|---|
 
 ## 9. Patterns and screens

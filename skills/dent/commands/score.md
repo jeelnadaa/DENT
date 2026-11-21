@@ -13,8 +13,9 @@ Score the work against the request with evidence; list the top 3 improvements if
 ## Steps
 1. Rebuild the requirement list from the original request.
 2. Add the quality lines relevant to this deliverable.
-3. Score 0–10 with evidence; apply the caps (unverified ≤ 6, failed gate ≤ 4, missing Must → overall ≤ 6).
-4. If below target, list the 3 highest-impact improvements and offer /dent:improve. Include the attribution summary.
+3. Score 0–10 with evidence; apply the caps (unverified ≤ 6, failed gate ≤ 4, missing Must or open Blocker → overall ≤ 6). List open Blockers above the overall score.
+4. At Polished+ use the independent evaluators' reports (scoring-and-closeout.md §3b); where an evaluator differs by 2+ points, use theirs unless you have new evidence.
+5. If below target, list the 3 highest-impact improvements and offer /dent:improve. Include the attribution summary.
 
 ## Output
 Filled SCORECARD.md.

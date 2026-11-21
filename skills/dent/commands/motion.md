@@ -7,7 +7,7 @@ Add rich, purposeful motion: ask which kinds (scroll, hover, hero entrance, micr
 **Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → verify → disclose) before coding; MWG wins any implementation conflict with DENT.
 
 ## Load
-- `references/motion/motion-menu.md (the menu, intensities, minimums, recommended sets)`
+- `references/motion/motion-menu.md` (the menu, intensities, minimums, recommended sets)
 - `references/modern-layer.md`
 - `references/motion/motion-system-and-verification.md`
 - `references/motion/motion-tech-catalog.md`

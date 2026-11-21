@@ -22,4 +22,4 @@ Installed vs available version, what was refreshed, and the one step left (if an
 - Edit Claude's settings or install records by hand.
 - Delete the user's plugin folders.
 
-Close with the scorecard summary, attribution (DENT / user / agent judgment / overrides) and a one-line next step (SKILL.md §8).
+Close with the installed and available versions and the one step left, if any.

@@ -43,7 +43,7 @@
   --bg:#FFF1E0; --text:#160F29; --text-2:#3E3458;
   --c1:#FF3D7F; --c2:#00C2A8; --c3:#FFD23F; --c4:#3A2BFF; --c5:#FF7A00; --c6:#9B5DE5;
   --accent:var(--c4); --on-accent:#FFFFFF;
-  --font-display-1:"Shrikhand",serif; --font-display-2:"Syne",sans-serif; --font-display-3:"Instrument Serif",serif; --font-sans:"DM Sans",system-ui,sans-serif;
+  --font-display-1:"Shrikhand",serif; --font-display-2:"Syne",sans-serif; --font-display-3:"Kalnia",serif; --font-sans:"Familjen Grotesk",system-ui,sans-serif;
   --shadow-1:6px 6px 0 #160F29;
   --dur:350ms; --ease:cubic-bezier(.34,1.56,.64,1);
 }

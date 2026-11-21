@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Off-white or cream background; **saturated flat colors** (yellow #FFD23F, pink #FF6B9D, blue #4D96FF, green #6BCB77, purple #A28BFF) as card/button fills. Black (#111) for text, borders and shadows. |
-| Typography | Heavy, chunky sans (Archivo Black, Space Grotesk, Lexend Mega, Bricolage Grotesque, "Clash Display"). Big bold headings. |
+| Typography | Heavy, chunky sans (Archivo Black, Lexend Mega, Special Gothic Expanded One, Anybody at heavy weights, Familjen Grotesk). Big bold headings. |
 | Spacing / layout | Blocky layout of cards; generous padding; elements can be slightly rotated (−2° to 2°) for fun. |
 | Radius | 0 or small-to-medium (4–12px). Pick one and keep it. |
 | Borders | **Thick black borders (2–4px)** on buttons, cards, inputs, images. |
@@ -44,7 +44,7 @@
   --bg:#FFF8E7; --surface:#FFFFFF; --text:#111111; --border:#111111;
   --c-yellow:#FFD23F; --c-pink:#FF6B9D; --c-blue:#4D96FF; --c-green:#6BCB77;
   --accent:var(--c-yellow); --on-accent:#111111;
-  --font-display:"Archivo Black",sans-serif; --font-sans:"Space Grotesk",sans-serif;
+  --font-display:"Archivo Black",sans-serif; --font-sans:"Familjen Grotesk",sans-serif;
   --border-w:3px; --radius-control:8px; --radius-container:12px;
   --shadow-1:4px 4px 0 #111; --shadow-2:8px 8px 0 #111;
   --dur:150ms; --ease:cubic-bezier(.34,1.56,.64,1);

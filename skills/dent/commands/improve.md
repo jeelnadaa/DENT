@@ -7,7 +7,7 @@ Apply the highest-impact improvements from the last scorecard and re-score.
 **Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → verify → disclose) before coding; MWG wins any implementation conflict with DENT.
 
 ## Load
-- `references/workflow/scoring-and-closeout.md §3`
+- `references/workflow/scoring-and-closeout.md` §3
 - the previous SCORECARD.md
 
 ## Steps

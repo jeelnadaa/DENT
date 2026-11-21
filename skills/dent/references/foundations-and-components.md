@@ -11,7 +11,7 @@ Labels: **[Law]** research-backed · **[Rule]** measurable standard, never overr
 Define these as named tokens first. Every component uses only tokens.
 
 ### Color
-- **Default palette (when the user gives no colors):** use three colors with fixed roles: **Dominant** (~60%, backgrounds and main surfaces), **Complement** (~30%, text, icons, borders, secondary surfaces) and **Off color** (~10%, the accent for primary actions, links and highlights). Ten ready-made, contrast-checked palettes (5 light, 5 dark) are in `references/color.md` Part 2. They are optional: use them only as a fallback. Scales, harmony, dark mode and color theory: `references/color.md` Part 1.
+- **Default palette (when the user gives no colors):** build a concept palette (`references/color.md` §12): a seed from the concept run through `scripts/palette.py make`, which returns role tokens for light and dark (bg, surface, raised, border, text, muted, accent, on-accent, accent-text, focus, optional second) with every pair contrast-checked and a cliché report. Twenty verified concept palettes are in `references/color.md` §13 as starting points. Scales, harmony, dark mode and color theory: `references/color.md` Part 1.
 - **Structure:** neutrals (background, surface, border, text levels), one brand/primary, optional accent, semantic set (success, warning, error, info).
 - **[Rule] Contrast (WCAG 2.x AA):** body text ≥ 4.5:1; large text (≥ 24px regular or ≥ ~18.7px bold) ≥ 3:1; UI components and meaningful graphics (input borders, icons, focus rings) ≥ 3:1 against adjacent colors.
 - **[Rule] Never use color alone** to convey meaning — pair with text, icon or shape (errors, status, charts).

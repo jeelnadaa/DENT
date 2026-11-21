@@ -9,8 +9,8 @@ Inspect the context and produce an audited PLAN.md without building anything.
 ## Load
 - `references/workflow/planning-and-plan-audit.md`
 - `templates/PLAN.md`
-- `references/modes-existing-products.md (if a codebase exists)`
-- `references/creative-direction.md (for new or redesigned UI)`
+- `references/modes-existing-products.md` (if a codebase exists)
+- `references/creative-direction.md` (for new or redesigned UI)
 
 ## Steps
 1. Gather Confirmed / Assumed / Unknown facts; inspect the repository if there is one.

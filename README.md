@@ -11,7 +11,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-111?style=flat-square)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-SKILL.md-111?style=flat-square)](https://agentskills.io)
-[![Version](https://img.shields.io/badge/version-2.4.0-E8461E?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.5.0-E8461E?style=flat-square)](CHANGELOG.md)
 [![Modern Web Guidance](https://img.shields.io/badge/web%20authority-Modern%20Web%20Guidance-111?style=flat-square)](#modern-web-guidance-the-authority-for-web-code)
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-111?style=flat-square)](skills/dent/references/styles/_styles-index.md)
 [![Commands](https://img.shields.io/badge/commands-32-111?style=flat-square)](docs/COMMANDS.md)
@@ -60,7 +60,7 @@ You never have to learn the commands. Type `/dent` (or just describe what you wa
 ```
 → `responsive → verify`. No questionnaire for a bug.
 
-Power users can call any of the [32 commands](docs/COMMANDS.md) directly: `/dent:plan`, `/dent:audit`, `/dent:components`, `/dent:motion-graphics`, `/dent:sound`, `/dent:video`, `/dent:score`, `/dent:improve`…
+Power users can call any of the [34 commands](docs/COMMANDS.md) directly: `/dent:plan`, `/dent:audit`, `/dent:components`, `/dent:motion-graphics`, `/dent:sound`, `/dent:video`, `/dent:score`, `/dent:improve`…
 
 ---
 
@@ -69,13 +69,13 @@ Power users can call any of the [32 commands](docs/COMMANDS.md) directly: `/dent
 | Discipline | What DENT brings |
 |---|---|
 | **Product design** | Six modes (create, redesign, audit, extend, implement, adopt), 4 effort levels, 4 task depths, UX laws labelled Law / Rule / Convention, recipes for landing pages, apps and dashboards |
-| **Creative direction** | Concept sentence, category-cliché check, 41 aesthetic styles, a [library of 25 named directions](skills/dent/references/creative/directions-library.md) plus motion, sound and video directions, a [hero typography system](skills/dent/references/creative/hero-typography.md) with 18 composition techniques |
+| **Creative direction** | Concept sentence, category-cliché check, a candid [`/dent:brainstorm`](skills/dent/references/workflow/brainstorm.md) partner that pushes back, 41 aesthetic styles it can apply, bend, blend or leave behind, concept-led palettes and fresh type found and checked by its own tools (`palette.py`, `fonts.py`), a [library of 25 named directions](skills/dent/references/creative/directions-library.md) plus motion, sound and video directions, a [hero typography system](skills/dent/references/creative/hero-typography.md) with 18 composition techniques |
 | **Front-end engineering** | Tokens first, ~45 component specs, code guides for HTML/CSS, Tailwind, React, Vue, Svelte, Flutter, SwiftUI, Compose, React Native. On the web, [Modern Web Guidance](#modern-web-guidance-the-authority-for-web-code) decides how each piece is built |
 | **Component intelligence** | A [sourced catalogue](skills/dent/references/catalog/README.md) of primitives (Radix, Base UI, React Aria, Ark…), systems (MUI, Mantine, Ant, Carbon, Fluent…), collections (shadcn/ui, Magic UI, Aceternity…) and specialists (TanStack Table, AG Grid, Tiptap, cmdk, Sonner, dnd-kit, React Flow…), with licences and paid tiers called out |
 | **Motion graphics** | Interface motion vs motion graphics vs 3D, 1D → 2D → 2.5D → 3D → XR, storyboards, kinetic type, scroll stories, generative visuals, and a tech ladder from CSS to GSAP, Rive, PixiJS, Three.js and shaders |
-| **Sound and voice** | UI sound, sonic identity, ambience, interactive and procedural audio, music, narration and TTS, captions; never autoplay, always opt-in |
-| **Video** | Launch (teaser, reveal, feature tour, manifesto), trailers, explainers, demos, social, ads; scripts, storyboards, animatics; generative tools if you have them, otherwise HyperFrames, Remotion, Motion Canvas and FFmpeg |
-| **Quality** | 13 gates, runnable checks, an [All-out protocol](skills/dent/references/workflow/all-out.md) that misses nothing, request-specific self-scoring, and attribution of what came from DENT vs the agent vs you |
+| **Sound and voice** | UI sound, sonic identity, ambience, interactive and procedural audio, music; narration through one tool over many engines (Qwen3-TTS, Kitten TTS 2, Chatterbox, Kokoro, Voxtral, OpenAI, ElevenLabs or any provider) with blind A/B, loudness mastering and captions; never autoplay, always opt-in |
+| **Video** | Launch (teaser, reveal, feature tour, manifesto), trailers, explainers, demos, social, ads; scripts, storyboards, animatics; for every kind of media DENT asks where it comes from: a local model (installed only with your OK), a free or paid cloud service, any provider you name, or your own assets |
+| **Quality** | 13 gates, runnable checks, three independent reviewers that can reject the work, an [All-out protocol](skills/dent/references/workflow/all-out.md) whose capability list misses nothing, request-specific self-scoring, and attribution of what came from DENT vs the agent vs you |
 
 ---
 
@@ -328,7 +328,7 @@ a short summary of the design decisions you made.
 
 ## Install
 
-**Claude Code (plugin, gets all 32 slash commands)**
+**Claude Code (plugin, gets all 34 slash commands)**
 ```bash
 /plugin marketplace add jeelnadaa/DENT
 ```
@@ -388,7 +388,7 @@ Score it. Then improve it.
 ```
 skills/dent/
 ├── SKILL.md            # the router: classify → route → gates → score (lean, always loaded)
-├── commands/           # 32 command definitions (one source of truth per command)
+├── commands/           # 34 command definitions (one source of truth per command)
 ├── references/         # loaded only when needed
 │   ├── workflow/       # orchestration, planning + plan audit, execution, verification, scoring, all-out
 │   ├── recipes/        # step-by-step procedures with gates (landing page, app & dashboard)
@@ -400,22 +400,22 @@ skills/dent/
 │   ├── styles/         # 41 aesthetic styles
 │   └── *.md            # modern-web-guidance (web authority), color, typography, accessibility, patterns, platforms, tokens & code…
 ├── templates/          # PLAN, AUDIT, REVIEW, SCORECARD, MOTION, SOUND, VIDEO
-└── scripts/            # verify_page.py, contrast.py, mwg.py (offline Modern Web Guidance lookup)
+└── scripts/            # verify_page.py, contrast.py, palette.py, fonts.py, tts.py, doctor.py, mwg.py (offline Modern Web Guidance lookup)
 skills/modern-web-guidance/  # Google's Modern Web Guidance skill, vendored verbatim (scripts/sync_mwg.py)
 commands/               # Claude Code plugin wrappers → /dent:<name>
-evals/                  # behaviour cases, 21 scenarios, command + routing tests, fixtures
+evals/                  # behaviour cases, 26 scenarios, command + routing tests, fixtures
 benchmark/              # public with/without comparisons
 ```
 
-Progressive disclosure keeps the agent's context small: `SKILL.md` is about 330 lines; the other 130+ files load only when a task needs them. More: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Progressive disclosure keeps the agent's context small: `SKILL.md` is about 350 lines; the other 140+ files load only when a task needs them. More: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ---
 
 ## Verification and evaluation
 
 - `python scripts/validate.py`: frontmatter, 500+ internal references, the styles index, the command trio (definition ↔ plugin wrapper ↔ router), 200+ catalogue entries with sources and status, versions, the vendored Modern Web Guidance copy, and every `mwg:<guide>` reference in DENT.
-- `python scripts/test_tools.py`: `verify_page.py` must fail a deliberately broken page on every gate (including each Modern Web Guidance rule it breaks) and pass a clean one.
-- [`evals/`](evals/): 15 behaviour cases, 21 scenarios (dashboards, data-heavy apps, checkout, existing design systems, unfamiliar frameworks, strict accessibility, motion graphics, 3D, animated data, audiovisual, launch and explainer videos, sonic identity) and a protocol that records the prompt, **every question asked and the answer chosen**, the output, machine checks, self-score and an independent score.
+- `python scripts/test_tools.py`: `verify_page.py` must fail a deliberately broken page on every gate (including each Modern Web Guidance rule it breaks) and pass a clean one; `palette.py` must flag the template palettes and every library palette must pass contrast in both themes; `fonts.py` must flag overused fonts and every pairing face must exist; `tts.py post` must hit its loudness target with valid captions; `doctor.py` must report without leaking keys.
+- [`evals/`](evals/): 15 behaviour cases, 26 scenarios (dashboards, data-heavy apps, checkout, existing design systems, unfamiliar frameworks, strict accessibility, motion graphics, 3D, animated data, audiovisual, launch and explainer videos, sonic identity) and a protocol that records the prompt, **every question asked and the answer chosen**, the output, machine checks, self-score and an independent score.
 - Catalogue licences are marked ✓ (checked against official sources on a date) or K (from knowledge, to verify), so DENT never presents a guess as a fact.
 
 CI runs the validator, the tool tests and the packager on every push.

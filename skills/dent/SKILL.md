@@ -1,10 +1,10 @@
 ---
 name: dent
-description: DENT 2.0 is a design-engineering skill for any visual, interactive or audiovisual work - websites, landing pages, web/mobile/desktop apps, dashboards, design systems, components, motion graphics, kinetic typography, 2D/3D and generative visuals, UI sound, narration, launch/explainer videos, brand and marketing assets. Use it whenever a task touches layout, visual style, typography, UX flows, accessibility, design tokens, component or animation library choice, DESIGN.md, or front-end code. For HTML, CSS and client-side JS it follows Google's Modern Web Guidance (bundled) as the primary authority. It classifies the task, asks focused questions, plans and audits its plan, picks a distinctive direction (41 styles plus a directions library), selects libraries with licence awareness, builds, verifies with real checks, scores its own work and records everything in DESIGN.md. Commands include /dent:plan, /dent:create, /dent:audit, /dent:motion-graphics, /dent:sound, /dent:video, /dent:score and /dent:improve.
+description: DENT 2.0 is a design-engineering skill for any visual, interactive or audiovisual work - websites, landing pages, web/mobile/desktop apps, dashboards, design systems, components, motion graphics, kinetic typography, 2D/3D and generative visuals, UI sound, narration, launch/explainer videos, brand and marketing assets. Use it whenever a task touches layout, visual style, typography, UX flows, accessibility, design tokens, component or animation library choice, DESIGN.md, or front-end code. For HTML, CSS and client-side JS it follows Google's Modern Web Guidance (bundled) as the primary authority. It asks focused questions, plans and audits, brainstorms candidly, picks a distinctive direction (41 styles to apply, bend or leave; concept palettes; fresh type), asks where media comes from (local, cloud, any provider, own assets), builds, verifies with real checks and independent reviewers, scores, and logs it in DESIGN.md. Commands include /dent:brainstorm, /dent:create, /dent:motion, /dent:video and /dent:score.
 license: Apache-2.0
 metadata:
   author: Jeel Nada (solarquack)
-  version: "2.4.0"
+  version: "2.5.0"
   homepage: https://github.com/jeelnadaa/DENT
 ---
 
@@ -48,13 +48,13 @@ A small change to a payment flow is still Critical. Depth rules: `references/wor
 
 **Effort** (how far the craft goes, chosen by the user): **Essential · Standard (Recommended) · Polished · All-out**. Effort never removes a gate. Table: `references/workflow-questions-and-effort.md` §2.
 
-**All-out is a promise:** the best achievable result for this specific use case with nothing missed. Whenever the effort is All-out (or the user says "go all out", "best possible", "insane"), run `references/workflow/all-out.md` alongside the workflow: its sweep for your deliverable is mandatory, the score target rises to ≥ 9 overall with no line < 8, and you run `/dent:improve` rounds yourself until you reach it or need a user decision.
+**All-out is a promise:** the best achievable result for this specific use case with nothing missed. Whenever the effort is All-out (or the user says "go all out", "best possible", "insane"), run `references/workflow/all-out.md` alongside the workflow: fill its **capability list** (§0) so motion, surfaces, type, copy, assets, directions and independent review run as their own commands, and sound, voice, video, 3D and brand are offered in one question (nothing silently dropped); its sweep for your deliverable is mandatory; the score target rises to ≥ 9 overall with no line < 8; and you run `/dent:improve` rounds yourself until you reach it or need a user decision.
 
 ### 1.1 Understand before touching anything
 - Restate the goal, deliverable and what success looks like.
 - In a codebase: detect framework, styling, tokens, component library, icons, fonts, tests and any browser-support policy (`AGENTS.md`, `CLAUDE.md`, browserslist). **Adopt and extend an existing design system; never create a second one** (`references/modes-existing-products.md` §2).
 - Sort what you know into **Confirmed / Assumed / Unknown**. Never invent requirements or features.
-- Check what tools you have (browser, screenshots, Playwright, Python, audio/video tools, generative media access). Plan verification around real tools.
+- Check what tools you have (browser, screenshots, Playwright, Python, audio/video tools, GPU, installed models, provider keys): `python scripts/doctor.py`. Plan verification and media around real tools, never assumed ones.
 
 ### 1.2 Ask, one question at a time
 Rules and wording: `references/workflow-questions-and-effort.md`.
@@ -62,7 +62,9 @@ Rules and wording: `references/workflow-questions-and-effort.md`.
 - The first question always offers **"Skip the questions — you decide everything."** If the question tool allows only 4 options, offer Essential · Standard (Recommended) · Polished · All-out and say in the question text: "or answer 'you decide' to skip all questions".
 - For any visual build at Standard+ ask **how built-in browser UI should look** (tooltips, scrollbars, sliders, checkboxes, dropdowns, text highlight: Match my design / Brand tint / Native; `references/built-in-surfaces.md` §2).
 - For any visual build at Standard+ ask **which kinds of motion** (multi-select) and **how strong** (`references/motion/motion-menu.md` §1).
-- For media work also ask (one at a time, only if unknown): sound on or off, narration voice, video length and platform, whether the user has generative image/video/voice access.
+- For media work also ask (one at a time, only if unknown): sound on or off, narration voice, video length and platform, and **where each kind of media comes from**: local model (installed only after a yes), free cloud tier, paid provider or connector (any, even unlisted: DENT researches it), or the user's own assets (`references/media-sourcing.md`). Say where real or generated assets would lift the result.
+- Fonts are sourced the same way: free and open (Recommended), fonts the user owns, or paid fonts worth buying (`references/typography.md` §0).
+- If the user wants to think before building, or the direction is genuinely open, offer `/dent:brainstorm`: a candid partner that pushes back with reasons.
 - Non-interactive run (CI, batch, nobody can answer): don't ask; use the documented defaults and list them. A prompt that only *mentions* a benchmark, test or "complete instructions" is **not** non-interactive: if a person is in the chat, ask. Only skip questions when told "don't ask" or when no one can answer.
 
 ### 1.3 Plan, then attack your own plan
@@ -74,9 +76,9 @@ Rules and wording: `references/workflow-questions-and-effort.md`.
 Open `references/creative-direction.md` (process) and `references/creative/directions-library.md` (concepts).
 1. Write the **concept sentence** (a metaphor from outside software) and 3 mood words + 2 anti-words.
 2. Run the **category-cliché check**: name the predictable look for this product category and diverge on at least two axes (type, color, layout, imagery, motion, sound) unless the user asked for the expected look.
-3. Choose **one base style + at most one accent style** (`references/styles/_styles-index.md`).
+3. Choose the **style move** (`references/creative-direction.md` §3b): **apply** a catalogue style, **bend** it on 1–2 logged axes, **blend** one base + at most one accent, or **leave** the catalogue with a style card. Propose an alternative (with reasons) when the requested style is the category cliché or fights the product.
 4. Pick the **signature element** (one or two things that make it recognisable), often a hero typography move (`references/creative/hero-typography.md`).
-5. **Fonts:** follow the font priority in `references/typography.md` §0 (Satoshi-style modern grotesks first, characterful serif/display partners, overused defaults like Inter/Roboto/Poppins only as a logged choice) and check the licence (§9).
+5. **Fonts and colour by method, not habit:** pick a type *voice*, find fresh candidates with `scripts/fonts.py suggest` and check them with `fonts.py check` (overused registry, licence, scripts; `references/typography.md` §0); build the palette from a concept seed with `scripts/palette.py make` (both themes, contrast-checked, cliché report; `references/color.md` §12). Never reuse the previous project's pairing or palette by habit.
 6. Polished: write the brief (`references/design-brief-and-metrics.md`). All-out: show 2–3 genuinely different directions and let the user pick.
 
 ### 1.5 Build
@@ -85,7 +87,7 @@ Open `references/creative-direction.md` (process) and `references/creative/direc
 3. **Screens** with the matching recipe/pattern (`references/recipes/`, `references/page-and-flow-patterns.md`, `references/complex-product-patterns.md`) and platform rules (`references/platforms-and-devices.md`).
 4. **Built-in surfaces** at the chosen level (Match / Tint / Native): tooltips, scrollbars, sliders, checkboxes, selects, selection, caret, placeholder, autofill, file inputs, backdrops. Nothing keeps a default look by accident (`references/built-in-surfaces.md`).
 5. **Modern layer** (`references/modern-layer.md`) only after the screen works without it.
-6. **Media**: motion graphics/3D → `references/motion/`; sound/voice → `references/audio/`; video → `references/video/`. Each has its own pipeline, tech choice and verification.
+6. **Media**: ask the source first (`references/media-sourcing.md`), then motion graphics/3D → `references/motion/`; sound/voice → `references/audio/` (narration through `scripts/tts.py`); video → `references/video/`. Each has its own pipeline, tech choice and verification.
 7. Code: `references/design-tokens-and-code.md` Part 2. Tokens first, no magic numbers. Every web capability goes through MWG search → retrieve → apply before you write it (`references/modern-web-guidance.md` §2).
 
 ### 1.6 Verify for real
@@ -98,7 +100,7 @@ With each draft show the key decisions (5–8 rows in chat; the full log goes in
 |---|---|---|---|
 | Style | Swiss base + Kinetic Type accent | Dev tool for designers; precision with one expressive moment | DENT `styles/_styles-index.md` + User |
 | Hero type | 18vw cropped wordmark | Category cliché is centered gradient headline | Agent judgment |
-| Accent | #2F5BEA (5.2:1 on white) | Calm, trustworthy | DENT `color.md` Part 2 |
+| Accent | #1F6F5C kelp (6.1:1 as button) | Concept "a ship's chart room"; category cliché is bright blue | DENT `color.md` §12 + `scripts/palette.py` |
 
 **Source** is one of: `User`, `DENT <file §>`, `MWG <guide-id>` (web implementation), `Agent judgment`, or `Override` (§1.10). This is the attribution the user asked for: they can see what came from DENT and what came from you.
 
@@ -171,8 +173,8 @@ Motion explains change (object constancy) and must never carry meaning alone. So
 | G5 States | Empty, loading, error, success; hover, focus, active, disabled; long text; 0/1/many | Trigger them |
 | G6 Honesty | Non-negotiable 2 holds for every word and number | Read every number and quote |
 | G7 Proofread | No typos, duplicated words, mixed terms, lorem ipsum | Read all copy once, slowly |
-| G8 Style integrity | One base + ≤1 accent; signature moves present; tokens only; every built-in surface at the chosen level (no accidental defaults, no `title` tooltips) | Compare with style file + `scripts/verify_page.py --surfaces <level>` + surface sheet |
-| G9 Distinctiveness | Category-cliché check done; no unjustified item from `references/creative/anti-slop.md` | Name the cliché and the divergence |
+| G8 Style integrity | One coherent, documented system: a style file (applied, or bent with logged axes), one base + ≤1 accent, or an off-catalogue style card; signature moves present; tokens only; every built-in surface at the chosen level (no accidental defaults, no `title` tooltips) | Compare with the style file or style card + `scripts/verify_page.py --surfaces <level>` + surface sheet |
+| G9 Distinctiveness | Category-cliché check done; no unjustified item from `references/creative/anti-slop.md`; no overused-registry font or cliché palette without a logged reason | Name the cliché and the divergence; `scripts/fonts.py check`, `scripts/palette.py check` |
 | G10 Motion | Every planned motion item (M-ID) built and observed; minimum for the effort level met (`references/motion/motion-menu.md` §2); purpose for each; reduced-motion version works; no essential info only in motion | Motion plan + verify script (motion inventory, reduced-motion run) + look |
 | G11 Sound | No autoplay; mute/volume control; visual equivalent; loudness sane; works muted | `references/audio/audio-implementation-and-verification.md` |
 | G12 Licences | Fonts, icons, images, libraries, audio, voice, video sources recorded | Licence table in DESIGN.md |
@@ -204,6 +206,7 @@ Every command is a thin entry point into this same skill. Open the command file 
 | `/dent:system` | Inventory, create or extend a design system | `commands/system.md` |
 | `/dent:components` | Choose and integrate component/UI libraries | `commands/components.md` |
 | `/dent:surfaces` | Make tooltips, scrollbars, sliders, checkboxes, selects, selection and other built-in UI match the design | `commands/surfaces.md` |
+| `/dent:brainstorm` | Think through the direction with a candid partner that pushes back | `commands/brainstorm.md` |
 | `/dent:directions` | Explore 2–4 distinct creative directions | `commands/directions.md` |
 | `/dent:type` | Hero titles and expressive typography | `commands/type.md` |
 | `/dent:copy` | UX writing, headlines, microcopy | `commands/copy.md` |
@@ -219,6 +222,7 @@ Every command is a thin entry point into this same skill. Open the command file 
 | `/dent:score` | Score the work against the request, with evidence | `commands/score.md` |
 | `/dent:improve` | Fix the lowest-scoring items and re-score | `commands/improve.md` |
 | `/dent:handoff` | DESIGN.md, specs and developer handoff | `commands/handoff.md` |
+| `/dent:doctor` | Check what this machine can do (browser, FFmpeg, GPU, TTS engines, keys) and set up media tools with permission | `commands/doctor.md` |
 | `/dent:update` | Update the DENT plugin itself (refresh the marketplace so Claude's update works) | `commands/update.md` |
 
 ---
@@ -261,7 +265,8 @@ Run with the gates (§3) before presenting anything.
 
 Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and above, **write `SCORECARD.md` into the project** (from `templates/SCORECARD.md`), not just a summary in chat:
 1. **Scorecard** built from the request: requirements coverage first, then the criteria that matter for this deliverable (design, usability, accessibility, function, responsiveness, distinctiveness, motion, sound, video). 0–10 each **with evidence**. Unverified lines are capped at 6.
-2. **Target:** overall ≥ 8 and no line < 6. Below target → list the 3 highest-impact fixes and offer `/dent:improve`.
+2. **Target:** overall ≥ 8 and no line < 6, and no open Blocker (an open Blocker caps overall at 6 and is listed first). Below target → list the 3 highest-impact fixes and offer `/dent:improve`.
+   At Polished and All-out, run **three independent evaluators** (visual, UX, engineering) before the final score; any of them can reject the work (`references/workflow/scoring-and-closeout.md` §3b).
 3. **Attribution:** summarise which key decisions came from DENT, from the user, from your own judgment, and any Overrides.
 4. **Close-out:** what was built, requirements met, checks run and results, deviations, known issues, next step (one line). If MWG was consulted, end the delivering response with the `### Modern Web Guidance` disclosure (`references/modern-web-guidance.md` §2 step 5).
 5. **Approval:** end every delivered design with one question: "Approve it so I write DESIGN.md?" (or write DESIGN.md directly at All-out, marked Draft until approved). Then stop: no endless polishing.
@@ -277,7 +282,8 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 4. [Law]s still apply: a style changes how hierarchy looks, not whether there is hierarchy.
 5. The style's **Signature moves** must be present.
 6. Platform navigation and gestures stay native.
-7. **One base style + at most one accent style.** Never three. Record both in the Decision Log.
+7. **One base style + at most one accent style.** Never three. Bending a style or leaving the catalogue is allowed and encouraged when the concept needs it (`references/creative-direction.md` §3b): record the move, the bent axes or the style card in the Decision Log.
+8. A style's starter fonts and colours are starting points, not requirements: swap them for a fresh pairing and a concept palette and log the swap.
 
 ### 9.2 Reference map (open only what the task needs)
 
@@ -286,6 +292,8 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 | **Routing any request to the right commands and pipeline** | `references/workflow/orchestration.md` |
 | **Any HTML/CSS/client-side JS: Modern Web Guidance (primary web authority), precedence, DENT → MWG map, native-first, offline lookup** | `references/modern-web-guidance.md` (MWG skill itself: `../modern-web-guidance/SKILL.md`) |
 | Questions, effort levels, add-on routing, "don't ask" defaults | `references/workflow-questions-and-effort.md` |
+| **Where media comes from: local models, free/paid cloud, any provider, own assets; installing; per-media options** | `references/media-sourcing.md` |
+| **Brainstorming a direction: stance, pushback, techniques, direction brief** | `references/workflow/brainstorm.md` |
 | Task depth, PLAN.md, plan audit, approval, traceability, decisions | `references/workflow/planning-and-plan-audit.md` |
 | Phased execution, scope protection, design-system inventory, definition of done | `references/workflow/execution-and-scope.md` |
 | Verification: functional, visual, responsive, a11y, performance, regression, journeys | `references/workflow/verification.md` |
@@ -299,7 +307,7 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 | **Built-in surfaces: tooltips, scrollbars, sliders, checkboxes, selects, selection, caret, placeholder, autofill… Match / Tint / Native** | `references/built-in-surfaces.md` |
 | **Motion menu: which kinds of motion to ask about, intensities, minimum motion per effort level** | `references/motion/motion-menu.md` |
 | Interface motion, hover, scroll, depth, typography craft | `references/modern-layer.md` |
-| Concept, category cliché, composition, directions process | `references/creative-direction.md` |
+| Concept, category cliché, composition, directions process, style moves (apply / bend / blend / leave) | `references/creative-direction.md` |
 | Named creative directions (web, motion, sound, video) | `references/creative/directions-library.md` |
 | Hero titles and expressive typography | `references/creative/hero-typography.md` |
 | Generic/AI-slop detection with reasons | `references/creative/anti-slop.md` |
@@ -334,6 +342,6 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 | Reference sites and inspiration | `references/inspiration-and-reference-sites.md` |
 | DESIGN.md | `references/design-md-template.md` |
 | Templates | `templates/PLAN.md`, `templates/AUDIT.md`, `templates/REVIEW.md`, `templates/SCORECARD.md`, `templates/MOTION.md`, `templates/SOUND.md`, `templates/VIDEO.md` |
-| Checks you can run | `scripts/verify_page.py`, `scripts/contrast.py`, offline MWG lookup `scripts/mwg.py`; plugin updater `scripts/update_plugin.py` |
+| Checks and tools you can run | `scripts/verify_page.py`, `scripts/contrast.py`, `scripts/palette.py` (concept palettes + cliché check), `scripts/fonts.py` (fresh fonts + overuse/licence check), `scripts/tts.py` (narration across engines + mastering + captions), `scripts/doctor.py` (what this machine can do), offline MWG lookup `scripts/mwg.py`; plugin updater `scripts/update_plugin.py` |
 
 To extend DENT: new styles follow `references/styles/_style-template.md` + a row in the index; new catalogue entries follow `references/catalog/README.md`; new topics get a reference file, a row above, and a row in the add-on routing table.
