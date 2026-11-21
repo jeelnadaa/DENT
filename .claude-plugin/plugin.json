@@ -1,6 +1,6 @@
 {
   "name": "dent",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "DENT 2.0: design-engineering skill for interfaces, motion graphics, 3D, sound, narration and video. Routes any request to the right workflow, plans and audits, picks distinctive directions and the right libraries, verifies with real checks, scores itself, and writes DESIGN.md. Bundles Google's Modern Web Guidance as the primary authority for HTML, CSS and client-side JS.",
   "author": {
     "name": "Jeel Nada (solarquack)",

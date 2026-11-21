@@ -15,6 +15,9 @@ Visual inspection alone is not verification, and code that compiles is not a wor
 | Project tests (Vitest, Jest, Playwright, Cypress) | Behavioural proof | Don't add a test framework unasked; describe the manual test |
 | Lighthouse / axe | Performance and automated a11y | Mark "Not run" |
 | ffprobe / ffmpeg | Video/audio duration, loudness, streams | Inspect in a player; mark "Not run" |
+| `scripts/doctor.py` | What this machine can run (browser, FFmpeg, GPU, TTS engines, keys present) | Ask the user what they have |
+| `scripts/palette.py check`, `scripts/fonts.py check` | Contrast of every role pair + cliché report; font overuse and licence (G9, G12) | Compare with `../color.md` §11 and `../typography.md` §0.1 by hand |
+| `scripts/tts.py post` | Narration loudness PASS/FAIL, captions, timing | ffmpeg `loudnorm` summary |
 
 Prefer tools already installed in the project. Don't add dependencies just to satisfy a checklist.
 
@@ -25,11 +28,13 @@ python scripts/verify_page.py path/to/index.html --out .dent/verify
 python scripts/verify_page.py http://localhost:3000 --out .dent/verify --widths 320 375 390 768 1024 1440
 python scripts/verify_page.py path/to/index.html --surfaces match   # also gate built-in surfaces (built-in-surfaces.md)
 python scripts/contrast.py "#1A1A1A:#FFFFFF" "#6B7280:#FFFFFF"
+python scripts/palette.py check bg=#F6FAFC text=#111619 muted=#555C61 accent=#A8236E on-accent=#FCFEFF   # contrast + cliché report
+python scripts/fonts.py check "<display face>" "<body face>" --verify                                  # overuse + licence
 ```
 
 **Known traps (seen in real runs):** some agent browser panes freeze CSS/JS animations at the first frame, so screenshots of animated pages look broken or empty: re-capture with headless Playwright (`verify_page.py`). Opening a page from `file://` blocks font preloads and some fetches (CORS): remove preloads or serve the folder (`python -m http.server`). WebGL may be unavailable in headless browsers: check that the page shows its fallback, then verify 3D on a real GPU if possible.
 
-`verify_page.py` reports (exit code 1 if any gate fails): horizontal overflow per width with the offending elements, unlabeled form controls, unnamed buttons/links, images without alt, low-contrast text samples, whether animations stop under `prefers-reduced-motion`, a motion inventory (keyframes, transitions, hover rules and whether they're pointer-guarded, scroll-driven animations, libraries), autoplaying audio/video and AudioContexts started without a user gesture, mechanical Modern Web Guidance violations (G13: global reduced-motion reset, lazy or deprioritised LCP image, `fetchpriority="high"` combined with lazy loading, `role="dialog"`/`aria-modal` added to a native `<dialog>`, plus warnings for custom ARIA dialogs and a missing `color-scheme` declaration), console errors, and saves full-page screenshots. **Then open the screenshots and look at them.** The script finds mechanical defects; you find design defects.
+`verify_page.py` reports (exit code 1 if any gate fails): horizontal overflow per width with the offending elements, unlabeled form controls, unnamed buttons/links, images without alt, low-contrast text samples, whether animations stop under `prefers-reduced-motion`, a motion inventory (keyframes, transitions, hover rules and whether they're pointer-guarded, scroll-driven animations, libraries), autoplaying audio/video and AudioContexts started without a user gesture, mechanical Modern Web Guidance violations (G13: global reduced-motion reset, lazy or deprioritised LCP image, `fetchpriority="high"` combined with lazy loading, `role="dialog"`/`aria-modal` added to a native `<dialog>`, plus warnings for custom ARIA dialogs and a missing `color-scheme` declaration), console errors, and saves full-page screenshots. **Then open the screenshots and look at them.** The script finds mechanical defects; you find design defects. When the page has scroll-driven animations, the full-page screenshots are taken with reduced motion (a full-page capture never scrolls, so entry effects below the fold would look like missing content); check the motion version in a real browser by scrolling through it.
 
 ## 3. Functional checks (only what is in scope)
 

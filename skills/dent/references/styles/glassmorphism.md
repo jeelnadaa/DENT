@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | **A colorful background is required** (gradient, blurred blobs, photo). Glass panels: white at 10–25% opacity (light) or black/white at 6–15% (dark). Text solid white or near-black. |
-| Typography | Clean geometric/neo-grotesque sans (Satoshi, General Sans, Plus Jakarta Sans, SF Pro on Apple). Medium weights. |
+| Typography | Clean geometric/neo-grotesque sans (SUSE, Albert Sans, Rethink Sans, SF Pro on Apple). Medium weights. |
 | Spacing / layout | Floating cards with clear gaps so the background shows between them. |
 | Radius | Large: controls 12px, containers 20–28px. |
 | Borders | **1px semi-transparent white border** (rgba 255,255,255,.25–.4) — catches "light" on the glass edge. |
@@ -41,10 +41,10 @@
 ## Starter tokens
 ```css
 :root{
-  --bg:linear-gradient(135deg,#4F46E5 0%,#9333EA 45%,#EC4899 100%);
+  --bg:linear-gradient(in oklch 135deg,#0F5F66 0%,#2B4C8C 50%,#7C2D5E 100%); /* any rich backdrop from the concept; avoid the indigo→purple→pink template gradient */
   --glass:rgb(255 255 255 / .16); --glass-strong:rgb(255 255 255 / .28); --glass-border:rgb(255 255 255 / .35);
-  --text:#FFFFFF; --text-2:rgb(255 255 255 / .8); --accent:#FFFFFF; --on-accent:#3B1E8F;
-  --font-sans:"Satoshi","Plus Jakarta Sans",system-ui,sans-serif;
+  --text:#FFFFFF; --text-2:rgb(255 255 255 / .8); --accent:#FFFFFF; --on-accent:#1D3A5F;
+  --font-sans:"SUSE","Albert Sans",system-ui,sans-serif;
   --radius-control:12px; --radius-container:24px;
   --blur:blur(24px) saturate(160%);
   --shadow-1:0 8px 32px rgb(0 0 0 / .18);

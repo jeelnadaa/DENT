@@ -43,5 +43,13 @@
 ## Screenshots
 List file paths (and what to look at in each).
 
-## Open issues
+## Independent evaluators
+Fresh context per evaluator where the agent can start subagents (request + DESIGN.md/PLAN.md + screenshots + check output + files; not the builder's reasoning). Otherwise say "not independent".
+| Evaluator | Verdict | Independent? | Findings (severity · evidence) |
+|---|---|---|---|
+| Visual | Accept / Accept with fixes / Reject | | |
+| UX | | | |
+| Engineering | | | |
+
+## Open issues (by severity: Blocker / High / Medium / Low)
 -

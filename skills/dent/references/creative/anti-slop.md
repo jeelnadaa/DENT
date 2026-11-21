@@ -27,6 +27,9 @@ Used by gate G9 (SKILL.md §3), `/dent:review`, `/dent:polish`, `/dent:score`.
 | OS-default surfaces on a designed page (blue checkboxes, grey scrollbars on a dark theme, `title` tooltips, unstyled sliders and selects) | Nobody decided; reads as unfinished | The product deliberately chose the native look (logged) | Built-in surfaces at the chosen level (`../built-in-surfaces.md`) |
 | Dark mode + neon by default | Category reflex | Product is used at night/creative/dev and brand fits | Choose mode from context of use |
 | Espresso + orange for coffee, navy + mint for fintech, pastel teal for health | Category cliché | User asked for the expected look | Diverge on ≥ 2 axes (directions-library §1) |
+| **Second-order "tasteful AI" look:** cream/sand paper background + terracotta or burnt-orange accent + a serif headline with one italic word (often Instrument Serif or Fraunces) + Satoshi/General Sans/DM Sans body | It is what every "avoid the AI look" guide prescribes, so it became the new default | The brand genuinely owns it, or it is a paper-era style (vintage, japandi) applied on purpose | A concept palette (`../color.md` §12, `scripts/palette.py` flags it) and a type voice from `../typography.md` §0 |
+| Acid lime / chartreuse on near-black, or safety orange on navy, as "bold" | Second-order default for "edgy" | The concept is literally signage, safety or sport | A seed from the concept; one bold colour on a tinted neutral |
+| The same fonts or palette as the previous project | DENT outputs start to look related | Same brand | Rotate: `scripts/fonts.py suggest`, a new seed |
 
 ## 3. Layout slop
 - **Centered everything:** long centered text, no tension. → Left-aligned reading, asymmetric grid, one centered moment.
@@ -58,7 +61,7 @@ Used by gate G9 (SKILL.md §3), `/dent:review`, `/dent:polish`, `/dent:score`.
 - A click sound on every button. → Sound only for meaningful, infrequent events.
 - Stock "corporate ukulele/whistle" or generic upbeat royalty-free loop. → A music bed that fits the concept, or silence + sound design.
 - Whoosh on every cut; riser before every title. → Sound design follows the edit's rhythm and emphasis; silence before the key moment.
-- Robotic default TTS voice without pronunciation fixes. → Choose a voice deliberately, fix pronunciations, pace at ~140–160 wpm, add breaths/pauses.
+- Robotic default TTS voice without pronunciation fixes. → Ask where the voice comes from, compare 2–3 natural engines blind (`scripts/tts.py compare`: Qwen3-TTS, Chatterbox, Kitten TTS 2, a paid provider), fix pronunciations, pace at ~140–160 wpm, add pauses, master with `tts.py post`.
 - Video that opens with a logo animation for 5 seconds. → Hook in the first 2 seconds; logo at the end or small.
 - Stock footage of people pointing at screens. → Real product, real use, or illustration with a concept.
 

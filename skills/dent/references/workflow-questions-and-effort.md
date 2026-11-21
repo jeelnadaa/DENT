@@ -43,7 +43,7 @@ The user decides how deep the design goes. **Ask this first** (question 0), with
 
 ### The floor (every level, including Essential — never skipped)
 - **Consistency:** tokens for color, type, spacing, radius, elevation; each component defined once and reused (`foundations-and-components.md` §3, › Components).
-- **Color rules:** three-role palette (or brand/style colors), contrast checked, never color alone.
+- **Color rules:** a concept-led palette (brand colours, the style's, or `scripts/palette.py`; `color.md` §12), every role pair contrast checked, never color alone.
 - **Foundation components** needed by the screen (buttons, inputs, selection controls, cards, nav…) with default, hover, focus, disabled and error states.
 - **Core laws:** clear hierarchy, one primary action, proximity/alignment, Fitts, Hick, Jakob.
 - **Accessibility minimum** (SKILL.md › Accessibility) and the pre-ship checklist's core items.
@@ -59,7 +59,7 @@ The user decides how deep the design goes. **Ask this first** (question 0), with
 | Screen states | Default + error | + empty, loading, success | + edge cases, content stress | + offline, permissions, all edge cases |
 | Layout & responsive | Mobile + desktop | All breakpoints + platform rules | + container queries, fluid type/spacing | + every surface in scope (tablet, desktop app…) |
 | Patterns | Basic structure | Matching page/flow pattern | + industry playbook | + IA/sitemap, full flows |
-| Motion | State transitions only (100–200ms) | Motion tokens + subtle feedback | Hover system, scroll reveals, shared transitions | Signature hero moments, choreography, springs, sound/haptics if relevant |
+| Motion (the floor in `motion/motion-menu.md` §2 is authoritative) | Hero entrance + hover on all interactive elements + micro-interactions (pages); state transitions and micro-interactions (apps) | + varied scroll reveals, one scroll-linked moment, text reveal; motion tokens | + depth or pinned scene, view transitions, animated SVG, ambient, magnetic hero CTAs | + a signature motion-graphics sequence, scrubbed scroll story, pointer layer, sound sync if relevant |
 | Typography | Type scale, 1–2 fonts | + style pairing | + typography craft (tracking, balance, fluid) | + expressive/kinetic moments |
 | Color & theme | One mode | One mode, full semantic set | Light + dark | + high contrast, theme switching, brand scales |
 | Built-in surfaces (`built-in-surfaces.md`) | Tint: accent on native controls, themed scrollbars, selection, no `title` tooltips | Match: tooltips, scrollbars, sliders, checkboxes, selects, selection, caret, placeholder | + autofill, validation, file input, progress, disclosure markers, backdrops; surface sheet | + every surface in every state and theme, forced colors, style-specific personality |
@@ -94,14 +94,15 @@ Rules:
 | 3 | **Scope of this round** | Avoids over-building | One key screen first (Recommended) · A full flow (e.g. onboarding) · Full set of main screens · Design system only |
 | 4 | **Overall look (aesthetic style)** | Biggest visual decision | 2–3 styles from styles/_styles-index.md that fit the product + feeling words in the prompt; or "I have a reference site/screenshot" (→ inspiration-and-reference-sites.md §2) |
 | 5 | **Light or dark** | Base of the palette | Light · Dark · Both (with toggle) — recommend based on product and context of use |
-| 6 | **Colors** | Brand feel | "I have brand colors" (ask for hex/logo) · 2–3 palettes from color.md Part 2 or the style's tokens, each shown as swatches with a mood line |
-| 7 | **Typography** | Personality + readability | 2–3 pairings from typography.md §3 that fit the chosen style, each with a sample line and a mood note |
+| 6 | **Colors** | Brand feel | "I have brand colors" (ask for hex/logo) · 2–3 concept palettes (color.md §13, or seeds run through `scripts/palette.py`), each shown as swatches in both themes with its scene line |
+| 7 | **Typography** | Personality + readability | First where fonts may come from (free and open · fonts I own / Adobe Fonts · suggest paid fonts · you decide), then 2–3 pairings by voice (typography.md §2–§3, fresh candidates from `scripts/fonts.py`), each with a real sample line |
 | 8 | **Density** | Spacing and component sizes | Comfortable (Recommended for most) · Compact (data-heavy/pro tools) · Spacious (marketing/luxury) |
 | 9 | **Motion: which kinds** (multi-select) **+ intensity** | How alive it feels; what gets built | Kinds: hero entrance · scroll · hover · micro-interactions · page/view transitions · text · data · layout · ambient · cursor · SVG/illustration · loading/feedback · 3D/depth · gestures · You choose. Intensity: Subtle · Balanced (Recommended) · Expressive · Cinematic. Script and recommended sets: `motion/motion-menu.md` |
 | 9b | **Built-in surfaces** (Standard+ visual builds) | Tooltips, scrollbars, sliders, checkboxes and dropdowns otherwise show OS defaults | Match my design everywhere (Recommended) · Brand tint only · Keep the native look · Let me choose per element. Script: `built-in-surfaces.md` §2 |
 | 10 | **Corner shape** (only if the style allows choice) | Personality | Sharp (0–4px) · Soft (8–12px) · Round (16px+/pills) |
 | 11 | **References** (optional) | Fast alignment | "Any app or site whose look you like?" — free answer |
 | 12 | **Content & must-haves** | Real content beats placeholders | Key sections/features, logo, real copy, images available? |
+| 13 | **Media sources** (any build with imagery, footage, voice, music, 3D) | Quality, cost and licence of everything not drawn in code | Local model (installed after a yes) · free cloud tier · paid provider or connector (any, even unlisted) · your own assets. Script: `media-sourcing.md` §2 |
 
 **How many questions per effort level:** Essential ≤ 3 (effort, look/colors, light/dark) · Standard ~5–6 · Polished ~7–9 · All-out ~10–14 (adds brand, references, content, research questions). Still one at a time; the user can say "skip" anytime.
 
@@ -132,6 +133,9 @@ When the user asks to add something to an existing design:
 
 | User asks for… | Read |
 |---|---|
+| "Let's brainstorm", "what direction?", "is this a good idea?" | workflow/brainstorm.md (`/dent:brainstorm`) |
+| Where media comes from, "use my ElevenLabs/Runway/…", "find me a free model", local vs cloud vs own assets, installing a model | media-sourcing.md (+ `/dent:doctor`) |
+| "What can you do on this machine?", missing tools, GPU, installed voices | `/dent:doctor` (scripts/doctor.py) |
 | Any web code change: HTML, CSS, client-side JS, a component, "use the modern way", browser support, Core Web Vitals, "modernize the codebase" | modern-web-guidance.md (search + retrieve the MWG guides first; native first; legacy scan only for broad modernization) |
 | Animations, transitions, micro-interactions, "more motion" | `motion/motion-menu.md` (ask kinds + intensity, minimums) + `modern-layer.md` (motion system, micro-interactions, reduced motion, performance) |
 | Hover effects | `modern-layer.md` §7.4 |
@@ -148,7 +152,7 @@ When the user asks to add something to an existing design:
 | Translation, RTL, Hindi/Indic, other languages | internationalization.md |
 | Better copy, error messages, tone | ux-writing.md |
 | Icons, illustrations, photos | icons-illustration-and-imagery.md |
-| Fonts, "change the typography" | typography.md |
+| Fonts, "change the typography", "fonts look generic" | typography.md (§0 method, `scripts/fonts.py`) |
 | Logo, brand | brand-identity.md |
 | Favicon, app icon, OG image, social posts, posters, slides, email | assets-and-marketing-graphics.md |
 | Motion graphics, kinetic type, animated hero, scroll story, generative visuals | motion/motion-graphics.md + motion/motion-tech-catalog.md (`/dent:motion-graphics`) |
@@ -180,11 +184,12 @@ Choose the best default from this skill, in this order, and record each as **"Ch
 1. **Product type & platform:** infer from the prompt; if unclear → responsive web.
 2. **Style:** match the prompt's words and product type using `styles/_styles-index.md` → "Pick by feeling". If nothing matches: **Minimal** for apps/tools, **Premium Product** for marketing pages.
 3. **Mode:** light for productivity, reading, commerce, daytime use; dark for media, creative, developer tools, night use.
-4. **Colors:** the chosen style's starter tokens; if the style doesn't fix colors, the best-matching palette in `color.md` Part 2.
-5. **Typography:** the style's suggested fonts.
+4. **Colors:** a concept palette: the matching scene in `color.md` §13 or a seed from the concept run through `scripts/palette.py make` (both themes, contrast-checked, no cliché hit). A style's starter colors only when the style depends on them.
+5. **Typography:** free and open fonts; a pairing by voice (`typography.md` §2–§3, `scripts/fonts.py`), never an overused-registry face by default and never the previous project's pairing.
 6. **Density:** comfortable; compact for data-heavy tools.
 7. **Motion:** the recommended set for the product type at Balanced intensity (`motion/motion-menu.md` §4), meeting the floor for the effort level (§2).
 7b. **Built-in surfaces:** Tint at Essential, Match at Standard and above; in an existing product, its current level applied consistently (`built-in-surfaces.md` §2).
+7c. **Media sources:** local models when the machine runs them and their licence fits (installing needs a yes, so without one use code-built media), otherwise code-built media or verified free libraries (`media-sourcing.md` §2).
 8. Everything else: DENT defaults (`foundations-and-components.md`, `modern-layer.md`).
 
 Then present the design with a short "Decisions I made" summary and invite changes. The user can still change anything later.

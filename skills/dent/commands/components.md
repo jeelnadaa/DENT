@@ -15,7 +15,7 @@ Choose, install and customise the right component/UI libraries for this project.
 1. Detect framework, language, styling, existing libraries and browser-support policy.
 2. List functional needs and the visual direction. For each need, search Modern Web Guidance first: if the platform covers it natively (dialog, popover, menu, tooltip, accordion, switch, select, tabs, drawer, toast, carousel), recommend the native build instead of a library (references/modern-web-guidance.md §5).
 3. Shortlist 2–3 options per need from the catalogue; compare compatibility, accessibility, customisation, performance, licence, maintenance, design fit.
-4. Recommend one per job with trade-offs; check the licence from the official source.
+4. Recommend one per job with trade-offs; run the dependency checklist (component-selection.md §4b) and check the licence from the official source.
 5. Install, theme to DESIGN.md tokens, and verify keyboard/a11y behaviour.
 
 ## Output

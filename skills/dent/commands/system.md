@@ -7,10 +7,10 @@ Inventory, create or extend a design system (tokens, components, docs).
 **Web code:** if this command writes, changes or reviews HTML, CSS or client-side JS, Google's Modern Web Guidance is the primary authority for how it is built: run `references/modern-web-guidance.md` §2 (search → retrieve → apply → verify → disclose) before coding; MWG wins any implementation conflict with DENT.
 
 ## Load
-- `references/workflow/execution-and-scope.md §1–2`
+- `references/workflow/execution-and-scope.md` §1–2
 - `references/design-tokens-and-code.md`
 - `references/foundations-and-components.md`
-- `references/tooling-and-handoff.md §3`
+- `references/tooling-and-handoff.md` §3
 
 ## Steps
 1. Inventory foundations, components, behaviour and implementation; classify findings (Healthy, Inconsistent, Missing, Outdated, Conflicting, Intentional exception).

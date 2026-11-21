@@ -14,7 +14,7 @@ Difference from **Minimal**: Minimal is cool and digital (white + black + accent
 | Area | Override |
 |---|---|
 | Color | Warm neutrals: rice paper #F5F1EA, linen #E8E1D5, stone #B9B2A6, charcoal #2E2B28, muted accents: indigo #3E4A61, moss #6B705C, rust #9C5A3C (one only). |
-| Typography | Light, refined sans (Manrope, "Karla", "Work Sans" light, "Zen Kaku Gothic New"); optional elegant serif ("Cormorant", "Shippori Mincho") for headings. Small sizes, generous spacing. |
+| Typography | Light, refined sans ("Albert Sans", "Karla", "Work Sans" light, "Zen Kaku Gothic New"); optional elegant serif ("Cormorant", "Shippori Mincho") for headings. Small sizes, generous spacing. |
 | Spacing / layout | **Asymmetric balance with lots of empty space (ma)**; low density; content aligned to a quiet grid. |
 | Radius | Small (2–6px) or natural (slightly rounded like wood edges). |
 | Borders | Thin, soft (stone at low contrast for decoration; ≥ 3:1 for inputs). |
@@ -44,7 +44,7 @@ Difference from **Minimal**: Minimal is cool and digital (white + black + accent
 :root{
   --bg:#F5F1EA; --surface:#EDE7DC; --text:#2E2B28; --text-2:#5E5850; --border:#CFC7B9; --border-input:#8F877A;
   --accent:#3E4A61; --on-accent:#F5F1EA;
-  --font-sans:"Manrope",system-ui,sans-serif; --font-serif:"Cormorant Garamond",serif;
+  --font-sans:"Albert Sans","Karla",system-ui,sans-serif; --font-serif:"Cormorant Garamond",serif;
   --radius-control:4px; --radius-container:6px;
   --dur:500ms; --ease:cubic-bezier(.25,.1,.25,1);
 }

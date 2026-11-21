@@ -8,9 +8,9 @@ Focused accessibility audit and remediation (WCAG 2.2 AA).
 
 ## Load
 - `references/accessibility.md`
-- `references/workflow/verification.md §5`
+- `references/workflow/verification.md` §5
 - `scripts/verify_page.py`
-- `references/modern-web-guidance.md (mwg:accessibility + the component guides)`
+- `references/modern-web-guidance.md` (mwg:accessibility + the component guides)
 
 ## Steps
 1. Run automated checks (verify script, axe if available).

@@ -146,7 +146,7 @@ def check_commands() -> int:
 
 def check_catalogues() -> int:
     files = [*(REFS / "catalog").glob("*.md"), REFS / "motion" / "motion-tech-catalog.md", REFS / "audio" / "audio-tech-catalog.md",
-             REFS / "video" / "video-tools-and-pipeline.md"]
+             REFS / "video" / "video-tools-and-pipeline.md", REFS / "media-sourcing.md", REFS / "audio" / "voice-and-narration.md"]
     rows = 0
     for f in files:
         if f.name in ("README.md", "component-selection.md"):
@@ -179,9 +179,72 @@ def check_repo(fm: dict[str, str]) -> None:
     for t in ("PLAN", "AUDIT", "REVIEW", "SCORECARD", "MOTION", "SOUND", "VIDEO"):
         if not (SKILL / "templates" / f"{t}.md").is_file():
             errors.append(f"missing template templates/{t}.md")
-    for s in ("verify_page.py", "contrast.py"):
+    for s in ("verify_page.py", "contrast.py", "palette.py", "fonts.py", "tts.py", "doctor.py", "data/google-fonts.json"):
         if not (SKILL / "scripts" / s).is_file():
             errors.append(f"missing script skills/dent/scripts/{s}")
+
+
+def check_capabilities() -> int:
+    """Guard against capabilities that are promised but never triggered (the 'go all out skips motion' class of bug)."""
+    n = 0
+    cmds = {p.stem: p.read_text(encoding="utf-8") for p in (SKILL / "commands").glob("*.md")}
+    allout = (REFS / "workflow" / "all-out.md").read_text(encoding="utf-8")
+    sec0 = allout.split("## 0.", 1)[1].split(chr(10) + "## 1.", 1)[0] if "## 0." in allout else ""
+    if not sec0:
+        errors.append("all-out.md has no §0 capability list")
+    for name in re.findall(r"\|\s*`([a-z0-9-]+)`(?:\s*/\s*`([a-z0-9-]+)`)?(?:\s*\+[^|]*)?\s*\|", sec0):
+        for c in filter(None, name):
+            n += 1
+            if c not in cmds:
+                errors.append(f"all-out.md §0 lists `{c}`, which is not a command")
+    for must in ("motion", "surfaces", "type", "copy", "assets", "directions", "review", "sound", "voice", "video", "3d", "brand"):
+        if f"`{must}`" not in sec0:
+            errors.append(f"all-out.md §0 capability list is missing `{must}`")
+    # commands that build visual UI must actually run motion and surfaces, not just mention them
+    for c in ("create", "redesign"):
+        t = cmds.get(c, "")
+        for need in ("commands/motion.md", "commands/surfaces.md"):
+            if need not in t:
+                errors.append(f"commands/{c}.md never runs {need} (motion/surfaces would be skipped)")
+    orch = (REFS / "workflow" / "orchestration.md").read_text(encoding="utf-8")
+    for line in orch.splitlines():
+        if "go all out" in line.lower() and "landing page" in line.lower() and "motion (" not in line:
+            errors.append("orchestration.md: the All-out landing-page example must include the motion command")
+    if "all-out.md` §0" not in orch:
+        errors.append("orchestration.md must expand pipelines with the All-out capability list (all-out.md §0)")
+    # every media command asks where media comes from
+    for c in ("voice", "video", "launch-video", "sound", "assets", "3d", "motion-graphics", "brand"):
+        if "media-sourcing.md" not in cmds.get(c, ""):
+            errors.append(f"commands/{c}.md doesn't ask where media comes from (references/media-sourcing.md)")
+    # effort tables must not undercut the motion floor (motion-menu.md §2 is the motion authority)
+    lp = (REFS / "recipes" / "landing-page.md").read_text(encoding="utf-8")
+    ess = next((ln for ln in lp.splitlines() if ln.startswith("| Essential |")), "")
+    if ess and "motion-menu.md" not in ess:
+        errors.append("recipes/landing-page.md: the Essential row must point to the motion floor (motion/motion-menu.md §2)")
+    wq = (REFS / "workflow-questions-and-effort.md").read_text(encoding="utf-8")
+    if "| Motion" in wq and "motion-menu.md" not in next((ln for ln in wq.splitlines() if ln.startswith("| Motion")), ""):
+        errors.append("workflow-questions-and-effort.md: the Motion row of the effort table must defer to motion/motion-menu.md §2")
+    # starter fonts in style files: warn when a style's first face is on the overused registry
+    try:
+        sys.path.insert(0, str(SKILL / "scripts"))
+        from fonts import OVERUSED  # type: ignore
+    except Exception:  # noqa: BLE001
+        OVERUSED = {}
+    try:
+        import palette as _P  # type: ignore
+        for f in STYLES.glob("*.md"):
+            for h in set(re.findall(r"#[0-9A-Fa-f]{6}", f.read_text(encoding="utf-8"))):
+                for ref, why in _P.CLICHES:
+                    if _P.delta(h, ref) < 0.02:
+                        warnings.append(f"{rel(f)}: {h} is the template colour {ref} ({why}); use a concept colour or log why")
+    except Exception:  # noqa: BLE001
+        pass
+    allowed = {"material.md": {"Roboto"}, "brutalism.md": {"Arial"}}
+    for f in STYLES.glob("*.md"):
+        for fam in re.findall(r"--font-[a-z0-9-]+:\s*\"([^\"]+)\"", f.read_text(encoding="utf-8")):
+            if fam in OVERUSED and fam not in allowed.get(f.name, set()):
+                warnings.append(f"{rel(f)}: starter font '{fam}' is on the overused registry (typography.md §0.1)")
+    return n
 
 
 def check_mwg() -> int:
@@ -234,6 +297,7 @@ def main() -> int:
     cmds = check_commands()
     rows = check_catalogues()
     mwg_refs = check_mwg()
+    check_capabilities()
     check_repo(fm)
     for w in warnings:
         print(f"warning: {w}")

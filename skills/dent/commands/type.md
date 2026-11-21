@@ -9,7 +9,7 @@ Design hero titles and expressive typography (custom type compositions).
 ## Load
 - `references/creative/hero-typography.md`
 - `references/typography.md`
-- `references/modern-layer.md §7.1`
+- `references/modern-layer.md` §7.1
 
 ## Steps
 1. Pick the type role: wordmark-scale, editorial, kinetic, typographic system, data-type.

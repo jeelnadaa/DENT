@@ -103,7 +103,7 @@ Fill the scorecard (`../workflow/scoring-and-closeout.md`). Landing-page lines: 
 ## Minimum bars by effort
 | Effort | Adds |
 |---|---|
-| Essential | Steps 1–3, 6, 8–10; one hero technique; no motion beyond state changes |
+| Essential | Steps 1–3, 6, 8–10; one hero technique; the Essential motion floor (`../motion/motion-menu.md` §2: hero entrance, hover on every interactive element, micro-interactions on buttons/toggles) |
 | Standard | + direction (Step 4) + hero craft + subtle motion |
 | Polished | + brief, product demo interactivity, dark/light, hover system, scroll moment, OG image + favicon |
 | All-out | + 2–3 directions to pick from, bespoke hero composition, motion-graphics moment, optional sound toggle, social/OG kit, launch video plan, full a11y pass, Lighthouse numbers, and the All-out sweep (`../workflow/all-out.md` §2) |

@@ -22,6 +22,8 @@ You only need `/dent`: the router (`skills/dent/references/workflow/orchestratio
 | `/dent:system` | Inventory, create or extend a design system (tokens, components, docs). |
 | `/dent:components` | Choose, install and customise the right component/UI libraries for this project. |
 | `/dent:surfaces` | Make every built-in browser surface match the product design: tooltips, scrollbars, sliders, checkboxes, radios, switches, selects, text selection, caret, placeholder, autofill, file inputs, progress and backdrops. |
+| `/dent:brainstorm` | Think through design direction with the user: a candid creative partner that questions assumptions, offers real alternatives and pushes back with reasons instead of simply agreeing. |
+| `/dent:doctor` | Check what this machine and session can actually do (browser checks, FFmpeg, GPU, installed TTS engines, provider keys) and set up missing media tools with the user's permission. |
 | `/dent:directions` | Explore 2–4 genuinely different creative directions before committing. |
 | `/dent:type` | Design hero titles and expressive typography (custom type compositions). |
 | `/dent:copy` | Write or fix UX copy: headlines, CTAs, microcopy, errors, empty states. |
@@ -48,7 +50,7 @@ The main entry point: understand any design, front-end or media request, pick th
 - **Usage:** `/dent <anything you want designed, built, fixed, reviewed or produced>`
 - **Default depth:** decided by the router
 - **Loads:** references/workflow/orchestration.md; SKILL.md §1.0 and §3
-- **Does:** Fill the signal card from orchestration → Map the signals to a main command + companions with the table in Step 2 → Expand into the default pipeline for each deliverable (Step 3) and tell the user the plan in one line → Ask only the questions the pipeline needs, one at a time, effort first (Step 4) → Run each sub-command's file (`commands/<name> → If the effort is All-out, also run `references/workflow/all-out → Finish with one close-out
+- **Does:** Fill the signal card from orchestration → Map the signals to a main command + companions with the table in Step 2 → Expand into the default pipeline for each deliverable (Step 3) and tell the user the plan in one line → Ask only the questions the pipeline needs, one at a time, effort first (Step 4) → Run each sub-command's file (`commands/<name> → If the effort is All-out, fill the All-out capability list (`references/workflow/all-out → Before any media work run `python scripts/doctor → Finish with one close-out
 - **Delivers:** Whatever the pipeline produces, plus the gate results, scorecard(s), attribution and a one-line next step.
 - **Definition:** [`skills/dent/commands/dent.md`](../skills/dent/commands/dent.md)
 
@@ -70,8 +72,8 @@ Create a new product, page, site or interface from scratch.
 - **Usage:** `/dent:create <what to create>`
 - **Default depth:** Standard or Advanced
 - **Loads:** references/workflow-questions-and-effort.md; references/creative-direction.md; references/creative/directions-library.md; references/recipes/landing-page.md or references/recipes/app-and-dashboard.md; references/foundations-and-components.md; references/workflow/verification.md
-- **Does:** Ask the effort level first, then only missing essentials (or decide everything if told to) → Plan (inline for Standard, PLAN → Direction → Follow the recipe step by step, including every gate inside it → Build tokens → components → screens → built-in surfaces at the chosen level (references/built-in-surfaces → Verify (verify_page
-- **Delivers:** Working files, Decision Log, gate results, scorecard, attribution; DESIGN.md after approval.
+- **Does:** Ask the effort level first, then only missing essentials (or decide everything if told to) → Plan (inline for Standard, PLAN → Direction → Follow the recipe step by step, including every gate inside it → Choose type and colour by method, not habit → Build tokens → components → screens → built-in surfaces at the chosen level (run commands/surfaces → Motion at Standard+ → Imagery and media → Verify (verify_page
+- **Delivers:** Working files, Decision Log, gate results, motion plan (planned vs built), scorecard, attribution; DESIGN.md after approval.
 - **Definition:** [`skills/dent/commands/create.md`](../skills/dent/commands/create.md)
 
 ### `/dent:redesign`
@@ -81,7 +83,7 @@ Redesign an existing product while preserving the behaviour users rely on.
 - **Usage:** `/dent:redesign <product or screens>`
 - **Default depth:** Advanced
 - **Loads:** references/modes-existing-products.md §3; references/workflow/execution-and-scope.md; references/workflow/planning-and-plan-audit.md; references/workflow/verification.md §8
-- **Does:** Inventory screens, flows, components and drift; screenshot the current version as a baseline → List what must stay (navigation, terminology, key positions, features) and ask what is sacred → Plan the redesign + migration (incremental by default) and audit it → Build in phases; never drop a feature because it wasn't in the screenshot you were given → Compare before/after per screen; classify every difference
+- **Does:** Inventory screens, flows, components and drift; screenshot the current version as a baseline → List what must stay (navigation, terminology, key positions, features) and ask what is sacred → Plan the redesign + migration (incremental by default) and audit it → Build in phases; never drop a feature because it wasn't in the screenshot you were given → Bring every redesigned screen to the floor for the effort level → Compare before/after per screen; classify every difference; run the three independent evaluators at Polished+
 - **Delivers:** Before/after comparison with reasons, migration plan, updated DESIGN.md, regression results.
 - **Definition:** [`skills/dent/commands/redesign.md`](../skills/dent/commands/redesign.md)
 
@@ -92,7 +94,7 @@ Add a feature or screen that fits the existing product and design system.
 - **Usage:** `/dent:extend <feature>`
 - **Default depth:** Standard
 - **Loads:** DESIGN.md; references/workflow/execution-and-scope.md §1–2; references/modes-existing-products.md §2
-- **Does:** Read DESIGN → Find the integration points and the screens that share components → Build the feature with existing tokens/components; add new ones only in the existing convention → Verify the new feature and the neighbouring screens; update DESIGN
+- **Does:** Read DESIGN → Find the integration points and the screens that share components → Build the feature with existing tokens/components; add new ones only in the existing convention; match the product's existing motion and built-in-surface level so the new part doesn't look unfinished → Run the dependency checklist (references/catalog/component-selection → Verify the new feature and the neighbouring screens; update DESIGN
 - **Delivers:** The feature, verification results, DESIGN.md changelog line.
 - **Definition:** [`skills/dent/commands/extend.md`](../skills/dent/commands/extend.md)
 
@@ -147,8 +149,8 @@ Deep review of a result: visual quality, UX, accessibility, responsiveness, func
 - **Usage:** `/dent:review <what to review>`
 - **Default depth:** Standard
 - **Loads:** references/workflow/verification.md; references/quality-review.md; templates/REVIEW.md; references/creative/anti-slop.md
-- **Does:** Run the automated pass and look at every screenshot → Walk the main user journey; trigger states; tab through → Check gates G1–G13 that apply (G13 → Prioritise issues by severity; mark each as verified defect or subjective recommendation
-- **Delivers:** templates/REVIEW.md + prioritised issue list.
+- **Does:** Run the automated pass and look at every screenshot → Run three independent evaluators (visual, UX, engineering; references/workflow/scoring-and-closeout → Walk the main user journey; trigger states; tab through → Check gates G1–G13 that apply (G13 → Prioritise issues by severity; mark each as verified defect or subjective recommendation
+- **Delivers:** templates/REVIEW.md with the three verdicts + prioritised issue list (Blocker / High / Medium / Low).
 - **Definition:** [`skills/dent/commands/review.md`](../skills/dent/commands/review.md)
 
 ### `/dent:verify`
@@ -202,7 +204,7 @@ Choose, install and customise the right component/UI libraries for this project.
 - **Usage:** `/dent:components <need, e.g. data table + command palette>`
 - **Default depth:** Standard
 - **Loads:** references/catalog/component-selection.md; references/catalog/components-primitives-and-systems.md; references/catalog/components-collections-and-specialized.md
-- **Does:** Detect framework, language, styling, existing libraries and browser-support policy → List functional needs and the visual direction → Shortlist 2–3 options per need from the catalogue; compare compatibility, accessibility, customisation, performance, licence, maintenance, design fit → Recommend one per job with trade-offs; check the licence from the official source → Install, theme to DESIGN
+- **Does:** Detect framework, language, styling, existing libraries and browser-support policy → List functional needs and the visual direction → Shortlist 2–3 options per need from the catalogue; compare compatibility, accessibility, customisation, performance, licence, maintenance, design fit → Recommend one per job with trade-offs; run the dependency checklist (component-selection → Install, theme to DESIGN
 - **Delivers:** Comparison table, recommendation with reasons, install + integration, verification.
 - **Definition:** [`skills/dent/commands/components.md`](../skills/dent/commands/components.md)
 
@@ -217,6 +219,28 @@ Make every built-in browser surface match the product design: tooltips, scrollba
 - **Delivers:** Surface decision table (level, tokens, exceptions) in DESIGN.md, the implementation, surface sheet screenshots, verification results.
 - **Definition:** [`skills/dent/commands/surfaces.md`](../skills/dent/commands/surfaces.md)
 
+### `/dent:brainstorm`
+
+Think through design direction with the user: a candid creative partner that questions assumptions, offers real alternatives and pushes back with reasons instead of simply agreeing.
+
+- **Usage:** `/dent:brainstorm <idea, problem or direction to explore>`
+- **Default depth:** Conversation (nothing is built)
+- **Loads:** references/workflow/brainstorm.md; references/creative-direction.md §1–3b; references/creative/directions-library.md; references/creative/anti-slop.md; DESIGN.md
+- **Does:** Frame → Diverge → Critique every option, including the user's own idea, by the same criteria (fit, audience, cliché, accessibility, cost); label rule / evidence / taste → Push back with reasons when you disagree; change your mind only on new information; once your case is made, respect the user's decision and make their choice as good as it can be → Converge → Write the direction brief and offer the next command (directions, create, redesign, brand, video)
+- **Delivers:** A short conversation that ends in a direction brief (concept, mood/anti-words, chosen and rejected options with reasons, open questions, next step).
+- **Definition:** [`skills/dent/commands/brainstorm.md`](../skills/dent/commands/brainstorm.md)
+
+### `/dent:doctor`
+
+Check what this machine and session can actually do (browser checks, FFmpeg, GPU, installed TTS engines, provider keys) and set up missing media tools with the user's permission.
+
+- **Usage:** `/dent:doctor [what you want to make, e.g. narrated video]`
+- **Default depth:** Quick
+- **Loads:** scripts/doctor.py; scripts/tts.py; references/media-sourcing.md
+- **Does:** Run `python scripts/doctor → Say in plain words what DENT can do now and what it can't (and what that means for the user's goal) → For each missing capability the goal needs, offer the options from media-sourcing → Install only what the user approves
+- **Delivers:** Capability report, decisions made, anything installed and verified with a sample.
+- **Definition:** [`skills/dent/commands/doctor.md`](../skills/dent/commands/doctor.md)
+
 ### `/dent:directions`
 
 Explore 2–4 genuinely different creative directions before committing.
@@ -224,7 +248,7 @@ Explore 2–4 genuinely different creative directions before committing.
 - **Usage:** `/dent:directions <product>`
 - **Default depth:** Standard
 - **Loads:** references/creative-direction.md; references/creative/directions-library.md; references/creative/hero-typography.md; references/styles/_styles-index.md
-- **Does:** Write the category cliché for this product → Pick 2–4 directions that differ on at least 3 axes (type, color, layout, imagery, motion, sound) → For each → Render a style tile per direction when HTML can be shown; recommend one
+- **Does:** Write the category cliché for this product → Pick 2–4 directions that differ on at least 3 axes (type, color, layout, imagery, motion, sound) → Build each direction's palette with `scripts/palette → For each → Render a style tile per direction when HTML can be shown; recommend one
 - **Delivers:** Directions side by side with a recommendation; chosen one goes to the Decision Log.
 - **Definition:** [`skills/dent/commands/directions.md`](../skills/dent/commands/directions.md)
 
@@ -257,7 +281,7 @@ Create a mini brand / identity direction (logo direction, color, type, voice, so
 - **Usage:** `/dent:brand <product>`
 - **Default depth:** Standard/Advanced
 - **Loads:** references/brand-identity.md; references/creative/directions-library.md; references/audio/sound-design.md §5
-- **Does:** Concept + positioning in one line; category cliché named → Logo direction (wordmark/symbol), color system, type pairing, voice, optional sonic logo → Show applications (favicon, OG image, app icon, header) → Record licences of fonts and any assets
+- **Does:** Concept + positioning in one line; category cliché named → Logo direction (wordmark/symbol), color system (`scripts/palette → Show applications (favicon, OG image, app icon, header) → Record licences of fonts and any assets
 - **Delivers:** Brand sheet + assets + DESIGN.md brand section.
 - **Definition:** [`skills/dent/commands/brand.md`](../skills/dent/commands/brand.md)
 
@@ -268,7 +292,7 @@ Find, make and license icons, images, illustrations, favicons, OG images and oth
 - **Usage:** `/dent:assets <what you need>`
 - **Default depth:** Quick/Standard
 - **Loads:** references/catalog/asset-sources.md; references/icons-illustration-and-imagery.md; references/assets-and-marketing-graphics.md
-- **Does:** Decide if imagery is needed and what role it plays → Prefer project assets; otherwise pick a source from the catalogue and check its licence → Produce correct sizes/formats; write alt text → Record source + licence + attribution in DESIGN
+- **Does:** Decide if imagery is needed and what role it plays → Ask where assets come from (references/media-sourcing → Produce correct sizes/formats; write alt text → Record source + licence + attribution in DESIGN
 - **Delivers:** Assets + licence table.
 - **Definition:** [`skills/dent/commands/assets.md`](../skills/dent/commands/assets.md)
 
@@ -312,7 +336,7 @@ Design UI sound, sonic identity, ambience or interactive audio.
 - **Usage:** `/dent:sound <product or piece>`
 - **Default depth:** Standard/Advanced
 - **Loads:** references/audio/sound-design.md; references/audio/audio-tech-catalog.md; references/audio/audio-implementation-and-verification.md; templates/SOUND.md
-- **Does:** Decide if sound helps at all; define its role and the silence policy → Audio direction + palette + interaction-to-sound map (few, meaningful events) → Choose assets (licences) or synthesis; choose one playback/synthesis library → Implement opt-in, mute, volume, visual equivalents; no autoplay → Verify playback after user gesture, mute, overlap, failure, loudness
+- **Does:** Decide if sound helps at all; define its role and the silence policy → Audio direction + palette + interaction-to-sound map (few, meaningful events) → Ask where sounds and music come from (references/media-sourcing → Implement opt-in, mute, volume, visual equivalents; no autoplay → Verify playback after user gesture, mute, overlap, failure, loudness
 - **Delivers:** SOUND.md, sound files or synth code, controls, verification.
 - **Definition:** [`skills/dent/commands/sound.md`](../skills/dent/commands/sound.md)
 
@@ -322,9 +346,9 @@ Write and produce narration or voice-over (human or TTS) with captions.
 
 - **Usage:** `/dent:voice <script topic or video>`
 - **Default depth:** Standard
-- **Loads:** references/audio/voice-and-narration.md; references/audio/audio-tech-catalog.md §4; templates/SOUND.md §4
-- **Does:** Ask → Write the script for the ear (short sentences, ~140–160 wpm), mark pronunciation and pauses → Produce → Make captions/transcript; check sync and pronunciation
-- **Delivers:** Script, audio file(s), captions, licence/consent notes.
+- **Loads:** references/audio/voice-and-narration.md; references/media-sourcing.md; scripts/tts.py; templates/SOUND.md §4
+- **Does:** Run `python scripts/tts → Ask where the voice comes from (media-sourcing → If the chosen local engine isn't installed, show the size and licence (`tts → Write the script for the ear (short sentences, ~140–160 wpm), mark pronunciation and `[pause n]` → Blind A/B of 2–3 engines or voices on one real line (`tts → Render (`tts
+- **Delivers:** Script, narration WAV (loudness measured), captions, timing JSON, engine settings, licence/consent notes.
 - **Definition:** [`skills/dent/commands/voice.md`](../skills/dent/commands/voice.md)
 
 ### `/dent:video`
@@ -334,7 +358,7 @@ Produce any video: explainer, trailer, product demo, tutorial, social short, tit
 - **Usage:** `/dent:video <what video>`
 - **Default depth:** Advanced
 - **Loads:** references/video/video-types-and-craft.md; references/video/video-tools-and-pipeline.md; references/audio/voice-and-narration.md; templates/VIDEO.md
-- **Does:** Ask (one at a time, if unknown) → Brief → one message → script (read it aloud with a timer) → storyboard → animatic → Pick tools → Build, add voice/music/SFX, captions; render per platform spec → QA with the VIDEO
+- **Does:** Run `python scripts/doctor → Brief → one message → script (read it aloud with a timer) → storyboard → animatic → Pick tools → Build, add voice (voice command → QA with the VIDEO
 - **Delivers:** VIDEO.md, the rendered video(s), captions, licence table, QA results.
 - **Definition:** [`skills/dent/commands/video.md`](../skills/dent/commands/video.md)
 
@@ -345,7 +369,7 @@ Make a product launch video end to end (teaser, reveal, feature tour or manifest
 - **Usage:** `/dent:launch-video <product>`
 - **Default depth:** Advanced
 - **Loads:** references/video/video-types-and-craft.md §2; references/video/video-tools-and-pipeline.md; references/motion/motion-graphics.md; references/audio/sound-design.md; templates/VIDEO.md
-- **Does:** Ask the launch sub-type → One message + hook in the first 2 seconds + proof (real product UI) + CTA → Script, storyboard (shot list with durations), animatic; sonic logo or music bed → Build with the chosen tool; real UI captures or faithful recreations only → Export 16
+- **Does:** Run `python scripts/doctor → One message + hook in the first 2 seconds + proof (real product UI) + CTA → Script, storyboard (shot list with durations), animatic; sonic logo or music bed → Build with the chosen tool; real UI captures or faithful recreations only → Narration (if any) through the voice command → Export 16
 - **Delivers:** Launch video files per platform, thumbnail, captions, VIDEO.md.
 - **Definition:** [`skills/dent/commands/launch-video.md`](../skills/dent/commands/launch-video.md)
 
@@ -356,7 +380,7 @@ Score the work against the request with evidence; list the top 3 improvements if
 - **Usage:** `/dent:score <optional target, e.g. 9>`
 - **Default depth:** —
 - **Loads:** references/workflow/scoring-and-closeout.md; templates/SCORECARD.md
-- **Does:** Rebuild the requirement list from the original request → Add the quality lines relevant to this deliverable → Score 0–10 with evidence; apply the caps (unverified ≤ 6, failed gate ≤ 4, missing Must → overall ≤ 6) → If below target, list the 3 highest-impact improvements and offer /dent
+- **Does:** Rebuild the requirement list from the original request → Add the quality lines relevant to this deliverable → Score 0–10 with evidence; apply the caps (unverified ≤ 6, failed gate ≤ 4, missing Must or open Blocker → overall ≤ 6) → At Polished+ use the independent evaluators' reports (scoring-and-closeout → If below target, list the 3 highest-impact improvements and offer /dent
 - **Delivers:** Filled SCORECARD.md.
 - **Definition:** [`skills/dent/commands/score.md`](../skills/dent/commands/score.md)
 

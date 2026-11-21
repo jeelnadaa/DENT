@@ -49,10 +49,14 @@ Choose the simplest audio technology that does the job; one library per job. Sof
 | Tech | Role | Licence / terms | Status |
 |---|---|---|---|
 | Web Speech API `speechSynthesis` | In-browser read-aloud with system voices | Standard (voices are OS-provided) | ✓ |
-| [Kokoro TTS](https://huggingface.co/hexgrad/Kokoro-82M) | Small, natural open TTS model | Apache-2.0 model weights | ✓ 2026-11-14 |
+| [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) | Most natural local TTS in DENT's tests; voice design, presets, cloning (`scripts/tts.py --engine qwen3`) | Apache-2.0 code and weights | ✓ 2026-11-21 |
+| [Kitten TTS 2](https://github.com/KittenML/KittenTTS) | Expressive local TTS on CPU or GPU, 20 languages (`--engine kitten2`) | Code Apache-2.0; weights Stellon Labs Community Licence (commercial only under USD 1M revenue and funding, registration, credit) | ✓ 2026-11-21 |
+| [Chatterbox](https://github.com/resemble-ai/chatterbox) | Emotion-controllable local TTS and cloning (`--engine chatterbox`) | MIT; watermarked output | K |
+| [Voxtral TTS](https://huggingface.co/mistralai/Voxtral-4B-TTS-2603) | Very natural 4B TTS; local via vLLM or Mistral API (`--engine http`) | Weights CC BY-NC 4.0 (non-commercial); commercial via Mistral's API | ✓ 2026-11-21 |
+| [Kokoro TTS](https://huggingface.co/hexgrad/Kokoro-82M) | Small, clean open TTS model, CPU-friendly (`--engine kokoro`) | Apache-2.0 model weights | ✓ 2026-11-14 |
 | [Piper](https://github.com/OHF-Voice/piper1-gpl) | Fast local TTS | Active repo GPL-3.0; original MIT repo archived Oct 2025; each voice has its own licence | ✓ 2026-11-14 |
 | [Coqui TTS / XTTS](https://github.com/coqui-ai/TTS) | Open TTS + cloning | Code MPL-2.0; XTTS model CPML non-commercial (verify) | K |
-| ElevenLabs, OpenAI TTS, Google Cloud TTS, Azure Speech, Amazon Polly | Hosted high-quality TTS/voice | Commercial terms per plan | K |
+| ElevenLabs, OpenAI TTS, Google Cloud TTS, Azure Speech, Amazon Polly, Cartesia, Hume, Fish Audio | Hosted TTS/voice; free tiers and paid plans (`--engine openai`, `elevenlabs`, `http`, or an adapter per `../media-sourcing.md` §4) | Commercial terms per plan | K |
 | [Whisper](https://github.com/openai/whisper) / whisper.cpp | Speech-to-text for captions | MIT | K |
 
 ## 5. Spatial and 3D audio

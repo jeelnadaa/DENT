@@ -2,7 +2,40 @@
 
 When the user chooses **All-out** (or says "go all out", "best possible", "no limits", "make it insane"), DENT promises **the best result achievable for this specific use case, with nothing missed**. Not "more effects". Every detail that a top studio would cover for this kind of deliverable is covered, verified and documented.
 
-This protocol applies to **every workflow**: create, redesign, extend, audit, system, motion graphics, 3D, sound, voice, video, brand, assets. Each workflow runs its normal steps *plus* the matching sweep in §2.
+This protocol applies to **every workflow**: create, redesign, extend, audit, system, motion graphics, 3D, sound, voice, video, brand, assets. Each workflow runs its normal steps *plus* the capability list in §0 *plus* the matching sweep in §2.
+
+---
+
+## 0. The All-out capability list [Rule]
+
+All-out means **every capability that can lift this deliverable is either built or consciously declined**. Nothing is dropped because it lives in a different command. Before planning, fill this table for the deliverable and show it to the user in one message (short: one line per row):
+
+| Capability | Command | Default at All-out | How it can end |
+|---|---|---|---|
+| Creative directions (2–3, rendered) | `directions` | **Included** | Included |
+| Hero / expressive typography | `type` | **Included** for any page with a hero | Included · N/A (no hero) |
+| UX copy and microcopy | `copy` | **Included** | Included |
+| Built-in surfaces at Match | `surfaces` | **Included** for any visual build | Included |
+| Interface motion (menu kinds + intensity, All-out floor of `../motion/motion-menu.md` §2) | `motion` | **Included**: run the motion command itself, not only the sweep line | Included · Declined by user |
+| Signature motion-graphics moment | `motion-graphics` | **Included** for marketing pages, launches, brand | Included · Declined · N/A with reason |
+| Assets: favicon set, app icon, OG/social image | `assets` | **Included** | Included |
+| Imagery / illustration / footage (own, generated or built) | `assets` + `../media-sourcing.md` | **Ask** where it comes from | Included · Declined |
+| 3D / real-time | `3d` | **Offer** when the product is physical, spatial or 3D-native | Included · Declined · N/A |
+| UI sound / sonic logo | `sound` | **Offer** (opt-in toggle) | Included · Declined |
+| Narration / voice | `voice` | **Offer** for videos and tours | Included · Declined · N/A |
+| Video (launch, explainer, social cut) | `video` / `launch-video` | **Offer** for launches and marketing sites | Included · Declined |
+| Brand kit | `brand` | **Offer** when no brand exists | Included · Declined · N/A |
+| Responsive at every width, light + dark (+ high contrast) | `responsive` | **Included** | Included |
+| Accessibility deep pass | `accessibility` | **Included** | Included |
+| Independent review (three evaluators) | `review` | **Included** | Included |
+| Score ≥ 9 with improve rounds | `score` / `improve` | **Included** | Included |
+| Handoff: DESIGN.md + specs + licences | `handoff` | **Included** | Included |
+
+Rules:
+1. **Included** rows run as their commands (open `commands/<name>.md` and follow it), in the pipeline order of `orchestration.md` Step 3. **Offer** rows are asked together in **one** multi-select question: "All-out can also include: UI sound with a toggle, a 30-second launch video with narration, a 3D product moment. Which do you want?" with *All of them (Recommended)* first. Silence or "you decide" means include what fits the product and log it.
+2. Every row ends **Included**, **Declined by user**, or **N/A with a one-line reason**. A row that silently disappears is a failed All-out (the score's requirements line is capped at 6).
+3. When the user said "go all out" and also "don't ask", include every row that fits the product, choose sources per `../media-sourcing.md` §2 (non-interactive defaults), and list the choices in the close-out.
+4. Repeat the table in the close-out with each row's final state and evidence (§3).
 
 ---
 
@@ -11,7 +44,7 @@ This protocol applies to **every workflow**: create, redesign, extend, audit, sy
 | Area | All-out means |
 |---|---|
 | Understanding | Full brief (problem, JTBD, audience doubts, success metrics), competitor/category scan (principles, never copying), real content gathered from the user |
-| Questions | All relevant questions (~10–14, still one at a time), including media: sound, narration, video, generative-tool access, brand assets |
+| Questions | All relevant questions (~10–14, still one at a time), plus the one multi-select "also include?" question from §0 and the media-sourcing question per media type (`../media-sourcing.md` §2) |
 | Planning | PLAN.md with requirement IDs + plan audit table, even for a single page |
 | Direction | 2–3 genuinely different directions rendered as style tiles; user picks or combines; concept, category-cliché divergence, signature element(s) |
 | Craft | Bespoke hero composition, typography craft at every size, custom illustration/icon/imagery direction, motion system + at least one motion-graphics moment where appropriate, optional sound with toggle |
@@ -41,7 +74,7 @@ All-out never means: ignoring the user's scope, adding features they didn't ask 
 - [ ] Navigation: sticky/condensing header (`mwg:shrinking-header-on-scroll`), skip link, mobile menu as a native drawer (`mwg:navigation-drawer`: Esc, swipe, outside tap, no hand-made trap or scroll lock), active section indicator (`mwg:scrollspy`)
 - [ ] Footer: legal links, licence/privacy, contact, social with accessible names
 - [ ] Dark + light (system default + toggle with persistence, no flash of wrong theme; `mwg:dark-mode`, `mwg:dark-mode-toggle`)
-- [ ] Motion: hero entrance, one scroll story, hover system (pointer only), reduced-motion versions, no layout shift
+- [ ] Motion: `/dent:motion` run in full (kinds + intensity asked, M-ID plan) meeting the **All-out floor** of `../motion/motion-menu.md` §2 (Polished set + a signature motion-graphics sequence + a scrubbed scroll story + a desktop pointer layer + optional sound sync); every M-ID observed working; reduced-motion versions; no layout shift
 - [ ] Optional sound only if on-brand, opt-in toggle, visual equivalents
 - [ ] SEO/meta: title, description, canonical, OG + Twitter cards with a designed 1200×630 image, favicon set (SVG + 32 px + 180 px apple-touch), theme-color, lang attribute, structured data where honest
 - [ ] Performance: fonts subset (OFL only) + `font-display: swap` + preload critical + stable fallbacks; images sized + modern formats + lazy below the fold, LCP image eager with `fetchpriority="high"`; no render-blocking scripts; LCP/CLS/INP measured (`mwg:performance`, `mwg:optimize-image-priority`)
@@ -65,6 +98,7 @@ All-out never means: ignoring the user's scope, adding features they didn't ask 
 - [ ] Theming (light/dark/high contrast), density setting if pro tool
 - [ ] Accessibility: full keyboard, focus management in overlays, screen-reader names for charts (data table alternative), status announcements
 - [ ] Performance: render cost of lists/charts, bundle size, perceived speed (skeletons, prefetch)
+- [ ] Motion: `/dent:motion` run in full, meeting the All-out app floor (`../motion/motion-menu.md` §2: gesture physics, shared-element transitions, command-palette choreography, a peak-end success moment), reduced motion
 - [ ] Design-system documentation: component sheet in every state
 
 ### 2.3 Mobile app (iOS/Android/cross-platform)
@@ -121,13 +155,15 @@ All-out never means: ignoring the user's scope, adding features they didn't ask 
 
 ### 2.9 Voice / narration
 - [ ] Script written for the ear, timed aloud, approved; pronunciation guide (names, acronyms, product terms)
-- [ ] Voice choice justified (human/TTS engine + voice); consent and rights documented
+- [ ] Voice source asked (`../media-sourcing.md` §2); 2–3 engines compared blind on a real line (`scripts/tts.py compare`); voice choice justified; consent and rights documented
+- [ ] Mastered and captioned with `scripts/tts.py post` (loudness PASS printed), every line listened to
 - [ ] Recording/synthesis clean: no clicks, breaths natural, room tone consistent
 - [ ] Loudness to platform target; true peak ≤ −1 dBTP
 - [ ] Captions (SRT/VTT) checked against audio; transcript published
 
 ### 2.10 Video (launch, trailer, explainer, demo, social)
 - [ ] Brief with one message, CTA, platforms; script approved; storyboard + animatic locked before polish
+- [ ] Media sources asked per type (footage, imagery, voice, music, SFX) with a one-line note on where real or generated assets would lift the video (`../media-sourcing.md`)
 - [ ] Hook in the first 2 s; product name early; CTA clear at the end
 - [ ] Visual system consistent with the brand (type, color, motion tokens)
 - [ ] Sound: narration, music bed (licensed), SFX palette, ducking, loudness target
@@ -151,8 +187,9 @@ All-out never means: ignoring the user's scope, adding features they didn't ask 
 ---
 
 ## 3. All-out close-out
-1. Scorecard (target ≥ 9, no line < 8) with evidence and the improve rounds you ran.
-2. The sweep(s) used, every line ticked or N/A with a reason.
-3. The "world-class studio" gap answer and what you did about it.
-4. Attribution: DENT / user / agent judgment / overrides.
-5. Everything that needs the user (real proof, licences to buy, accounts, approvals).
+1. Scorecard (target ≥ 9, no line < 8, no open Blocker) with evidence and the improve rounds you ran.
+2. The capability list (§0) with every row's final state (Included with evidence · Declined by user · N/A with reason).
+3. The sweep(s) used, every line ticked or N/A with a reason.
+4. The "world-class studio" gap answer and what you did about it.
+5. Attribution: DENT / user / agent judgment / overrides.
+6. Everything that needs the user (real proof, licences to buy, accounts, approvals).

@@ -12,7 +12,7 @@
 | Area | Override |
 |---|---|
 | Color | Earth tones: sand #EFE6D8, clay/terracotta #C66B3D, sage #8A9A7B, olive #5C6B3A, warm brown #4A3B2F, cream. Low saturation. |
-| Typography | Soft serifs (Fraunces soft, "Recoleta"-like, "Lora", "DM Serif Display") for headings; warm humanist sans (DM Sans, "Nunito Sans", "Figtree") body. |
+| Typography | Soft serifs ("Young Serif", "Recoleta"-like, "Lora", "Besley") for headings; warm humanist sans ("Rethink Sans", "Radio Canada Big", "Albert Sans") body. |
 | Spacing / layout | Relaxed, airy; organic overlap of images and shapes; asymmetric but calm. |
 | Radius | Large and soft (16–32px), **blob/irregular shapes** for decorative containers and image masks, arches. |
 | Borders | Few; if used, soft earthy color. |
@@ -43,7 +43,7 @@
   --bg:#F4EDE2; --surface:#FBF7F0; --text:#3A2E24; --text-2:#6B5A4A;
   --clay:#B5582E; --sage:#8A9A7B; --olive:#4F5D2F;
   --accent:var(--olive); --on-accent:#FBF7F0;
-  --font-display:"Fraunces",Georgia,serif; --font-sans:"DM Sans",system-ui,sans-serif;
+  --font-display:"Young Serif",Georgia,serif; --font-sans:"Rethink Sans",system-ui,sans-serif;
   --radius-control:999px; --radius-container:28px; --blob:42% 58% 63% 37% / 41% 44% 56% 59%;
   --shadow-1:0 6px 24px rgb(90 60 30 / .10);
   --dur:450ms; --ease:cubic-bezier(.25,.1,.25,1);

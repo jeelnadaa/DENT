@@ -10,7 +10,7 @@ Create a new product, page, site or interface from scratch.
 - `references/workflow-questions-and-effort.md`
 - `references/creative-direction.md`
 - `references/creative/directions-library.md`
-- `references/recipes/landing-page.md or references/recipes/app-and-dashboard.md`
+- `references/recipes/landing-page.md` or references/recipes/app-and-dashboard.md
 - `references/foundations-and-components.md`
 - `references/workflow/verification.md`
 
@@ -19,14 +19,18 @@ Create a new product, page, site or interface from scratch.
 2. Plan (inline for Standard, PLAN.md for Advanced) and audit it.
 3. Direction: concept sentence, category-cliché check, one base style + ≤1 accent, signature element, hero type move.
 4. Follow the recipe step by step, including every gate inside it.
-5. Build tokens → components → screens → built-in surfaces at the chosen level (references/built-in-surfaces.md; ask the surface question at Standard+) → modern layer → media.
-6. Verify (verify_page.py when a browser is available), fix, then score and close out.
+5. Choose type and colour by method, not habit: type voice + `scripts/fonts.py` (references/typography.md §0), concept palette via `scripts/palette.py` (references/color.md §12); no overused-registry font or cliché palette without a logged reason.
+6. Build tokens → components → screens → built-in surfaces at the chosen level (run commands/surfaces.md; ask the surface question at Standard+).
+7. Motion at Standard+: run commands/motion.md in full (kinds + intensity, M-ID plan, the floor for the effort level). It is part of create, not an optional follow-up.
+8. Imagery and media: ask where they come from (references/media-sourcing.md §2), saying where real or generated assets would lift the page; at All-out fill the capability list (references/workflow/all-out.md §0).
+9. Verify (verify_page.py when a browser is available), run the three independent evaluators at Polished+ (references/workflow/scoring-and-closeout.md §3b), fix, then score and close out.
 
 ## Output
-Working files, Decision Log, gate results, scorecard, attribution; DESIGN.md after approval.
+Working files, Decision Log, gate results, motion plan (planned vs built), scorecard, attribution; DESIGN.md after approval.
 
 ## Never
 - Invent stats, testimonials, logos or ratings.
-- Combine more than one base style and one accent.
+- Ship a Standard+ page without the motion floor or with default built-in surfaces.
+- Reuse the previous project's fonts and palette by habit.
 
 Close with the scorecard summary, attribution (DENT / MWG / user / agent judgment / overrides), the `### Modern Web Guidance` disclosure if guides shaped the code, and a one-line next step (SKILL.md §8).

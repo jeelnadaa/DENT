@@ -6,7 +6,7 @@
 ## 2. Discovery (manual, per agent)
 | Agent | Test | Pass when |
 |---|---|---|
-| Claude Code (plugin) | Type `/dent:` | All 32 commands listed with descriptions |
+| Claude Code (plugin) | Type `/dent:` | All 34 commands listed with descriptions |
 | Claude Code (manual skill) | `/dent plan a pricing page` | Skill loads and follows `commands/plan.md` |
 | Codex / Cursor / Copilot / Gemini CLI | `dent audit this page` (with a file) | Skill triggers; follows `commands/audit.md` steps |
 
@@ -16,6 +16,10 @@ For each prompt, the first reply must state the classification/plan line and the
 | Prompt | Expected main command → pipeline |
 |---|---|
 | `/dent make a landing page for my meditation app` | create → (directions if Polished+) → motion → verify → score; asks effort first |
+| `/dent go all out on a landing page` | All-out capability list shown; create → type/copy → surfaces → motion (full menu) → motion-graphics → assets → review (3 evaluators) → verify → score → improve |
+| `/dent let's brainstorm the look of my app` | brainstorm (no build); ends with a direction brief |
+| `/dent add a voice-over to the demo video` | doctor → voice (sourcing question, A/B, tts.py) → verify |
+| `/dent which voice models can I use here?` | doctor |
 | `/dent this dashboard looks bad on my phone` (+ screenshot) | responsive (+ verify); no effort question |
 | `/dent is this accessible?` (+ URL) | accessibility as audit (findings first, offer fixes) |
 | `/dent which table library should I use?` (Vue project) | components; Vue-compatible options with licences |

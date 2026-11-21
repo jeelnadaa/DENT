@@ -44,7 +44,7 @@ Difference from **Brutalism**: brutalism is raw and plain (defaults, structure);
 :root{
   --bg:#E8E8E8; --text:#000000; --acid:#C6FF00; --rgb-red:#FF0000; --rgb-blue:#0000FF;
   --accent:var(--rgb-blue); --on-accent:#FFFFFF;
-  --font-display:"Syne","Unbounded",sans-serif; --font-sans:"Satoshi","Manrope",system-ui,sans-serif; --font-serif:"Times New Roman",serif;
+  --font-display:"Syne","Unbounded",sans-serif; --font-sans:"Familjen Grotesk","Epilogue",system-ui,sans-serif; --font-serif:"Times New Roman",serif;
   --dur:400ms; --ease:cubic-bezier(.68,-0.6,.32,1.6);
 }
 .invert-hover:hover{mix-blend-mode:difference;}

@@ -13,10 +13,10 @@ Produce any video: explainer, trailer, product demo, tutorial, social short, tit
 - `templates/VIDEO.md`
 
 ## Steps
-1. Ask (one at a time, if unknown): type and platform, length, sound/narration, and **whether the user has generative video/image/voice access** (Veo, Sora, Runway, Kling, ElevenLabs…).
+1. Run `python scripts/doctor.py`. Ask (one at a time, if unknown): type and platform, length, sound/narration, and where each kind of media comes from (references/media-sourcing.md §2: code-built scenes, real captures, local or cloud generative models, any provider, own footage), saying where real or generated assets would lift the video.
 2. Brief → one message → script (read it aloud with a timer) → storyboard → animatic. Get the script approved.
 3. Pick tools: generative if available and wanted; otherwise code-based (HyperFrames, Remotion, Motion Canvas, Revideo, Manim) or an editor; check licences.
-4. Build, add voice/music/SFX, captions; render per platform spec.
+4. Build, add voice (voice command: `tts.py say` → `tts.py post`, scenes synced to narration.timing.json), music/SFX, captions; render per platform spec.
 5. QA with the VIDEO.md checklist (ffprobe, loudness, sync, captions, safe areas).
 
 ## Output

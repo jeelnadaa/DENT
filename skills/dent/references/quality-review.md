@@ -135,7 +135,7 @@ When giving feedback, write: **what** the issue is → **why** it matters (cite 
 Each item: **the pattern → why it hurts → what to do instead.**
 
 ### Visual identity
-1. **Default purple-to-blue gradient everywhere** (hero, buttons, text) → signals "template", no brand → pick a palette deliberately (see color.md Part 2 or the style file); use gradients only where the style calls for them.
+1. **Default purple-to-blue gradient everywhere** (hero, buttons, text) → signals "template", no brand → pick a concept palette deliberately (color.md §12, `scripts/palette.py`); use gradients only where the style calls for them.
 2. **One default font for everything, all at medium weight** → no hierarchy, no character → choose a display/body pairing or one family with strong weight and size contrast (`modern-layer.md` §7.1).
 3. **Everything centered** → long centered text is hard to read; no tension or structure → left-align body text and most layouts; center only short hero content.
 4. **Every element has the same big radius + soft shadow + border** → visual mush, no layers → choose border OR shadow, a radius hierarchy (controls < containers), and reserve elevation for things that are actually above others.

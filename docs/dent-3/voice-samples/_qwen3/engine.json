@@ -1,0 +1,9 @@
+{
+  "engine": "qwen3",
+  "model": null,
+  "voice": null,
+  "instruct": "Calm, warm documentary narrator, unhurried",
+  "design": null,
+  "seed": 7,
+  "licence": "Apache-2.0 (code and weights)"
+}

@@ -15,7 +15,7 @@ Design UI sound, sonic identity, ambience or interactive audio.
 ## Steps
 1. Decide if sound helps at all; define its role and the silence policy.
 2. Audio direction + palette + interaction-to-sound map (few, meaningful events).
-3. Choose assets (licences) or synthesis; choose one playback/synthesis library.
+3. Ask where sounds and music come from (references/media-sourcing.md §5.2–5.3: synthesis, local models, libraries, free or paid generators, any provider, own recordings); check licences; choose one playback/synthesis library.
 4. Implement opt-in, mute, volume, visual equivalents; no autoplay.
 5. Verify playback after user gesture, mute, overlap, failure, loudness.
 

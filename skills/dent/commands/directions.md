@@ -14,9 +14,10 @@ Explore 2–4 genuinely different creative directions before committing.
 
 ## Steps
 1. Write the category cliché for this product.
-2. Pick 2–4 directions that differ on at least 3 axes (type, color, layout, imagery, motion, sound).
-3. For each: name, concept sentence, palette swatches, type sample, hero composition, motion and sound idea, fits/risks.
-4. Render a style tile per direction when HTML can be shown; recommend one.
+2. Pick 2–4 directions that differ on at least 3 axes (type, color, layout, imagery, motion, sound). Use the style moves (apply, bend, blend, leave the catalogue: references/creative-direction.md §3b); at least one direction should not be a catalogue style as-is.
+3. Build each direction's palette with `scripts/palette.py` and its type with `scripts/fonts.py` (no overused-registry defaults).
+4. For each: name, concept sentence, palette swatches, type sample, hero composition, motion and sound idea, fits/risks.
+5. Render a style tile per direction when HTML can be shown; recommend one.
 
 ## Output
 Directions side by side with a recommendation; chosen one goes to the Decision Log.

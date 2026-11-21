@@ -11,8 +11,8 @@
 ## Overrides
 | Area | Override |
 |---|---|
-| Color | Background near-black, slightly tinted (#0A0A0B, #0B0D12). Surfaces step up in lightness (#111215, #17181C, #1E1F24). Text #EDEDEF / #A0A0AB secondary. **Borders do the separating**: white at 6–12%. One accent (violet #7C5CFF, blue #3B82F6, or green #22C55E) used for focus, links, glows. |
-| Typography | Geometric/neo-grotesque (Geist, Satoshi, General Sans), medium weights; **gradient text** on hero headline (white → grey); monospace (Geist Mono, JetBrains Mono) for code, keys, metadata. |
+| Color | Background near-black, slightly tinted (#0A0A0B, #0B0D12). Surfaces step up in lightness (#111215, #17181C, #1E1F24). Text #EDEDEF / #A0A0AB secondary. **Borders do the separating**: white at 6–12%. One accent from the concept (`scripts/palette.py`; e.g. signal amber #F0A63A, sea-glass #6FD3B8, coral #FF6A57) used for focus, links, glows; the stock violet/blue/green of dark SaaS templates only as a logged choice. |
+| Typography | Precise neo-grotesque (Host Grotesk, Zalando Sans, Mozilla Text; Geist only as a logged choice), medium weights; **gradient text** on hero headline (white → grey); monospace (Martian Mono, Fragment Mono, JetBrains Mono) for code, keys, metadata. |
 | Spacing / layout | Centered hero with product screenshot; bento feature grids; tight, dense app UIs with compact rows (32–36px). |
 | Radius | Controls 6–8px; cards 12–16px. |
 | Borders | **1px hairline borders everywhere** (rgba 255,255,255,.08); sometimes a gradient border (light at top). |
@@ -44,8 +44,8 @@
 :root{
   --bg:#0A0A0B; --surface-1:#111215; --surface-2:#17181C; --surface-3:#1E1F24;
   --text:#EDEDEF; --text-2:#A0A0AB; --border:rgb(255 255 255 / .08); --border-strong:rgb(255 255 255 / .22);
-  --accent:#7C5CFF; --on-accent:#FFFFFF; --glow:radial-gradient(600px circle at 50% 0%,rgb(124 92 255 / .25),transparent 60%);
-  --font-sans:"Geist","Satoshi",system-ui,sans-serif; --font-mono:"Geist Mono","JetBrains Mono",monospace;
+  --accent:#F0A63A; --on-accent:#111215; --glow:radial-gradient(600px circle at 50% 0%,rgb(240 166 58 / .16),transparent 60%); /* placeholder: take the accent from the concept */
+  --font-sans:"Host Grotesk","Zalando Sans",system-ui,sans-serif; --font-mono:"Martian Mono","JetBrains Mono",monospace;
   --radius-control:8px; --radius-container:14px;
   --dur:160ms; --ease:cubic-bezier(.2,0,0,1);
 }

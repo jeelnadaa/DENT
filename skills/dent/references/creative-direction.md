@@ -43,6 +43,23 @@ Make **2–3 directions** that differ on real axes, not three shades of the same
 
 Present each direction as: name + concept sentence + a small visual (palette swatches, a type sample line, one hero or key component rendered) + "best if…" line. Let the user pick or combine **one** base. (This is the "multiple variations" item in the All-out level.)
 
+## 3b. Style intelligence: apply, bend, blend or leave the catalogue
+
+The 41 style files (`styles/_styles-index.md`) are a **vocabulary**, not a menu of templates. A strong result often sits between styles or outside them. Choose one of four moves, deliberately, and log it:
+
+| Move | When | How |
+|---|---|---|
+| **Apply** | The user named a style, or it fits the concept exactly | Use the style file; its signature moves are present; overrides only where the product needs them |
+| **Bend** | A style is close, but one or two axes fight the concept or the audience | Keep the style's identity and move 1–2 axes on purpose (the §3 axes table): *Swiss with a warm text serif*, *Brutalism with a calm palette for a finance tool*. Log each bent axis with its reason |
+| **Blend** | Two styles each carry half the concept | One base owns the tokens, one accent adds signature moves in limited places (`styles/_styles-index.md` › Combining). If both must shape the tokens, it is a new direction: write a style card |
+| **Leave** | No style fits, the closest style is the category cliché, or the user wants something new | Build an **off-catalogue direction** from the concept: name it, write a style card (below), and treat it exactly like a style file from then on |
+
+**Style card** (for Leave, or a Blend that changes tokens; goes into DESIGN.md): name and concept sentence · 3 mood words + 2 anti-words · positions on the §3 axes (type, color, density, shape, depth, imagery, motion, layout) · starter tokens (palette from `color.md` §12 or `scripts/palette.py`, type from `typography.md` §0) · 2–3 signature moves · what it never does · accessibility watch-outs (contrast, motion, legibility). The section headings of `styles/_style-template.md` are the full form.
+
+**When to propose an alternative instead of following the request.** If the requested style is the category cliché, works against the audience or the product's job, or cannot meet a [Rule] without losing its signature (e.g. low-contrast neumorphism for a form-heavy health app), say so in two lines and offer one alternative with the reason. If the user keeps their choice, build it as well as it can be built and log `User` as the source. Disagree with reasons, never by quietly doing something else.
+
+**Keep exploring.** Don't repeat the previous project's style, palette or pairing in the same session or repository. Draw on movements beyond the catalogue when they fit (editorial brutalism, soft industrial, data-art, post-flat tactile, swiss-punk, scientific illustration, signage systems, print ephemera…) and on the inspiration sources in `inspiration-and-reference-sites.md`, translating principles, never copying a site.
+
 ## 4. The signature element
 
 Every memorable product has **one or two** things that are *theirs*. Choose deliberately; everything else stays quiet.
@@ -86,8 +103,9 @@ These are the patterns that, in 2025–2026, instantly read as *unedited templat
 - Testimonial carousel of avatars with five stars and generic praise.
 - Emoji in headings, dark mode with pure #000 and neon accents for no reason.
 - Copy: "Supercharge", "Unlock", "Seamless", "Effortless", "All-in-one", "Built for the future of…".
+- **The second-order default** (2025–26): the "tasteful" look that guides recommend against the first list: cream paper + terracotta, Satoshi/General Sans/Cabinet Grotesk/Clash/DM Sans, one italic serif word in the headline, acid lime on black. Treat it exactly like the list above (`creative/anti-slop.md` §2).
 
-Alternatives: real product screenshots cropped to the key moment; a specific headline that states the outcome; one concrete number; a distinctive type pairing; a palette from `color.md` Part 2 or the chosen style; a layout that follows the content, not the template.
+Alternatives: real product screenshots cropped to the key moment; a specific headline that states the outcome; one concrete number; a type voice and pairing chosen with `scripts/fonts.py` (`typography.md` §0); a concept palette from `color.md` §12–13 (`scripts/palette.py`); a layout that follows the content, not the template.
 
 ## 7. Type-led design (cheapest path to identity)
 - A distinctive display face + a workhorse text face gives identity with zero illustration budget.

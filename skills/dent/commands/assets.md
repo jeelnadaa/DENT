@@ -13,7 +13,7 @@ Find, make and license icons, images, illustrations, favicons, OG images and oth
 
 ## Steps
 1. Decide if imagery is needed and what role it plays.
-2. Prefer project assets; otherwise pick a source from the catalogue and check its licence.
+2. Ask where assets come from (references/media-sourcing.md §2): the user's own files (best for product truth), code-made (SVG/canvas), a local model, a free or paid generator or connector (any provider), or a free library; check every licence.
 3. Produce correct sizes/formats; write alt text.
 4. Record source + licence + attribution in DESIGN.md.
 

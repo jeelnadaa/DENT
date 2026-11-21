@@ -8,9 +8,9 @@ Make every built-in browser surface match the product design: tooltips, scrollba
 
 ## Load
 - `references/built-in-surfaces.md`
-- `references/modern-web-guidance.md (§4 map; the guide for each surface)`
-- `references/foundations-and-components.md §4`
-- `DESIGN.md (tokens, style)`
+- `references/modern-web-guidance.md` (§4 map; the guide for each surface)
+- `references/foundations-and-components.md` §4
+- `DESIGN.md` (tokens, style)
 
 ## Steps
 1. Inventory the built-in surfaces actually present: run `python scripts/verify_page.py <page> --surfaces match` (or scan the code) and list them.

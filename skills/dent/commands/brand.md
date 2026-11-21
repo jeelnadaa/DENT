@@ -9,11 +9,11 @@ Create a mini brand / identity direction (logo direction, color, type, voice, so
 ## Load
 - `references/brand-identity.md`
 - `references/creative/directions-library.md`
-- `references/audio/sound-design.md §5 (sonic logo)`
+- `references/audio/sound-design.md` §5 (sonic logo)
 
 ## Steps
 1. Concept + positioning in one line; category cliché named.
-2. Logo direction (wordmark/symbol), color system, type pairing, voice, optional sonic logo.
+2. Logo direction (wordmark/symbol), color system (`scripts/palette.py`, color.md §12), type voice and pairing (`scripts/fonts.py`, typography.md §0), voice, optional sonic logo; ask where any imagery comes from (references/media-sourcing.md).
 3. Show applications (favicon, OG image, app icon, header).
 4. Record licences of fonts and any assets.
 

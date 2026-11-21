@@ -40,12 +40,24 @@ Every substantial deliverable ends with an honest scorecard, an attribution summ
 - Overall = average of all lines, but requirement lines count double.
 - You are scoring your own work, so you are biased upward. Before finalising, find the weakest visible thing in each screenshot and score with it in mind.
 - Self-scores are not benchmark results. Independent review (a person or another model) is needed for published comparisons.
+- **Blockers stay visible.** Any open Blocker (§6 severity) is listed above the overall score, and the overall cannot exceed **6** while one is open, however good the other lines are. A blocker is never averaged away.
 
 ## 3. Target and the improve loop
 - **Target:** overall ≥ 8 and no line < 6 (the user may set another target, e.g. "9+ on distinctiveness").
 - **Below target:** list the **3 highest-impact improvements**: each with the line it raises, what to change, and expected new score. Ask: "Want me to apply these (`/dent:improve`)?"
 - **`/dent:improve`:** apply the listed fixes in order, re-verify the affected gates, re-score only with new evidence, show before → after per line. Stop when the target is met or when the remaining gap needs a user decision (e.g. real testimonials, brand assets, budget for a paid voice).
 - Two improve rounds without movement → say so and propose a direction change instead of polishing further.
+
+## 3b. Independent evaluation (three evaluators) [Rule at Polished+ and All-out]
+The builder is biased toward its own work. Before the final score at Polished and All-out (and whenever the user asks for a review), run **three separate evaluators**. Where the agent can start subagents, give each one a fresh context with only: the original request, DESIGN.md/PLAN.md, the screenshots and verification output, and the files; never the builder's reasoning or self-score. Without subagents, run them yourself one after another, each from its checklist only, and say they were not independent.
+
+| Evaluator | Looks at | Checklist |
+|---|---|---|
+| **Visual** | Rendered screenshots at 320/390/768/1440, both themes | Composition and hierarchy, typography craft, color and contrast, consistency, brand fit, responsive rendering, distinctiveness (`../creative/anti-slop.md`), polish |
+| **UX** | The running page/app and the journeys | Task completion end to end, navigation and discoverability, interaction clarity, content and IA, empty/loading/success/error states, keyboard and screen-reader use |
+| **Engineering** | The code and the check output | Correctness and regression risk, architecture fit, types and error handling, performance (measured), security (unsafe HTML, secrets, validation), dependencies justified (`../catalog/component-selection.md` §4b), tests, MWG compliance (G13) |
+
+Each evaluator returns: a verdict (**Accept** / **Accept with fixes** / **Reject**), findings with severity (§6), evidence, and the lines it would score differently. **A Reject blocks delivery**: fix the cause or present the work with the rejection and its reasons stated plainly. Merge the three reports into `REVIEW.md` (`templates/REVIEW.md`) and use them when scoring; where the builder's score and an evaluator's differ by 2+ points, use the evaluator's unless you can show new evidence.
 
 ## 4. Attribution (what came from where)
 Summarise the Decision Log's Source column in 3–6 lines:
@@ -64,5 +76,11 @@ Summarise the Decision Log's Source column in 3–6 lines:
 6. Known issues and anything that needs the user (real content, licences, accounts).
 7. One-line next step (e.g. "Score is 7.6, below your 8 target: want me to run /dent:improve?").
 8. If MWG was consulted, end with the `### Modern Web Guidance` section in MWG's own format: one first-person bullet per guide that shaped the code, with a short verbatim quote of the specific rule (`../modern-web-guidance.md` §2 step 5). Never cite a guide or quote you didn't retrieve in this session.
+
+## 6. Severity levels (used by evaluators, audits and the scorecard)
+- **Blocker:** prevents core use, breaks the app, or creates a serious security, privacy or accessibility barrier ([Rule] failure on a primary path). Must be fixed or explicitly disclosed before delivery.
+- **High:** breaks an important workflow or causes a major visual/responsive defect.
+- **Medium:** noticeably harms usability, consistency or maintainability.
+- **Low:** polish or a non-essential refinement.
 
 Write `SCORECARD.md` into the project (from `templates/SCORECARD.md`) at Standard effort and above, and for every showcase or benchmark run. A score that only exists in chat is lost.

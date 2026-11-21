@@ -44,7 +44,7 @@
   --bg:linear-gradient(135deg,#E9F4FF 0%,#F3E8FF 50%,#FFE8F6 100%);
   --text:#1B1B3A; --text-2:#4B4B6E; --chrome:linear-gradient(180deg,#FFFFFF 0%,#C9CED6 45%,#8F96A3 55%,#E9ECF1 100%);
   --accent:#FF4FB4; --on-accent:#1B1B3A; --lime:#C6FF3D;
-  --font-display:"Orbitron","Michroma",sans-serif; --font-sans:"Outfit",system-ui,sans-serif;
+  --font-display:"Orbitron","Michroma",sans-serif; --font-sans:"Albert Sans",system-ui,sans-serif;
   --radius-control:999px; --radius-container:28px;
   --gloss:linear-gradient(180deg,rgb(255 255 255 / .7) 0%,rgb(255 255 255 / 0) 55%);
   --dur:300ms; --ease:cubic-bezier(.34,1.56,.64,1);

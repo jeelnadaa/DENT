@@ -24,7 +24,9 @@
 
 ## 4. Narration (if any)
 - Script file / version:
-- Voice (human, TTS engine + voice name, licence):
+- Voice source (`references/media-sourcing.md` §2): human / local engine / cloud provider (any) — engine or provider, model, voice/preset, instruct or design text, seed, licence, commercial OK, consent:
+- Blind A/B: engines/voices compared (`tts.py compare`), the user's pick:
+- Mastering (`tts.py post`): target LUFS, measured LUFS and true peak (PASS/FAIL), captions files, timing JSON:
 - Pace (words per minute), pronunciation notes, tone:
 - Captions / transcript file:
 

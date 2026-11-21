@@ -41,6 +41,16 @@ Write each need as a job with acceptance criteria: "Sortable, filterable table o
 
 Write the comparison as a small table; recommend one with the trade-off in one sentence.
 
+## 4b. Dependency checklist (before adding any package) [Rule]
+1. **Already there?** Search the project's dependencies and components for something that does the job.
+2. **Native first?** Search Modern Web Guidance: if the platform covers it (dialog, popover, details, form validation, view transitions, scroll-driven animation…), build it natively (`../modern-web-guidance.md` §5).
+3. **Compatible?** Framework and version, SSR/hydration, bundler, TypeScript types, browser-support policy.
+4. **Cost:** bundle size (gzip, tree-shaking), runtime cost, and transitive dependencies.
+5. **Quality:** accessibility and keyboard behaviour tested, theming to DESIGN.md tokens, maintenance (release in the last ~12 months, open issues), documentation.
+6. **Licence:** from the official source; record it (gate G12). Watch for "open core" and per-seat or revenue licences.
+7. **Safety:** inspect install scripts and the code you copy (copy-paste kits too); no unpinned CDN scripts in production.
+8. **Justify in one line** in the Decision Log ("TanStack Table: virtualised sorting for 50k rows; native table can't"). If the line is weak, don't add it. Never add a library for something trivial the platform or ten lines of code do safely.
+
 ## 5. Rules
 - **One library per job.** No two toast libraries, two animation engines doing the same thing, or two component systems.
 - **Never ship a library's default look unchanged** when the project has its own direction (restyle shadcn/MUI/Mantine tokens).

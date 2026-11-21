@@ -13,7 +13,7 @@ Status legend: ✓ checked 2026-11-14 · K from knowledge, verify on the source 
 | Source | Licence | Notes | Status |
 |---|---|---|---|
 | [Google Fonts](https://fonts.google.com) | Mostly SIL OFL 1.1 (some Apache-2.0/UFL) | Free incl. commercial; self-host for privacy/performance | K |
-| [Fontshare (ITF)](https://www.fontshare.com) | ITF Free Font License (some families OFL) | **DENT's preferred source** (Satoshi, General Sans, Switzer, Cabinet Grotesk, Clash Display, Gambetta, Zodiak…). Free for commercial use in any media; self-hosting allowed; **no subsetting/format conversion/modification; no redistribution (don't commit to public repos; use the Fontshare API there)** | ✓ 2026-11-14 |
+| [Fontshare (ITF)](https://www.fontshare.com) | ITF Free Font License (some families OFL) | Quality free faces (Erode, Gambetta, Zodiak, Sentient, Boska, Panchang, Tanker…; its Satoshi, General Sans, Switzer, Cabinet Grotesk and Clash are on DENT's overused registry, `../typography.md` §0.1). Free for commercial use in any media; self-hosting allowed; **no subsetting/format conversion/modification; no redistribution (don't commit to public repos; use the Fontshare API there)** | ✓ 2026-11-14 |
 | [Velvetyne](https://velvetyne.fr) | OFL (mostly) | Experimental, characterful display faces | K |
 | [The League of Moveable Type](https://www.theleagueofmoveabletype.com) | OFL | Classic open display faces | K |
 | [Uncut.wtf](https://uncut.wtf) | Varies (catalogue of free fonts) | Check each font's licence link | K |
@@ -103,7 +103,7 @@ Or **synthesize** UI sounds (Web Audio / Tone.js): no asset licence needed, perf
 | Musopen / IMSLP recordings | Many public-domain/CC recordings (composition PD ≠ recording PD) | Check the recording's licence | K |
 
 ## 9. Voices (TTS and voice actors)
-See `../audio/voice-and-narration.md` §5 and `../audio/audio-tech-catalog.md` §4. Key rules: synthetic voices have provider terms (commercial use, attribution, disclosure); **cloning a real person's voice requires their documented consent**; open engines differ (Kokoro: Apache-2.0 model ✓ 2026-11-14; Piper: active repo GPL-3.0, original MIT repo archived Oct 2025 ✓ 2026-11-14; Coqui XTTS model: non-commercial CPML — verify).
+See `../audio/voice-and-narration.md` §5 and `../audio/audio-tech-catalog.md` §4. Key rules: synthetic voices have provider terms (commercial use, attribution, disclosure); **cloning a real person's voice requires their documented consent**; open engines differ (Qwen3-TTS: Apache-2.0 ✓ 2026-11-21; Kitten TTS 2: Stellon Labs Community Licence with revenue/funding thresholds ✓ 2026-11-21; Voxtral TTS open weights: CC BY-NC 4.0 ✓ 2026-11-21; Chatterbox: MIT, K; Kokoro: Apache-2.0 model ✓ 2026-11-14; Piper: active repo GPL-3.0 ✓ 2026-11-14; Coqui XTTS model: non-commercial CPML, K). Where any media comes from (local, free cloud, paid, any provider, own assets) is asked per `../media-sourcing.md`.
 
 ## 10. Logos and trademarks
 Company logos (e.g. for "works with" lists) are trademarks: use them only for factual compatibility statements, unmodified, per the owner's brand guidelines, and never to imply endorsement. Never invent "Trusted by" logo walls.

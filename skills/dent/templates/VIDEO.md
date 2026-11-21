@@ -14,7 +14,15 @@
 - Assets available (logo, screenshots, footage, brand fonts, music):
 
 ## 2. Tools
-- Generative video/image/voice access? <yes: which | no>
+- Media sources (`references/media-sourcing.md` §2), one row per type:
+
+| Media | Source (local model / free cloud / paid provider or connector / own assets / code-built) | Model or provider + version | Cost | Licence / commercial OK | Consent (voices, people) |
+|---|---|---|---|---|---|
+| Footage / imagery | | | | | |
+| Voice | | | | | |
+| Music | | | | | |
+| SFX | | | | | |
+
 - Build tool and why (HyperFrames / Remotion / Motion Canvas / Revideo / Manim / editor / generative):
 - Licences (tool + every asset):
 
