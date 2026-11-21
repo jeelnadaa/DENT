@@ -137,6 +137,9 @@ def check_commands() -> int:
     for name in sorted(skill_cmds - {"dent"}):
         if f"`{name}`" not in orch:
             warnings.append(f"orchestration.md never routes to `{name}`")
+    m = re.search(r"badge/commands-(\d+)-", (ROOT / "README.md").read_text(encoding="utf-8"))
+    if m and int(m.group(1)) != len(skill_cmds):
+        errors.append(f"README badge says {m.group(1)} commands but {len(skill_cmds)} exist")
     for p in (ROOT / "commands").glob("*.md"):
         t = p.read_text(encoding="utf-8")
         if not t.startswith("---\ndescription:"):
@@ -179,7 +182,7 @@ def check_repo(fm: dict[str, str]) -> None:
     for t in ("PLAN", "AUDIT", "REVIEW", "SCORECARD", "MOTION", "SOUND", "VIDEO"):
         if not (SKILL / "templates" / f"{t}.md").is_file():
             errors.append(f"missing template templates/{t}.md")
-    for s in ("verify_page.py", "contrast.py", "palette.py", "fonts.py", "tts.py", "doctor.py", "data/google-fonts.json"):
+    for s in ("verify_page.py", "contrast.py", "palette.py", "fonts.py", "tts.py", "doctor.py", "video_qa.py", "data/google-fonts.json"):
         if not (SKILL / "scripts" / s).is_file():
             errors.append(f"missing script skills/dent/scripts/{s}")
 
@@ -216,6 +219,14 @@ def check_capabilities() -> int:
     for c in ("voice", "video", "launch-video", "sound", "assets", "3d", "motion-graphics", "brand"):
         if "media-sourcing.md" not in cmds.get(c, ""):
             errors.append(f"commands/{c}.md doesn't ask where media comes from (references/media-sourcing.md)")
+    # video: the creative process, the kit and the measured QA must be wired into every video command
+    for c in ("video", "launch-video"):
+        t = cmds.get(c, "")
+        for need in ("video-creative-direction.md", "video_qa.py", "video-kit"):
+            if need not in t:
+                errors.append(f"commands/{c}.md doesn't use {need}")
+    if "PLACEHOLDERS ONLY" not in (SKILL / "templates" / "video-kit" / "composition.html").read_text(encoding="utf-8"):
+        errors.append("templates/video-kit/composition.html must mark its scenes as placeholders (originality guard)")
     # effort tables must not undercut the motion floor (motion-menu.md §2 is the motion authority)
     lp = (REFS / "recipes" / "landing-page.md").read_text(encoding="utf-8")
     ess = next((ln for ln in lp.splitlines() if ln.startswith("| Essential |")), "")
@@ -239,7 +250,9 @@ def check_capabilities() -> int:
                         warnings.append(f"{rel(f)}: {h} is the template colour {ref} ({why}); use a concept colour or log why")
     except Exception:  # noqa: BLE001
         pass
-    allowed = {"material.md": {"Roboto"}, "brutalism.md": {"Arial"}}
+    # styles whose identity IS the default face (typography.md §0.1 "a style depends on it")
+    allowed = {"material.md": {"Roboto"}, "brutalism.md": {"Arial", "Times New Roman", "Courier New"},
+               "anti-design.md": {"Times New Roman"}, "retro-os.md": {"Tahoma", "Verdana", "Segoe UI"}}
     for f in STYLES.glob("*.md"):
         for fam in re.findall(r"--font-[a-z0-9-]+:\s*\"([^\"]+)\"", f.read_text(encoding="utf-8")):
             if fam in OVERUSED and fam not in allowed.get(f.name, set()):

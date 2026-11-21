@@ -1,5 +1,5 @@
 ---
-description: Produce any video: explainer, trailer, product demo, tutorial, social short, title sequence, data story.
+description: Produce any video (explainer, trailer, product demo, tutorial, social short, title sequence, data story) with an original direction and measured craft.
 argument-hint: <what video>
 ---
 

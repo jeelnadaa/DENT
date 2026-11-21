@@ -1,5 +1,5 @@
 ---
-description: Make a product launch video end to end (teaser, reveal, feature tour or manifesto).
+description: Make a product launch video end to end (teaser, reveal, feature tour or manifesto) with an original direction.
 argument-hint: <product>
 ---
 

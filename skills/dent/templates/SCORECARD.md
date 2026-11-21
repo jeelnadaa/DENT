@@ -9,7 +9,7 @@
 | — | none | | | |
 
 ## Independent evaluators (Polished+ / All-out)
-| Evaluator | Verdict (Accept / Accept with fixes / Reject) | Independent context? | Key findings |
+| Evaluator | Verdict (Accept / Accept with fixes / Reject) | Independent? (fresh context or a person = yes; same agent/session = **self-review**) | Key findings |
 |---|---|---|---|
 | Visual | | | |
 | UX | | | |

@@ -16,7 +16,8 @@ Engines
           then run `post` on that folder (references/audio/voice-and-narration.md §5.6).
 
 Each local engine lives in its own virtual environment (their PyTorch/Transformers pins conflict) under
-$DENT_TTS_HOME (default ~/.dent/tts/<engine>). `say` re-runs itself inside that environment automatically.
+$DENT_TTS_HOME, else the folder registered with `tts.py home <folder>` (~/.dent/tts-home.txt), else ~/.dent/tts.
+`say` re-runs itself inside that environment automatically.
 Script file: one line of narration per line (blank lines and lines starting with # are ignored). Inline pauses
 `[pause 0.6]` split a line into parts with silence between them.
 
@@ -38,7 +39,23 @@ import urllib.request
 import wave
 from pathlib import Path
 
-HOME = Path(os.environ.get("DENT_TTS_HOME", Path.home() / ".dent" / "tts"))
+POINTER = Path(os.environ.get("DENT_TTS_POINTER", Path.home() / ".dent" / "tts-home.txt"))  # remembers a custom engine folder across sessions
+
+
+def _home() -> Path:
+    """$DENT_TTS_HOME, else the folder registered in ~/.dent/tts-home.txt, else ~/.dent/tts."""
+    if os.environ.get("DENT_TTS_HOME"):
+        return Path(os.environ["DENT_TTS_HOME"])
+    try:
+        reg = POINTER.read_text(encoding="utf-8").strip()
+        if reg and Path(reg).is_dir():
+            return Path(reg)
+    except OSError:
+        pass
+    return Path.home() / ".dent" / "tts"
+
+
+HOME = _home()
 TORCH = "torch torchaudio --index-url https://download.pytorch.org/whl/cu124"
 
 ENGINES = {
@@ -296,9 +313,22 @@ def render_cloud(engine: str, lines: list[str], outdir: Path, a: argparse.Namesp
 
 # ---------------------------------------------------------------- commands
 
+def cmd_home(a) -> int:
+    folder = Path(a.folder).expanduser().resolve()
+    if not folder.is_dir():
+        out(f"{folder} is not a folder")
+        return 1
+    POINTER.parent.mkdir(parents=True, exist_ok=True)
+    POINTER.write_text(str(folder), encoding="utf-8")
+    found = [e for e in ENGINES if not ENGINES[e].get("cloud") and e != "system" and (folder / e).is_dir()]
+    out(f"registered {folder} in {POINTER}; engine folders found: {', '.join(found) or 'none yet'}")
+    return 0
+
+
 def cmd_engines(_a) -> int:
     out(f"machine: {platform.system()} {platform.machine()}, GPU: {gpu()}, ffmpeg: {'yes' if shutil.which('ffmpeg') else 'NO (needed for post)'}")
-    out(f"engine environments: {HOME}  (set DENT_TTS_HOME to change)")
+    src = "DENT_TTS_HOME" if os.environ.get("DENT_TTS_HOME") else ("registered in ~/.dent/tts-home.txt" if POINTER.is_file() else "default")
+    out(f"engine environments: {HOME}  ({src}; `tts.py home <folder>` registers another)")
     for name, m in ENGINES.items():
         if m.get("cloud"):
             state = "key set" if os.environ.get(m["key"], "") else f"needs {m['key']}"
@@ -336,6 +366,9 @@ def cmd_install(a) -> int:
         out("Not installed. Ask the user first; re-run with --yes after they agree.")
         return 2
     HOME.mkdir(parents=True, exist_ok=True)
+    if HOME != Path.home() / ".dent" / "tts":   # remember a custom location for later sessions
+        POINTER.parent.mkdir(parents=True, exist_ok=True)
+        POINTER.write_text(str(HOME), encoding="utf-8")
     for c in cmds:
         r = subprocess.run(c)
         if r.returncode:
@@ -524,6 +557,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("engines")
+    hm = sub.add_parser("home", help="register the folder that holds the engine environments (remembered for every session)")
+    hm.add_argument("folder")
     i = sub.add_parser("install")
     i.add_argument("engine", choices=sorted(ENGINES))
     i.add_argument("--yes", action="store_true", help="actually install (only after the user agreed)")
@@ -563,7 +598,7 @@ def main() -> int:
     c.add_argument("--out", required=True)
     c.add_argument("--seed", type=int, default=7)
     a = ap.parse_args()
-    return {"engines": cmd_engines, "install": cmd_install, "say": cmd_say, "post": cmd_post, "compare": cmd_compare}[a.cmd](a)
+    return {"engines": cmd_engines, "install": cmd_install, "say": cmd_say, "post": cmd_post, "compare": cmd_compare, "home": cmd_home}[a.cmd](a)
 
 
 if __name__ == "__main__":

@@ -34,8 +34,8 @@ You only need `/dent`: the router (`skills/dent/references/workflow/orchestratio
 | `/dent:3d` | Build 3D and real-time graphics (product viewers, scenes, interactive 3D). |
 | `/dent:sound` | Design UI sound, sonic identity, ambience or interactive audio. |
 | `/dent:voice` | Write and produce narration or voice-over (human or TTS) with captions. |
-| `/dent:video` | Produce any video: explainer, trailer, product demo, tutorial, social short, title sequence, data story. |
-| `/dent:launch-video` | Make a product launch video end to end (teaser, reveal, feature tour or manifesto). |
+| `/dent:video` | Produce any video (explainer, trailer, product demo, tutorial, social short, title sequence, data story) with an original direction and measured craft. |
+| `/dent:launch-video` | Make a product launch video end to end (teaser, reveal, feature tour or manifesto) with an original direction. |
 | `/dent:score` | Score the work against the request with evidence; list the top 3 improvements if below target. |
 | `/dent:improve` | Apply the highest-impact improvements from the last scorecard and re-score. |
 | `/dent:update` | Update the DENT plugin to the latest version without reinstalling (refreshes the local marketplace copy so Claude's normal update works). |
@@ -314,7 +314,7 @@ Create motion graphics: kinetic typography, animated compositions, scroll storie
 - **Usage:** `/dent:motion-graphics <piece>`
 - **Default depth:** Advanced
 - **Loads:** references/motion/motion-graphics.md; references/motion/motion-menu.md; references/motion/motion-tech-catalog.md; references/motion/motion-system-and-verification.md; references/creative/directions-library.md; templates/MOTION.md
-- **Does:** Ask (if unknown) → Concept → 2–3 motion directions (All-out) → storyboard with timing → animatic → Choose technology with the selection ladder; justify it → Build with a timeline; design the reduced-motion version; budget performance → Verify play-through, sync, loop point, frame rate, reduced motion, cleanup; capture video/GIF if useful
+- **Does:** Ask (if unknown) → Concept → 2–3 motion directions as bibles with a style frame each (references/video/video-creative-direction → Choose technology with the selection ladder; justify it → Build with a timeline; design the reduced-motion version; budget performance → Verify play-through, sync, loop point, frame rate, reduced motion, cleanup; for rendered video run `python scripts/video_qa
 - **Delivers:** MOTION.md (concept, storyboard, timing, tech), the piece, verification evidence.
 - **Definition:** [`skills/dent/commands/motion-graphics.md`](../skills/dent/commands/motion-graphics.md)
 
@@ -353,24 +353,24 @@ Write and produce narration or voice-over (human or TTS) with captions.
 
 ### `/dent:video`
 
-Produce any video: explainer, trailer, product demo, tutorial, social short, title sequence, data story.
+Produce any video (explainer, trailer, product demo, tutorial, social short, title sequence, data story) with an original direction and measured craft.
 
 - **Usage:** `/dent:video <what video>`
 - **Default depth:** Advanced
-- **Loads:** references/video/video-types-and-craft.md; references/video/video-tools-and-pipeline.md; references/audio/voice-and-narration.md; templates/VIDEO.md
-- **Does:** Run `python scripts/doctor → Brief → one message → script (read it aloud with a timer) → storyboard → animatic → Pick tools → Build, add voice (voice command → QA with the VIDEO
-- **Delivers:** VIDEO.md, the rendered video(s), captions, licence table, QA results.
+- **Loads:** references/video/video-creative-direction.md; references/video/video-types-and-craft.md; references/video/video-tools-and-pipeline.md; templates/video-kit/README.md; references/audio/voice-and-narration.md; templates/VIDEO.md
+- **Does:** Run `python scripts/doctor → Ask the video creative menu (video-creative-direction → Brief → Invent directions as film bibles (§3 → Script (read aloud with a timer) → storyboard → animatic → Decide how it is made (video-tools-and-pipeline → Build, add voice (`tts → Review a contact sheet of stills before the full render; then `python scripts/video_qa
+- **Delivers:** VIDEO.md (brief, chosen bible, guard result), the rendered video(s), captions, licence table, video_qa results.
 - **Definition:** [`skills/dent/commands/video.md`](../skills/dent/commands/video.md)
 
 ### `/dent:launch-video`
 
-Make a product launch video end to end (teaser, reveal, feature tour or manifesto).
+Make a product launch video end to end (teaser, reveal, feature tour or manifesto) with an original direction.
 
 - **Usage:** `/dent:launch-video <product>`
 - **Default depth:** Advanced
-- **Loads:** references/video/video-types-and-craft.md §2; references/video/video-tools-and-pipeline.md; references/motion/motion-graphics.md; references/audio/sound-design.md; templates/VIDEO.md
-- **Does:** Run `python scripts/doctor → One message + hook in the first 2 seconds + proof (real product UI) + CTA → Script, storyboard (shot list with durations), animatic; sonic logo or music bed → Build with the chosen tool; real UI captures or faithful recreations only → Narration (if any) through the voice command → Export 16
-- **Delivers:** Launch video files per platform, thumbnail, captions, VIDEO.md.
+- **Loads:** references/video/video-creative-direction.md; references/video/video-types-and-craft.md §2–2b; references/video/video-tools-and-pipeline.md; templates/video-kit/README.md; references/audio/sound-design.md; templates/VIDEO.md
+- **Does:** Run `python scripts/doctor → Ask the video creative menu (video-creative-direction → Write the three answers (what is it, what does it do for me, how do I get it) and plan ≥ 60 % of screen time on the real product or its real output (video-types-and-craft → Invent 2–3 directions as film bibles with style frames; user picks; originality guard; 2–3 escalation moves; aim for the launch sub-type's bar (§5) → Script, storyboard, animatic; hook in the first 2 seconds with sound off; name by ~9 s; CTA held ≥ 2 s → Build from templates/video-kit/ (engine + invariants; replace every placeholder with the bible); real UI captures or faithful reenactments only → Narration (if any) through the voice command → Stills contact sheet → full render → export 16
+- **Delivers:** Launch video files per platform, thumbnail, captions, VIDEO.md with the chosen bible and guard result, video_qa results.
 - **Definition:** [`skills/dent/commands/launch-video.md`](../skills/dent/commands/launch-video.md)
 
 ### `/dent:score`

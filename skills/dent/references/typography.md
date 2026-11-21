@@ -20,6 +20,7 @@ Fonts are the fastest way a design looks either *designed* or *default*. DENT ha
 `scripts/fonts.py` holds the list and flags these automatically:
 - **First order (template defaults):** Inter as the only face, Roboto, Open Sans, Lato, Montserrat, Poppins, Nunito Sans, Source Sans as a first pick, Raleway, Arial/Helvetica, Playfair Display as "luxury", Bebas Neue / Anton / Oswald as automatic display.
 - **Second order (the anti-slop picks that became slop):** Satoshi, General Sans, Switzer, Cabinet Grotesk, Clash Display/Grotesk, DM Sans, Manrope, Plus Jakarta Sans, Space Grotesk/Mono, Geist, Instrument Serif (especially one italic word in the headline), Fraunces, Bricolage Grotesque, Outfit, Sora, Urbanist, Figtree.
+- **System defaults:** Impact, Georgia, Times New Roman, Consolas, Courier New, Verdana, Tahoma, Segoe UI, Calibri, Cambria, Trebuchet MS, Comic Sans MS, Arial Black: fonts chosen because they happen to be installed. In video they also signal frames drawn with OS raster APIs instead of a real type system (`video/video-tools-and-pipeline.md` §1).
 - **Common (Google Fonts rank ≤ 40):** fine for body text and UI, weak as the identity face.
 
 A registry font earns its place when the brand already uses it, the project's design system ships it, a style depends on it (Material → Roboto Flex), or it is the best face for a hard constraint (script coverage, legibility); log the reason. Inter, Geist and their kin remain excellent UI faces in an existing product; this rule is about new identities.

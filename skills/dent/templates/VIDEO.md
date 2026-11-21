@@ -13,6 +13,15 @@
 - Must show / must not show:
 - Assets available (logo, screenshots, footage, brand fonts, music):
 
+## 1b. Creative direction (`references/video/video-creative-direction.md`)
+- Creative menu answers (feel, typography, motion language, graphics, sound, never):
+- Directions offered (name + logline each) and the one chosen or combined:
+- Film bible of the chosen direction (world, signature device, type, motion language, transitions, camera, colour script, sound world, structure, the moment, never):
+- Escalation moves and where they land:
+- Genre bar (what exceptional looks like for this genre, §5):
+- Originality guard: no DENT launch-film devices · no genre clichés · differs from earlier films on ≥ 4 axes (list them):
+- Products only, three answers with sound off: what is it / what does it do for me / how do I get it; planned share of real-product screen time (≥ 60 %):
+
 ## 2. Tools
 - Media sources (`references/media-sourcing.md` §2), one row per type:
 
@@ -23,7 +32,8 @@
 | Music | | | | | |
 | SFX | | | | | |
 
-- Build tool and why (HyperFrames / Remotion / Motion Canvas / Revideo / Manim / editor / generative):
+- How it is made (render / capture / generate / hybrid) and why; code-built films start from `templates/video-kit/` and render through a browser engine:
+- Build tool and why (video kit / HyperFrames / Remotion / Motion Canvas / Revideo / Manim / editor / generative):
 - Licences (tool + every asset):
 
 ## 3. Script
@@ -54,6 +64,10 @@ Burned-in and/or sidecar (.srt/.vtt); max ~42 characters per line, 2 lines, ≥ 
 |---|---|---|---|---|---|---|
 
 ## 9. QA checklist
+- [ ] `python scripts/video_qa.py <film> --captions <srt> --sheet <jpg>` passes (colour range, sync, loudness, frozen time, longest hold, captions) and I looked at the sheet
+- [ ] Contact sheet of stills reviewed before the final render; fixes listed
+- [ ] Genre bar met; the bible followed in every scene; originality guard passed
+- [ ] Sound heard by a person (or reported as unverified, line ≤ 6)
 - [ ] Message understood with sound off (captions + on-screen text)
 - [ ] First 3 seconds hook works
 - [ ] No typos; brand names correct; claims true

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DENT video kit: composition</title>
+<!-- Fonts: choose with scripts/fonts.py (typography.md §0). Load them here; render.py waits for document.fonts.ready. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mozilla+Headline:wdth,wght@75..100,200..700&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Datatype:wdth,wght@75..100,400..700&display=block">
+<style>
+/* DENT video kit. Replace tokens with DESIGN.md / palette.py output. Two-voice type system:
+   --statement (heavy, tight) for claims, --soul (italic serif) for the emotional half of a line, --label (mono) for data. */
+:root{
+  --paper:#F6FAFC; --ink:#111619; --accent:#A8236E; --muted:#555C61;
+  --statement:"Mozilla Headline",system-ui,sans-serif; --soul:"Newsreader",Georgia,serif; --label:"Datatype",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+#stage{position:relative;overflow:hidden;background:var(--paper);color:var(--ink)}
+#cam{position:absolute;inset:0;transform-origin:50% 50%}            /* living frame: everything inside drifts */
+.scene{position:absolute;inset:0;opacity:0}
+.a{position:absolute}
+.statement{font-family:var(--statement);font-weight:700;letter-spacing:-.04em;line-height:.95}
+.soul{font-family:var(--soul);font-style:italic;font-weight:400;letter-spacing:-.01em;color:var(--accent)}
+.label{font-family:var(--label);font-stretch:85%;text-transform:uppercase;letter-spacing:.09em;font-size:22px;color:var(--muted)}
+.line{display:block;overflow:clip;padding-bottom:.06em}             /* mask for line reveals */
+.line>span{display:inline-block}
+.chapter-n{font-family:var(--statement);font-weight:200;color:var(--accent);font-size:180px;line-height:.8}
+.term{background:#15191C;color:#E8EEF1;border-radius:14px;padding:26px 30px;font-family:var(--label);font-stretch:85%;font-size:26px;line-height:1.5;white-space:pre-wrap;box-shadow:0 40px 90px rgba(0,0,0,.35)}
+.term .dim{color:#8A9499}.term .hit{color:#FF8FC8}
+#wipe{position:absolute;border-radius:50%;background:var(--accent);pointer-events:none}
+#grain{position:absolute;inset:-50%;opacity:.06;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
+#cap{position:absolute;left:8%;right:8%;text-align:center;font-family:var(--statement);font-weight:500;font-size:34px;color:#fff}
+#cap span{background:rgba(17,22,25,.82);padding:.1em .45em;border-radius:.25em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+</style>
+</head>
+<body>
+<div id="stage"><div id="cam"></div><div id="wipe"></div><div id="grain"></div><div id="cap"><span></span></div></div>
+<script>
+/* ============================================================ engine (keep) */
+const Q = new URLSearchParams(location.search), W = +Q.get('w') || 1920, H = +Q.get('h') || 1080, PORT = H > W;
+const stage = document.getElementById('stage'), cam = document.getElementById('cam');
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+const U = Math.min(W, H) / 1080;                       // design at 1080 short side, scale everything by U
+let TL;
+const $ = (h) => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstChild; };
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const P = (t, start, dur) => clamp((t - start) / dur);  // 0→1 progress of an event
+// motion tokens: one family for the whole film
+const eOut = (x) => 1 - Math.pow(1 - clamp(x), 4);                       // arrivals
+const eIn = (x) => Math.pow(clamp(x), 3);                                 // departures
+const eIO = (x) => { x = clamp(x); return x < .5 ? 8 * x ** 4 : 1 - Math.pow(-2 * x + 2, 4) / 2; };
+const spring = (dt, f = 2.2, z = .35) => dt <= 0 ? 0 : 1 - Math.exp(-z * f * 2 * Math.PI * dt) * Math.cos(f * Math.sqrt(1 - z * z) * 2 * Math.PI * dt);
+const fall = (dt, h, g = 4200) => Math.min(h, 0.5 * g * dt * dt);         // gravity, px
+const S = (el, o) => {                                                    // set transform/opacity in one call
+  const tr = `translate(${(o.x || 0) * U}px,${(o.y || 0) * U}px) scale(${o.s ?? 1}${o.sy !== undefined ? ',' + o.sy : ''}) rotate(${o.r || 0}deg)`;
+  el.style.transform = tr; if (o.o !== undefined) el.style.opacity = o.o;
+};
+const beat = (n) => n * 60 / TL.bpm;                                       // beats → seconds
+// line reveal: each line slides up out of its mask, staggered
+function lines(el, t, start, stagger = .09, dur = .55) {
+  el.querySelectorAll('.line>span').forEach((s, i) => { const k = eOut(P(t, start + i * stagger, dur)); S(s, { y: (1 - k) * 120, o: 1 }); });
+}
+// transition family: the accent dot grows from a point into a full-frame wipe, then shrinks away revealing the next scene
+const wipeEl = document.getElementById('wipe');
+function wipe(t, at, ox = .5, oy = .5) {
+  const R = Math.hypot(W, H) * 1.05;
+  const grow = eIn(P(t, at - .35, .35)), shrink = eOut(P(t, at, .45));
+  const r = t < at ? R * grow : R * (1 - shrink);
+  if (r <= 0.5) return false;
+  wipeEl.style.width = wipeEl.style.height = 2 * r + 'px';
+  wipeEl.style.left = (ox * W - r) + 'px'; wipeEl.style.top = (oy * H - r) + 'px';
+  wipeEl.style.opacity = 1;
+  return true;
+}
+// living frame: a slow push in every scene so no frame is ever frozen; plus a subtle drift
+function livingFrame(t, sceneStart) { const k = t - sceneStart; S(cam, { s: 1 + .012 * k, x: Math.sin(k * .7) * 3, y: Math.cos(k * .5) * 2 }); }
+
+/* ============================================================ scenes: PLACEHOLDERS ONLY. Replace every scene, font, colour
+   and the transition with your film bible (references/video/video-creative-direction.md). Keep the engine above. */
+const scenes = [];
+function scene(html) { const el = $(`<div class="scene">${html}</div>`); cam.append(el); scenes.push(el); return el; }
+
+// 1. Hook: words punch in on the beat (sound-off readable from frame 1)
+const s1 = scene(`<div class="a statement" style="left:${110 * U}px;top:${PORT ? 520 * U : 300 * U}px;font-size:${150 * U}px">
+  <span class="line"><span>Your product.</span></span><span class="line"><span class="soul">Its own look.</span></span></div>`);
+// 2. Chapter: claim + live proof (number, statement with an italic half, a reenacted UI)
+const s2 = scene(`<div class="a chapter-n" style="left:${110 * U}px;top:${PORT ? 200 * U : 170 * U}px">01</div>
+  <div class="a statement" style="left:${110 * U}px;top:${PORT ? 420 * U : 420 * U}px;font-size:${88 * U}px"><span class="line"><span>It asks</span></span><span class="line"><span class="soul">before it guesses.</span></span></div>
+  <div class="a term" style="left:${PORT ? 80 * U : 1000 * U}px;top:${PORT ? 820 * U : 260 * U}px;width:${PORT ? W - 160 * U : 800 * U}px;font-size:${26 * U}px"></div>`);
+// 3. Proof number: counts up on the beat
+const s3 = scene(`<div class="a label" style="left:${110 * U}px;top:${260 * U}px">measured · say where the number comes from</div>
+  <div class="a statement" style="left:${100 * U}px;top:${330 * U}px;font-size:${300 * U}px;font-variant-numeric:tabular-nums">0</div>`);
+// 4. End card: name, promise, CTA held still (the only allowed long hold)
+const s4 = scene(`<div class="a statement" style="left:0;right:0;text-align:center;top:${PORT ? 760 * U : 360 * U}px;font-size:${170 * U}px">Name<span style="color:var(--accent)">.</span></div>
+  <div class="a soul" style="left:0;right:0;text-align:center;top:${PORT ? 960 * U : 560 * U}px;font-size:${54 * U}px">one-line promise</div>
+  <div class="a label" style="left:0;right:0;text-align:center;top:${PORT ? 1080 * U : 680 * U}px">url · install command</div>`);
+
+const TERM = '> /dent a landing page for my coffee app\n\nHow far should I take it?\n  Essential\n  Standard (Recommended)\n  Polished\n› All-out';
+
+/* ============================================================ render(t) */
+function show(el, on) { el.style.opacity = on ? 1 : 0; }
+function render(t) {
+  const T = TL.events, cut = TL.scenes;            // scene start times from timeline.json
+  const idx = cut.findLastIndex(s => t >= s);
+  scenes.forEach((el, i) => show(el, i === idx));
+  livingFrame(t, cut[Math.max(0, idx)]);
+  wipeEl.style.opacity = 0;
+  cut.slice(1).forEach(at => wipe(t, at));
+
+  if (idx === 0) lines(s1, t, T.hook);
+  if (idx === 1) {
+    const n = s2.querySelector('.chapter-n'); const k = spring(t - cut[1]); S(n, { y: (1 - k) * 80, o: clamp(k * 2) });
+    lines(s2, t, cut[1] + .15);
+    const term = s2.querySelector('.term'); const tp = eOut(P(t, cut[1] + .3, .6)); S(term, { x: (1 - tp) * 120, o: tp });
+    const chars = Math.floor(clamp((t - T.type) / 1.0) * TERM.length);
+    term.textContent = TERM.slice(0, chars);
+  }
+  if (idx === 2) {
+    const el = s3.querySelector('.statement'); const k = eOut(P(t, cut[2] + .2, 1.0));
+    el.textContent = Math.round(k * TL.proof.value) + TL.proof.unit; S(el, { s: 1 + .05 * Math.exp(-(t - cut[2] - 1.2) * 8) * (t > cut[2] + 1.2) });
+  }
+  if (idx === 3) {
+    const [nm, pr, cta] = s4.children; const k = spring(t - cut[3], 2.6, .3);
+    S(nm, { s: .9 + .1 * k, sy: .9 + .1 * k, o: clamp(k * 3) }); S(pr, { y: (1 - eOut(P(t, cut[3] + .35, .5))) * 30, o: eOut(P(t, cut[3] + .35, .5)) });
+    S(cta, { o: eOut(P(t, cut[3] + .7, .5)) });
+  }
+  // captions from timeline.json cues (burned in; also write SRT/VTT)
+  const cue = (TL.cues || []).find(c => t >= c.s && t < c.e);
+  document.querySelector('#cap span').textContent = cue ? cue.t : '';
+  document.getElementById('cap').style.opacity = cue ? 1 : 0;
+  document.getElementById('cap').style.top = (PORT ? H * .74 : H * .86) + 'px';
+}
+(async () => {
+  TL = await (await fetch('timeline.json')).json();
+  await document.fonts.ready;
+  window.render = render; render(+Q.get('t') || 0); window.READY = true;
+})();
+</script>
+</body>
+</html>

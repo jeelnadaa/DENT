@@ -4,7 +4,7 @@ description: DENT 2.0 is a design-engineering skill for any visual, interactive 
 license: Apache-2.0
 metadata:
   author: Jeel Nada (solarquack)
-  version: "2.5.0"
+  version: "2.5.1"
   homepage: https://github.com/jeelnadaa/DENT
 ---
 
@@ -325,7 +325,8 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 | Narration, voice-over, TTS, captions | `references/audio/voice-and-narration.md` |
 | Audio technology and asset catalogue | `references/audio/audio-tech-catalog.md` |
 | Audio implementation and verification | `references/audio/audio-implementation-and-verification.md` |
-| Video types, scripts, storyboards, craft | `references/video/video-types-and-craft.md` |
+| Video types, scripts, storyboards, craft, product truth, the quality bar | `references/video/video-types-and-craft.md` |
+| **Video creative direction: the creative menu (typography, motion language, graphics, sound), film bibles, originality guard, the bar in each genre, escalation moves** | `references/video/video-creative-direction.md` (engine + quality invariants: `templates/video-kit/`) |
 | Video tools (generative + code-based + editors), pipeline, export specs | `references/video/video-tools-and-pipeline.md` |
 | Landing, pricing, dashboard, onboarding, auth, forms, checkout, settings, AI/chat UI | `references/page-and-flow-patterns.md` |
 | Teams, billing, roles, notifications, docs, blog, 404, legal | `references/complex-product-patterns.md` |
@@ -341,7 +342,7 @@ Follow `references/workflow/scoring-and-closeout.md`. At Standard effort and abo
 | Previews, Figma, Storybook, handoff | `references/tooling-and-handoff.md` |
 | Reference sites and inspiration | `references/inspiration-and-reference-sites.md` |
 | DESIGN.md | `references/design-md-template.md` |
-| Templates | `templates/PLAN.md`, `templates/AUDIT.md`, `templates/REVIEW.md`, `templates/SCORECARD.md`, `templates/MOTION.md`, `templates/SOUND.md`, `templates/VIDEO.md` |
-| Checks and tools you can run | `scripts/verify_page.py`, `scripts/contrast.py`, `scripts/palette.py` (concept palettes + cliché check), `scripts/fonts.py` (fresh fonts + overuse/licence check), `scripts/tts.py` (narration across engines + mastering + captions), `scripts/doctor.py` (what this machine can do), offline MWG lookup `scripts/mwg.py`; plugin updater `scripts/update_plugin.py` |
+| Templates | `templates/video-kit/` (code-built video engine), `templates/PLAN.md`, `templates/AUDIT.md`, `templates/REVIEW.md`, `templates/SCORECARD.md`, `templates/MOTION.md`, `templates/SOUND.md`, `templates/VIDEO.md` |
+| Checks and tools you can run | `scripts/verify_page.py`, `scripts/contrast.py`, `scripts/palette.py` (concept palettes + cliché check), `scripts/fonts.py` (fresh fonts + overuse/licence check), `scripts/tts.py` (narration across engines + mastering + captions), `scripts/doctor.py` (what this machine can do), `scripts/video_qa.py` (measure a finished video: colour range, sync, loudness, frozen time, captions), offline MWG lookup `scripts/mwg.py`; plugin updater `scripts/update_plugin.py` |
 
 To extend DENT: new styles follow `references/styles/_style-template.md` + a row in the index; new catalogue entries follow `references/catalog/README.md`; new topics get a reference file, a row above, and a row in the add-on routing table.

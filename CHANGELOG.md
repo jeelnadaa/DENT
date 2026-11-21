@@ -4,6 +4,29 @@ All notable changes to DENT are documented here. Format: [Keep a Changelog](http
 
 ## [Unreleased]
 
+## [2.5.1] — 2026-11-21
+
+Videos made with DENT now aim for the bar of DENT's own launch film without copying it: an original direction for every film, measured craft, and honest review.
+
+### Added
+- **Video creative direction** (`references/video/video-creative-direction.md`): the split between quality invariants (fixed) and creative choices (invented per film); a **video creative menu** that asks about feel, typography (including custom lettering), motion language, graphics and imagery, sound and "never"; 2–3 **film bibles** with style frames to choose from; an **originality guard** (no reuse of DENT's launch-film devices, no genre clichés, differ from earlier films on ≥ 4 axes); **the bar in each genre** (15 video types); escalation moves; how each choice is built in a browser engine.
+- **`templates/video-kit/`**: a code-built video engine (deterministic `render(t)`, one timeline for picture and sound, motion blur, TV-range BT.709 encoding, 16:9 / 9:16 / 1:1, beat-locked original score, stills contact sheets) with the ten quality invariants; its scenes are marked as placeholders.
+- **`scripts/video_qa.py`**: measures a finished video (codec, colour range, constant frame rate, A/V sync, loudness, **frozen time and longest hold**, rhythm, black frames, captions) and makes a contact sheet. DENT's launch film passes (17 % frozen, 1.4 s longest hold); the test films that prompted this release failed (86 %, 64 %, and a 5 s hold).
+- **Product truth for launch films** (`video-types-and-craft.md` §2b): the three-question test with sound off, ≥ 60 % of screen time on the real product or its real output, no AI imagery presented as the product's output.
+- `tts.py home <folder>`: registers where the voice engines live so every later session finds them.
+- Tests for `video_qa.py`, `tts.py home`, system-font flags and the kit; validator checks that video commands use the creative direction, the kit and the QA; eval scenario S27 (original films across three genres).
+
+### Changed
+- `/dent:video`, `/dent:launch-video` and `/dent:motion-graphics` ask the creative menu, offer film bibles, run the originality guard, start from the kit, decide render / capture / generate / hybrid, and must pass `video_qa.py`.
+- **[Rule]** Code-built video frames render through a browser engine with chosen fonts; never OS raster text (System.Drawing, PIL, OpenCV) with system fonts.
+- `fonts.py` flags system fonts (Impact, Georgia, Times New Roman, Consolas, Courier New, Segoe UI…); Brutalism, Anti-Design and Retro OS keep theirs as logged exceptions.
+- Scoring: an evaluation is independent only in a fresh context or by a person; same-agent reviews are labelled self-review. Sound, music and voice nobody has heard score at most 6.
+- `templates/VIDEO.md`: creative direction, how-it-is-made and measured QA sections.
+
+### Fixed
+- Voice engines installed outside `~/.dent/tts` were invisible to new sessions, so agents fell back to a lower-ranked engine (Kokoro instead of Qwen3-TTS).
+- Video QA guidance now catches full-range `yuvj420p` output and product names the narrator mispronounces.
+
 ## [2.5.0] — 2026-11-21
 
 "Go all out" now means everything, narration sounds human, and DENT stops reaching for the same fonts and colours. Specification: `docs/dent-3/SPEC.md`; evidence: `docs/dent-3/VERIFICATION.md`.

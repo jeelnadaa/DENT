@@ -11,10 +11,10 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-111?style=flat-square)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-SKILL.md-111?style=flat-square)](https://agentskills.io)
-[![Version](https://img.shields.io/badge/version-2.5.0-E8461E?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.5.1-E8461E?style=flat-square)](CHANGELOG.md)
 [![Modern Web Guidance](https://img.shields.io/badge/web%20authority-Modern%20Web%20Guidance-111?style=flat-square)](#modern-web-guidance-the-authority-for-web-code)
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-111?style=flat-square)](skills/dent/references/styles/_styles-index.md)
-[![Commands](https://img.shields.io/badge/commands-32-111?style=flat-square)](docs/COMMANDS.md)
+[![Commands](https://img.shields.io/badge/commands-34-111?style=flat-square)](docs/COMMANDS.md)
 
 **[Website](https://dent.solarquack.in)** · **[Install](#install)** · **[One command](#one-command-the-right-pipeline)** · **[What it can make](#what-dent-can-make)** · **[Proof](#see-the-difference-run-the-benchmark)** · **[Commands](docs/COMMANDS.md)** · **[Architecture](docs/ARCHITECTURE.md)**
 
@@ -403,7 +403,7 @@ skills/dent/
 └── scripts/            # verify_page.py, contrast.py, palette.py, fonts.py, tts.py, doctor.py, mwg.py (offline Modern Web Guidance lookup)
 skills/modern-web-guidance/  # Google's Modern Web Guidance skill, vendored verbatim (scripts/sync_mwg.py)
 commands/               # Claude Code plugin wrappers → /dent:<name>
-evals/                  # behaviour cases, 26 scenarios, command + routing tests, fixtures
+evals/                  # behaviour cases, 27 scenarios, command + routing tests, fixtures
 benchmark/              # public with/without comparisons
 ```
 
@@ -415,7 +415,7 @@ Progressive disclosure keeps the agent's context small: `SKILL.md` is about 350 
 
 - `python scripts/validate.py`: frontmatter, 500+ internal references, the styles index, the command trio (definition ↔ plugin wrapper ↔ router), 200+ catalogue entries with sources and status, versions, the vendored Modern Web Guidance copy, and every `mwg:<guide>` reference in DENT.
 - `python scripts/test_tools.py`: `verify_page.py` must fail a deliberately broken page on every gate (including each Modern Web Guidance rule it breaks) and pass a clean one; `palette.py` must flag the template palettes and every library palette must pass contrast in both themes; `fonts.py` must flag overused fonts and every pairing face must exist; `tts.py post` must hit its loudness target with valid captions; `doctor.py` must report without leaking keys.
-- [`evals/`](evals/): 15 behaviour cases, 26 scenarios (dashboards, data-heavy apps, checkout, existing design systems, unfamiliar frameworks, strict accessibility, motion graphics, 3D, animated data, audiovisual, launch and explainer videos, sonic identity) and a protocol that records the prompt, **every question asked and the answer chosen**, the output, machine checks, self-score and an independent score.
+- [`evals/`](evals/): 15 behaviour cases, 27 scenarios (dashboards, data-heavy apps, checkout, existing design systems, unfamiliar frameworks, strict accessibility, motion graphics, 3D, animated data, audiovisual, launch and explainer videos, sonic identity) and a protocol that records the prompt, **every question asked and the answer chosen**, the output, machine checks, self-score and an independent score.
 - Catalogue licences are marked ✓ (checked against official sources on a date) or K (from knowledge, to verify), so DENT never presents a guess as a fact.
 
 CI runs the validator, the tool tests and the packager on every push.

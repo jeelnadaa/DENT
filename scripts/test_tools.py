@@ -6,6 +6,8 @@
 - fonts.py: overuse flags, suggestions, every pairing face exists on Google Fonts and is not overused
 - tts.py: engine listing, install needs --yes, post (loudness, captions, timing) on synthetic tones
 - doctor.py: JSON capability report
+- tts.py home: a registered engine folder is found by new processes without env vars
+- video_qa.py: frozen and full-range clips fail, a moving clip passes; the video kit is complete and marked as placeholders
 - verify_page.py (run with --surfaces match): evals/fixtures/bad.html must fail G2, G3, G4, G8_surfaces, G10, G11,
   G13 (each MWG rule and default surface it has);
   good.html must pass all (including a slowed progress spinner under reduced motion)
@@ -137,6 +139,8 @@ def test_fonts() -> None:
     overused = sorted(n for n in names if n in F.OVERUSED)
     check(not missing, f"pairing faces on Google Fonts ({len(names)} checked){': missing ' + ', '.join(missing) if missing else ''}")
     check(not overused, f"no overused face in the pairing library{': ' + ', '.join(overused) if overused else ''}")
+    r = subprocess.run([sys.executable, str(SCRIPTS / "fonts.py"), "check", "Impact", "Georgia", "Consolas"], capture_output=True, text=True)
+    check(r.stdout.count("OVERUSED") == 3, "system fonts (Impact, Georgia, Consolas) are flagged")
 
 
 def _tone(path: Path, seconds: float, freq: float, sr: int = 24000, amp: float = 0.3) -> None:
@@ -187,6 +191,51 @@ def test_tts() -> None:
         check(r.returncode == 0 and span(t2) > span(timing) * 1.15, "post --tempo 0.8 slows lines (pitch-preserving) and still passes loudness")
 
 
+def test_tts_home() -> None:
+    print("tts.py home")
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d)
+        (d / "engines" / "kokoro").mkdir(parents=True)
+        env = {**__import__("os").environ, "DENT_TTS_POINTER": str(d / "pointer.txt")}
+        env.pop("DENT_TTS_HOME", None)
+        r = subprocess.run([sys.executable, str(SCRIPTS / "tts.py"), "home", str(d / "engines")], capture_output=True, text=True, env=env)
+        check(r.returncode == 0 and (d / "pointer.txt").is_file() and "kokoro" in r.stdout, "home registers a folder and finds engine folders in it")
+        r = subprocess.run([sys.executable, str(SCRIPTS / "tts.py"), "engines"], capture_output=True, text=True, env=env, timeout=300)
+        check(str((d / "engines").resolve()) in r.stdout and "registered" in r.stdout, "engines uses the registered folder in a new process (no env var needed)")
+
+
+def _clip(path: Path, moving: bool, full_range: bool = False) -> None:
+    src = "testsrc2=size=640x360:rate=30" if moving else "color=c=0x334455:size=640x360:rate=30"
+    pix = ["-pix_fmt", "yuvj420p"] if full_range else ["-pix_fmt", "yuv420p", "-color_range", "tv"]
+    subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi", "-i", src, "-f", "lavfi",
+                    "-i", "sine=frequency=330:sample_rate=48000", "-t", "8", "-af", "volume=0.2", *pix,
+                    "-c:v", "libx264", "-c:a", "aac", "-shortest", str(path)], check=True)
+
+
+def test_video_qa() -> None:
+    print("video_qa.py")
+    if not shutil.which("ffmpeg"):
+        print("  skip  ffmpeg not installed")
+        return
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d)
+        mov, still, full = d / "moving.mp4", d / "still.mp4", d / "full.mp4"
+        _clip(mov, True); _clip(still, False); _clip(full, True, full_range=True)
+        q = lambda f: subprocess.run([sys.executable, str(SCRIPTS / "video_qa.py"), str(f), "--lufs", "-21", "--end-hold", "1", "--json", str(d / "r.json")],  # noqa: E731
+                                     capture_output=True, text=True, timeout=300)
+        r = q(still)
+        rep = json.loads((d / "r.json").read_text(encoding="utf-8"))
+        check(r.returncode == 1 and rep["motion"]["frozen_share"] > 0.9, "a frozen clip fails the motion check")
+        r = q(mov)
+        rep = json.loads((d / "r.json").read_text(encoding="utf-8"))
+        check(rep["motion"]["frozen_share"] == 0 and "motion:" in r.stdout and "FAIL  motion" not in r.stdout, "a moving clip passes the motion check")
+        r = q(full)
+        check("FAIL  pixel format yuvj420p" in r.stdout, "full-range yuvj420p frames are flagged")
+    kit = ROOT / "skills" / "dent" / "templates" / "video-kit"
+    check(all((kit / f).is_file() for f in ("README.md", "composition.html", "timeline.json", "render.py", "score.py")), "video kit is complete")
+    check("PLACEHOLDERS ONLY" in (kit / "composition.html").read_text(encoding="utf-8"), "kit scenes are marked as placeholders (originality guard)")
+
+
 def test_doctor() -> None:
     print("doctor.py")
     r = subprocess.run([sys.executable, str(SCRIPTS / "doctor.py"), "--json"], capture_output=True, text=True, timeout=600)
@@ -207,6 +256,8 @@ def main() -> int:
     test_palette()
     test_fonts()
     test_tts()
+    test_tts_home()
+    test_video_qa()
     test_doctor()
     test_verify()
     print(f"\n{len(failures)} failure(s)" if failures else "\nAll tool tests passed")

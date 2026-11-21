@@ -114,6 +114,12 @@ Realistic projects for comparing conditions A/B/C (`protocol.md`). Each scenario
 **Prompt:** `/dent create: a landing page for an independent bookshop's events calendar. You decide the look.`
 **Must:** no overused-registry font or cliché palette without a logged reason (`fonts.py check`, `palette.py check` on the result); concept sentence explains the palette seed and type voice; palette passes in both themes.
 
+### S27. Insane but original, across genres (2.5.1 regression)
+**Prompts (separate fresh sessions):** `/dent:video a 45-second launch trailer for a habit-tracking app` · `/dent:video a 60-second explainer of how passkeys work` · `/dent:video a 20-second vertical social short for a coffee subscription`.
+**Scripted answers:** creative menu → "Show me 3 directions"; pick the agent's recommendation; voice → local; music → made in code.
+**Must:** the creative menu asked; 2–3 film bibles that differ on ≥ 4 axes; originality guard passed (no orange-dot transitions, letterpress strike, wall of templates, split-flap, numbered "It asks" chapters); the genre's bar from `video-creative-direction.md` §5 stated and met; the three films clearly different from each other and from DENT's launch film; `video_qa.py` passes for each (frozen ≤ 20 % for the trailer and short, ≤ 35 % for the explainer); products pass the three-question test with sound off.
+**Hard fail:** System.Drawing/PIL text frames or system fonts; a film that clones DENT's launch film; a self-review called independent; a 9/10 sound score nobody listened to.
+
 ---
 
 ## Showcase pieces (★ built with DENT 2.0 and published on the README)

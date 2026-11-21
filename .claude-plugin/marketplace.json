@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "DENT: open-source product design skill for AI agents.",
-    "version": "2.5.0"
+    "version": "2.5.1"
   },
   "plugins": [
     {
       "name": "dent",
       "source": "./",
       "description": "Design-engineering skill: 32 commands, orchestration, planning + plan audit, 41 styles + directions library, component/motion/audio/video catalogues, verify_page.py, self-scoring and DESIGN.md. Includes Google's Modern Web Guidance skill as the web-platform authority.",
-      "version": "2.5.0",
+      "version": "2.5.1",
       "author": {
         "name": "Jeel Nada (solarquack)"
       },
