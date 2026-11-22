@@ -1,0 +1,44 @@
+[
+ {
+  "t": 20.0,
+  "kind": "unsafe",
+  "txt": "No reset.",
+  "top": 1522,
+  "bottom": 1623
+ },
+ {
+  "t": 20.5,
+  "kind": "unsafe",
+  "txt": "No reset.",
+  "top": 1523,
+  "bottom": 1624
+ },
+ {
+  "t": 21.0,
+  "kind": "unsafe",
+  "txt": "No reset.",
+  "top": 1525,
+  "bottom": 1626
+ },
+ {
+  "t": 21.5,
+  "kind": "unsafe",
+  "txt": "No reset.",
+  "top": 1526,
+  "bottom": 1628
+ },
+ {
+  "t": 22.0,
+  "kind": "unsafe",
+  "txt": "No reset.",
+  "top": 1528,
+  "bottom": 1629
+ },
+ {
+  "t": 22.5,
+  "kind": "unsafe",
+  "txt": "No reset.",
+  "top": 1529,
+  "bottom": 1630
+ }
+]

@@ -21,39 +21,41 @@ body{background:#101214;color:#EDEFF1;font-family:"Datatype",monospace;overflow:
 </head>
 <body>
 <div id="grid">
-  <div class="tile"><div class="tag">1 · custom lettering</div>
+  <div class="tile"><div class="tag" data-small>1 · custom lettering</div>
     <svg id="let" class="c" viewBox="0 0 470 140" width="420"><g transform="translate(10 10)">
       <path class="glyph" d="M0 0H70Q120 0 120 60Q120 120 70 120H0Z M30 30V90H66Q90 90 90 60Q90 30 66 30Z"/>
       <path class="glyph" transform="translate(140 0)" d="M0 0H100V28H30V46H88V74H30V92H100V120H0Z"/>
       <path class="glyph" transform="translate(260 0)" d="M0 0H30L82 76V0H110V120H82L30 44V120H0Z"/>
       <path class="glyph" transform="translate(370 0)" d="M0 0H100V28H64V120H36V28H0Z"/></g></svg></div>
-  <div class="tile"><div class="tag">2 · variable-axis kinetic type</div>
+  <div class="tile"><div class="tag" data-small>2 · variable-axis kinetic type</div>
     <div id="kin" class="c" style="font-family:Anybody;font-size:96px;line-height:1;white-space:nowrap">MOTION</div></div>
-  <div class="tile"><div class="tag">3 · hand-made boil</div>
+  <div class="tile"><div class="tag" data-small>3 · hand-made boil</div>
     <svg class="c" viewBox="0 0 300 200" width="360" style="filter:url(#boil)"><path d="M40 160 Q150 10 260 160 Z" fill="none" stroke="#EDEFF1" stroke-width="6"/><circle cx="150" cy="120" r="30" fill="#FFD166"/></svg></div>
-  <div class="tile"><div class="tag">4 · morph</div>
+  <div class="tile"><div class="tag" data-small>4 · morph</div>
     <svg class="c" viewBox="0 0 200 200" width="240"><path id="mor" fill="#5AC8E8"/></svg></div>
-  <div class="tile"><div class="tag">5 · parallax camera + rack focus</div>
+  <div class="tile"><div class="tag" data-small>5 · parallax camera + rack focus</div>
     <div id="par" style="position:absolute;inset:0">
       <div class="layer" data-z="3.2"><div style="width:520px;height:220px;background:linear-gradient(#2B3A55,#1A1D20);border-radius:12px"></div></div>
       <div class="layer" data-z="1.6"><div style="width:120px;height:120px;border-radius:50%;background:#7FB2C9;margin-left:-180px"></div></div>
       <div class="layer" data-z="1"><div style="font:700 54px Anybody">DEPTH</div></div>
       <div class="layer" data-z=".7"><div style="width:60px;height:60px;background:#FF6A57;margin-left:260px;margin-top:120px"></div></div></div></div>
-  <div class="tile"><div class="tag">6 · glitch</div>
+  <div class="tile"><div class="tag" data-small>6 · glitch</div>
     <div id="gl" class="c" style="font:900 90px Anybody;font-stretch:130%">SIGNAL</div></div>
-  <div class="tile"><div class="tag">7 · physics: bounce + squash</div>
+  <div class="tile"><div class="tag" data-small>7 · physics: bounce + squash</div>
     <div id="ball" style="position:absolute;left:50%;top:78%;width:70px;height:70px;margin:-70px 0 0 -35px;border-radius:50%;background:#FFD166;transform-origin:50% 100%"></div>
     <div style="position:absolute;left:20%;right:20%;top:78%;height:2px;background:#3A4046"></div></div>
-  <div class="tile"><div class="tag">7b · shockwave</div><div id="ring"></div><div style="position:absolute;left:50%;top:60%;width:24px;height:24px;margin:-12px;border-radius:50%;background:#FF6A57"></div></div>
-  <div class="tile"><div class="tag">8 · collage: torn paper + halftone</div>
+  <div class="tile"><div class="tag" data-small>7b · shockwave</div><div id="ring"></div><div style="position:absolute;left:50%;top:60%;width:24px;height:24px;margin:-12px;border-radius:50%;background:#FF6A57"></div></div>
+  <div class="tile"><div class="tag" data-small>8 · collage: torn paper + halftone</div>
     <div id="paper" style="position:absolute;left:12%;right:12%;top:22%;bottom:14%;background:#F1E9DA;color:#1A1D20;display:grid;place-items:center;font:800 64px Anybody;overflow:hidden">
       <div id="ht" style="position:absolute;inset:-40%"></div><span style="position:relative">PRINT</span></div></div>
-  <div class="tile"><div class="tag">9 · data: count + line</div>
+  <div class="tile"><div class="tag" data-small>9 · data: count + line</div>
     <div id="num" style="position:absolute;left:24px;top:48px;font:800 80px Anybody;color:#EDEFF1"></div>
     <svg id="chart" style="position:absolute;left:24px;right:24px;bottom:24px;height:150px;width:calc(100% - 48px);color:#5AC8E8"></svg></div>
-  <div class="tile" id="t3d"><div class="tag">10 · 3D (three.js, t-driven)</div></div>
-  <div class="tile"><div class="tag">all modules: deterministic in t</div>
-    <div id="clock" class="c" style="font-size:40px;color:#8B949B"></div></div>
+  <div class="tile" id="t3d"><div class="tag" data-small>10 · 3D (three.js, t-driven)</div></div>
+  <div class="tile"><div class="tag" data-small>11–13 · loadFonts + fitText + livingFrame</div>
+    <div id="live" style="position:absolute;inset:40px 20px 50px;display:grid;place-items:center">
+      <div id="fit" style="font:800 40px Anybody;font-stretch:120%;white-space:nowrap;color:#FFD166">FITS THE BOX</div></div>
+    <div id="clock" style="position:absolute;left:12px;bottom:10px;font-size:18px;color:#8B949B"></div></div>
 </div>
 <script src="techniques.js"></script>
 <script type="module">
@@ -80,9 +82,12 @@ window.render = (t) => {
   F.count(document.getElementById('num'), t, 0, 1.5, 43.8, { decimals: 1 });
   F.lineChart(document.getElementById('chart'), [12, 18, 15, 26, 31, 29, 38, 44], t, .2, 1.6, { w: 420, h: 150 });
   s3.render(t, (root, t) => { root.rotation.y = t * .9; root.rotation.x = .4 + .2 * Math.sin(t); });
-  document.getElementById('clock').textContent = `t = ${t.toFixed(2)} s`;
+  F.livingFrame(document.getElementById('live'), t, { drift: 8, push: .03 });
+  document.getElementById('clock').textContent = `t = ${t.toFixed(2)} s · deterministic in t`;
 };
-await document.fonts.ready;
+const missing = await F.loadFonts(['800 1em Anybody', '900 1em Anybody', '400 1em Datatype']);
+if (missing.length) console.error('fonts missing: ' + missing.join(', '));
+F.fitText(document.getElementById('fit'), 400, 200);
 window.render(+new URLSearchParams(location.search).get('t') || 0);
 window.READY = true;
 </script>

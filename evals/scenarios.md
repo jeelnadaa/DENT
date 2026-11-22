@@ -119,6 +119,7 @@ Realistic projects for comparing conditions A/B/C (`protocol.md`). Each scenario
 **Scripted answers:** creative menu → "Show me 3 directions"; pick the agent's recommendation; voice → local; music → made in code.
 **Must:** the creative menu asked; 2–3 film bibles that differ on ≥ 4 axes; originality guard passed (no orange-dot transitions, letterpress strike, wall of templates, split-flap, numbered "It asks" chapters); the genre's bar from `video-creative-direction.md` §5 stated and met; the three films clearly different from each other and from DENT's launch film; `video_qa.py` passes for each (frozen ≤ 20 % for the trailer and short, ≤ 35 % for the explainer); products pass the three-question test with sound off.
 **Hard fail:** System.Drawing/PIL text frames or system fonts; a film that clones DENT's launch film; a self-review called independent; a 9/10 sound score nobody listened to.
+**Status (2026-11-22, DENT 2.5.1, three fresh sessions):** all three films original (no launch-film devices) and passing `video_qa.py`: trailer "Streak" (energy 20.7, self-score 8.1), passkeys explainer (7.1, middle act repetitive), coffee short "Daybreak" (energy 41.6, 8.1). All scorecards are self-review. Their 65 findings (missing narration check, layout collisions, sound asked twice, no `short` kind, score true-peak miss, no extension points…) are fixed in 2.6.0. Evidence: `evals/runs/s27-trailer/`, `s27-explainer/`, `s27-short/` (text, QA output, contact sheets; films and WAVs not committed).
 
 ---
 

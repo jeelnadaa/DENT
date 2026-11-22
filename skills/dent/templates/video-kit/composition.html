@@ -11,7 +11,7 @@
 /* DENT video kit. Replace tokens with DESIGN.md / palette.py output. Two-voice type system:
    --statement (heavy, tight) for claims, --soul (italic serif) for the emotional half of a line, --label (mono) for data. */
 :root{
-  --paper:#F6FAFC; --ink:#111619; --accent:#A8236E; --muted:#555C61;
+  --paper:#E6E6E6; --ink:#1A1A1A; --accent:#7A7A7A; --muted:#5C5C5C; /* PLACEHOLDER greys: replace with the film's palette */
   --statement:"Mozilla Headline",system-ui,sans-serif; --soul:"Newsreader",Georgia,serif; --label:"Datatype",ui-monospace,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -86,7 +86,7 @@ const s1 = scene(`<div class="a statement" style="left:${110 * U}px;top:${PORT ?
   <span class="line"><span>Your product.</span></span><span class="line"><span class="soul">Its own look.</span></span></div>`);
 // 2. Chapter: claim + live proof (number, statement with an italic half, a reenacted UI)
 const s2 = scene(`<div class="a chapter-n" style="left:${110 * U}px;top:${PORT ? 300 * U : 170 * U}px">01</div>
-  <div class="a statement" style="left:${110 * U}px;top:${PORT ? 420 * U : 420 * U}px;font-size:${88 * U}px"><span class="line"><span>It asks</span></span><span class="line"><span class="soul">before it guesses.</span></span></div>
+  <div class="a statement" style="left:${110 * U}px;top:${PORT ? 520 * U : 420 * U}px;font-size:${88 * U}px"><span class="line"><span>It asks</span></span><span class="line"><span class="soul">before it guesses.</span></span></div>
   <div class="a term" style="left:${PORT ? 80 * U : 1000 * U}px;top:${PORT ? 820 * U : 260 * U}px;width:${PORT ? W - 160 * U : 800 * U}px;font-size:${26 * U}px"></div>`);
 // 3. Proof number: counts up on the beat
 const s3 = scene(`<div class="a label" style="left:${110 * U}px;top:${260 * U}px">measured · say where the number comes from</div>

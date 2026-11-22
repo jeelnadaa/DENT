@@ -117,11 +117,11 @@ Frame rates: 24 (cinematic), 30 (UI/screen), 60 (fast UI motion/games). Keep one
 | Check | How |
 |---|---|
 | File plays, correct duration/resolution/fps/codec | `ffprobe` output |
-| **Run `python scripts/video_qa.py <film> --captions <srt> --sheet <jpg>`** and look at the sheet | Streams, colour range, A/V sync, loudness, frozen time (≤ 20 % for trailers) and longest hold (≤ 2.5 s), black frames, captions; exit 1 on failure |
+| **Run `python scripts/video_qa.py <film> --kind <kind> --captions <srt> --audio <mix.wav> --sheet <jpg>`** (add `--loop` for loops) and look at the time-labelled sheet | Streams, colour range, A/V offset against the mix, loudness and true peak, frozen time, longest hold, visual sameness, energy, black frames, captions, loop seam; exit 1 on failure. Thresholds per kind below |
 | Product truth (`video-types-and-craft.md` §2b) | Three-question test written and passed with sound off; ≥ 60 % of screen time shows the real product or its real output |
 | Colour range is TV/limited `yuv420p`, not full-range `yuvj420p` (happens when screenshots are piped to FFmpeg as JPEG/PNG; players then show crushed or washed-out contrast) | `ffprobe` `pix_fmt` + `color_range`; encode with `-vf scale=in_range=full:out_range=tv,format=yuv420p -color_range tv -colorspace bt709` |
-| Narration says the product's name correctly | Speech-to-text pass on every line (`../audio/voice-and-narration.md` §5.4): in DENT's own trailer the engine read "DENT" as "PEN" |
-| A/V sync | Scrub key moments (clap/impact frames) |
+| Narration says what the script says | `python scripts/tts.py check --in vo/lines` (`../audio/voice-and-narration.md` §5.2): per-line word error rate with **inserted, dropped and replaced words**; read them, since engines add words as well as mispronounce. In DENT's own trailer the engine read "DENT" as "PEN" |
+| A/V sync | `--audio out/score.wav` measures the film's offset against its own mix (≤ 20 ms); scrub the impact frames by eye and ear too |
 | Loudness and peaks | `ffmpeg -af ebur128` / loudnorm summary on target; true peak ≤ −1 dBTP |
 | Captions | Present, synced, spelled correctly, readable on phone |
 | Message with sound off | Watch muted: still understood? |
@@ -132,3 +132,17 @@ Frame rates: 24 (cinematic), 30 (UI/screen), 60 (fast UI motion/games). Keep one
 | Flashing | No > 3 flashes/s (check fast cuts/strobes) |
 | Versions | 16:9, 9:16, 1:1 rendered as planned; thumbnail exported |
 | Licences | Every asset in the licence table |
+
+### `video_qa.py` thresholds by `--kind`
+| Kind | Frozen time ≤ | Longest hold ≤ | Longest visually-unchanged stretch ≤ | Energy (mean change/s) ≥ |
+|---|---|---|---|---|
+| `trailer` | 20 % | 2.5 s | 6 s | 15 |
+| `short` | 20 % | 2.5 s | 4 s | 18 |
+| `explainer` | 35 % | 4 s | 10 s | none |
+| `tutorial` | 50 % | 6 s | 20 s | none |
+| `loop` | 20 % | 2.5 s | 6 s | 15, plus loop seam ≤ 12/255 |
+
+Energy calibration: DENT's launch film measures 35, a weak GPT-made trailer 18.6, a static slideshow 4.2. The end hold (`--end-hold`, default 3 s) is excluded except for loops. Loudness: −14 LUFS ± 1, true peak ≤ −1 dBTP. Sync: offset ≤ 20 ms against `--audio`.
+
+### Independent evaluation for video
+At Polished and All-out, the three evaluators (`../workflow/scoring-and-closeout.md` §3b) for a film are **Story** (three-question test, script, product truth, accuracy), **Picture** (contact sheets, stills, style frames, originality guard) and **Sound** (the mix, narration check output, loudness, sync). Start each as a subagent with a fresh context, or, with the user's OK, as a separate session; give it only the request, VIDEO.md, the film, its sheets and the QA output. If neither is possible, run them yourself and label the result **self-review**, never independent.

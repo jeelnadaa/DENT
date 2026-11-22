@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DENT video kit: style frames</title>
+<!-- Style frames: 4 still key frames of the film, approved BEFORE any animation (video-creative-direction.md §3).
+     Build them with the film's real fonts, palette and signature device; everything below is a grey PLACEHOLDER.
+     Render: python render.py stills --page styleframes --times 0   (one image, all four frames)
+             python render.py stills --page styleframes --ratio 9x16 --times 0   (portrait layouts) -->
+<style>
+:root{ --paper:#E6E6E6; --ink:#1A1A1A; --accent:#7A7A7A; --muted:#5C5C5C; }  /* PLACEHOLDER greys */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100vw;height:100vh;overflow:hidden;background:#0E0E0E;font-family:system-ui,sans-serif}
+#board{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;width:100vw;height:100vh;padding:12px}
+.frame{position:relative;overflow:hidden;background:var(--paper);color:var(--ink)}
+.label{position:absolute;left:10px;top:8px;font-size:14px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.hero{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:9vmin;letter-spacing:-.02em}
+@media (orientation: portrait){#board{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr)}}
+.dev{position:absolute;width:30%;aspect-ratio:1;border:6px solid var(--accent);border-radius:50%;right:8%;top:12%}
+</style>
+</head>
+<body>
+<!-- data-crop: a board of frames, not one frame, so the 9:16 platform zones do not apply to the board itself -->
+<div id="board" data-crop>
+  <div class="frame"><div class="dev"></div><div class="hero">HOOK</div><div class="label" data-small>1 · hook: frame 1 of the film</div></div>
+  <div class="frame"><div class="hero" style="font-weight:300">signature device</div><div class="label" data-small>2 · the device at its strongest</div></div>
+  <div class="frame"><div class="hero" style="font-size:16vmin">43</div><div class="label" data-small>3 · proof: real product / real number</div></div>
+  <div class="frame" style="background:var(--ink);color:var(--paper)"><div class="hero">NAME</div><div class="label" data-small>4 · end card: name + one action</div></div>
+</div>
+<script>
+// Page contract: window.render(t) + window.READY. Style frames are stills, so render ignores t.
+window.render = () => {};
+document.fonts.ready.then(() => { window.READY = true; });
+</script>
+</body>
+</html>

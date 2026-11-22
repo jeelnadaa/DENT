@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Signed, Not Said: how passkeys work</title>
+<!-- Fonts chosen with scripts/fonts.py (suggest --role display --axes wght,wdth; --role mono) and checked with fonts.py check. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zalando+Sans:wdth,wght@75..125,200..900&family=Chivo+Mono:wght@300..700&display=block">
+<style>
+/* Film bible A, "Signed, Not Said". Palette from scripts/palette.py make --hue 262 --chroma .16 --second #C2185B --neutral cool
+   (vellum-ink); colour script moves vellum (act 1) -> indigo night (act 2) -> near-black (climax) -> vellum (resolve).
+   Magenta = a secret (things that must never travel). Blue = public, checkable things. */
+:root{
+  --vellum:#EEF2F6; --ink:#111619; --graphite:#555C61; --indigo:#0D224A; --night:#0B0F14;
+  --blue:#3C6ECF; --blue-l:#9EC0FE; --magenta:#C2185B; --magenta-l:#FB6B93; --rule:#C6D2DE;
+  --display:"Zalando Sans",system-ui,sans-serif; --mono:"Chivo Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+#stage{position:relative;overflow:hidden;background:var(--vellum);color:var(--ink)}
+.layer{position:absolute;inset:0;transform-origin:50% 50%}
+#grid{inset:-20%}
+.scene{position:absolute;inset:0;opacity:0}
+.a{position:absolute}
+.k{font-family:var(--display);font-weight:600;font-stretch:88%;letter-spacing:-.035em;line-height:1.0}
+.k .w{display:inline-block;white-space:pre}
+.mono{font-family:var(--mono);font-weight:400;letter-spacing:.02em}
+.lab{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.12em;font-size:22px}
+.card{position:absolute;width:420px;height:250px;border-radius:22px;background:#FBFDFF;border:2px solid var(--rule);box-shadow:0 30px 60px rgba(17,22,25,.10);padding:26px 30px}
+.card .dom{font-family:var(--mono);font-weight:600;font-size:30px;color:var(--ink)}
+.card .row{font-family:var(--mono);font-size:24px;color:var(--graphite);margin-top:22px}
+.card .field{margin-top:18px;height:58px;border:2px solid var(--rule);border-radius:12px;font-family:var(--mono);font-size:26px;line-height:54px;padding:0 16px;color:var(--magenta)}
+.pill{display:inline-block;color:var(--magenta);font-weight:700}
+.dark .card{background:#12284f;border-color:#2C59AF;box-shadow:none}
+.dark .card .dom{color:#F3F7FF}.dark .card .row{color:var(--blue-l)}
+svg.ill{position:absolute;overflow:visible}
+svg.ill path, svg.ill circle, svg.ill rect, svg.ill line{fill:none;stroke-linecap:round;stroke-linejoin:round}
+#pen{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;transform-origin:50% 50%}
+#pen path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+#cap{position:absolute;left:10%;right:10%;text-align:center;white-space:pre-line;font-family:var(--display);font-weight:500;font-stretch:95%;font-size:34px;line-height:1.3;color:#fff}
+#cap span{background:rgba(11,15,20,.80);padding:.12em .5em;border-radius:.3em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#grain{position:absolute;inset:-50%;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}
+</style>
+<script src="techniques.js"></script>
+</head>
+<body>
+<div id="stage">
+  <svg id="grid" class="layer" xmlns="http://www.w3.org/2000/svg"><defs>
+    <pattern id="g" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="currentColor" stroke-width="1"/></pattern>
+    <pattern id="G" width="240" height="240" patternUnits="userSpaceOnUse"><path d="M240 0H0V240" fill="none" stroke="currentColor" stroke-width="1.6"/></pattern></defs>
+    <rect width="100%" height="100%" fill="url(#g)" opacity=".35"/><rect width="100%" height="100%" fill="url(#G)" opacity=".45"/></svg>
+  <div id="cam" class="layer"></div>
+  <svg id="pen" xmlns="http://www.w3.org/2000/svg"><path id="penp" stroke-width="7"/></svg>
+  <div id="grain"></div>
+  <div id="cap"><span></span></div>
+</div>
+<script>
+/* ============================================================ engine (kit; kept) */
+const Q = new URLSearchParams(location.search), W = +Q.get('w') || 1920, H = +Q.get('h') || 1080;
+const stage = document.getElementById('stage'), cam = document.getElementById('cam'), grid = document.getElementById('grid');
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+const U = Math.min(W, H) / 1080;
+let TL;
+const FX = window.DENTFX;
+const $ = (h) => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstChild; };
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const P = (t, s, d) => clamp((t - s) / d);
+const eOut = (x) => 1 - Math.pow(1 - clamp(x), 4);
+const eIn = (x) => Math.pow(clamp(x), 3);
+const eIO = (x) => { x = clamp(x); return x < .5 ? 8 * x ** 4 : 1 - Math.pow(-2 * x + 2, 4) / 2; };
+const spring = (dt, f = 2.2, z = .35) => dt <= 0 ? 0 : 1 - Math.exp(-z * f * 2 * Math.PI * dt) * Math.cos(f * Math.sqrt(1 - z * z) * 2 * Math.PI * dt);
+const lerp = (a, b, k) => a + (b - a) * k;
+const S = (el, o) => {
+  el.style.transform = `translate(${(o.x || 0)}px,${(o.y || 0)}px) scale(${o.s ?? 1}${o.sy !== undefined ? ',' + o.sy : ''}) rotate(${o.r || 0}deg)`;
+  if (o.o !== undefined) el.style.opacity = o.o;
+};
+const E = (k) => { const v = TL.events[k]; if (v === undefined) throw new Error('missing event ' + k); return v; };
+const hex = (h) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mix = (a, b, k) => { const A = hex(a), B = hex(b); return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], clamp(k)))).join(',')})`; };
+
+/* ============================================================ kinetic type: words are the actors, timed to the voice.
+   A phrase is written as "word@event word@event …"; each word rises out of a mask on its spoken time and its weight
+   settles from 250 to its target (variable wght axis), so the type literally "lands" with the voice. */
+function phrase(spec, cls = '', style = '') {
+  const el = $(`<div class="a k ${cls}" style="${style}"></div>`);
+  spec.trim().split(/\s+/).forEach(tok => {
+    if (tok === '/') { el.append(document.createElement('br')); return; }
+    const [word, ev, kind] = tok.split('@');
+    const s = document.createElement('span'); s.className = 'w'; s.textContent = word.replace(/_/g, ' ') + ' ';
+    s.dataset.ev = ev; if (kind) s.dataset.kind = kind; el.append(s);
+  });
+  return el;
+}
+function speak(el, t, wt = 700) {
+  el.querySelectorAll('.w').forEach(s => {
+    const at = E(s.dataset.ev) - .08, k = eOut(P(t, at, .38)), sp = spring(t - at, 2.4, .5);
+    const target = s.dataset.kind === 'x' ? 900 : wt;
+    s.style.opacity = k; s.style.transform = `translateY(${(1 - k) * .45}em)`;
+    s.style.fontVariationSettings = `"wght" ${Math.round(lerp(250, target, clamp(sp)))}, "wdth" ${Math.round(lerp(75, s.dataset.kind === 'x' ? 112 : 88, clamp(sp)))}`;
+  });
+}
+
+/* ============================================================ the signature device: one pen line that never lifts.
+   It draws the custom lettering, signs every challenge, and morphs from one scene's shape into the next (the film's only
+   transition family). All keyframe shapes are sampled to the same number of points so any two can morph. */
+const NP = 120;
+const toD = (pts) => 'M' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L');
+const curve = (f) => Array.from({ length: NP }, (_, i) => f(i / (NP - 1)));
+const SHAPES = {
+  underline: (x, y, w, amp = 10) => curve(u => [x + u * w, y + Math.sin(u * Math.PI * 3) * amp * Math.sin(u * Math.PI)]),
+  rrect: (cx, cy, w, h, r) => curve(u => {                      // rounded rectangle perimeter, starting top-middle
+    const per = 2 * (w + h - 4 * r) + 2 * Math.PI * r; let d = u * per;
+    const segs = [[w / 2 - r, 'L', [cx, cy - h / 2], [1, 0]], [Math.PI * r / 2, 'A', [cx + w / 2 - r, cy - h / 2 + r], -Math.PI / 2],
+      [h - 2 * r, 'L', [cx + w / 2, cy - h / 2 + r], [0, 1]], [Math.PI * r / 2, 'A', [cx + w / 2 - r, cy + h / 2 - r], 0],
+      [w - 2 * r, 'L', [cx + w / 2 - r, cy + h / 2], [-1, 0]], [Math.PI * r / 2, 'A', [cx - w / 2 + r, cy + h / 2 - r], Math.PI / 2],
+      [h - 2 * r, 'L', [cx - w / 2, cy + h / 2 - r], [0, -1]], [Math.PI * r / 2, 'A', [cx - w / 2 + r, cy - h / 2 + r], Math.PI],
+      [w / 2 - r, 'L', [cx - w / 2 + r, cy - h / 2], [1, 0]]];
+    for (const [len, kind, o, dir] of segs) {
+      if (d <= len + 1e-6) {
+        if (kind === 'L') return [o[0] + dir[0] * d, o[1] + dir[1] * d];
+        const a = dir + d / r; return [o[0] + Math.cos(a) * r, o[1] + Math.sin(a) * r];
+      } d -= len;
+    }
+    return [cx, cy - h / 2];
+  }),
+  ellipse: (cx, cy, rx, ry, turns = 1.08) => curve(u => [cx + Math.cos(-Math.PI * .6 + u * Math.PI * 2 * turns) * rx * (1 + .03 * u), cy + Math.sin(-Math.PI * .6 + u * Math.PI * 2 * turns) * ry * (1 + .05 * u)]),
+  sign: (x, y, w, h) => curve(u => [x + u * w + Math.sin(u * Math.PI * 7) * 26 * (1 - u), y + Math.sin(u * Math.PI * 5.5) * h * (1 - .6 * u) - u * 14]),
+  thread: (pts) => curve(u => { const n = pts.length - 1, s = Math.min(n - 1e-6, u * n), i = Math.floor(s), f = s - i, a = pts[i], b = pts[i + 1];
+    const e = f * f * (3 - 2 * f); return [lerp(a[0], b[0], f), lerp(a[1], b[1], e) - Math.sin(f * Math.PI) * 60]; }),
+};
+const pen = document.getElementById('penp');
+// pen keyframes, one per scene: the shape the line takes while that scene plays (filled in after TL loads)
+let PENK;
+
+/* ============================================================ custom lettering: "passkey", monoline technical-pen script
+   drawn for this film. Detail: the y's descender does not end; it swings back under the word as a signature flourish
+   (the moving part), and the k's leg ends in a small key-bit notch. x-height 100, ascender 180, descender 85. */
+const LETTERS = (() => {
+  const L = [], g = 26;
+  let x = 0;
+  const add = (d, w) => { L.push(d(x)); x += w + g; };
+  add(o => `M${o} 285 L${o} 100 M${o} 150 C${o} 94 ${o + 64} 94 ${o + 64} 150 C${o + 64} 206 ${o} 206 ${o} 150`, 64);                    // p
+  add(o => `M${o + 64} 150 C${o + 64} 94 ${o} 94 ${o} 150 C${o} 206 ${o + 64} 206 ${o + 64} 150 M${o + 64} 100 L${o + 64} 200`, 64);    // a
+  add(o => `M${o + 54} 114 C${o + 42} 96 ${o + 6} 96 ${o + 6} 124 C${o + 6} 150 ${o + 56} 146 ${o + 56} 175 C${o + 56} 206 ${o + 10} 206 ${o + 2} 186`, 58); // s
+  add(o => `M${o + 54} 114 C${o + 42} 96 ${o + 6} 96 ${o + 6} 124 C${o + 6} 150 ${o + 56} 146 ${o + 56} 175 C${o + 56} 206 ${o + 10} 206 ${o + 2} 186`, 58); // s
+  add(o => `M${o} 20 L${o} 200 M${o + 56} 100 L${o + 6} 156 M${o + 24} 136 L${o + 60} 200 L${o + 60} 184`, 60);                            // k (+ key-bit)
+  add(o => `M${o + 3} 150 L${o + 62} 150 C${o + 62} 112 ${o + 46} 98 ${o + 32} 98 C${o + 12} 98 ${o + 2} 120 ${o + 2} 150 C${o + 2} 184 ${o + 18} 202 ${o + 36} 202 C${o + 48} 202 ${o + 58} 194 ${o + 62} 182`, 64); // e
+  add(o => `M${o} 100 L${o + 32} 196 M${o + 64} 100 L${o + 30} 214 C${o + 20} 248 ${o - 6} 270 ${o - 60} 270 C${o - 200} 270 ${o - 420} 262 ${o - 560} 246 C${o - 610} 240 ${o - 600} 226 ${o - 540} 228 C${o - 300} 236 ${o + 40} 250 ${o + 150} 226`, 64); // y + flourish
+  return L;
+})();
+function lettering(cls, color, sw) {
+  return `<svg class="ill ${cls}" viewBox="-80 0 860 300" xmlns="http://www.w3.org/2000/svg">${LETTERS.map(d => `<path d="${d}" stroke="${color}" stroke-width="${sw}"/>`).join('')}</svg>`;
+}
+
+/* ============================================================ line illustrations (drawn with the same pen) */
+const ICON = {
+  face: `<circle cx="60" cy="60" r="52"/><path d="M40 50 v8 M80 50 v8 M60 52 v20 l-6 4 M40 86 C52 96 68 96 80 86"/>`,
+  finger: `<path d="M24 92 C14 40 46 10 76 22 C100 32 104 62 100 84"/><path d="M38 100 C30 60 48 36 70 40 C88 44 90 66 86 96"/><path d="M54 104 C48 76 56 56 66 58 C76 60 74 84 72 108"/><path d="M62 70 C64 84 62 98 60 110"/>`,
+  pin: `<rect x="6" y="30" width="108" height="60" rx="14"/><circle cx="30" cy="60" r="7"/><circle cx="50" cy="60" r="7"/><circle cx="70" cy="60" r="7"/><circle cx="90" cy="60" r="7"/>`,
+  phone: (w, h) => `<rect x="0" y="0" width="${w}" height="${h}" rx="${w * .16}"/><line x1="${w * .38}" y1="${h * .045}" x2="${w * .62}" y2="${h * .045}"/>`,
+  laptop: `<rect x="40" y="0" width="320" height="210" rx="14"/><path d="M0 236 H400 L384 252 H16 Z"/>`,
+  tablet: `<rect x="0" y="0" width="230" height="300" rx="26"/>`,
+};
+function draw(svg, t, start, dur = .8, stagger = .12) {          // stroke-on for any illustration
+  svg.querySelectorAll('path,circle,rect,line').forEach((p, i) => {
+    const L = p.__len || (p.__len = (p.getTotalLength ? p.getTotalLength() : 400) + 2);
+    const k = eIO(P(t, start + i * stagger, dur)); p.style.strokeDasharray = L; p.style.strokeDashoffset = L * (1 - k);
+  });
+}
+
+// honest illustrative key material (random digits, not a real key) and a fresh challenge
+const R = FX.rand(20261121), digits = (n) => Array.from({ length: n }, () => Math.floor(R() * 10)).join('');
+const PRIV = digits(78), PUB = '04' + Array.from({ length: 30 }, () => '0123456789abcdef'[Math.floor(R() * 16)]).join('');
+const CHAL = Array.from({ length: 24 }, () => '0123456789abcdef'[Math.floor(R() * 16)]).join('');
+const chunk = (s, n) => (s.match(new RegExp(`.{1,${n}}`, 'g')) || []).join(' ');
+
+/* ============================================================ scenes */
+const scenes = [];
+function scene(html, cls = '') { const el = $(`<div class="scene ${cls}">${html}</div>`); cam.append(el); scenes.push(el); return el; }
+const SITES = ['bank.example', 'mail.example', 'shop.example', 'news.example', 'games.example'];
+
+let s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
+function build() {
+  // 1  "A password is a secret you hand over. To every site, every time."
+  s1 = scene(`
+    <div class="a mono" id="hook" style="left:150px;top:150px;font-size:44px;color:var(--graphite);border-bottom:3px solid var(--rule);padding:0 8px 6px 0;min-width:420px"></div>`);
+  s1.append(phrase('A@L1.a password@L1.password / is_a@L1.is secret@L1.secret@x / you@L1.you hand@L1.hand over.@L1.over', '', 'left:150px;top:270px;font-size:128px'));
+  s1.append($(`<div class="a" id="s1cards" style="left:1060px;top:170px;width:760px;height:760px"></div>`));
+  SITES.forEach((d, i) => s1.querySelector('#s1cards').append($(`<div class="card" style="left:${i * 64}px;top:${i * 92}px"><div class="dom">${d}</div><div class="field">secret</div></div>`)));
+  // 2  "Sites keep copies. Fake sites ask just as nicely."
+  s2 = scene(`<div class="a" id="s2rows" style="left:150px;top:420px;width:820px"></div>
+    <div class="card" id="fake" style="left:1180px;top:300px;width:540px;height:320px;border-color:var(--magenta)"><div class="dom">bank.examp1e</div><div class="row">Please sign in again</div><div class="field" id="fakefield"></div></div>
+    <div class="a lab" id="fakelab" style="left:1180px;top:650px;color:var(--magenta)">a lookalike page</div>`);
+  s2.append(phrase('Sites@L2.sites keep@L2.keep copies.@L2.copies', '', 'left:150px;top:180px;font-size:112px'));
+  s2.append(phrase('Fake@L2.fake sites@L2.sites#2 ask@L2.ask / just_as@L2.just nicely.@L2.nicely', '', 'left:1180px;top:760px;font-size:64px;color:var(--magenta)'));
+  SITES.forEach((d, i) => s2.querySelector('#s2rows').append($(`<div class="mono" style="font-size:30px;line-height:62px;border-bottom:2px solid var(--rule);display:flex;justify-content:space-between"><span>${d}</span><span class="pill">secret</span></div>`)));
+  // 3  "A passkey isn't a secret you share. It's a signature only your device can make."
+  s3 = scene(`<div class="a" style="left:0;right:0;top:330px;display:flex;justify-content:center">${lettering('title', 'var(--blue-l)', 15).replace('class="ill title"', 'class="ill title" style="position:relative;width:1180px;height:412px"')}</div>`, 'dark');
+  s3.append(phrase("isn't@L3.isn't a_secret@L3.secret you_share.@L3.share", '', 'left:0;right:0;text-align:center;top:170px;font-size:72px;color:#F3F7FF'));
+  s3.append(phrase("a@L3.a#3 signature@L3.signature@x only@L3.only your_device@L3.your can_make.@L3.can", '', 'left:0;right:0;text-align:center;top:800px;font-size:72px;color:#F3F7FF'));
+  s3.append($(`<div class="a" id="strike" style="left:0;top:0;height:7px;border-radius:4px;background:var(--magenta-l);transform-origin:0 50%"></div>`));
+  // 4  "Your device makes a pair of keys. The private key never leaves it, and only your face, fingerprint or PIN unlocks it."
+  s4 = scene(`
+    <div class="a mono" id="priv" style="left:320px;top:300px;width:320px;font-size:27px;line-height:1.45;color:var(--magenta-l);word-break:break-all"></div>
+    <div class="a lab" id="privlab" style="left:320px;top:250px;color:var(--magenta-l)">private key</div>
+    <div class="a mono" id="pub" style="left:320px;top:660px;width:320px;font-size:27px;line-height:1.45;color:var(--blue-l);word-break:break-all"></div>
+    <div class="a lab" id="publab" style="left:320px;top:610px;color:var(--blue-l)">public key</div>
+    <div class="a lab" style="left:300px;top:968px;color:#8C9BB8;font-size:18px" data-small>illustration · not a real key</div>
+    <svg class="ill ic" id="ic1" style="left:880px;top:640px;width:150px;height:150px" viewBox="0 0 120 120" stroke="#F3F7FF" stroke-width="5">${ICON.face}</svg>
+    <svg class="ill ic" id="ic2" style="left:1160px;top:640px;width:150px;height:150px" viewBox="0 0 120 120" stroke="#F3F7FF" stroke-width="5">${ICON.finger}</svg>
+    <svg class="ill ic" id="ic3" style="left:1440px;top:640px;width:150px;height:150px" viewBox="0 0 120 120" stroke="#F3F7FF" stroke-width="5">${ICON.pin}</svg>`, 'dark');
+  s4.append(phrase('A@L4.a pair@L4.pair of@L4.of keys.@L4.keys@x', '', 'left:880px;top:200px;font-size:104px;color:#F3F7FF'));
+  s4.append(phrase('The_private_key@L4.private never@L4.never@x leaves@L4.leaves it.@L4.it', '', 'left:880px;top:340px;font-size:64px;color:var(--magenta-l)'));
+  s4.append(phrase('Only@L4.only your@L4.your#2 face,@L4.face fingerprint@L4.fingerprint or_PIN@L4.or unlocks_it.@L4.unlocks', '', 'left:880px;top:850px;font-size:46px;color:#C6DAFD'));
+  // 5  "The site keeps only the public key. It can check your signature, but never forge one."
+  s5 = scene(`<div class="card" id="site5" style="left:1080px;top:250px;width:640px;height:440px"><div class="dom">bank.example</div>
+      <div class="row">account · you</div><div class="row" id="s5pub" style="color:var(--blue-l)"></div><div class="row" id="s5chk" style="color:#F3F7FF"></div></div>
+    <svg class="ill" id="ph5" style="left:250px;top:150px;width:440px;height:800px" viewBox="-10 -10 440 800" stroke="#9EC0FE" stroke-width="6">${ICON.phone(420, 780)}</svg>
+    <div class="a mono" id="pubfly" style="left:300px;top:660px;font-size:27px;color:var(--blue-l)">${chunk(PUB.slice(0, 16), 4)}…</div>
+    <div class="a lab" style="left:300px;top:250px;color:#FFB0C6">private key · stays</div>
+    <svg class="ill" id="forge" style="left:1150px;top:640px;width:500px;height:160px" viewBox="0 0 500 160" stroke="#FFB0C6" stroke-width="6" stroke-dasharray="14 18"><path d="M10 110 C60 20 110 140 160 70 C200 20 230 130 280 80"/></svg>`, 'dark');
+  s5.append(phrase('The_site@L5.site keeps@L5.keeps only@L5.only the_public_key.@L5.public', '', 'left:780px;top:120px;font-size:64px;color:#F3F7FF'));
+  s5.append(phrase('check@L5.check ✓@L5.signature', '', 'left:780px;top:770px;font-size:64px;color:var(--blue-l)'));
+  s5.append(phrase('never@L5.never forge.@L5.forge@x', '', 'left:1180px;top:770px;font-size:64px;color:#FFB0C6'));
+  // 6  "To sign in, the site sends a fresh challenge. Your device signs it, and the site checks."
+  s6 = scene(`<svg class="ill" style="left:150px;top:260px;width:300px;height:560px" viewBox="-6 -6 300 560" stroke="#9EC0FE" stroke-width="5">${ICON.phone(288, 548)}</svg>
+    <div class="card" style="left:1330px;top:330px;width:440px;height:300px"><div class="dom">bank.example</div><div class="row" style="color:var(--blue-l)">public key ✓</div><div class="row" id="s6res" style="color:#F3F7FF"></div></div>
+    <div class="a mono" id="chal" style="font-size:30px;color:#F3F7FF;white-space:nowrap"></div>
+    <div class="a lab" id="chalab" style="color:#9EC0FE">fresh challenge</div>
+    <div class="a mono" id="sig6" style="font-size:30px;color:var(--blue-l);white-space:nowrap">signature ↗</div>`, 'dark');
+  s6.append(phrase('fresh@L6.fresh challenge@L6.challenge@x', '', 'left:600px;top:140px;font-size:84px;color:#F3F7FF'));
+  s6.append(phrase('signs@L6.signs@x it.@L6.it', '', 'left:500px;top:640px;font-size:72px;color:var(--blue-l)'));
+  s6.append(phrase('checks.@L6.checks@x', '', 'left:1330px;top:680px;font-size:84px;color:#F3F7FF'));
+  // 7  "No secret crosses the wire. A stolen public key signs no one in."
+  s7 = scene(`<svg class="ill" style="left:150px;top:260px;width:300px;height:560px" viewBox="-6 -6 300 560" stroke="#9EC0FE" stroke-width="5">${ICON.phone(288, 548)}</svg>
+    <div class="a mono" id="s7priv" style="left:190px;top:380px;width:220px;font-size:26px;line-height:1.4;color:var(--magenta-l);word-break:break-all">${PRIV.slice(0, 40)}</div>
+    <div class="card" style="left:1330px;top:330px;width:440px;height:300px"><div class="dom">bank.example</div><div class="row" style="color:var(--blue-l)">public key</div></div>
+    <div class="a" id="log" style="left:560px;top:380px;width:660px"></div>
+    <div class="a mono" id="thief" style="left:1380px;top:700px;font-size:30px;color:var(--blue-l)">public key copy</div>
+    <div class="a mono" id="thiefno" style="left:1380px;top:750px;font-size:30px;color:var(--magenta-l)">→ sign in? nothing to sign with</div>`, 'dark');
+  s7.append(phrase('No@L7.no secret@L7.secret@x crosses@L7.crosses the_wire.@L7.the', '', 'left:560px;top:140px;font-size:84px;color:#F3F7FF'));
+  ['→ challenge', '← signature', '→ signed in'].forEach((l, i) => s7.querySelector('#log').append($(`<div class="mono" style="font-size:34px;line-height:72px;color:${i === 1 ? 'var(--blue-l)' : '#F3F7FF'};border-bottom:2px dashed #2C59AF">${l}</div>`)));
+  // 8  "Each passkey is bound to the real site's domain. A lookalike gets nothing."  (the climax)
+  s8 = scene(`<div class="a mono" id="dom8" style="left:0;right:0;text-align:center;top:360px;font-size:150px;font-weight:600;color:#F3F7FF;letter-spacing:-.02em">bank.example</div>
+    <div class="a mono" id="fake8" style="left:0;right:0;text-align:center;top:360px;font-size:150px;font-weight:600;color:#9EA6AB;letter-spacing:-.02em">bank.examp<span style="color:var(--magenta-l)">1</span>e</div>
+    <div class="a lab" id="lab8" style="left:0;right:0;text-align:center;top:250px;color:#9EC0FE">the passkey was made for</div>
+    <div class="a lab" id="lab8b" style="left:0;right:0;text-align:center;top:250px;color:var(--magenta-l)">this page is</div>
+    <div class="a mono" id="none8" style="left:0;right:0;text-align:center;top:640px;font-size:40px;color:#9EA6AB">No passkeys for this site</div>`, 'night');
+  s8.append(phrase('bound@L8.bound@x to_the@L8.to real_site’s_domain.@L8.real', '', 'left:0;right:0;text-align:center;top:120px;font-size:72px;color:#F3F7FF'));
+  s8.append(phrase('A_lookalike@L8.lookalike gets@L8.gets nothing.@L8.nothing@x', '', 'left:0;right:0;text-align:center;top:760px;font-size:84px;color:#F3F7FF'));
+  // 9  "Your keychain or password manager syncs them across your devices."
+  s9 = scene(`<svg class="ill" id="dv1" style="left:220px;top:330px;width:240px;height:440px" viewBox="-6 -6 240 440" stroke="#3C6ECF" stroke-width="5">${ICON.phone(228, 428)}</svg>
+    <svg class="ill" id="dv2" style="left:700px;top:420px;width:520px;height:330px" viewBox="-6 -6 412 262" stroke="#3C6ECF" stroke-width="4">${ICON.laptop}</svg>
+    <svg class="ill" id="dv3" style="left:1420px;top:330px;width:300px;height:390px" viewBox="-6 -6 242 312" stroke="#3C6ECF" stroke-width="4">${ICON.tablet}</svg>
+    <div class="a" id="mini" style="left:0;top:0"></div>`);
+  s9.append(phrase('Your_keychain@L9.your or_password_manager@L9.or / syncs@L9.syncs@x them@L9.them across@L9.across your_devices.@L9.devices', '', 'left:150px;top:110px;font-size:72px'));
+  // 10 "Stop handing over secrets. Look for “Create a passkey” in your settings." + end card
+  s10 = scene(`<div class="a" style="left:0;right:0;top:250px;display:flex;justify-content:center">${lettering('end', 'var(--blue)', 15).replace('class="ill end"', 'class="ill end" style="position:relative;width:1000px;height:349px"')}</div>
+    <div class="a" id="cta" style="left:0;right:0;top:700px;text-align:center"><span class="mono" style="display:inline-block;font-size:44px;padding:18px 34px;border:3px solid var(--blue);border-radius:16px;color:var(--ink)">Create a passkey</span></div>
+    <div class="a lab" id="cta2" style="left:0;right:0;text-align:center;top:830px;color:var(--graphite)">look for it in your account settings</div>`);
+  s10.append(phrase('Stop@L10.stop handing@L10.handing over@L10.over secrets.@L10.secrets@x', '', 'left:0;right:0;text-align:center;top:120px;font-size:84px'));
+}
+
+/* ============================================================ camera + colour script */
+function camAt(t) {           // a slow cinematic camera: push-ins per scene, a long lateral move in the sign-in scenes
+  const c = TL.scenes; let x = 0, y = 0, z = 1;
+  const sc = c.findLastIndex(s => t >= s), k = t - c[Math.max(0, sc)];
+  z = 1 + .010 * k; x = Math.sin(t * .23) * 10; y = Math.cos(t * .19) * 6;
+  if (sc === 8) z = 1.10 - .012 * k;                         // sync: start close, pull back (scale contrast)
+  return { x, y, z };
+}
+const ACT = [  // [time key, background, grid colour]
+  ['act1', '#EEF2F6', '#B9C6D3'], ['act2', '#0D224A', '#1F448D'],
+  // inside the night, the light table brightens while the handshake runs and dims again when nothing crosses the wire
+  ['act2b', '#1F448D', '#2C59AF'], ['act2c', '#16336C', '#1F448D'], ['act2d', '#0D224A', '#1F448D'],
+  ['act3', '#0B0F14', '#1A2230'], ['act4', '#EEF2F6', '#B9C6D3']];
+function colourAt(t) {
+  let bg = hex(ACT[0][1]), gr = hex(ACT[0][2]);
+  for (let i = 1; i < ACT.length; i++) { const k = eIO(P(t, E(ACT[i][0]) - .3, .6)), b = hex(ACT[i][1]), g = hex(ACT[i][2]);
+    bg = bg.map((v, j) => lerp(v, b[j], k)); gr = gr.map((v, j) => lerp(v, g[j], k)); }
+  const css = (a) => `rgb(${a.map(Math.round).join(',')})`;
+  return { bg: css(bg), gr: css(gr) };
+}
+
+/* ============================================================ render(t) */
+function vis(el, t, a, b, fi = .35, fo = .35) { const o = Math.min(eOut(P(t, a, fi)), 1 - eIn(P(t, b - fo, fo))); el.style.opacity = o; return o; }
+function render(t) {
+  const c = TL.scenes, end = TL.duration;
+  const { bg, gr } = colourAt(t); stage.style.background = bg; grid.style.color = gr;
+  const cm = camAt(t);
+  cam.style.transform = `translate(${cm.x}px,${cm.y}px) scale(${cm.z})`;
+  document.getElementById('pen').style.transform = cam.style.transform;                 // the pen lives on the content plane
+  grid.style.transform = `translate(${(-t * 9) % 48 + cm.x * .4}px,${(-t * 4) % 48 + cm.y * .4}px) scale(${1 + (cm.z - 1) * .4})`;   // parallax: grid is far
+  scenes.forEach((el, i) => vis(el, t, c[i] - .25, i + 1 < c.length ? c[i + 1] + .25 : end + 1));
+
+  // ---- pen: draw on, then morph from scene shape to scene shape around every cut (the transition family)
+  const ki = c.findLastIndex(s => t >= s - .35), from = PENK[Math.max(0, ki - 1)], to = PENK[Math.max(0, ki)];
+  const mk = ki <= 0 ? 1 : eIO(P(t, c[ki] - .35, .75));
+  FX.morph(pen, toD(from.pts), toD(to.pts), mk);
+  pen.setAttribute('stroke', mix(from.col, to.col, mk)); pen.setAttribute('stroke-width', lerp(from.w, to.w, mk));
+  const L = 6000; pen.style.strokeDasharray = L;
+  let reveal = eIO(P(t, E('L1.secret') + .1, .9));                             // first appearance: the pen underlines "secret"
+  const hide = t > E('cut8') && t < c[8] - .05;           // climax: the pen is absent at the lookalike
+  pen.style.strokeDashoffset = L * (1 - reveal); pen.style.opacity = hide ? 0 : (ki === 8 ? eOut(P(t, c[8] - .05, .5)) : 1) * (to.o ?? 1) * (ki <= 0 ? 1 : lerp(from.o ?? 1, to.o ?? 1, mk));
+
+  // ---- scene 1
+  if (t < c[1] + .5) {
+    speak(s1.querySelector('.k'), t, 640);
+    const hk = s1.querySelector('#hook'), nd = Math.min(12, Math.floor(t / .09));          // frame 1: a password being typed
+    hk.textContent = 'password  ' + '•'.repeat(nd) + (Math.floor(t * 3) % 2 ? '|' : ' ');
+    hk.style.opacity = 1 - .6 * P(t, E('L1.a') + .2, .5);
+    s1.querySelectorAll('#s1cards .card').forEach((cd, i) => {
+      const at = E('L1.site') + i * .16 - .25, k = eOut(P(t, at, .55)), f = cd.querySelector('.field');
+      S(cd, { x: (1 - k) * 700, y: Math.sin(t * .8 + i) * 4, o: k, r: (1 - k) * 8 });
+      const fk = eOut(P(t, E('L1.every#2') + i * .12, .4)); f.style.opacity = fk; f.style.transform = `translateX(${(1 - fk) * -60}px)`;
+    });
+  }
+  // ---- scene 2: copies stack up as data rows; a lookalike asks just as nicely
+  if (t > c[1] - .4 && t < c[2] + .5) {
+    s2.querySelectorAll('.k').forEach(k => speak(k, t, 640));
+    s2.querySelectorAll('#s2rows > div').forEach((r, i) => { const k = eOut(P(t, E('L2.copies') - .2 + i * .14, .45)); S(r, { x: (1 - k) * -80, o: k }); });
+    const fk = spring(t - (E('L2.fake') - .1), 1.8, .45); S(s2.querySelector('#fake'), { y: (1 - fk) * 80, o: clamp(fk * 2), r: (1 - fk) * -3 });
+    S(s2.querySelector('#fakelab'), { o: clamp(fk * 2) });
+    const typed = Math.floor(clamp((t - E('L2.ask')) / .55) * 6); s2.querySelector('#fakefield').textContent = 'secret'.slice(0, typed) + (Math.floor(t * 2.5) % 2 ? '|' : ' ');
+  }
+  // ---- scene 3: the title is written; "share" is struck; the flourish becomes a signature
+  if (t > c[2] - .4 && t < c[3] + .5) {
+    s3.querySelectorAll('.k').forEach(k => speak(k, t, 600));
+    FX.lettering(s3.querySelector('svg.title'), t, E('L3.passkey') - .2, { draw: .75, stagger: .16, fill: .01 });
+    const sh = s3.querySelectorAll('.k')[0].querySelectorAll('.w')[2], r = sh.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+    const st = s3.querySelector('#strike'), sk = eOut(P(t, E('L3.share') + .35, .35)), z = cm.z;
+    st.style.left = ((r.left - sr.left) / z - cm.x / z + (W / 2) * (1 - 1 / z)) + 'px';
+    st.style.top = ((r.top - sr.top + r.height * .55) / z - cm.y / z + (H / 2) * (1 - 1 / z)) + 'px';
+    st.style.width = (r.width / z * .92) + 'px'; st.style.transform = `scaleX(${sk})`;
+  }
+  // ---- scene 4: a pair of keys; the private one stays; face / fingerprint / PIN
+  if (t > c[3] - .4 && t < c[4] + .5) {
+    s4.querySelectorAll('.k').forEach(k => speak(k, t, 640));
+    const pk = clamp((t - E('L4.pair')) / 1.1), pv = s4.querySelector('#priv'), pb = s4.querySelector('#pub');
+    pv.textContent = chunk(PRIV.slice(0, Math.floor(pk * 78)), 13); pb.textContent = chunk(PUB.slice(0, Math.floor(pk * 32)), 4);
+    ['#privlab', '#publab'].forEach(s => S(s4.querySelector(s), { o: eOut(P(t, E('L4.pair'), .4)) }));
+    S(pv, { s: 1 + .04 * Math.exp(-Math.max(0, t - E('L4.never')) * 5) * (t > E('L4.never')) });
+    ['face', 'fingerprint', 'or'].forEach((w, i) => { const ic = s4.querySelector('#ic' + (i + 1)); draw(ic, t, E('L4.' + w) - .1, .7, .05); S(ic, { o: t > E('L4.' + w) - .15 ? 1 : 0, y: Math.sin(t * 1.3 + i) * 5 }); });
+  }
+  // ---- scene 5: public key goes to the site; it can check, never forge
+  if (t > c[4] - .4 && t < c[5] + .5) {
+    s5.querySelectorAll('.k').forEach(k => speak(k, t, 640));
+    const fk = eIO(P(t, E('L5.keeps') - .1, .9)), fl = s5.querySelector('#pubfly');
+    S(fl, { x: fk * 820, y: fk * -300 - Math.sin(fk * Math.PI) * 120, o: 1 - P(t, E('L5.keeps') + .75, .15) });
+    s5.querySelector('#s5pub').textContent = t > E('L5.keeps') + .8 ? 'public key · ' + chunk(PUB.slice(0, 12), 4) + '…' : '';
+    s5.querySelector('#s5chk').textContent = t > E('L5.check') + .1 ? 'check(signature) → valid' : '';
+    const fg = s5.querySelector('#forge'), fgk = P(t, E('L5.forge') - .5, .9);
+    fg.style.opacity = fgk > 0 ? 1 - P(t, E('L5.forge') + .5, .5) : 0; draw(fg, t, E('L5.forge') - .5, .7);
+    S(fg, { x: Math.sin(t * 40) * 3 * fgk, y: P(t, E('L5.forge') + .2, .6) * 80 });
+  }
+  // ---- scene 6: challenge -> signature -> checked, along the wire
+  if (t > c[5] - .4 && t < c[6] + .5) {
+    s6.querySelectorAll('.k').forEach(k => speak(k, t, 640));
+    const ch = s6.querySelector('#chal'), ck = eIO(P(t, E('L6.sends') - .1, 1.1)), lab = s6.querySelector('#chalab');
+    const shown = CHAL.split('').map((d, i) => t < E('L6.fresh') + i * .03 ? '0123456789abcdef'[Math.floor((t * 37 + i * 7) % 16)] : d).join('');
+    ch.textContent = chunk(shown, 4); ch.style.left = lerp(1320, 470, ck) + 'px'; ch.style.top = '500px';
+    lab.style.left = lerp(1320, 470, ck) + 'px'; lab.style.top = '450px'; lab.style.opacity = ch.style.opacity = 1 - P(t, E('L6.signs') + .2, .3);
+    const sg = s6.querySelector('#sig6'), gk = eIO(P(t, E('L6.and') - .1, .9));
+    sg.style.left = lerp(470, 1330, gk) + 'px'; sg.style.top = '560px'; sg.style.opacity = t > E('L6.signs') + .3 ? 1 - P(t, E('L6.checks'), .3) : 0;
+    s6.querySelector('#s6res').textContent = t > E('L6.checks') ? 'signature valid → signed in' : '';
+  }
+  // ---- scene 7: what crossed the wire; a stolen public key is useless
+  if (t > c[6] - .4 && t < c[7] + .5) {
+    s7.querySelectorAll('.k').forEach(k => speak(k, t, 640));
+    s7.querySelectorAll('#log > div').forEach((r, i) => { const k = eOut(P(t, E('L7.crosses') + i * .25, .4)); S(r, { x: (1 - k) * (i === 1 ? 60 : -60), o: k }); });
+    const sp = s7.querySelector('#s7priv'); S(sp, { x: Math.sin(t * 30) * 4 * P(t, E('L7.secret'), .2) * (1 - P(t, E('L7.secret') + .6, .2)) });
+    const th = s7.querySelector('#thief'), tk = eOut(P(t, E('L7.stolen') - .1, .6)); S(th, { x: (1 - tk) * -120, o: tk });
+    S(s7.querySelector('#thiefno'), { o: eOut(P(t, E('L7.signs') , .4)) });
+  }
+  // ---- scene 8: the climax. bound domain; hard cut + silence; the lookalike; nothing.
+  if (t > c[7] - .4 && t < c[8] + .5) {
+    const ks = s8.querySelectorAll('.k'); speak(ks[0], t, 640); speak(ks[1], t, 640);
+    const cut = E('cut8'), before = t < cut;
+    ks[0].style.opacity = before ? 1 : 0; ks[1].style.opacity = before ? 0 : 1;
+    const d8 = s8.querySelector('#dom8'), f8 = s8.querySelector('#fake8');
+    d8.style.opacity = before ? eOut(P(t, c[7] + .1, .5)) : 0; f8.style.opacity = before ? 0 : 1;
+    s8.querySelector('#lab8').style.opacity = before ? eOut(P(t, c[7] + .3, .5)) : 0;
+    s8.querySelector('#lab8b').style.opacity = before ? 0 : 1;
+    FX.axisWave(d8, t, { start: E('L8.real'), speed: .9, wMin: 500, wMax: 700, dMin: 100, dMax: 100, spread: .07 });
+    const n8 = s8.querySelector('#none8'); n8.style.opacity = eOut(P(t, E('L8.nothing') - .05, .35));
+    S(f8, { s: 1 + .015 * Math.sin(t * 2), x: before ? 0 : Math.sin(Math.max(0, t - cut) * 3) * 2 });
+  }
+  // ---- scene 9: pull back; the same passkey reaches every device
+  if (t > c[8] - .4 && t < c[9] + .5) {
+    s9.querySelectorAll('.k').forEach(k => speak(k, t, 640));
+    ['dv1', 'dv2', 'dv3'].forEach((id, i) => { const el = s9.querySelector('#' + id); draw(el, t, c[8] + .1 + i * .35, .8, .06); S(el, { y: Math.sin(t * .9 + i * 1.7) * 6 }); });
+  }
+  // ---- scene 10: callback ("stop handing over secrets"), the lettering re-signed, the CTA held
+  if (t > c[9] - .4) {
+    s10.querySelectorAll('.k').forEach(k => speak(k, t, 700));
+    FX.lettering(s10.querySelector('svg.end'), t, E('L10.look') - .3, { draw: .6, stagger: .12, fill: .01 });
+    const ck = spring(t - E('L10.create') + .1, 1.6, .55);
+    S(s10.querySelector('#cta'), { y: (1 - clamp(ck)) * 40, o: clamp(ck * 2) });
+    S(s10.querySelector('#cta2'), { o: eOut(P(t, E('L10.settings'), .5)) });
+  }
+
+  // captions (burned in, from the narration's own caption file)
+  const cue = (TL.cues || []).find(q => t >= q.s && t < q.e);
+  document.querySelector('#cap span').textContent = cue ? cue.t : '';
+  const capEl = document.getElementById('cap'); capEl.style.opacity = cue ? 1 : 0; capEl.style.top = (H * .855) + 'px';
+}
+
+(async () => {
+  TL = await (await fetch('timeline.json')).json();
+  await document.fonts.ready;
+  build();
+  // pen keyframes per scene (positions in stage px), colour, width, opacity
+  PENK = [
+    { pts: SHAPES.underline(150, 560, 560, 9), col: '#C2185B', w: 7 },                 // 1 underlines "secret"
+    { pts: SHAPES.rrect(1450, 460, 560, 340, 24), col: '#C2185B', w: 6 },               // 2 rings the lookalike page
+    { pts: SHAPES.sign(560, 900, 800, 26), col: '#9EC0FE', w: 6, o: 0 },                // 3 hands over to the lettering's flourish
+    { pts: SHAPES.rrect(470, 550, 440, 800, 68), col: '#9EC0FE', w: 7 },                // 4 becomes the device that keeps the key
+    { pts: SHAPES.thread([[700, 560], [1080, 470]]), col: '#9EC0FE', w: 5, o: .8 },       // 5 the path the public key travels
+    { pts: SHAPES.underline(470, 540, 850, 0), col: '#9EC0FE', w: 5 },                  // 6 the wire
+    { pts: SHAPES.underline(470, 540, 850, 0), col: '#2C59AF', w: 4 },                  // 7 the wire, dimmer
+    { pts: SHAPES.ellipse(960, 445, 640, 150), col: '#9EC0FE', w: 6 },                  // 8 binds the passkey to the domain
+    { pts: SHAPES.thread([[340, 560], [960, 600], [1570, 540]]), col: '#3C6ECF', w: 6 },  // 9 the sync thread
+    { pts: SHAPES.sign(700, 640, 520, 16), col: '#3C6ECF', w: 6, o: 0 },               // 10 hands back to the lettering
+  ];
+  window.render = render; render(+Q.get('t') || 0); window.READY = true;
+})();
+</script>
+</body>
+</html>

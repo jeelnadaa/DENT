@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Daybreak: style frame for Direction B, Long Drop (not built)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair:opsz,wdth,wght@5..1200,50..125,300..900&family=Zalando+Sans:wght@400..900&display=block">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#000;overflow:hidden}
+#s{position:relative;width:1080px;height:1920px;overflow:hidden;background:linear-gradient(180deg,#0E0B2A 0%,#1C1547 55%,#2B1D5C 100%)}
+.layer{position:absolute;left:0;right:0}
+.cut{position:absolute;border-radius:40% 60% 0 0/30% 30% 0 0}
+#ruler{position:absolute;left:70px;top:200px;bottom:330px;width:4px;background:#8E86C9}
+.tick{position:absolute;left:70px;width:34px;height:3px;background:#8E86C9}
+.hr{position:absolute;left:118px;font-family:"Zalando Sans";font-weight:700;font-size:30px;color:#B9B2EE;letter-spacing:.08em}
+#big{position:absolute;left:150px;top:260px;font-family:Playfair;font-weight:800;font-size:200px;color:#F6EBD9;writing-mode:vertical-rl;transform:rotate(180deg);line-height:.9;font-variation-settings:'wdth' 60}
+#bean{position:absolute;left:560px;top:880px;width:70px;height:98px;border-radius:50%;background:#F6EBD9;box-shadow:0 -260px 60px -20px rgba(246,235,217,.12)}
+#trail{position:absolute;left:585px;top:520px;width:20px;height:380px;background:linear-gradient(180deg,rgba(246,235,217,0),rgba(246,235,217,.55));border-radius:10px;filter:blur(3px)}
+#door{position:absolute;left:640px;top:1340px;width:230px;height:330px;background:#FFD98A;box-shadow:0 0 140px 40px rgba(255,217,138,.35)}
+#cap{position:absolute;left:300px;right:70px;top:230px;font-family:"Zalando Sans";font-weight:800;font-size:58px;color:#F6EBD9;line-height:1.05}
+</style>
+</head>
+<body>
+<div id="s">
+  <div class="layer" style="top:1480px;height:440px;background:#120E33"></div>
+  <div class="cut" style="left:-80px;top:1200px;width:700px;height:500px;background:#191347"></div>
+  <div class="cut" style="left:520px;top:1260px;width:700px;height:480px;background:#211A55"></div>
+  <div id="door"></div>
+  <div class="cut" style="left:-120px;top:1560px;width:1400px;height:500px;background:#0B0824"></div>
+  <div id="ruler"></div>
+  <div id="ticks"></div>
+  <div id="big">+18 h</div>
+  <div id="trail"></div><div id="bean"></div>
+  <div id="cap">Roasted at 6 pm.<br>Still falling.</div>
+</div>
+<script>
+const tk = document.getElementById('ticks');
+for (let i = 0; i <= 12; i++) { const y = 200 + i * 105; tk.insertAdjacentHTML('beforeend', `<div class="tick" style="top:${y}px"></div>`);
+  if (i % 3 === 0) tk.insertAdjacentHTML('beforeend', `<div class="hr" style="top:${y - 16}px;left:118px;display:none">${i * 2}h</div>`); }
+window.render = () => {};
+(async () => { await document.fonts.ready; window.READY = true; })();
+</script>
+</body>
+</html>

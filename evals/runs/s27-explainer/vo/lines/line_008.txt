@@ -1,0 +1,1 @@
+Each passkey is bound to the real site's domain. A lookalike gets nothing.

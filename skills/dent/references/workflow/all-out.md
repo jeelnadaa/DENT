@@ -15,8 +15,8 @@ All-out means **every capability that can lift this deliverable is either built 
 | Creative directions (2–3, rendered) | `directions` | **Included** | Included |
 | Hero / expressive typography | `type` | **Included** for any page with a hero | Included · N/A (no hero) |
 | UX copy and microcopy | `copy` | **Included** | Included |
-| Built-in surfaces at Match | `surfaces` | **Included** for any visual build | Included |
-| Interface motion (menu kinds + intensity, All-out floor of `../motion/motion-menu.md` §2) | `motion` | **Included**: run the motion command itself, not only the sweep line | Included · Declined by user |
+| Built-in surfaces at Match | `surfaces` | **Included** for any visual build | Included · N/A (video-only deliverable) |
+| Interface motion (menu kinds + intensity, All-out floor of `../motion/motion-menu.md` §2) | `motion` | **Included**: run the motion command itself, not only the sweep line | Included · Declined by user · N/A (video-only: the film's motion language replaces it) |
 | Signature motion-graphics moment | `motion-graphics` | **Included** for marketing pages, launches, brand | Included · Declined · N/A with reason |
 | Assets: favicon set, app icon, OG/social image | `assets` | **Included** | Included |
 | Imagery / illustration / footage (own, generated or built) | `assets` + `../media-sourcing.md` | **Ask** where it comes from | Included · Declined |
@@ -169,7 +169,9 @@ All-out never means: ignoring the user's scope, adding features they didn't ask 
 - [ ] Sound: narration, music bed (licensed), SFX palette, ducking, loudness target
 - [ ] Captions burned-in for social + sidecar files; on-screen text legible on phones
 - [ ] Versions: 16:9, 9:16, 1:1 cuts; durations per platform; safe areas; thumbnail/poster
-- [ ] QA: ffprobe metadata, A/V sync, no typos, claims true, no flashes > 3/s, licences recorded
+- [ ] Creative menu asked, 2–3 bibles with style frames, originality guard logged (`../video/video-creative-direction.md`)
+- [ ] Narration checked with `tts.py check` (no inserted, dropped or misread words)
+- [ ] QA: `video_qa.py` passes for the kind, sheet looked at; no typos, claims true (explainers: sources listed), no flashes > 3/s, licences recorded
 
 ### 2.11 Brand and assets
 - [ ] Logo: wordmark + symbol + lockups, clear space, minimum sizes, monochrome/inverse versions, favicon legibility at 16 px

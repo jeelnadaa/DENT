@@ -1,0 +1,62 @@
+1
+00:00:00,900 --> 00:00:06,714
+A password is a secret you hand
+over. To every site, every time.
+
+2
+00:00:07,114 --> 00:00:11,228
+Sites keep copies. Fake
+sites ask just as nicely.
+
+3
+00:00:11,628 --> 00:00:16,193
+A passkey isn't a secret you share. It's
+a signature only your device can make.
+
+4
+00:00:16,593 --> 00:00:20,253
+Your device makes a pair of
+keys. The private key never
+
+5
+00:00:20,253 --> 00:00:24,312
+leaves it, and only your face,
+fingerprint or PIN unlocks it.
+
+6
+00:00:24,712 --> 00:00:27,669
+The site keeps only the public key. It can
+
+7
+00:00:27,669 --> 00:00:30,627
+check your signature, but never forge one.
+
+8
+00:00:31,027 --> 00:00:33,397
+To sign in, the site sends a fresh
+
+9
+00:00:33,397 --> 00:00:37,091
+challenge. Your device signs
+it, and the site checks.
+
+10
+00:00:37,491 --> 00:00:43,079
+No secret crosses the wire. A
+stolen public key signs no one in.
+
+11
+00:00:43,479 --> 00:00:48,616
+Each passkey is bound to the real site's
+domain. A lookalike gets nothing.
+
+12
+00:00:49,016 --> 00:00:53,358
+Your keychain or password manager
+syncs them across your devices.
+
+13
+00:00:53,758 --> 00:00:59,909
+Stop handing over secrets. Look for
+"Create a passkey" in your settings.
+

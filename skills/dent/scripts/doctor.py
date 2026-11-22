@@ -92,11 +92,14 @@ def main() -> int:
         "disk_free_gb": round(disk.free / 1e9, 1),
         "blender": run(["blender", "--version"]) or "not found",
         "imagemagick": run(["magick", "-version"]) or "not found",
-        "whisper": "ok" if (importlib.util.find_spec("whisper") or importlib.util.find_spec("faster_whisper") or shutil.which("whisper")) else "not found",
         "tts": tts_engines(),
         "api_keys_set": [k for k in KEYS if os.environ.get(k)],
         "fonts_snapshot": fonts_snapshot(),
     }
+    # speech-to-text (tts.py check / words): this interpreter, a whisper CLI, or faster-whisper in the registered TTS home
+    stt_home = any(t.lstrip("- ").startswith("whisper") and "installed" in t and "not installed" not in t for t in rep["tts"])
+    rep["whisper"] = ("ok" if (importlib.util.find_spec("whisper") or importlib.util.find_spec("faster_whisper") or shutil.which("whisper"))
+                      else "ok (faster-whisper in the TTS home)" if stt_home else "not found")
     can, ask = [], []
     can.append("render and inspect pages (verify_page.py)" if rep["playwright"].startswith("ok") else "static checks only: no browser verification until Playwright + Chromium are installed")
     if "not found" in rep["ffmpeg"]:

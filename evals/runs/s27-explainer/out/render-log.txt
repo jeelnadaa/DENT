@@ -1,0 +1,38 @@
+  0/3810
+  120/3810
+  240/3810
+  360/3810
+  480/3810
+  600/3810
+  720/3810
+  840/3810
+  960/3810
+  1080/3810
+  1200/3810
+  1320/3810
+  1440/3810
+  1560/3810
+  1680/3810
+  1800/3810
+  1920/3810
+  2040/3810
+  2160/3810
+  2280/3810
+  2400/3810
+  2520/3810
+  2640/3810
+  2760/3810
+  2880/3810
+  3000/3810
+  3120/3810
+  3240/3810
+  3360/3810
+  3480/3810
+  3600/3810
+  3720/3810
+layout check (every 0.5 s): 0 too small, 0 cut off, 0 in unsafe zones -> clean
+wrote D:\SKILLS\product-design\.claude\worktrees\s27-explainer-91bde4\evals\runs\s27-explainer\out\film-16x9.mp4; page errors: none. Next: python <skill>/scripts/video_qa.py D:\SKILLS\product-design\.claude\worktrees\s27-explainer-91bde4\evals\runs\s27-explainer\out\film-16x9.mp4 --sheet out/qa-sheet.jpg
+
+real	9m35.544s
+user	0m0.000s
+sys	0m0.093s

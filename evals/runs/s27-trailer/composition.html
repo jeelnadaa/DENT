@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Streak: "Roots" launch trailer</title>
+<!-- Fonts chosen with scripts/fonts.py suggest/check (all "fresh enough", OFL via Google Fonts):
+     BioRhyme (wide slab serif, wdth axis) = statements; Georama (wdth) = the app's own UI; Sometype Mono = data and labels. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BioRhyme:wdth,wght@100..125,200..800&family=Georama:wdth,wght@62.5..150,100..900&family=Sometype+Mono:wght@400..700&display=block">
+<style>
+/* Palette from scripts/palette.py make --accent #C9D94A --second #E9B44C --neutral warm (name "rootsystem").
+   Colour script: act 1 sterile grey (the checkmark world) -> act 2 soil + pollen-gold roots + chartreuse growth -> act 3 dawn gold. */
+:root{
+  --soil:#18140F; --soil2:#221D18; --soil3:#322D27; --loam:#47413A;
+  --root:#E9B44C; --sprout:#C9D94A; --leaf:#88940B; --leafdk:#5C640A; --wilt:#B08218;
+  --cream:#FCF8F5; --app:#F4EFE6; --appline:#E2DBD0; --ink:#18140F; --muted:#605A53;
+  --sterile:#E9ECEE; --sterile2:#D6DADD; --steel:#2A2F33; --miss:#B3313C;
+  --dawn1:#F3D69B; --dawn2:#F8EEDB;
+  --state:"BioRhyme",serif; --ui:"Georama",sans-serif; --mono:"Sometype Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+#stage{position:relative;overflow:hidden;background:var(--sterile);color:var(--ink)}
+#cam{position:absolute;inset:0;transform-origin:50% 50%}
+.L{position:absolute;inset:0}
+.a{position:absolute}
+#sky{background:var(--sterile)}
+#soil{background:var(--soil)}
+#soil .strata{position:absolute;left:-10%;right:-10%;height:300%;top:0;
+  background:repeating-linear-gradient(180deg,rgba(233,180,76,.035) 0 3%,transparent 3% 7%,rgba(0,0,0,.25) 7% 8%,transparent 8% 12%)}
+#soil .fringe{position:absolute;left:0;right:0;top:-14px;height:30px}
+#under{overflow:hidden}
+.pebble{position:absolute;border-radius:46% 54% 50% 50%;background:var(--soil3)}
+.mote{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--root);opacity:.35}
+/* statements */
+.st{font-family:var(--state);font-weight:800;font-stretch:125%;letter-spacing:-.035em;line-height:.95}
+.st i{font-style:normal;font-weight:300;font-stretch:100%}
+.line{display:block;overflow:clip;padding-bottom:.08em}
+.line>span{display:inline-block}
+.lab{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.1em}
+/* hook grid (the sterile checkmark world) */
+.cell{position:absolute;border-radius:14px;background:#F6F7F8;border:2px solid var(--sterile2)}
+.cell b{position:absolute;left:10px;top:6px;font:500 18px var(--mono);color:#7B8186}
+.cell svg{position:absolute;inset:0;overflow:visible}
+/* phone (the app is a faithful HTML reenactment designed for this film: Streak is fictional) */
+.phone{position:absolute;width:410px;height:860px;border-radius:58px;background:#14110D;padding:12px;transform-origin:50% 100%;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.phone.droid{border-radius:40px}
+.scr{position:relative;width:100%;height:100%;border-radius:46px;background:var(--app);overflow:hidden;font-family:var(--ui);color:var(--ink)}
+.droid .scr{border-radius:30px}
+.island{position:absolute;left:50%;top:12px;width:112px;height:32px;margin-left:-56px;border-radius:20px;background:#14110D;z-index:3}
+.punch{position:absolute;left:50%;top:16px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:#14110D;z-index:3}
+.sb{position:absolute;left:30px;right:30px;top:16px;display:flex;justify-content:space-between;font:650 18px var(--ui)}
+.hd{position:absolute;left:26px;right:26px;top:62px}
+.hd small{display:block;font:600 18px var(--ui);color:var(--muted);letter-spacing:.02em}
+.hd h2{font:800 40px var(--ui);font-stretch:112%;letter-spacing:-.02em;line-height:1.1}
+.chip{position:absolute;right:0;top:10px;font:600 18px var(--mono);background:var(--ink);color:var(--sprout);border-radius:20px;padding:6px 14px}
+.seg{position:absolute;left:22px;right:22px;top:154px;height:46px;border-radius:23px;background:var(--appline);display:flex;font:650 18px var(--ui)}
+.seg div{flex:1;display:grid;place-items:center;position:relative;z-index:1}
+.seg .knob{position:absolute;top:4px;bottom:4px;width:calc(33.3% - 6px);left:4px;border-radius:19px;background:var(--cream);box-shadow:0 2px 6px rgba(0,0,0,.12);z-index:0}
+.pane{position:absolute;left:0;right:0;top:214px;bottom:0}
+.row{position:absolute;left:18px;right:18px;height:76px;border-radius:20px;background:var(--cream);display:flex;align-items:center}
+.row svg.pot{width:66px;height:76px;flex:none;margin-left:6px;overflow:visible}
+.row .nm{flex:1;padding-left:8px}
+.row .nm b{display:block;font:700 22px var(--ui)}
+.row .nm span{display:block;font:500 18px var(--ui);color:var(--muted)}
+.drop{width:50px;height:50px;border-radius:50%;margin-right:14px;display:grid;place-items:center;background:var(--appline)}
+.drop svg{width:22px;height:22px}
+.tap{position:absolute;width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;background:rgba(24,20,15,.18);border:3px solid rgba(24,20,15,.35);opacity:0;z-index:5}
+.banner{position:absolute;left:18px;right:18px;border-radius:20px;background:var(--ink);color:var(--cream);padding:16px 18px;font:600 19px var(--ui);line-height:1.3;opacity:0}
+.banner em{font-style:normal;color:var(--sprout)}
+.gbed{position:absolute;left:0;right:0;top:0;height:446px;overflow:hidden}
+.gbed .sk{position:absolute;inset:0;background:linear-gradient(#E6E9D9,#F4EFE6)}
+.gbed svg{position:absolute;inset:0;overflow:visible}
+.glab{position:absolute;top:404px;width:80px;margin-left:-40px;text-align:center;font:600 18px var(--ui);color:var(--cream)}
+.widget{position:absolute;width:340px;height:340px;border-radius:72px;background:var(--soil);color:var(--cream);padding:30px;font-family:var(--ui);box-shadow:0 30px 70px rgba(0,0,0,.3);transform-origin:50% 50%}
+.widget b{font:800 30px var(--ui)}
+.widget span{display:block;font:600 20px var(--ui);color:var(--sprout);margin-top:6px}
+.widget svg{position:absolute;right:26px;bottom:20px;overflow:visible}
+#demo{position:absolute;font:500 20px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:8px;background:rgba(24,20,15,.72);color:var(--cream);z-index:20}
+#grain{position:absolute;inset:-50%;opacity:.07;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}
+#cap{position:absolute;left:7%;right:7%;text-align:center;font:600 34px var(--ui);color:var(--cream);z-index:30;line-height:1.35}
+#cap span{background:rgba(24,20,15,.84);padding:.08em .45em;border-radius:.3em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+svg.word path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg.word path.leafk{stroke:none}
+</style>
+</head>
+<body>
+<div id="stage">
+ <div id="cam">
+  <div id="sky" class="L"></div>
+  <div id="above" class="L"></div>
+  <div id="soil" class="L"><div class="strata"></div>
+    <svg class="fringe" preserveAspectRatio="none" viewBox="0 0 1000 30"><path id="fr" fill="#18140F"/></svg></div>
+  <div id="under" class="L"></div>
+ </div>
+ <div id="demo" data-small>Concept demo · Streak is fictional</div>
+ <div id="grain"></div>
+ <div id="cap"><span></span></div>
+</div>
+<script src="techniques.js"></script>
+<script>
+/* ============================================================ engine (kept from the DENT video kit) */
+const Q = new URLSearchParams(location.search), W = +Q.get('w') || 1920, H = +Q.get('h') || 1080, PORT = H > W;
+const stage = document.getElementById('stage'), cam = document.getElementById('cam');
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+const U = Math.min(W, H) / 1080;
+let TL;
+const F = window.DENTFX;
+const $ = (h) => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstChild; };
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const P = (t, start, dur) => clamp((t - start) / dur);
+const eOut = (x) => 1 - Math.pow(1 - clamp(x), 4);
+const eIn = (x) => Math.pow(clamp(x), 3);
+const eIO = (x) => { x = clamp(x); return x < .5 ? 8 * x ** 4 : 1 - Math.pow(-2 * x + 2, 4) / 2; };
+const spring = (dt, f = 2.2, z = .35) => dt <= 0 ? 0 : 1 - Math.exp(-z * f * 2 * Math.PI * dt) * Math.cos(f * Math.sqrt(1 - z * z) * 2 * Math.PI * dt);
+// growth spring: the film's own motion token (organic, slight overshoot, settles fast)
+const grow = (dt) => spring(dt, 1.6, .5);
+const fall = (dt, h, g = 4200) => Math.min(h, 0.5 * g * dt * dt);
+const S = (el, o) => {
+  const tr = `translate(${(o.x || 0) * U}px,${(o.y || 0) * U}px) scale(${o.s ?? 1}${o.sy !== undefined ? ',' + o.sy : ''}) rotate(${o.r || 0}deg)`;
+  el.style.transform = tr; if (o.o !== undefined) el.style.opacity = o.o;
+};
+const px = (v) => v * U + 'px';
+function lines(el, t, start, stagger = .09, dur = .55) {
+  el.querySelectorAll('.line>span').forEach((s, i) => { const k = eOut(P(t, start + i * stagger, dur)); S(s, { y: (1 - k) * 140, o: 1 }); });
+}
+function livingFrame(t, sceneStart) { const k = t - sceneStart; S(cam, { s: 1 + .010 * k, x: Math.sin(k * .7) * 3, y: Math.cos(k * .5) * 2 }); }
+
+/* ============================================================ film: "Roots" (bible in VIDEO.md)
+   Transition family: the HORIZON CROSSING. The camera sinks below or rises above the soil line; the soil edge is the wipe.
+   One exception at the climax: the push THROUGH the phone screen into the roots (25.0 s). */
+const sky = document.getElementById('sky'), above = document.getElementById('above'), soil = document.getElementById('soil'), under = document.getElementById('under');
+const strata = soil.querySelector('.strata');
+const rnd = F.rand(42);
+// soil fringe (a ragged top edge, re-seeded on twos so it breathes)
+const fr = document.getElementById('fr');
+function fringe(t) { const r = F.rand(5 + Math.floor(t * 12) % 4); let d = 'M0 30 L0 14'; for (let i = 0; i <= 100; i++) d += ` L${i * 10} ${10 + r() * 8}`; fr.setAttribute('d', d + ' L1000 30Z'); }
+// pebbles and motes (parallax depth in the soil)
+const pebbles = [];
+for (let i = 0; i < 26; i++) { const p = $(`<div class="pebble"></div>`); const s = (8 + rnd() * 26) * U; p.style.width = s + 'px'; p.style.height = s * .7 + 'px';
+  pebbles.push({ el: p, x: rnd() * W, y: rnd() * 1.6, z: .6 + rnd() * 1.2 }); soil.append(p); }
+const motes = [];
+for (let i = 0; i < 18; i++) { const m = $(`<div class="mote"></div>`); motes.push({ el: m, x: rnd() * W, y: rnd(), ph: rnd() * 6 }); under.append(m); }
+
+/* ---------- layout per ratio */
+const LS = PORT ? {
+  hyApp: .56, phoneX: 540, phoneW: 1.05, bury: 60, stX: 80, stY: 1262, stW: 920, capY: .785,
+  grid: { cols: 5, rows: 6, cell: 130, gap: 14, x: 193, y: 560 }, counter: { x: 0, y: 250, size: 230, center: true },
+} : {
+  hyApp: .76, phoneX: 600, phoneW: 1.12, bury: 250, stX: 1010, stY: 190, stW: 840, capY: .875,
+  grid: { cols: 10, rows: 3, cell: 112, gap: 14, x: 610, y: 400 }, counter: { x: 120, y: 360, size: 300, center: false },
+};
+
+/* ---------- custom lettering: "streak" as one root writing itself (monoline, round caps, a leaf for the k's arm) */
+const WORD = [
+  { d: 'M62 14 C48 0 6 -2 6 26 C6 52 64 44 64 74 C64 104 14 104 0 86', x: 0 },          // s
+  { d: 'M22 -58 L22 82 C22 98 34 102 50 98 M0 0 L48 0', x: 82 },                           // t
+  { d: 'M0 0 L0 100 M0 44 C6 10 28 0 54 4', x: 150 },                                       // r
+  { d: 'M2 52 L70 52 C70 20 54 0 36 0 C12 0 0 24 0 50 C0 80 16 100 40 100 C56 100 66 92 72 82', x: 222 }, // e
+  { d: 'M66 0 L66 100 M66 50 C66 20 52 0 34 0 C12 0 0 24 0 50 C0 78 14 100 34 100 C52 100 66 80 66 50', x: 316 }, // a
+  { d: 'M0 -62 L0 100 M16 58 L62 100', x: 408 },                                            // k (stem + leg)
+];
+const LEAF_K = 'M2 60 C12 14 46 -4 84 -10 C78 30 50 58 2 60 Z';
+function wordSVG(id, stroke, sw) {
+  return `<svg class="word" id="${id}" viewBox="-20 -90 520 220" style="overflow:visible">
+    ${WORD.map(g => `<path d="${g.d}" transform="translate(${g.x} 0)" stroke="${stroke}" stroke-width="${sw}"/>`).join('')}
+    <g transform="translate(408 0)"><path class="leafk" d="${LEAF_K}" fill="var(--sprout)"/></g>
+  </svg>`;
+}
+function drawWord(svg, t, start, draw = .32, stagger = .3) {
+  const ps = svg.querySelectorAll('path');
+  ps.forEach((p, i) => {
+    if (p.classList.contains('leafk')) { const k = Math.max(0, grow(t - (start + 5 * stagger + draw * .8))); p.setAttribute('transform', `translate(2 60) scale(${k}) translate(-2 -60)`); return; }
+    const L = p.__len || (p.__len = p.getTotalLength()); const k = eIO(P(t, start + i * stagger, draw));
+    p.style.strokeDasharray = L; p.style.strokeDashoffset = L * (1 - k); p.style.visibility = k > .002 ? 'visible' : 'hidden';
+  });
+}
+
+/* ---------- plants (one function draws a habit plant at any growth stage; deterministic in t) */
+function leafPath(len, wide) { return `M0 0 C${len * .25} ${-wide} ${len * .7} ${-wide} ${len} 0 C${len * .7} ${wide * .7} ${len * .25} ${wide * .7} 0 0 Z`; }
+function plant(stage, wilt, t, seed, sc = 1, flowerCol = 'var(--root)') {
+  // stage 0..1 = height, leaves, bloom. wilt 0..1 = droop + ochre.
+  const h = (14 + 120 * stage) * sc, sway = Math.sin(t * 1.4 + seed) * 2.2 * sc * (1 - wilt);
+  const bend = wilt * 78 * sc;
+  const tipX = sway + bend * .9, tipY = -h + bend * .55;
+  const col = wilt > .01 ? `color-mix(in oklab, var(--leaf) ${Math.round(100 - wilt * 75)}%, var(--wilt))` : 'var(--leaf)';
+  let s = `<path d="M0 0 Q${sway * .3} ${-h * .55} ${tipX} ${tipY}" fill="none" stroke="${col}" stroke-width="${4 * sc}" stroke-linecap="round"/>`;
+  const n = stage * 6;
+  for (let i = 0; i < Math.ceil(n); i++) {
+    const f = (i + 1) / 7, k = clamp(n - i), side = i % 2 ? 1 : -1;
+    const lx = sway * .3 * f + bend * f * f * .9, ly = -h * f + bend * f * f * .55;
+    const len = (16 + 10 * stage) * sc * k, rot = side > 0 ? -28 + wilt * 70 : 208 - wilt * 70;
+    s += `<path d="${leafPath(len, len * .38)}" transform="translate(${lx} ${ly}) rotate(${rot})" fill="${col}"/>`;
+  }
+  if (stage > .72) { const b = clamp((stage - .72) / .2) * (1 - wilt * .6);
+    for (let p = 0; p < 5; p++) { const a = p * 72 + t * 8; s += `<ellipse cx="${tipX + Math.cos(a * Math.PI / 180) * 7 * sc * b}" cy="${tipY + Math.sin(a * Math.PI / 180) * 7 * sc * b}" rx="${7 * sc * b}" ry="${4.5 * sc * b}" transform="rotate(${a} ${tipX} ${tipY})" fill="${flowerCol}"/>`; }
+    s += `<circle cx="${tipX}" cy="${tipY}" r="${4 * sc * b}" fill="var(--soil)"/>`; }
+  return s;
+}
+const POT = (sc = 1) => `<path d="M${-17 * sc} 0 L${17 * sc} 0 L${13 * sc} ${22 * sc} L${-13 * sc} ${22 * sc} Z" fill="#B9775B"/><rect x="${-19 * sc}" y="${-3 * sc}" width="${38 * sc}" height="${6 * sc}" rx="${2 * sc}" fill="#A2654B"/>`;
+
+/* ---------- habits (fictional demo data) */
+const HABITS = [
+  { n: 'Read 10 pages', fl: 'var(--root)' }, { n: 'Walk 20 min', fl: '#D98C7A' }, { n: 'Stretch', fl: '#A99BE0' },
+  { n: 'Journal', fl: 'var(--root)' }, { n: 'No phone in bed', fl: '#D98C7A' },
+];
+const DROP = '<svg viewBox="0 0 24 24"><path d="M12 2 C12 2 4 11 4 15.5 A8 8 0 0 0 20 15.5 C20 11 12 2 12 2Z" fill="currentColor"/></svg>';
+
+function makePhone(droid) {
+  const el = $(`<div class="phone ${droid ? 'droid' : ''}"><div class="scr">
+    ${droid ? '<div class="punch"></div>' : '<div class="island"></div>'}
+    <div class="sb"><span>9:41</span><span>▮▮▮ ◔</span></div>
+    <div class="hd"><small class="dow">Tuesday</small><h2>Today</h2><div class="chip">Day 12</div></div>
+    <div class="seg"><div class="knob"></div><div>Today</div><div>Garden</div><div>Roots</div></div>
+    <div class="pane today">${HABITS.map((h, i) => `<div class="row" style="top:${i * 86}px"><svg class="pot" viewBox="-33 -64 66 92"><g class="pl"></g>${POT()}</svg>
+      <div class="nm"><b>${h.n}</b><span class="sub">2 leaves</span></div><div class="drop" style="color:var(--muted)">${DROP}</div></div>`).join('')}</div>
+    <div class="pane garden" style="opacity:0"><div class="gbed"><div class="sk"></div><svg viewBox="0 0 386 446"><rect x="0" y="380" width="386" height="66" fill="#5B4636"/><g class="gp"></g></svg>
+      ${HABITS.map((h, i) => `<div class="glab" style="left:${43 + i * 75}px">${['Read', 'Walk', 'Stretch', 'Journal', 'Unplug'][i]}</div>`).join('')}</div></div>
+    <div class="banner"></div>
+    <div class="tap"></div>
+  </div></div>`);
+  return el;
+}
+
+/* ============================================================ scenes */
+// S1 hook: the checkmark grid (sterile)
+const G = LS.grid, cells = [];
+const hook = $(`<div class="L"></div>`); above.append(hook);
+for (let i = 0; i < 30; i++) {
+  const c = i % G.cols, r = Math.floor(i / G.cols);
+  const el = $(`<div class="cell" style="left:${px(G.x + c * (G.cell + G.gap))};top:${px(G.y + r * (G.cell + G.gap))};width:${px(G.cell)};height:${px(G.cell)}"><b>${i + 1}</b>
+    <svg viewBox="0 0 100 100"><path class="ck" d="M24 54 L42 72 L78 30" fill="none" stroke="var(--steel)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="sp" d="" fill="var(--leaf)" opacity="0"/></svg></div>`);
+  hook.append(el); cells.push(el);
+}
+const counter = $(`<div class="a" style="${LS.counter.center ? 'left:0;right:0;text-align:center' : 'left:' + px(LS.counter.x)};top:${px(LS.counter.y)}">
+  <div class="lab" style="font-size:${px(26)};color:#5E6469">day streak</div>
+  <div class="num" style="font:700 ${px(LS.counter.size)}/.95 var(--mono);color:var(--steel);font-variant-numeric:tabular-nums;letter-spacing:-.04em">0</div></div>`);
+hook.append(counter);
+const xMark = $(`<svg class="a" viewBox="0 0 100 100" style="overflow:visible"><path d="M28 28 L72 72 M72 28 L28 72" stroke="var(--miss)" stroke-width="11" stroke-linecap="round" fill="none"/></svg>`);
+hook.append(xMark);
+// S2 the falling check -> sprout (signature device: the checkmark becomes a seedling)
+const seedSvg = $(`<svg class="a" viewBox="-100 -140 200 200" style="overflow:visible;width:${px(200)};height:${px(200)}">
+  <path class="stem" d="" stroke="var(--leaf)" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path class="armL" stroke-linejoin="round" stroke-width="14"/><path class="armR" stroke-linejoin="round" stroke-width="14"/></svg>`);
+above.append(seedSvg);
+// morph shapes share structure: M C C Z
+const ARM_L0 = 'M0 0 C-6 -6 -14 -14 -22 -22 C-14 -14 -6 -6 0 0 Z', ARM_L1 = 'M0 0 C-4 -34 -44 -52 -78 -44 C-66 -16 -32 2 0 0 Z';
+const ARM_R0 = 'M0 0 C12 -14 26 -32 40 -48 C26 -32 12 -14 0 0 Z', ARM_R1 = 'M0 0 C8 -40 52 -64 92 -60 C80 -24 40 0 0 0 Z';
+// S3 underground wordmark
+const word1 = $(`<div class="a" style="left:0;right:0;top:${PORT ? px(760) : px(330)};display:flex;justify-content:center">${wordSVG('w1', 'var(--root)', 15)}</div>`);
+under.append(word1); const w1 = word1.querySelector('svg'); w1.style.width = px(PORT ? 900 : 1000);
+const tag1 = $(`<div class="a st" style="left:0;right:0;text-align:center;top:${PORT ? px(1130) : px(720)};font-size:${px(56)};color:var(--cream)"><span class="line"><span><i>habits that</i> grow</span></span></div>`);
+under.append(tag1);
+const taproot = $(`<svg class="a" style="left:0;top:0;width:${W}px;height:${H}px;overflow:visible" viewBox="0 0 ${W} ${H}"><path fill="none" stroke="var(--root)" stroke-width="${7 * U}" stroke-linecap="round"/></svg>`);
+under.append(taproot);
+
+// S4-S6 the phone (iOS-style) planted in the soil
+const phone = makePhone(false); above.append(phone);
+const phoneRoots = $(`<svg class="a" style="left:0;top:0;width:${W}px;height:${H}px;overflow:visible" viewBox="0 0 ${W} ${H}"></svg>`); under.append(phoneRoots);
+const st = $(`<div class="a" style="left:${px(LS.stX)};top:${px(LS.stY)};width:${px(LS.stW)}"></div>`); above.append(st);
+const stU = $(`<div class="a" style="left:${px(LS.stX)};top:${px(LS.stY)};width:${px(LS.stW)};color:var(--cream)"></div>`); under.append(stU);
+const dayBig = $(`<div class="a" style="font:700 ${px(PORT ? 120 : 170)}/1 var(--mono);letter-spacing:-.04em;font-variant-numeric:tabular-nums;opacity:0"></div>`);
+// S7 roots (full frame) + title at the peak
+const rootsL = $(`<div class="L" style="opacity:0;background:var(--soil)"></div>`); cam.append(rootsL);
+const rootSvg = $(`<svg class="a" style="left:0;top:0;width:${W}px;height:${H}px;overflow:visible" viewBox="0 0 ${W} ${H}"><g class="rg"></g></svg>`); rootsL.append(rootSvg);
+const rootLab = $(`<div class="a lab" style="font-size:${px(24)};color:var(--root)"></div>`); rootsL.append(rootLab);
+// the app's own chrome on the full-frame Roots view: this IS the Roots tab, blown up to the frame
+const chrome = $(`<div class="a" style="left:0;right:0;top:${PORT ? px(270) : px(40)};display:flex;justify-content:center;gap:${px(18)};align-items:center;font-family:var(--ui)">
+  <div style="display:flex;width:${px(470)};height:${px(56)};border-radius:${px(28)};background:rgba(252,248,245,.12);font:650 ${px(22)} var(--ui);color:var(--cream);position:relative">
+    <div style="position:absolute;top:${px(5)};bottom:${px(5)};right:${px(5)};width:calc(33.3% - ${px(8)});border-radius:${px(23)};background:var(--cream)"></div>
+    <div style="flex:1;display:grid;place-items:center;z-index:1">Today</div><div style="flex:1;display:grid;place-items:center;z-index:1">Garden</div><div style="flex:1;display:grid;place-items:center;z-index:1;color:var(--ink)">Roots</div></div>
+  <div style="font:600 ${px(22)} var(--mono);background:var(--cream);color:var(--ink);border-radius:${px(22)};padding:${px(8)} ${px(16)}">Day 61</div></div>`);
+rootsL.append(chrome);
+const word2 = $(`<div class="a" style="left:0;right:0;top:${PORT ? px(640) : px(190)};display:flex;justify-content:center">${wordSVG('w2', 'var(--cream)', 19)}</div>`);
+rootsL.append(word2); const w2 = word2.querySelector('svg'); w2.style.width = px(PORT ? 960 : 1240);
+const tag2 = $(`<div class="a st" style="left:0;right:0;text-align:center;top:${PORT ? px(1130) : px(730)};font-size:${px(PORT ? 54 : 60)};color:var(--root)"><span class="line"><span><i>The days you showed up</i> stay.</span></span></div>`);
+rootsL.append(tag2);
+const ring = $(`<div class="a" style="border:4px solid var(--root);border-radius:50%;left:${W / 2}px;top:${H * .42}px"></div>`); rootsL.append(ring);
+// S8 two phones + widget at dawn
+const phA = makePhone(false), phB = makePhone(true); above.append(phA); above.append(phB);
+const widget = $(`<div class="widget"><b>Streak</b><span>Day 62 · 5 growing</span><svg viewBox="-60 -150 120 160" width="150" height="190"><g class="wp"></g>${POT(1.5)}</svg></div>`); above.append(widget);
+// S9 end card
+const end = $(`<div class="L" style="opacity:0"></div>`); above.append(end);
+const word3 = $(`<div class="a" style="left:0;right:0;top:${PORT ? px(560) : px(250)};display:flex;justify-content:center">${wordSVG('w3', 'var(--soil)', 17)}</div>`);
+end.append(word3); const w3 = word3.querySelector('svg'); w3.style.width = px(PORT ? 860 : 980);
+const endTxt = $(`<div class="a" style="left:0;right:0;text-align:center;top:${PORT ? px(940) : px(640)}">
+  <div class="st" style="font-size:${px(PORT ? 64 : 70)};color:var(--soil)"><span class="line"><span><i>Grow habits,</i> not checkmarks.</span></span></div>
+  <div class="lab" style="font-size:${px(32)};color:var(--leafdk);margin-top:${px(34)}">On iPhone and Android</div></div>`);
+end.append(endTxt);
+above.append(dayBig);
+
+/* ---------- procedural roots (seeded) for the peak */
+const ROOTS = [];
+(function buildRoots() {
+  const r = F.rand(17), ox = W / 2, oy = -40 * U;
+  function branch(x, y, ang, len, depth, t0, id) {
+    const x2 = x + Math.cos(ang) * len, y2 = y + Math.sin(ang) * len;
+    const mx = (x + x2) / 2 + (r() - .5) * len * .5, my = (y + y2) / 2 + (r() - .5) * len * .3;
+    ROOTS.push({ d: `M${x.toFixed(1)} ${y.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`, depth, t0, dur: .5 + r() * .4, id, x2, y2 });
+    if (depth >= 4) return;
+    const kids = depth < 2 ? 2 : 1 + (r() > .35 ? 1 : 0);
+    for (let k = 0; k < kids; k++) branch(x2, y2, ang + (r() - .5) * 1.3, len * (.66 + r() * .2), depth + 1, t0 + .36 + r() * .2, id);
+  }
+  const prim = 5, spread = PORT ? 1.0 : 2.3;
+  for (let i = 0; i < prim; i++) branch(ox, oy, Math.PI / 2 + (i - (prim - 1) / 2) / (prim - 1) * spread, (PORT ? 420 : 380) * U, 0, .08 + i * .05, i);
+})();
+const rg = rootSvg.querySelector('.rg');
+rg.innerHTML = ROOTS.map(R => `<path d="${R.d}" fill="none" stroke="${R.id === 1 ? 'var(--sprout)' : 'var(--root)'}" stroke-width="${(11 - R.depth * 2.1) * U}" stroke-linecap="round" opacity="${1 - R.depth * .12}"/>`).join('')
+  + ROOTS.filter(R => R.depth === 4 || R.depth === 3).map(R => `<circle cx="${R.x2}" cy="${R.y2}" r="${5 * U}" fill="var(--sprout)"/>`).join('');
+const rootPaths = [...rg.querySelectorAll('path')], rootTips = [...rg.querySelectorAll('circle')];
+const tipRoots = ROOTS.filter(R => R.depth === 4 || R.depth === 3);
+
+/* ---------- phone roots (5, one per habit, growing with each day of care) */
+const PR = HABITS.map((h, i) => {
+  const r = F.rand(100 + i); const pts = [];
+  let x = 0, y = 0, a = Math.PI / 2 + (i - 2) * .42;
+  for (let k = 0; k < 14; k++) { a += (r() - .5) * .5; x += Math.cos(a) * 40; y += Math.sin(a) * 26; pts.push([x, y]); }
+  return pts;
+});
+phoneRoots.innerHTML = PR.map((_, i) => `<path fill="none" stroke="${i === 1 ? 'var(--sprout)' : 'var(--root)'}" stroke-width="${6 * U}" stroke-linecap="round"/>`).join('');
+const prPaths = [...phoneRoots.querySelectorAll('path')];
+
+/* ============================================================ helpers per frame */
+function horizon(t) {
+  // horizon y as a fraction of H, per act (the transition family lives here)
+  const app = LS.hyApp;
+  const keys = [ [0, 1.15], [4.3, 1.15], [5.1, PORT ? .78 : .8], [6.25, PORT ? .78 : .8], [7.4, .08], [10.0, .08], [10.9, app], [24.9, app], [24.95, app],
+    [32.5, -.05], [33.4, app], [40.0, app], [40.75, 1.2] ];
+  // the push through the screen: the ground drops away below as we move in; then the roots layer covers the frame
+  if (t >= 24.95 && t < 25.45) return app + (1.3 - app) * eIn(P(t, 24.95, .45));
+  if (t >= 25.45 && t < 32.5) return -.05;
+  for (let i = keys.length - 1; i >= 0; i--) if (t >= keys[i][0]) { const [t0, v0] = keys[i], [t1, v1] = keys[i + 1] || keys[i]; return v0 + (v1 - v0) * eIO(P(t, t0, Math.max(.001, t1 - t0))); }
+  return keys[0][1];
+}
+function setText(el, html) { if (el.__h !== html) { el.innerHTML = html; el.__h = html; } }
+function statement(el, t, html, start, size = 96) {
+  setText(el, `<div class="st" style="font-size:${px(size)}">${html}</div>`);
+  lines(el, t, start, .12, .5);
+}
+function placePhone(ph, cx, hyPx, sc, bury) {
+  const w = 410 * sc * U, h = 860 * sc * U;
+  ph.style.left = (cx * U - 205) + 'px'; ph.style.top = (hyPx + bury * U - 860) + 'px';
+  ph.style.transformOrigin = '50% 100%'; ph.style.transform = `scale(${sc * U})`;
+  ph.style.display = 'block';
+  return { x: cx * U, bottom: hyPx + bury * U, top: hyPx + bury * U - h, w, h };
+}
+function today(ph, t, careDay, taps, wiltK, dayN, dow) {
+  const sc = ph.querySelector('.scr');
+  setText(sc.querySelector('.chip'), 'Day ' + dayN); setText(sc.querySelector('.dow'), dow);
+  sc.querySelectorAll('.today .row').forEach((row, i) => {
+    const tp = taps[i], k = tp === undefined ? 0 : grow(t - tp);
+    const stage = clamp(.3 + careDay * .012 + .17 * k, 0, 1);
+    row.querySelector('.pl').innerHTML = plant(stage * .62, i === 1 ? wiltK : 0, t, i, .62, HABITS[i].fl);
+    const leaves = Math.max(1, Math.round(stage * 6));
+    setText(row.querySelector('.sub'), `${tp !== undefined && t > tp + .25 ? 3 : 2} leaves${tp !== undefined && t > tp ? ' · watered' : ''}`);
+    const d = row.querySelector('.drop'); const on = tp !== undefined && t > tp;
+    d.style.background = on ? 'var(--leafdk)' : 'var(--appline)'; d.style.color = on ? 'var(--sprout)' : 'var(--muted)';
+    S(d, { s: on ? 1 + .25 * Math.exp(-(t - tp) * 9) * Math.sin((t - tp) * 30) : 1 });
+  });
+}
+function tapAt(ph, t, at, row) {
+  const tap = ph.querySelector('.tap'); const k = P(t, at - .12, .5);
+  if (k <= 0 || k >= 1) return;
+  tap.style.left = '330px'; tap.style.top = (214 + row * 86 + 38) + 'px';
+  tap.style.opacity = (1 - k) * 1.2; tap.style.transform = `scale(${.6 + k * .8})`;
+}
+function garden(ph, t, day, wiltK, rev) {
+  const g = ph.querySelector('.gp');
+  g.innerHTML = HABITS.map((h, i) => {
+    const st0 = clamp(.2 + (day - 1) / 60 * (.75 + i * .05));
+    return `<g transform="translate(${43 + i * 75} 380)">${plant(st0, i === 1 ? wiltK : 0, t, i * 1.7, 1.5, h.fl)}</g>`;
+  }).join('');
+  const sk = ph.querySelector('.gbed .sk');
+  const night = Math.max(0, Math.sin((day * .9) % Math.PI)) * rev * .55;
+  sk.style.background = `linear-gradient(color-mix(in oklab,#E6E9D9 ${100 - night * 70}%,#2B2F45),#F4EFE6)`;
+}
+function segTo(ph, t, at, idx, from = 0) { const k = eOut(P(t, at, .35)); const pos = from + (idx - from) * k; ph.querySelector('.knob').style.left = `calc(${pos * 33.3}% + 4px)`; return k; }
+
+/* ============================================================ render(t) */
+function render(t) {
+  const cut = TL.scenes; const idx = cut.findLastIndex(s => t >= s);
+  // living frame, made continuous: this film has no hard cuts to hide a per-scene reset (kit livingFrame restarts each scene)
+  S(cam, { s: 1.015 + .012 * Math.sin(t * .33), x: Math.sin(t * .7) * 4, y: Math.cos(t * .5) * 3 });
+  fringe(t);
+  const hy = horizon(t) * H;
+  soil.style.clipPath = `inset(${Math.max(0, hy)}px 0 0 0)`;
+  soil.querySelector('.fringe').style.top = (hy - 14 * U) + 'px';
+  under.style.clipPath = `inset(${Math.max(0, hy)}px 0 0 0)`;
+  // parallax: the soil texture and pebbles move with the camera depth (hy) at their own depths
+  strata.style.transform = `translateY(${hy * .6 - H * .2}px)`;
+  pebbles.forEach(p => { p.el.style.left = (p.x + Math.sin(t * .2 + p.z) * 6) + 'px'; p.el.style.top = (hy + (p.y * H - H * .2) / p.z + hy * (1 / p.z - 1) * .3) + 'px'; });
+  motes.forEach(m => { m.el.style.left = (m.x + Math.sin(t * .6 + m.ph) * 20 * U) + 'px'; m.el.style.top = ((m.y * H + t * 14 * U) % H) + 'px'; });
+  // colour script (sky)
+  const dawn = eIO(P(t, 32.6, 1.2));
+  sky.style.background = t < 10 ? 'var(--sterile)' : (t < 40.2 ? `linear-gradient(color-mix(in oklab,var(--dawn1) ${Math.round(dawn * 100)}%,#DCD8CC),color-mix(in oklab,var(--dawn2) ${Math.round(dawn * 100)}%,#ECE8DF))` : 'var(--dawn2)');
+
+  // deliberate crops (entering, leaving, the push through the screen) are marked for the layout check
+  phone.toggleAttribute('data-crop', t < 10.95 || t > 24.9); [phA, phB].forEach(e => e.toggleAttribute('data-crop', t < 33.5 || t > 39.95));
+  // reset visibility
+  [hook, seedSvg, word1, tag1, taproot, phone, phoneRoots, st, stU, rootsL, phA, phB, widget, end, dayBig, xMark].forEach(e => e.style.display = 'none');
+  const demo = document.getElementById('demo');
+  demo.style.opacity = t > 10.2 && t < 24.95 || t > 25.35 ? 1 : 0;
+  demo.style.left = px(PORT ? 40 : 40); demo.style.top = PORT ? px(200) : px(28);
+
+  /* ---- S1 0–5: the checkmark grid (sterile). 29 ticks accelerate, day 30 is missed, everything resets to zero. */
+  if (t < 6.3) {
+    hook.style.display = 'block';
+    const tick = (i) => .18 + 2.9 * Math.pow(i / 28, .8);   // accelerating ticks; last tick at ~3.08 s
+    let n = 0; for (let i = 0; i < 29; i++) if (t >= tick(i)) n = i + 1;
+    const RESET = TL.events.reset, MISS = TL.events.miss;
+    const num = counter.querySelector('.num');
+    num.textContent = t >= RESET ? '0' : String(n);
+    num.style.color = t >= RESET ? 'var(--miss)' : 'var(--steel)';
+    S(num, { s: t >= RESET ? 1 + .18 * Math.exp(-(t - RESET) * 7) : (n > 0 ? 1 + .04 * Math.exp(-(t - tick(n - 1)) * 14) : 1) });
+    const shake = t > MISS && t < MISS + .5 ? Math.sin((t - MISS) * 90) * 10 * (1 - (t - MISS) / .5) : 0;
+    S(hook, { x: shake, o: 1 - P(t, 4.6, .6) });
+    cells.forEach((c, i) => {
+      const ck = c.querySelector('.ck'); const on = i < 29 && t >= tick(i);
+      const pop = on ? 1 + .25 * Math.exp(-(t - tick(i)) * 16) : 1;
+      // at the reset every check flies off with gravity (deterministic per cell), except one: cell 14 is kept for the fall
+      if (t >= RESET && i < 29 && i !== 14) {
+        const dt = t - RESET - (i % 10) * .018; const r = F.rand(i)();
+        const y = dt > 0 ? -(380 + 240 * r) * dt + 1300 * dt * dt : 0, x = dt > 0 ? (r - .5) * 420 * dt : 0;
+        ck.setAttribute('transform', `translate(${x} ${y}) rotate(${dt > 0 ? (r - .5) * 720 * dt : 0} 50 50)`);
+        ck.style.opacity = dt > .95 ? 0 : 1;
+      } else ck.setAttribute('transform', `translate(0 0) scale(${pop})`), ck.style.transformOrigin = '50px 50px';
+      ck.style.display = on ? 'block' : 'none';
+      if (i === 14 && t >= RESET) ck.style.display = 'none';   // handed over to the falling seed
+      c.style.background = i === 29 && t >= MISS ? '#F7E3E4' : '#F6F7F8';
+      c.style.borderColor = i === 29 && t >= MISS ? 'var(--miss)' : 'var(--sterile2)';
+    });
+    if (t >= MISS) {
+      xMark.style.display = 'block'; const c = cells[29].getBoundingClientRect(); const k = spring(t - MISS, 3, .3);
+      xMark.style.left = (c.left) + 'px'; xMark.style.top = c.top + 'px'; xMark.style.width = c.width + 'px'; xMark.style.height = c.height + 'px';
+      xMark.style.transform = `scale(${.4 + .6 * k})`; xMark.style.opacity = 1 - P(t, RESET + .1, .3);
+    }
+  }
+  /* ---- S2 3.75–7.5: one check survives, hangs, falls to the soil and becomes a seedling (the signature device). */
+  if (t >= TL.events.reset && t < 10.0) {
+    seedSvg.style.display = 'block';
+    const c14 = { x: LS.grid.x + (14 % G.cols) * (G.cell + G.gap) + G.cell / 2, y: LS.grid.y + Math.floor(14 / G.cols) * (G.cell + G.gap) + G.cell / 2 };
+    const FALL = TL.events.fall, LAND = TL.events.land;
+    const groundY = hy / U;
+    let x = c14.x, y = c14.y;
+    // hover with a little float, then gravity
+    if (t < FALL) { y += Math.sin((t - 3.75) * 6) * 6 - 20 * eOut(P(t, 3.75, .6)); x += 0; }
+    else { const h0 = c14.y - 20; const dist = (groundY - 6) - h0; const k = clamp((t - FALL) / (LAND - FALL)); y = h0 + dist * k * k; x += (PORT ? 540 - c14.x : 960 - c14.x) * eIO(k); }
+    if (t >= LAND) { y = groundY - 6; x = PORT ? 540 : 960; }
+    const imp = t >= LAND ? Math.exp(-(t - LAND) * 10) * Math.sin((t - LAND) * 40) : 0;
+    seedSvg.style.left = px(x - 100); seedSvg.style.top = px(y - 140);
+    const vel = t >= FALL && t < LAND ? (t - FALL) / (LAND - FALL) : 0;
+    seedSvg.style.transformOrigin = '50% 70%';
+    seedSvg.style.transform = `scale(${1 - imp * .25 - vel * .1},${1 + imp * .3 + vel * .25}) rotate(${t < LAND ? 45 * eIO(P(t, FALL, LAND - FALL)) - 0 : 0}deg)`;
+    const mk = eIO(P(t, LAND + .05, .55));
+    const col = mk > 0 ? 'var(--sprout)' : 'var(--steel)';
+    const aL = seedSvg.querySelector('.armL'), aR = seedSvg.querySelector('.armR');
+    F.morph(aL, ARM_L0, ARM_L1, mk); F.morph(aR, ARM_R0, ARM_R1, mk);
+    // as a check the arms are rotated so the V reads as ✓; as a seedling they open upward
+    const rot = -40 * (1 - mk);
+    aL.setAttribute('transform', `rotate(${rot}) translate(0 ${-30 * grow(t - LAND - .4)})`); aR.setAttribute('transform', `rotate(${rot}) translate(0 ${-30 * grow(t - LAND - .4)})`);
+    [aL, aR].forEach(a => { a.setAttribute('fill', col); a.setAttribute('stroke', col); a.setAttribute('stroke-width', 14 - 12 * mk); });
+    const stem = seedSvg.querySelector('.stem'); const sh = 30 * grow(t - LAND - .4);
+    stem.setAttribute('d', `M0 6 L0 ${-sh}`); stem.style.display = sh > .5 ? 'block' : 'none';
+    if (t >= LAND) { aL.setAttribute('transform', `translate(0 ${-sh})`); aR.setAttribute('transform', `translate(0 ${-sh})`); }
+    // the taproot grows from the seedling down as the camera sinks
+    if (t >= 6.0) {
+      taproot.style.display = 'block';
+      const p = taproot.querySelector('path'); const bx = (PORT ? 540 : 960) * U, by = hy + 4 * U;
+      const k = eIO(P(t, 6.0, 1.8));
+      const d = `M${bx} ${by} C${bx + 30 * U} ${by + 200 * U} ${bx - 60 * U} ${by + 380 * U} ${bx - 10 * U} ${by + 620 * U * k + 1}`;
+      p.setAttribute('d', d); const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L * (1 - k);
+      p.style.opacity = 1 - P(t, 9.6, .4);
+    }
+  }
+  /* ---- S3 7.5–10: underground, one root writes the name. */
+  if (t >= 7.3 && t < 10.9) {
+    word1.style.display = 'flex'; tag1.style.display = 'block';
+    drawWord(w1, t, TL.events.name, .34, .27);
+    lines(tag1, t, 9.15); S(word1, { y: -6 * (t - 7.5) });
+  }
+  /* ---- S4–S6 10–25: the app, planted. */
+  if (t >= 9.95 && t < 25.45) {
+    phone.style.display = 'block'; phoneRoots.style.display = 'block';
+    const sc = LS.phoneW, pp = placePhone(phone, LS.phoneX, hy, sc, LS.bury);
+    // push THROUGH the screen at the climax (the one exception to the horizon family)
+    const push = eIn(P(t, 24.95, .45));
+    if (push > 0) { phone.style.transformOrigin = '50% 40%'; phone.style.transform = `scale(${sc * U * (1 + push * 7)})`; }
+    const T4 = TL.events;
+    const taps = [T4.tap1, T4.tap2, T4.tap3, T4.tap4];
+    const inGarden = t >= T4.garden;
+    const day = t < T4.lapse ? 12 : Math.round(12 + 48 * eIO(P(t, T4.lapse, 3.6)));
+    const dayN = t >= T4.miss2 ? 61 : day;
+    const wiltK = eOut(P(t, T4.miss2 + .3, 1.0));
+    const scr = phone.querySelector('.scr');
+    // tabs
+    let segK = 0;
+    if (t < T4.roots) segK = segTo(phone, t, T4.garden, 1, 0); else segK = segTo(phone, t, T4.roots, 2, 1);
+    const todayPane = scr.querySelector('.today'), gardenPane = scr.querySelector('.garden');
+    const gk = eOut(P(t, T4.garden, .45));
+    S(todayPane, { x: -gk * 410 / U, o: 1 }); todayPane.style.display = gk >= 1 ? 'none' : 'block'; S(gardenPane, { x: (1 - gk) * 410 / U, o: inGarden ? 1 : 0 });
+    today(phone, t, 0, taps, 0, dayN, t >= T4.miss2 ? 'Wednesday' : 'Tuesday');
+    taps.forEach((a, i) => tapAt(phone, t, a, i));
+    if (t >= T4.garden - .1) garden(phone, t, dayN, wiltK, t >= T4.lapse && t < T4.lapse + 3.6 ? 1 : 0);
+    // banner after the miss
+    const ban = scr.querySelector('.banner');
+    setText(ban, 'Walk missed yesterday.<br><em>It’s wilting, not reset.</em> Water it today.');
+    ban.style.top = '470px'; ban.style.opacity = eOut(P(t, T4.miss2 + .9, .4)); S(ban, { y: (1 - eOut(P(t, T4.miss2 + .9, .4))) * 30 / U, o: eOut(P(t, T4.miss2 + .9, .4)) });
+    scr.style.background = t >= 24.9 ? `color-mix(in oklab,var(--app) ${Math.round((1 - push) * 100)}%,var(--soil))` : 'var(--app)';
+    // roots under the phone grow with care (taps + days)
+    prPaths.forEach((p, i) => {
+      const base = .12 + (taps[i] !== undefined ? .14 * grow(t - taps[i]) : 0) + .62 * eIO(P(t, T4.lapse, 3.6));
+      const n = Math.max(2, Math.round(PR[i].length * clamp(base)));
+      const ox = pp.x + (i - 2) * 36 * U, oy = pp.bottom - 10 * U;
+      const pts = PR[i].slice(0, n); let d = `M${ox} ${oy}`; pts.forEach(([x, y]) => d += ` L${ox + x * U * (PORT ? 1.3 : 1)} ${oy + y * U * (PORT ? .32 : 1)}`);
+      p.setAttribute('d', d); p.setAttribute('stroke-linejoin', 'round');
+      p.style.opacity = 1 - push;
+    });
+    // statements beside (16:9) or below in the soil (9:16)
+    const tgt = PORT ? stU : st; tgt.style.display = 'block';
+    tgt.style.color = PORT ? 'var(--cream)' : 'var(--ink)';
+    const acc = PORT ? 'var(--sprout)' : 'var(--leafdk)';
+    const sz = PORT ? 64 : 104;
+    if (t < T4.garden) statement(tgt, t, `<span class="line"><span>Show up.</span></span><span class="line"><span style="color:${acc}"><i>It</i> grows.</span></span>`, T4.tap1 - .2, sz);
+    else if (t < T4.miss2) statement(tgt, t, `<span class="line"><span>Keep going.</span></span><span class="line"><span style="color:${acc}"><i>It</i> fills in.</span></span>`, T4.garden + .25, sz);
+    else statement(tgt, t, `<span class="line"><span><i>Miss a day?</i></span></span><span class="line"><span>It wilts.</span></span><span class="line"><span style="color:var(--miss)">No reset.</span></span>`, T4.miss2 + .5, sz);
+    if (t >= T4.miss2) { tgt.querySelectorAll('.line>span').forEach((s, i) => { const k = eOut(P(t, [T4.miss2 + .5, T4.w2, T4.w3][i], .45)); S(s, { y: (1 - k) * 140, o: 1 }); }); }
+    S(tgt, { o: 1 - push * 3 });
+    // the day counter (data, tabular) during the time-lapse
+    if (t >= T4.lapse - .2 && t < T4.miss2 + .4) {
+      dayBig.style.display = 'block'; dayBig.textContent = 'Day ' + dayN; dayBig.style.color = 'var(--leafdk)';
+      dayBig.style.left = px(PORT ? 0 : LS.stX); dayBig.style.right = PORT ? '0' : ''; dayBig.style.textAlign = PORT ? 'center' : 'left';
+      dayBig.style.top = px(PORT ? 1340 : 560);
+      if (PORT) dayBig.style.color = 'var(--root)';
+      dayBig.style.opacity = eOut(P(t, T4.lapse - .2, .3)) * (1 - P(t, T4.miss2, .3));
+    }
+    // the half-second of stillness before the payoff (24.4–24.95): freeze the sway
+    if (t > 24.4 && t < 24.95) S(cam, { s: 1, x: 0, y: 0 });
+  }
+  /* ---- S7 25–32.5: the climax. Through the screen into 61 days of roots. Macro -> whole (scale contrast). Title at the peak. */
+  if (t >= 25.12 && t < 33.0) {
+    rootsL.style.display = 'block';
+    const R0 = 24.98;
+    rootPaths.forEach((p, i) => { const R = ROOTS[i]; const L = p.__len || (p.__len = p.getTotalLength()); const k = eOut(P(t, R0 + R.t0 * 1.25, R.dur * 1.2));
+      p.style.strokeDasharray = L; p.style.strokeDashoffset = L * (1 - k); });
+    rootTips.forEach((c, i) => { const R = tipRoots[i]; const k = P(t, R0 + R.t0 * 1.25 + R.dur * 1.2, .3); c.setAttribute('r', (k > 0 ? 4 + 2.5 * Math.sin(t * 3 + i) : 0) * U); });
+    // scale contrast: start macro on the "Walk" root tip, pull back to the whole system
+    const tip = ROOTS.find(R => R.id === 1 && R.depth === 0) || ROOTS[0];
+    const z = 1 + 3.2 * (1 - eIO(P(t, 25.5, 2.6)));
+    const fx = W / 2 + (tip.x2 - W / 2) * .4, fy = -40 * U + (tip.y2 + 40 * U) * .4;
+    const off = (z - 1) / 3.2; rg.setAttribute('transform', `translate(${fx + (W / 2 - fx) * off} ${fy + (H * .45 - fy) * off}) scale(${z}) translate(${-fx} ${-fy})`);
+    rg.style.opacity = t > 28.6 ? 1 - .55 * eOut(P(t, 28.6, .4)) : 1;
+    // label on the wilted habit's root: still there
+    rootLab.style.display = 'block';
+    rootLab.innerHTML = 'Walk 20 min · 47 days of roots · <span style="color:var(--sprout)">still here</span>';
+    rootLab.style.left = px(PORT ? 70 : 120); rootLab.style.top = px(PORT ? 360 : 130);
+    chrome.style.opacity = eOut(P(t, 25.35, .35)); S(chrome, { y: (1 - eOut(P(t, 25.35, .35))) * -20 });
+    rootLab.style.opacity = eOut(P(t, 26.4, .4)) * (1 - P(t, 28.4, .3));
+    // title at the peak
+    word2.style.display = t >= TL.events.title - .05 ? 'flex' : 'none';
+    drawWord(w2, t, TL.events.title, .3, .07);
+    S(word2, { s: 1 + .05 * Math.exp(-(t - TL.events.title - .5) * 5) * (t > TL.events.title + .5) + .006 * (t - TL.events.title) });
+    lines(tag2, t, TL.events.title + .75);
+    F.shockwave(ring, t, TL.events.title + .4, { maxR: 900 * U, dur: 1.1 });
+    S(rootsL, { o: eOut(P(t, 25.12, .25)) * (1 - eIn(P(t, 32.5, .45))) });
+  }
+  /* ---- S8 32.5–40: dawn. Both platforms, one garden, and the home-screen widget. The wilted plant gets watered. */
+  if (t >= 32.5 && t < 40.8) {
+    const T8 = TL.events; const sc = PORT ? .8 : .78;
+    const a = placePhone(phA, PORT ? 300 : 330, hy, sc, LS.bury * .9), b = placePhone(phB, PORT ? 780 : 720, hy + (PORT ? 30 : 24) * U, sc, LS.bury * .9);
+    [phA, phB].forEach((ph, j) => {
+      const scr = ph.querySelector('.scr'); scr.style.background = 'var(--app)';
+      segTo(ph, 99, 0, 1, 1);
+      scr.querySelector('.today').style.display = 'none'; S(scr.querySelector('.garden'), { o: 1, x: 0 });
+      const revive = 1 - eOut(P(t, T8.water + .2, 1.2));
+      garden(ph, t + j * .7, 61, revive, 0);
+      setText(scr.querySelector('.chip'), t > T8.water ? 'Day 62' : 'Day 61');
+      setText(scr.querySelector('.dow'), 'Thursday');
+      const tap = scr.querySelector('.tap'); const k = P(t, T8.water - .12, .5);
+      tap.style.left = '118px'; tap.style.top = '360px'; tap.style.opacity = j === 0 && k > 0 && k < 1 ? (1 - k) * 1.2 : 0; tap.style.transform = `scale(${.6 + k * .8})`;
+      ph.style.transform += ` translateY(${(1 - eOut(P(t, 33.0 + j * .25, .7))) * 80}px)`; ph.style.opacity = 1 - P(t, 40.0, .25);
+    });
+    // widget pops in on the beat
+    widget.style.display = 'block'; const wk = grow(t - T8.widget);
+    widget.style.left = px(PORT ? 370 : 1380); widget.style.top = (hy + (PORT ? -850 : -390) * U) + 'px';
+    widget.style.transform = `scale(${wk * U * (PORT ? .78 : 1)}) rotate(${(1 - wk) * -8}deg)`; widget.style.opacity = t > T8.widget ? 1 - P(t, 40.0, .25) : 0;
+    widget.querySelector('.wp').innerHTML = plant(.95, 0, t, 3, 1.1, 'var(--root)');
+    const tgt = PORT ? stU : st; tgt.style.display = 'block'; tgt.style.color = 'var(--ink)';
+    if (!PORT) {
+      statement(tgt, t, `<span class="line"><span>One garden.</span></span><span class="line"><span style="color:var(--leafdk)"><i>iPhone +</i> Android.</span></span>`, 33.6, 72);
+      S(tgt, { o: 1 - P(t, 39.8, .3) });
+    } else {
+      tgt.style.color = 'var(--cream)';
+      statement(tgt, t, `<span class="line"><span>One garden.</span></span><span class="line"><span style="color:var(--sprout)"><i>iPhone +</i> Android.</span></span>`, 33.6, 64);
+      S(tgt, { o: 1 - P(t, 39.8, .3) });
+    }
+  }
+  /* ---- S9 40–45: callback. The opening grid returns, every check is now a seedling. Name, promise, platforms. */
+  if (t >= 40.0) {
+    end.style.display = 'block'; end.style.opacity = eOut(P(t, 40.2, .4));
+    hook.style.display = 'block'; S(hook, { o: eOut(P(t, 40.2, .4)) * (1 - .86 * eIO(P(t, 41.6, .6))), x: 0 });
+    counter.style.display = 'none';
+    cells.forEach((c, i) => {
+      c.querySelector('.ck').style.display = 'none'; c.style.background = '#FBF6EC'; c.style.borderColor = '#E7DCC6';
+      const sp = c.querySelector('.sp'); const k = grow(t - (40.35 + (i % G.cols) * .045 + Math.floor(i / G.cols) * .07));
+      sp.setAttribute('d', plantPathMini(k, t, i)); sp.setAttribute('opacity', k > 0 ? 1 : 0);
+    });
+    drawWord(w3, t, TL.events.endname, .26, .06);
+    lines(endTxt, t, TL.events.endname + .7);
+    S(word3, { y: -4 * (t - 42) });
+  }
+  // captions (burned in; the same cues are written to film.srt)
+  const cue = (TL.cues || []).find(c => t >= c.s && t < c.e);
+  document.querySelector('#cap span').textContent = cue ? cue.t : '';
+  const capEl = document.getElementById('cap'); capEl.style.opacity = cue ? 1 : 0;
+  capEl.style.top = (H * LS.capY) + 'px';
+  document.getElementById('grain').style.transform = `translate(${(Math.floor(t * 12) % 5) * 7}px,${(Math.floor(t * 12) % 3) * 9}px)`;
+  if (!hook.style.display || hook.style.display === 'none') {}
+}
+// a tiny seedling path (two leaves on a stem) for the end-card grid, swaying
+function plantPathMini(k, t, i) {
+  if (k <= 0) return '';
+  const s = Math.sin(t * 1.6 + i) * 2, h = 26 * k;
+  return `M50 ${80} L50 ${80 - h} ` + `M50 ${80 - h} C${46 + s} ${60 - h} ${26 + s} ${62 - h} ${22 + s} ${70 - h} C${32 + s} ${78 - h} ${44} ${80 - h} 50 ${80 - h} Z ` +
+    `M50 ${80 - h} C${56 + s} ${58 - h} ${76 + s} ${56 - h} ${80 + s} ${62 - h} C${70 + s} ${74 - h} ${58} ${78 - h} 50 ${80 - h} Z`;
+}
+(async () => {
+  TL = await (await fetch('timeline.json')).json();
+  await document.fonts.ready;
+  window.render = render; render(+Q.get('t') || 0); window.READY = true;
+})();
+</script>
+</body>
+</html>

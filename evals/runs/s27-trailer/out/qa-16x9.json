@@ -1,0 +1,25 @@
+{
+  "loudness": {
+    "lufs": -14.41,
+    "true_peak": -1.76
+  },
+  "motion": {
+    "frozen_s": 0.53,
+    "frozen_share": 0.013,
+    "longest_hold_s": 0.53,
+    "segments": [
+      [
+        24.42,
+        24.95
+      ]
+    ]
+  },
+  "variety": {
+    "longest_same_s": 5.5,
+    "mean_change_per_s": 20.74
+  },
+  "shots": {
+    "cuts": 0,
+    "per_minute": 0.0
+  }
+}

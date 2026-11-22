@@ -4,9 +4,13 @@
   python score.py                     # -> out/score.wav (stereo), mastered to -14 LUFS, true peak <= -1.5 dBTP
   python score.py --voice vo.wav      # also mixes a narration stem (from tts.py post) and ducks the music under it
 
-timeline.json "music": {"from", "to", "key_hz", "progression": [[semitones…] per bar], "style": pulse|cinematic|playful|minimal,
-"drop": [[start, end], …] (silences), "lift": seconds where the arrangement opens up}. "sfx": [{"t", "kind"}…] places
-designed sounds exactly on picture events. The presets are instruments and arrangements to build from, not a house
+timeline.json fields (all times in seconds):
+  "music": {"from", "to", "key_hz" (root note in Hz, e.g. 146.83 = D3), "progression": one list per bar of semitone offsets
+            from key_hz (e.g. [0,3,7,10] = minor 7th), "style": pulse|cinematic|playful|minimal|<registered>,
+            "drop": [[start, end], …] silences, "lift": time where the arrangement opens up}
+  "sfx":   [{"t", "kind", "dur"?, "gain"?, "hz"?}, …] designed sounds exactly on picture events; kinds include hits, ticks,
+           risers (end on t) and material families (paper_rip, paper_flick, riffle, glass, liquid_drop, rain, cloth_swish)
+  "vo":    [{"t", "file"}, …] narration lines placed at chosen times (lines from tts.py say, mastered or raw) The presets are instruments and arrangements to build from, not a house
 sound: shape them to the film bible's sound world (references/video/video-creative-direction.md §3).
 Copyright 2026 Jeel Nada (solarquack). Licensed under the Apache License 2.0.
 """
@@ -140,17 +144,71 @@ def reverb(x, mix=.22, room=.84):
 
 
 # ------------------------------------------------------------------ designed SFX (picture events)
+# Every kind takes the event dict (t, dur, any extra keys). Materials give each film its own sound world:
+# pick the family that matches the bible's WORLD & MATERIAL, then register your own with register_sfx().
+def _paper_rip(dur=.45):
+    t = T(dur)
+    n = rng.standard_normal(len(t))
+    crackle = (rng.random(len(t)) < .02) * rng.standard_normal(len(t)) * 2
+    return .35 * (n - lp(n, 2500) + crackle) * np.minimum(1, t / .01) * np.exp(-t * 4) * (.6 + .4 * np.sin(2 * np.pi * 37 * t))
+
+
+def _paper_flick(dur=.12):
+    t = T(dur)
+    n = rng.standard_normal(len(t))
+    return .3 * (n - lp(n, 1800)) * np.exp(-t * 45)
+
+
+def _glass(f=2093.0, dur=1.6):
+    return layer(fm(f, dur, 2.76, 1.2, 3.0, .12), fm(f * 1.5, dur, 3.9, .8, 4.0, .06))
+
+
+def _drop(dur=.35):
+    t = T(dur)
+    f = 1400 * np.exp(-t * 18) + 380
+    return .3 * np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 14)
+
+
+def _swish(dur=.5):
+    t = T(dur)
+    n = lp(rng.standard_normal(len(t)), 1200)
+    return .35 * n * np.sin(np.pi * np.clip(t / dur, 0, 1)) ** 2
+
+
 SFX = {
-    "hit": lambda: layer(kick(.8, 140), snare(.25)),
-    "stab": lambda: fm(293.66, .8, 1.0, 2.5, 3.5, .3),
-    "whoosh": lambda: lp(rng.standard_normal(int(.7 * SR)), 2500) * np.sin(np.linspace(0, np.pi, int(.7 * SR))) * .3,
-    "type": lambda: rng.standard_normal(int(.012 * SR)) * np.exp(-T(.012) * 300) * .18,
-    "impact": lambda: layer(taiko(1.0), kick(.9, 60), fm(98, 2.5, 3.5, 6, 1.2, .25)),
-    "riser": lambda: riser(1.5),
-    "tick": lambda: fm(1760, .15, 3.5, 2, 18, .15),
-    "pop": lambda: pluck(880, .25, .3),
-    "logo": lambda: layer(*[np.pad(fm(f, 2.6, 3.5, 4, 1.8, .2), (int(i * .19 * SR), 0)) for i, f in enumerate((587.33, 880, 1174.66))]),
+    # hits and accents
+    "hit": lambda e: layer(kick(.8, 140), snare(.25)),
+    "stab": lambda e: fm(e.get("hz", 293.66), .8, 1.0, 2.5, 3.5, .3),
+    "impact": lambda e: layer(taiko(1.0), kick(.9, 60), fm(98, 2.5, 3.5, 6, 1.2, .25)),
+    "thud": lambda e: taiko(.6),
+    "tick": lambda e: fm(e.get("hz", 1760), .15, 3.5, 2, 18, .15),
+    "pop": lambda e: pluck(e.get("hz", 880), .25, .3),
+    "riser": lambda e: riser(e.get("dur", 1.5)),
+    "air": lambda e: lp(rng.standard_normal(int(e.get("dur", .7) * SR)), 2500) * np.sin(np.linspace(0, np.pi, int(e.get("dur", .7) * SR))) * .3,
+    "logo": lambda e: layer(*[np.pad(fm(f, 2.6, 3.5, 4, 1.8, .2), (int(i * .19 * SR), 0)) for i, f in enumerate(e.get("notes", (587.33, 880, 1174.66)))]),
+    # materials
+    "paper_rip": lambda e: _paper_rip(e.get("dur", .45)),
+    "paper_flick": lambda e: _paper_flick(e.get("dur", .12)),
+    "glass": lambda e: _glass(e.get("hz", 2093.0), e.get("dur", 1.6)),
+    "liquid_drop": lambda e: _drop(e.get("dur", .35)),
+    "cloth_swish": lambda e: _swish(e.get("dur", .5)),
+    "key": lambda e: rng.standard_normal(int(.012 * SR)) * np.exp(-T(.012) * 300) * .18,
 }
+# kinds that repeat over a duration (dur seconds at rate per second)
+REPEAT = {"type": ("key", 14), "riffle": ("paper_flick", 22), "rain": ("liquid_drop", 9)}
+STYLES = {}  # name -> function(m, bt, N, chord_at) returning a music array; see register_style()
+
+
+def register_sfx(name, fn):
+    """Add a sound for this film: fn(event_dict) -> mono numpy array at 48 kHz. Then use {"t": .., "kind": name} in timeline.json."""
+    SFX[name] = fn
+
+
+def register_style(name, fn):
+    """Add an arrangement: fn(m, bt, N) -> mono numpy array (len N). Use "style": name in timeline.json "music".
+    Recommended path for a film's own score: a small score_<film>.py that does `import score as K`, registers its sounds
+    and styles with K's instruments (K.fm, K.pluck, K.pad, K.kick, K.snare, K.taiko, K.riser, K.reverb...), then calls K.main()."""
+    STYLES[name] = fn
 
 
 def place(buf, sig, t):
@@ -164,6 +222,8 @@ def place(buf, sig, t):
 # ------------------------------------------------------------------ arrangements (presets to shape, not a house sound)
 def arrange(m, bt, N):
     style = m.get("style", "pulse")
+    if style in STYLES:
+        return STYLES[style](m, bt, N)
     music, side = np.zeros(N), np.ones(N)
     t, bar = m["from"], 0
     lift = m.get("lift", 1e9)
@@ -222,24 +282,38 @@ def main() -> int:
     bt = 60 / tl["bpm"]
     music = arrange(tl["music"], bt, N) if tl.get("music") else np.zeros(N)
     sfx = np.zeros(N)
+    unknown = set()
     for ev in tl.get("sfx", []):
-        if ev["kind"] == "type":
-            for i in range(int(ev.get("dur", 1) * 14)):
-                place(sfx, SFX["type"](), ev["t"] + i / 14 + rng.uniform(-.01, .01))
-        elif ev["kind"] == "riser":
-            place(sfx, riser(ev.get("dur", 1.5)), ev["t"] - ev.get("dur", 1.5))
-        elif ev["kind"] in SFX:
-            place(sfx, SFX[ev["kind"]](), ev["t"])
-    if a.voice:
-        with wave.open(a.voice) as w:
-            v = np.frombuffer(w.readframes(w.getnframes()), "<i2").astype(float) / 32768
+        k = ev["kind"]
+        if k in REPEAT:
+            base, rate = REPEAT[k]
+            for i in range(int(ev.get("dur", 1) * rate)):
+                place(sfx, SFX[base](ev) * ev.get("gain", 1.0), ev["t"] + i / rate + rng.uniform(-.01, .01))
+        elif k == "riser":   # a riser ends ON its event
+            place(sfx, SFX[k](ev) * ev.get("gain", 1.0), ev["t"] - ev.get("dur", 1.5))
+        elif k in SFX:
+            place(sfx, SFX[k](ev) * ev.get("gain", 1.0), ev["t"])
+        else:
+            unknown.add(k)
+    if unknown:
+        print(f"warning: no sound registered for {sorted(unknown)} (register_sfx, or one of {sorted(SFX) + sorted(REPEAT)})")
+    def read_mono(path):
+        with wave.open(str(path)) as w:
+            x = np.frombuffer(w.readframes(w.getnframes()), "<i2").astype(float) / 32768
             if w.getnchannels() == 2:
-                v = v.reshape(-1, 2).mean(axis=1)
-        v = v[:N] if len(v) >= N else np.pad(v, (0, N - len(v)))
+                x = x.reshape(-1, 2).mean(axis=1)
+            if w.getframerate() != SR:
+                x = np.interp(np.arange(0, len(x), w.getframerate() / SR), np.arange(len(x)), x)
+        return x
+    v = np.zeros(N)
+    if a.voice:   # one finished narration file (from tts.py post), starting at 0
+        x = read_mono(a.voice)
+        v[: min(N, len(x))] += x[:N]
+    for line in tl.get("vo", []):   # or each line placed at its own time: "vo": [{"t": 0.45, "file": "vo/lines/line_001.wav"}, ...]
+        place(v, read_mono(HERE / line["file"]) * line.get("gain", 1.0), line["t"])
+    if v.any():
         env = np.convolve(np.abs(v), np.ones(4800) / 4800, mode="same")
         music = music * (1 - .7 * np.clip(env / (env.max() + 1e-9) * 3, 0, 1))
-    else:
-        v = np.zeros(N)
     bed_l, bed_r = reverb(music * .9 + sfx * .35, mix=.2)
     left, right = bed_l + sfx * .65 + v, bed_r + sfx * .65 + v
     end = int(tl["duration"] * SR)
@@ -262,16 +336,22 @@ def main() -> int:
         return json.loads(r.stderr[r.stderr.rfind("{"): r.stderr.rfind("}") + 1])
     gain = -14 - float(measure(pre)["input_i"])
     dst = out / "score.wav"
-    for _ in range(4):  # gain + 4x oversampled true-peak limiter, corrected until it lands
+    # The WAV keeps true peak <= -2 dBTP so the AAC encode (which adds up to ~1 dB of overshoot) still lands under -1 dBTP.
+    ceiling = -3.0
+    for _ in range(6):  # gain + 4x oversampled limiter; correct loudness, and tighten the ceiling if true peak overshoots
         subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(pre), "-af",
-                        f"volume={gain:.2f}dB,aresample=192000,alimiter=limit={10 ** (-1.8 / 20):.4f}:attack=3:release=60:level=false,aresample=48000",
+                        f"volume={gain:.2f}dB,aresample=192000,alimiter=limit={10 ** (ceiling / 20):.4f}:attack=2:release=60:level=false,aresample=48000",
                         str(dst)])
         m_ = measure(dst)
-        if abs(float(m_["input_i"]) + 14) <= .5:
+        lufs_ok, tp_ok = abs(float(m_["input_i"]) + 14) <= .5, float(m_["input_tp"]) <= -2.0
+        if lufs_ok and tp_ok:
             break
+        if not tp_ok:
+            ceiling -= float(m_["input_tp"]) + 2.0 + .2
         gain += -14 - float(m_["input_i"])
     pre.unlink(missing_ok=True)
-    print(f"wrote {dst}: {m_['input_i']} LUFS, true peak {m_['input_tp']} dBTP (style: {tl.get('music', {}).get('style', 'none')}). "
+    print(f"wrote {dst}: {m_['input_i']} LUFS, true peak {m_['input_tp']} dBTP (WAV ceiling -2 dBTP leaves room for AAC; "
+          f"style: {tl.get('music', {}).get('style', 'none')}). "
           "Have a person listen before calling the sound done.")
     return 0
 

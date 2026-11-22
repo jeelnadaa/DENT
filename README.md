@@ -11,7 +11,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-111?style=flat-square)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-SKILL.md-111?style=flat-square)](https://agentskills.io)
-[![Version](https://img.shields.io/badge/version-2.5.1-E8461E?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.6.0-E8461E?style=flat-square)](CHANGELOG.md)
 [![Modern Web Guidance](https://img.shields.io/badge/web%20authority-Modern%20Web%20Guidance-111?style=flat-square)](#modern-web-guidance-the-authority-for-web-code)
 [![Styles](https://img.shields.io/badge/aesthetic%20styles-41-111?style=flat-square)](skills/dent/references/styles/_styles-index.md)
 [![Commands](https://img.shields.io/badge/commands-34-111?style=flat-square)](docs/COMMANDS.md)

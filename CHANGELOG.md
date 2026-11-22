@@ -4,6 +4,28 @@ All notable changes to DENT are documented here. Format: [Keep a Changelog](http
 
 ## [Unreleased]
 
+## [2.6.0] — 2026-11-22
+
+Fixes from three fresh test films (S27: a trailer, an explainer and a social short; 65 findings). The films were original and passed QA, but the agents had to build missing tools themselves; this release puts those tools in the skill.
+
+### Added
+- **Technique modules** (`templates/video-kit/techniques.js`, tested on `techniques.html`): custom lettering, variable-axis kinetic type, hand-made boil, morph, parallax camera with rack focus, glitch, bounce/squash/shockwave, torn paper and halftone, counters and line charts, Three.js on the film's clock, plus `loadFonts`, `fitText` and a continuous `livingFrame`.
+- `templates/video-kit/styleframes.html`: four still key frames to approve a look before animating.
+- **Render-time layout check** in `render.py` on every still and every 0.5 s of the film: text too small for a phone, clipped, cut by the frame, inside the 9:16 platform zones or the right action rail, or colliding with other text, with explicit opt-outs. Also `--draft` (fast whole-film check), `--from/--to` (re-render a stretch), `--every N` stills, `--page`, an ETA and time-labelled contact sheets.
+- **Score engine** (`score.py`): material SFX families (paper, glass, liquid, cloth, keys, thuds, air), `register_sfx` / `register_style` for a film's own sound world, `dur`/`gain`/`hz` on every event, narration lines placed from the timeline (`"vo"`), and mastering that keeps true peak ≤ −2 dBTP so the AAC film stays under −1.
+- **`video_qa.py`**: visual sameness and energy floors calibrated on real films, a `short` kind, a loop-seam check (`--loop`), A/V offset measured against the source mix (`--audio`; catches a 200 ms shift), and time-labelled sheets.
+- **`tts.py`**: `check` (speech-to-text per line with inserted, dropped and replaced words; fails on misreads), `words` (word timestamps), `{shown|spoken}` respelling so captions never show respellings, `say --line N`, `post --at` (place lines at chosen times), and a `whisper` engine entry. `doctor.py` finds faster-whisper in the registered engine folder.
+- Rules: product-truth definitions (what counts, teasers and manifestos, physical goods, concept products with a label and no invented URLs, CTA fallback); the trailer title may land at the peak if the name appears small by ~9 s; an **accuracy gate** for explainers; hook in frame 1 for every genre; product-category clichés in the originality guard; one definition of 9:16 safe zones; sound asked once; non-interactive defaults; what does not apply to a video-only deliverable; `video_qa.py` thresholds per kind; independent evaluators for video (Story, Picture, Sound).
+- Tests for respelling, `--line`, `post --at`, every layout-check kind, the `short` kind, loop seam, sync shift and the score's true peak. S27 evidence in `evals/runs/s27-*`.
+
+### Changed
+- The kit's placeholder palette is now neutral greys (the previous one matched a `palette.py` output), and `palette.py` prints "cliché check: none" when clean.
+- Narration word budget: 60 s ≈ 130–140 words for a natural TTS read.
+
+### Fixed
+- Portrait placeholder statement overlapped the chapter number in the kit composition.
+- `score.py` could miss its own true-peak ceiling after AAC encoding.
+
 ## [2.5.1] — 2026-11-21
 
 Videos made with DENT now aim for the bar of DENT's own launch film without copying it: an original direction for every film, measured craft, and honest review.

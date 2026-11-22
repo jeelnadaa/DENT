@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Style frame B: Two Rooms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair:ital,opsz,wdth,wght@0,5..1200,87.5..112.5,300..900;1,5..1200,87.5..112.5,300..900&family=Sometype+Mono:wght@400..700&display=block">
+<style>
+/* Direction B "Two Rooms": palette.py make --hue 168 --chroma .12 --neutral tinted (dark theme), light-line isometric rooms. */
+:root{--night:#111614;--wall:#19201D;--line:#4DBA95;--text:#F6FAF8;--muted:#9EA7A3;--warm:#E9C46A}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#000;overflow:hidden}
+#stage{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 30% 40%,#1b2622 0%,var(--night) 70%)}
+svg{position:absolute;inset:0}
+.t{position:absolute;color:var(--text);font-family:"Playfair",serif;font-variation-settings:"opsz" 900,"wdth" 90;font-weight:400;letter-spacing:-.02em}
+.m{position:absolute;font-family:"Sometype Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="rooms" viewBox="0 0 1920 1080"></svg>
+  <div class="t" style="left:150px;top:150px;font-size:112px;line-height:1"><i>It never</i><br>leaves the room.</div>
+  <div class="m" style="left:156px;top:430px;font-size:24px">Your device · private key</div>
+  <div class="m" style="left:1290px;top:880px;font-size:24px">bank.example · public key only</div>
+</div>
+<script>
+const Q = new URLSearchParams(location.search), W = +Q.get('w') || 1920, H = +Q.get('h') || 1080;
+const st = document.getElementById('stage'); st.style.width = W + 'px'; st.style.height = H + 'px';
+const svg = document.getElementById('rooms');
+// Isometric room outlines drawn in light; the private key glows warm in the near room, its echo (ripples) reaches the far room.
+function iso(x, y, s) { const c = Math.cos(Math.PI / 6) * s, h = s * .5;
+  return `M${x} ${y} l${c} ${h} l${c} ${-h} l${-c} ${-h} z M${x} ${y} v${s * .9} l${c} ${h} v${-s * .9} M${x + 2 * c} ${y} v${s * .9} l${-c} ${h}`; }
+function render(t) {
+  const rip = [0, 1, 2, 3].map(i => { const r = ((t * 120 + i * 140) % 560) + 20;
+    return `<circle cx="760" cy="640" r="${r}" fill="none" stroke="#4DBA95" stroke-opacity="${(1 - r / 580) * .7}" stroke-width="2"/>`; }).join('');
+  svg.innerHTML = `<g fill="none" stroke="#4DBA95" stroke-width="2.2" stroke-linejoin="round">
+    <path d="${iso(560, 520, 240)}"/><path d="${iso(1260, 610, 190)}" stroke-opacity=".55"/></g>
+    ${rip}
+    <circle cx="760" cy="640" r="26" fill="#E9C46A"/><circle cx="760" cy="640" r="60" fill="#E9C46A" opacity=".18"/>
+    <rect x="1405" y="735" width="64" height="30" rx="4" fill="none" stroke="#4DBA95" stroke-width="3"/>`;
+}
+document.fonts.ready.then(() => { window.render = render; render(+Q.get('t') || 0); window.READY = true; });
+</script>
+</body>
+</html>

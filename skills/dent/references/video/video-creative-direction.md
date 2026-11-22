@@ -20,6 +20,12 @@ Copying the launch film's devices produces clones. Copying its **ambition and cr
 5. **Choose 2–3 escalation moves** (§6) and write where they land in the timeline.
 6. **Build** with the kit's engine, following the bible's rules exactly; meet every invariant; review stills; render; `video_qa.py`; watch it with sound off and on.
 
+### Non-interactive runs (no one to answer, or "you decide")
+Do not stop for approvals. Defaults, each logged in VIDEO.md as **"Chosen by default"**: the script is approved as written (after the accuracy gate for explainers); the **recommended** bible is chosen; **Never** = the genre's and the product category's clichés (§4); sound = narration + score + SFX for explainers and launches, score + SFX for shorts and loops; media = code-built (no installs without a yes). Still render style frames and stills, and still run `video_qa.py`.
+
+### What does not apply to a video-only deliverable
+A film is not an interface: the **built-in surfaces** and **interface motion** questions and their All-out rows are **N/A (video)**, with that reason logged. **VIDEO.md is the plan** (no separate PLAN.md). Modern Web Guidance applies to a render-only composition page only where it affects the frames (font loading, transforms, layout); log the rest of the MWG checklist as N/A (not shipped as a web page).
+
 ## 2. The video creative menu (ask; one question at a time; multi-select where marked)
 Respect the question tool's 4-option limit: start with the gate question, then ask only the groups the user wants.
 
@@ -60,7 +66,7 @@ If they pick ingredients, ask these (each multi-select, plus "You choose"):
 | Photography or footage | The user's own, captured, or generated for atmosphere only (`../media-sourcing.md`) |
 | Generative and abstract | Shaders, particles, noise fields, procedural patterns |
 
-**E. Sound** (single choice, then `../media-sourcing.md` for sources): *Narration + score + SFX* · *Score + SFX, no voice* · *Sound design only, no music* · *Silence and a few hits (bold)*.
+**E. Sound, asked once** (single choice): *Narration + score + SFX* · *Score + SFX, no voice* · *Sound design only, no music* · *Silence and a few hits (bold)*. Ask where each chosen layer comes from (code-built score, a local or cloud voice, licensed music, the user's own files) **in the same question round** as the media-sourcing question (`../media-sourcing.md` §2), not as a second sound question later.
 
 **F. Never** (free): "Anything you never want to see or hear?" Record it as a hard rule in the bible.
 
@@ -85,6 +91,7 @@ Directions must differ on at least four of: world, signature, type, motion langu
 ## 4. Originality guard [Rule]
 - **Not DENT's devices.** Unless the user's own brand owns them or the user asks: no orange-dot transitions, no letterpress strike or "impression", no wall of identical templates being knocked over, no split-flap style board, no numbered "It asks / It names / It checks" chapter pattern, no "this film was made with" ending. These are the launch film's identity; reusing them makes a clone.
 - **Not the genre's clichés** (§5 lists them per genre).
+- **Not the product category's clichés.** Name the three images every film in this category uses (fintech: rising line, coins, a phone with a green tick; developer tools: a terminal with green text, matrix code, a rocket; fitness: sunrise run, sweat drop, a smartwatch close-up; AI: glowing brain, particles, a chat bubble typing) and use none of them unless the concept turns one on its head on purpose.
 - **Not the previous film.** Read the bibles of earlier films in the project (`video/*/VIDEO.md`) and differ on at least four axes from each.
 - **Within the brand.** Originality stays inside the product's identity (DESIGN.md): new direction, same brand.
 Log the guard's result in VIDEO.md.

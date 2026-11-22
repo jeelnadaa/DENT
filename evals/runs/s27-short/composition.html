@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Daybreak: Tear-Off Day (9:16 social short)</title>
+<!-- Fonts from scripts/fonts.py: Anybody (display, wdth 50-150) + Zalando Sans (labels, captions). Both SIL OFL 1.1. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Zalando+Sans:wght@400..900&display=block">
+<script src="techniques.js"></script>
+<style>
+/* Tokens: palette.py make --hue 262 --chroma 0.2 --neutral warm ("daybreak-today"). */
+:root{
+  --desk:#18140F; --desk-2:#221D18; --paper:#FCF8F5; --paper-old:#D5CEC7; --ink:#18140F; --ink-old:#807972; --muted:#605A53;
+  --cobalt:#1B54C3; --cobalt-deep:#0B3079; --cobalt-ink:#1B54C3; --on-cobalt:#FFFDFB; --cobalt-soft:#C6DAFD;
+  --date:"Anybody",system-ui,sans-serif; --label:"Zalando Sans",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+#stage{position:relative;overflow:hidden;background:radial-gradient(120% 80% at 50% 45%,var(--desk-2),var(--desk) 70%)}
+#cam{position:absolute;inset:0;transform-origin:50% 26%}
+#pad{position:absolute;perspective:2600px;transform-style:preserve-3d}
+.under{position:absolute;left:0;right:0;border-radius:0 0 10px 10px;background:#EDE7E0}
+.page{position:absolute;inset:0;background:var(--paper);color:var(--ink);transform-origin:50% 0;backface-visibility:visible;
+  box-shadow:0 2px 0 rgba(0,0,0,.08) inset;display:none;overflow:hidden}
+.page .perf{position:absolute;left:3%;right:3%;top:16px;height:8px;background:radial-gradient(circle,rgba(0,0,0,.18) 3px,transparent 3.6px) 0 0/22px 8px repeat-x}
+.page .hdr{position:absolute;left:56px;right:56px;top:58px;display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--label);font-weight:800;text-transform:uppercase;letter-spacing:.14em;font-size:38px}
+.page .big{position:absolute;left:0;right:0;text-align:center;font-family:var(--date);font-weight:900;line-height:.82;white-space:nowrap}
+.page .ftr{position:absolute;left:56px;right:56px;bottom:52px;display:flex;justify-content:space-between;
+  font-family:var(--label);font-weight:600;font-size:34px;letter-spacing:.02em}
+.page.cobalt{background:var(--cobalt);color:var(--on-cobalt)}
+.page.cobalt .perf{background-image:radial-gradient(circle,rgba(0,0,0,.28) 3px,transparent 3.6px)}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 60%);opacity:0;pointer-events:none}
+#binding{position:absolute;background:linear-gradient(180deg,#3A342E,#221D18);border-radius:14px 14px 4px 4px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#binding i{position:absolute;top:22px;width:56px;height:26px;border-radius:13px;background:linear-gradient(180deg,#9A938B,#47413A)}
+#stub{position:absolute;height:22px;background:var(--paper);box-shadow:0 2px 3px rgba(0,0,0,.2)}
+#cap{position:absolute;left:70px;right:70px;text-align:center;font-family:var(--label);font-weight:800;color:var(--paper);
+  font-size:68px;line-height:1.05;letter-spacing:-.015em}
+#cap .line{display:block;overflow:clip;padding-bottom:.08em}
+#cap .line>span{display:inline-block;background:var(--desk);padding:.03em .28em;border-radius:.18em}
+#cap em{font-style:normal;color:var(--cobalt-soft)}
+#grain{position:absolute;inset:-50%;opacity:.07;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
+.mark{font-family:var(--date);font-weight:900;letter-spacing:.01em}
+.pill{display:inline-block;background:var(--on-cobalt);color:var(--cobalt-deep);font-family:var(--label);font-weight:800;font-size:44px;
+  padding:22px 44px;border-radius:999px}
+</style>
+</head>
+<body>
+<div id="stage"><div id="cam">
+  <div id="binding"><i style="left:22%"></i><i style="right:22%"></i></div>
+  <div id="pad"><div id="stub"></div></div>
+</div><div id="cap"></div><div id="grain"></div></div>
+<script>
+/* ============================================================ engine (kept from the DENT video kit) */
+const Q = new URLSearchParams(location.search), W = +Q.get('w') || 1080, H = +Q.get('h') || 1920;
+const stage = document.getElementById('stage'), cam = document.getElementById('cam');
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+let TL;
+const { clamp, P, eOut, eIO, rand, splitLetters, axisWave } = DENTFX;
+const eIn = (x) => Math.pow(clamp(x), 3);
+const spring = (dt, f = 2.2, z = .35) => dt <= 0 ? 0 : 1 - Math.exp(-z * f * 2 * Math.PI * dt) * Math.cos(f * Math.sqrt(1 - z * z) * 2 * Math.PI * dt);
+const lerp = (a, b, k) => a + (b - a) * k;
+const mix = (h1, h2, k) => { const a = parseInt(h1.slice(1), 16), b = parseInt(h2.slice(1), 16);
+  const c = [16, 8, 0].map(s => Math.round(lerp(a >> s & 255, b >> s & 255, k))); return `rgb(${c})`; };
+
+/* ============================================================ the world: a tear-off calendar pad (Direction A) */
+const PAD = { x: 90, y: 470, w: 900, h: 1080 };
+const pad = document.getElementById('pad');
+Object.assign(pad.style, { left: PAD.x + 'px', top: PAD.y + 'px', width: PAD.w + 'px', height: PAD.h + 'px' });
+for (let i = 4; i >= 1; i--) {                                   // page thickness under the pad
+  const u = document.createElement('div'); u.className = 'under';
+  Object.assign(u.style, { top: (8 * i) + 'px', height: PAD.h + 'px', left: (i * 3) + 'px', right: (i * 3) + 'px', background: mix('#EDE7E0', '#8A8178', i / 5) });
+  pad.append(u);
+}
+const binding = document.getElementById('binding');
+Object.assign(binding.style, { left: (PAD.x - 24) + 'px', top: (PAD.y - 74) + 'px', width: (PAD.w + 48) + 'px', height: '74px' });
+const stub = document.getElementById('stub');
+Object.assign(stub.style, { left: '0px', top: '0px', width: PAD.w + 'px', zIndex: 5 });
+const jag = (seed, n = 46, d = 1.4, top = true) => { const r = rand(seed), pts = [];
+  for (let i = 0; i <= n; i++) pts.push(`${(i / n * 100).toFixed(2)}% ${(top ? r() * d : 100 - r() * d).toFixed(2)}%`);
+  return top ? `polygon(${pts.join(',')},100% 100%,0 100%)` : `polygon(0 0,100% 0,${pts.reverse().join(',')})`; };
+stub.style.clipPath = jag(99, 60, 70, false);
+
+const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const daysAgo = (day, mon) => Math.round((Date.UTC(2026, 10, 25) - Date.UTC(2026, MON.indexOf(mon), +day)) / 864e5);
+function datePage(day, mon, age) {   // age 0 (fresh) .. 1 (oldest)
+  const el = document.createElement('div'); el.className = 'page';
+  el.style.background = mix('#FCF8F5', '#CFC6BB', age); el.style.color = mix('#18140F', '#8A8178', age * .85);
+  el.innerHTML = `<div class="perf"></div><div class="hdr"><span>${mon}</span><span style="color:var(--muted)">roasted?</span></div>
+    <div class="big" style="top:300px;font-size:560px;font-variation-settings:'wdth' ${Math.round(lerp(75, 150, age))}" data-w="${Math.round(lerp(75, 150, age))}">${day}</div>
+    <div class="ftr"><span style="color:var(--muted)">${daysAgo(day, mon)} days ago</span><span></span></div><div class="shade"></div>`;
+  return el;
+}
+function questionPage() {
+  const el = document.createElement('div'); el.className = 'page';
+  el.innerHTML = `<div class="perf"></div><div class="hdr"><span>Roasted on</span><span style="color:var(--cobalt)">?</span></div>
+    <div class="big q" style="top:230px;font-size:780px;color:var(--cobalt);font-variation-settings:'wdth' 120">?</div>
+    <div class="ftr"><span style="opacity:.6">Check the bag.</span><span></span></div><div class="shade"></div>`;
+  return el;
+}
+function wordPage(cls, hdrL, hdrR, linesTxt, size, ftrL) {
+  const el = document.createElement('div'); el.className = 'page ' + cls;
+  el.innerHTML = `<div class="perf"></div><div class="hdr"><span>${hdrL}</span><span>${hdrR}</span></div>
+    <div class="big w" style="top:${560 - linesTxt.length * size * .41}px;font-size:${size}px">${linesTxt.map(l => `<div class="wl">${l}</div>`).join('')}</div>
+    <div class="ftr"><span>${ftrL}</span><span></span></div><div class="shade"></div>`;
+  return el;
+}
+function brandPage() {
+  const el = document.createElement('div'); el.className = 'page cobalt';
+  el.innerHTML = `<div class="perf"></div><div class="hdr"><span>Coffee subscription</span><span></span></div>
+    <div class="big mark" style="top:330px;font-size:236px;font-variation-settings:'wdth' 110">daybreak</div>
+    <div style="position:absolute;left:70px;right:70px;top:620px;text-align:center;font-family:var(--label);font-weight:600;font-size:52px;line-height:1.2" class="line1">Beans roasted the day<br>before they ship.</div>
+    <div style="position:absolute;left:0;right:0;top:860px;text-align:center" class="cta"><span class="pill">Subscribe · link in bio</span></div>
+    <div class="shade"></div>`;
+  return el;
+}
+
+/* pages, top of stack first. Each: el, land (-Inf = already on the pad), tear (Inf = never), gone (silently removed
+   once covered), hero (slow tear), seed */
+const T = { };
+const pages = [];
+function addPage(el, o) { pad.append(el); const p = Object.assign({ el, land: -Infinity, tear: Infinity, gone: Infinity, hero: false, seed: pages.length * 7 + 3 }, o); pages.push(p); return p; }
+
+/* ============================================================ physics of a torn page (the signature device) */
+const PEEL = .12, HERO_PEEL = .42;
+function flight(d, p) {           // d seconds after detaching; a thrown sheet: up and out, gravity, spin
+  const r = rand(p.seed); const side = r() < .5 ? -1 : 1;
+  const vx = side * (380 + r() * 520), vy = p.hero ? 1500 : 2500 + r() * 600, g = p.hero ? 2600 : 5200, w = side * (40 + r() * 70) * (p.hero ? .6 : 1);
+  return { x: vx * d, y: -vy * d + .5 * g * d * d, r: w * d, rx: (p.hero ? 70 : 38) + d * (p.hero ? 50 : 160), s: 1 + d * .25 };
+}
+function pose(p, t) {             // returns null (hidden) or a pose
+  if (t >= p.gone) return null;
+  if (t < p.land) { const d = p.land - t; if (d > .6) return null; const f = flight(d, p); return { ...f, torn: true }; }
+  const peel = p.hero ? HERO_PEEL : PEEL;
+  if (t < p.tear - peel) return { x: 0, y: 0, r: 0, rx: 0, s: 1 };
+  if (t < p.tear) { const k = eIn(P(t, p.tear - peel, peel)); return { x: 0, y: -10 * k, r: 0, rx: (p.hero ? 70 : 38) * k, s: 1 }; }
+  const d = t - p.tear; if (d > (p.hero ? 1.4 : .7)) return null;
+  return { ...flight(d, p), torn: true };
+}
+
+/* ============================================================ build the stack */
+let Fq, Fk, Rs = [], Y, TD, BR, Fq2;
+function build() {
+  const E = TL.events;
+  const old = [['12','NOV'],['03','NOV'],['27','OCT'],['14','OCT'],['06','OCT'],['29','SEP'],['18','SEP'],['09','SEP'],['30','AUG'],['19','AUG'],['07','AUG'],['26','JUL'],['12','JUL'],['01','JUL'],['17','JUN'],['02','JUN'],['20','MAY'],['05','MAY'],['22','APR']];
+  const fwd = [['09','MAY'],['13','JUN'],['18','JUL'],['22','AUG'],['26','SEP'],['31','OCT'],['17','NOV']];
+  const ageOf = (i, n) => (i + 1) / n;
+  // z: later-appended = drawn later = on top. So append bottom-first.
+  Fq2 = addPage(questionPage(), {});                                                       // the loop page (bottom)
+  BR = addPage(brandPage(), { tear: E.loop });
+  TD = addPage(wordPage('', 'Shipped', 'Daybreak', ['TODAY'], 330, 'Roasted yesterday.'), { tear: E.brand });
+  // the forward-dig pages (oldest at the bottom); covered for good once Daybreak's page lands
+  const F = [];
+  for (let i = old.length - 1; i >= 0; i--) F[i + 1] = addPage(datePage(old[i][0], old[i][1], ageOf(i, old.length)), { tear: i + 1 < old.length ? E.tears[i + 1] : Infinity, gone: E.yesterday + .02 });
+  Fq = addPage(questionPage(), { tear: E.tears[0] });
+  Fk = F[old.length];
+  fwd.forEach((d, i) => Rs.push(addPage(datePage(d[0], d[1], 1 - (i + 1) / (fwd.length + 1)), { land: E.lands[i], gone: E.yesterday + .02 })));
+  Y = addPage(wordPage('cobalt', 'Roasted', 'Daybreak', ['YESTER', 'DAY.'], 300, 'Not “some time ago”.'), { land: E.yesterday, tear: E.hero, hero: true });
+  pages.forEach(p => { p.big = p.el.querySelector('.big'); });
+  const fit = (el, maxW, wdth) => { const keep = el.style.fontVariationSettings; el.style.fontVariationSettings = `'wdth' ${wdth}`;
+    const prev = el.parentElement.closest('.page'), d = prev.style.display; prev.style.display = 'block';
+    const rg = document.createRange(); rg.selectNodeContents(el); const w = rg.getBoundingClientRect().width;
+    if (w > maxW) el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * maxW / w) + 'px';
+    prev.style.display = d; el.style.fontVariationSettings = keep; };
+  [Y, TD].forEach(p => { const ls = [...p.el.querySelectorAll('.wl')]; ls.forEach(l => fit(l, PAD.w - 100, p === Y ? 62 : 56));
+    const fs = Math.min(...ls.map(l => parseFloat(getComputedStyle(l).fontSize))); ls.forEach(l => l.style.fontSize = '');
+    p.big.style.fontSize = fs + 'px'; p.big.style.lineHeight = '.88'; p.big.style.top = (545 - ls.length * fs * .44) + 'px'; });
+  fit(BR.el.querySelector('.mark'), PAD.w - 100, 72);
+  pages.forEach(p => { if (p.big && p.big.dataset.w) { fit(p.big, PAD.w - 90, +p.big.dataset.w); const fs = parseFloat(getComputedStyle(p.big).fontSize); p.big.style.top = (470 - fs * .41) + 'px'; } });
+}
+
+/* ============================================================ caption line above the pad */
+const capEl = document.getElementById('cap');
+capEl.style.top = '236px';   // below the stricter 12 % top zone in video-types-and-craft.md §4 (render.py checks 10 %)
+let lastCue = null;
+function caption(t) {
+  const cues = TL.cues, i = cues.findIndex(c => t >= c.s && t < c.e);
+  const c = cues[i];
+  if (c !== lastCue) {
+    lastCue = c;
+    const txt = c ? c.t.replace('Daybreak', '<em>Daybreak</em>') : '';
+    capEl.innerHTML = c ? (c.t.length > 26 ? splitTwo(txt) : [txt]).map(l => `<span class="line"><span>${l}</span></span>`).join('') : '';
+  }
+  if (!c) return;
+  const inK = c.s === 0 ? 1 : eOut(P(t, c.s, .32)), outK = eIn(P(t, c.e - .14, .14));
+  const next = cues[i + 1]; const leaving = next && Math.abs(next.s - c.e) < .01 ? outK : 0;
+  capEl.querySelectorAll('.line>span').forEach((s, j) => {
+    const k = c.s === 0 ? 1 : eOut(P(t, c.s + j * .06, .32));
+    s.style.transform = `translateY(${(1 - k) * 110 - leaving * 110}%)`;
+  });
+}
+function splitTwo(s) { const w = s.split(' '); let best = 1, bd = 1e9;
+  for (let i = 1; i < w.length; i++) { const d = Math.abs(w.slice(0, i).join(' ').length - w.slice(i).join(' ').length); if (d < bd) { bd = d; best = i; } }
+  return [w.slice(0, best).join(' '), w.slice(best).join(' ')]; }
+
+/* ============================================================ render(t) */
+function render(t) {
+  const E = TL.events;
+  // living frame + the one camera push (climax: in on the torn edge, then back)
+  const push = eIO(P(t, E.hero - .5, .55)) - eIO(P(t, E.hero + .45, .9));
+  const k = t % 20;
+  cam.style.transform = `translate(${Math.sin(k * .6) * 4}px,${Math.cos(k * .45) * 3}px) scale(${1.0 + .006 * Math.sin(k * .3) + push * .22}) rotate(${Math.sin(k * .4) * .25}deg)`;
+  if (push > .02) cam.dataset.crop = ''; else delete cam.dataset.crop;   // deliberate crop during the climax push
+  // the slam: pad squashes as Daybreak's page lands
+  const slam = Math.exp(-(t - E.yesterday) * 9) * (t >= E.yesterday) * Math.cos((t - E.yesterday) * 40);
+  pad.style.transform = `scale(${1 - .02 * slam},${1 + .015 * slam})`;
+  stub.style.opacity = t >= E.tears[0] ? 1 : 0;
+
+  // the topmost resting page decides what is "under"; draw only what can be seen
+  let restingTopFound = false;
+  for (let i = pages.length - 1; i >= 0; i--) {
+    const p = pages[i], q = pose(p, t);
+    if (!q) { p.el.style.display = 'none'; continue; }
+    const resting = !q.torn && q.rx === 0;
+    if (resting && restingTopFound) { p.el.style.display = 'none'; continue; }
+    if (resting) restingTopFound = true;
+    p.el.style.display = 'block';
+    p.el.style.zIndex = q.torn || q.rx > 0 ? 10 : 1;
+    p.el.style.transform = `translate(${q.x}px,${q.y}px) rotateX(${q.rx}deg) rotate(${q.r}deg) scale(${q.s})`;
+    p.el.style.clipPath = q.torn ? jag(p.seed) : 'none';
+    p.el.style.boxShadow = q.rx > 0 || q.torn ? `0 ${30 + q.rx}px ${60 + q.rx}px rgba(0,0,0,.45)` : 'none';
+    if (q.torn || q.rx > 0) p.el.dataset.crop = ''; else delete p.el.dataset.crop;
+    p.el.querySelector('.shade').style.opacity = clamp(q.rx / 80);
+  }
+
+  // hook: the "?" shrugs on the beat (tick-tock), rests at t=0 so the loop is seamless
+  [Fq, Fq2].forEach(p => { const qq = p.el.querySelector('.q'); const a = Math.sin(t * Math.PI * 2) * 7 * clamp(t * 4) * (t < E.tears[0] + .2 || t > E.loop ? 1 : 0);
+    qq.style.transform = `rotate(${a}deg) scale(${1 + .03 * Math.abs(Math.sin(t * Math.PI * 2))})`; });
+  // old pages: the hanging page flutters in the silence
+  if (t >= E.hang && t < E.lands[0]) { const f = Math.sin((t - E.hang) * 13) * 6 + 10 * eOut(P(t, E.hang, .3));
+    Fk.el.style.display = 'block'; Fk.el.style.transform = `rotateX(${f}deg)`; Fk.el.querySelector('.shade').style.opacity = f / 60; }
+  // fresh pages breathe wide (signature: width = freshness)
+  if (t >= E.yesterday - .1 && t < E.hero + 1.4) Y.el.querySelectorAll('.wl').forEach((l, i) =>
+    l.style.fontVariationSettings = `'wdth' ${Math.round(50 + 12 * (.5 - .5 * Math.cos((t - E.yesterday) * 2.2 - i * .9)))}`);
+  if (t >= E.hero - .2 && t < E.brand + .8) TD.el.querySelectorAll('.wl').forEach(l => {
+    const k2 = spring(t - E.hero - .05, 1.7, .3); l.style.fontVariationSettings = `'wdth' 56`; l.style.transformOrigin = '50% 100%'; l.style.transform = `scaleY(${clamp(.15 + .85 * k2, .15, 1.15)})`; });
+  // brand: wordmark letters drop in on 1/8 notes, then the line, then the CTA with the sonic logo
+  if (t >= E.brand - .1) {
+    const mk = BR.el.querySelector('.mark'), L = splitLetters(mk);
+    L.forEach((s, i) => { const k2 = spring(t - (E.brand + .25 + i * .125), 2.4, .32);
+      s.style.transform = `translateY(${(1 - k2) * -160}px) scaleY(${1 + (1 - k2) * .25})`; s.style.opacity = clamp((t - (E.brand + .25 + i * .125)) * 8);
+      s.style.fontVariationSettings = `'wdth' ${Math.round(62 + 10 * Math.sin(t * 2.4 - i * .6))}`; });
+    const l1 = BR.el.querySelector('.line1'), kk = eOut(P(t, E.brand + 1.5, .5)); l1.style.opacity = kk; l1.style.transform = `translateY(${(1 - kk) * 40}px)`;
+    const cta = BR.el.querySelector('.cta'), kc = spring(t - E.logo - .25, 2.6, .35); cta.style.opacity = clamp((t - E.logo - .25) * 6);
+    cta.style.transform = `scale(${.85 + .15 * kc})`;
+  }
+  caption(t);
+}
+(async () => {
+  TL = await (await fetch('timeline.json')).json();
+  await Promise.all(['900 300px Anybody', '800 60px "Zalando Sans"', '600 40px "Zalando Sans"'].map(f => document.fonts.load(f, 'YESTERDAY0123456789?daybreak')));
+  await document.fonts.ready;
+  build();
+  window.render = render; render(+Q.get('t') || 0); window.READY = true;
+})();
+</script>
+</body>
+</html>

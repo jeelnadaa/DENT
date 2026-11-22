@@ -1,0 +1,9 @@
+{
+  "engine": "qwen3",
+  "model": null,
+  "voice": "ryan",
+  "instruct": "calm, precise and warm, like a clear teacher explaining something clever to a friend; natural conversational pace; clear consonants",
+  "design": null,
+  "seed": 11,
+  "licence": "Apache-2.0 (code and weights)"
+}

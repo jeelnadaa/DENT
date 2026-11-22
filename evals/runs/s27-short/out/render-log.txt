@@ -1,0 +1,12 @@
+  0/1200
+  120/1200
+  240/1200
+  360/1200
+  480/1200
+  600/1200
+  720/1200
+  840/1200
+  960/1200
+  1080/1200
+layout check (every 0.5 s): 0 too small, 0 cut off, 0 in unsafe zones -> clean
+wrote D:\SKILLS\product-design\.claude\worktrees\s27-short-8f5e5d\evals\runs\s27-short\out\film-9x16.mp4; page errors: none. Next: python <skill>/scripts/video_qa.py D:\SKILLS\product-design\.claude\worktrees\s27-short-8f5e5d\evals\runs\s27-short\out\film-9x16.mp4 --sheet out/qa-sheet.jpg

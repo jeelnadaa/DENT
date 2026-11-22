@@ -4,7 +4,7 @@ description: DENT 2.0 is a design-engineering skill for any visual, interactive 
 license: Apache-2.0
 metadata:
   author: Jeel Nada (solarquack)
-  version: "2.5.1"
+  version: "2.6.0"
   homepage: https://github.com/jeelnadaa/DENT
 ---
 

@@ -140,5 +140,36 @@
     return { T, scene, camera: cam, root, render(t, update) { update && update(root, t, cam); renderer.render(scene, cam); } };
   }
 
-  G.DENTFX = { clamp, P, eOut, eIO, rand, lettering, splitLetters, axisWave, boilFilter, boil, morph, camera, glitch, bounce, shockwave, tornEdge, halftone, count, lineChart, scene3d };
+  /* 11. Fonts before measuring: document.fonts.ready resolves before faces that no element uses yet are fetched,
+         so text measured in the first render can use the fallback face. Load every face + weight you measure:
+         await loadFonts(['700 1em "Mozilla Headline"', 'italic 400 1em Newsreader']); then set window.READY. */
+  async function loadFonts(specs) {
+    await Promise.all(specs.map(s => document.fonts.load(s).catch(() => [])));
+    await document.fonts.ready;
+    return specs.filter(s => !document.fonts.check(s));   // faces still missing (log them, don't ship with a fallback)
+  }
+
+  /* 12. Fit text to a box: the largest font size (px) at which el's text fits maxW x maxH, by binary search.
+         Measure once per layout (ratio), after loadFonts; never per frame. */
+  function fitText(el, maxW, maxH = Infinity, { min = 8, max = 600 } = {}) {
+    let lo = min, hi = max;
+    for (let i = 0; i < 18; i++) {
+      const mid = (lo + hi) / 2; el.style.fontSize = mid + 'px';
+      const r = el.getBoundingClientRect();
+      if (r.width <= maxW && r.height <= maxH) lo = mid; else hi = mid;
+    }
+    el.style.fontSize = lo + 'px';
+    return lo;
+  }
+
+  /* 13. Living frame: a continuous, never-resetting drift for the whole film (not per scene), so cuts don't restart
+         the motion. Apply to a stage wrapper; overlays that sit "on" the picture (labels, callouts, captions pinned
+         to objects) must live INSIDE the moving layer or apply the same transform, or they will slide off what they label. */
+  function livingFrame(el, t, { push = .012, drift = 6, rot = .15, period = 11 } = {}) {
+    const w = 2 * Math.PI * t / period;
+    el.style.transform = `translate(${(Math.sin(w) * drift).toFixed(2)}px,${(Math.cos(w * .7) * drift * .6).toFixed(2)}px) ` +
+      `scale(${(1 + push * (1 + Math.sin(w * .5))).toFixed(4)}) rotate(${(Math.sin(w * .3) * rot).toFixed(3)}deg)`;
+  }
+
+  G.DENTFX = { clamp, P, eOut, eIO, rand, lettering, splitLetters, axisWave, boilFilter, boil, morph, camera, glitch, bounce, shockwave, tornEdge, halftone, count, lineChart, scene3d, loadFonts, fitText, livingFrame };
 })(window);
