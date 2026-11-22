@@ -159,7 +159,8 @@ When the user asks to add something to an existing design:
 | 3D, WebGL, product viewer | motion/3d-and-realtime.md (`/dent:3d`) |
 | Sound, UI sounds, sonic logo, ambience, music | audio/sound-design.md + audio/audio-implementation-and-verification.md (`/dent:sound`) |
 | Narration, voice-over, TTS, captions | audio/voice-and-narration.md (`/dent:voice`) |
-| Any video: launch, trailer, explainer, demo, social | video/video-types-and-craft.md + video/video-tools-and-pipeline.md (`/dent:video`, `/dent:launch-video`) |
+| Any video: launch, trailer, explainer, demo, social | video/video-creative-direction.md (creative menu, directions, genre bar) + video/video-types-and-craft.md + video/video-tools-and-pipeline.md + templates/video-kit/ (`/dent:video`, `/dent:launch-video`) |
+| "Make the video more creative / less generic", "custom typography in the video", "what style should the film have?" | video/video-creative-direction.md §2–§6 |
 | Which library / component kit / chart / table / editor | catalog/component-selection.md (`/dent:components`) |
 | "Score it" / "make it better" after a draft | workflow/scoring-and-closeout.md (`/dent:score`, `/dent:improve`) |
 | Haptics, AR/VR, watch, TV, car, voice UI, AI/agent UI | platforms-and-devices.md §5–6, page-and-flow-patterns.md §16 |

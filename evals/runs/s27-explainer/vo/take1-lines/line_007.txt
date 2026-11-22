@@ -1,0 +1,1 @@
+No secret ever crosses the wire, and a stolen public key can't sign anyone in.

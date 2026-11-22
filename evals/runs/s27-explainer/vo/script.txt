@@ -1,0 +1,11 @@
+# S27 explainer narration, take 2 (take 1 ran 73 s and had two TTS artefacts). One line per caption-sized thought.
+A password is a secret you hand over. To every site, every time.
+Sites keep copies. Fake sites ask just as nicely.
+A passkey isn't a secret you share. It's a signature only your device can make.
+Your device makes a pair of keys. The private key never leaves it, and only your face, fingerprint or PIN unlocks it.
+The site keeps only the public key. It can check your signature, but never forge one.
+To sign in, the site sends a fresh challenge. Your device signs it, and the site checks.
+No secret crosses the wire. A stolen public key signs no one in.
+Each passkey is bound to the real site's domain. A lookalike gets nothing.
+Your keychain or password manager syncs them across your devices.
+Stop handing over secrets. Look for "Create a passkey" in your settings.

@@ -1,0 +1,24 @@
+DENT video QA: film-16x9.mp4
+  ok    video codec h264
+  ok    pixel format yuv420p (yuv420p; yuvj420p means full-range JPEG frames were piped in)
+  ok    colour range tv (TV/limited)
+  ok    constant frame rate (60/1)
+  ok    audio codec aac
+  ok    A/V durations 63.50 s / 63.49 s
+  ok    loudness -14.0 LUFS (target -14.0 ± 1)
+  ok    true peak -1.7 dBTP (≤ −1)
+  ok    motion: 0.9 s of 59.5 s frozen (2 %, limit 35 % for a explainer)
+  ok    motion: longest frozen hold 0.9 s (limit 4.0 s; closing 4.0 s end card excluded)
+  FAIL  variety: longest visually-unchanged stretch 26.8 s (limit 10.0 s for a explainer)
+  info  energy: mean picture change 10.4/255 per second (DENT's launch film: 35)
+  info  rhythm: 0 shot changes (0/min), longest shot 63.5 s
+  ok    no unintended black frames (0 found)
+  ok    captions: 13 cues in film-16x9.srt
+  ok    captions: every line ≤ 42 characters
+  ok    captions: ≤ 2 lines per cue
+  ok    captions: every cue ≥ 1 s
+  ok    captions: every cue inside the film
+  info  contact sheet (one frame every 4.0 s): out\qa-sheet.jpg  ← look at it
+  note  taste, message and product truth are not measured here: look at the sheet and watch it with sound off and on
+
+1 failure(s)

@@ -1,0 +1,9 @@
+{
+  "engine": "qwen3",
+  "model": null,
+  "voice": "ryan",
+  "instruct": "Warm, close and unhurried, a quiet smile in the voice, like telling a friend something good. Natural storyteller, not a movie-trailer announcer.",
+  "design": null,
+  "seed": 7,
+  "licence": "Apache-2.0 (code and weights)"
+}

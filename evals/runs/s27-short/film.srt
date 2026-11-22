@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:02,900
+When was your coffee roasted?
+[Page: ROASTED ON ?]
+
+2
+00:00:02,900 --> 00:00:04,400
+Three weeks ago?
+[Pages torn off: NOV, OCT, SEP]
+
+3
+00:00:04,400 --> 00:00:05,500
+Three months?
+[Pages torn off: AUG, JUL, JUN, MAY]
+
+4
+00:00:05,500 --> 00:00:06,700
+Who knows.
+[Page: 22 APR, 217 days ago]
+
+5
+00:00:06,700 --> 00:00:10,400
+Unless it's Daybreak.
+[Page: ROASTED YESTERDAY.]
+
+6
+00:00:10,400 --> 00:00:13,000
+Roasted yesterday. Shipped today.
+[Page: SHIPPED TODAY]
+
+7
+00:00:13,000 --> 00:00:16,000
+A coffee subscription.
+[Page: daybreak]
+
+8
+00:00:16,000 --> 00:00:19,000
+Coffee with a birthday.
+[Page: Subscribe · link in bio]
+
+9
+00:00:19,000 --> 00:00:20,000
+When was your coffee roasted?
+[Page: ROASTED ON ?]

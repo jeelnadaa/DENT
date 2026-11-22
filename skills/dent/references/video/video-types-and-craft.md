@@ -33,25 +33,43 @@ What kind of video to make, how each type is structured, and the craft that make
 
 Launch rules: the **first 2 seconds** must be interesting with sound off; product name visible by ~5 s (except teasers); show the real product (screen recordings or faithful HTML recreations, never invented features); end card with name, one-line promise, URL/CTA, held ≥ 2 s; deliver 16:9, 9:16 and 1:1 cuts with captions.
 
+## 2b. Launch films for software products (developer tools, apps, AI skills) [Rule]
+DENT's own trials showed the failure: a capable agent made polished films about *a side story* (one contrast ratio on a ticket; a fictional radio station) and the viewer never saw what the product is or does. For any launch film or trailer of a product:
+1. **Three-question test.** After one viewing with sound off, a stranger can answer: *What is it? What does it do for me? How do I get it?* Write the three answers in VIDEO.md before the script; every scene must serve one of them.
+2. **Product truth ≥ 60 %** (trailers, reveals, feature tours, demos; a **teaser** withholds by design and needs ≥ 30 %, a **manifesto** ≥ 40 %). At least 60 % of screen time shows the product itself or its real output: the real UI, or for a CLI/agent/skill a faithful reenactment of a real session (the actual command, the actual questions, the actual files and results), screen captures, real numbers with their source. A fictional client or case study is allowed only as a labelled demo inside that 60 %, and every artefact in it must be something the product genuinely produced or could produce exactly as shown.
+   - **What counts:** frames where the product, its real interface, its real output or the real object is on screen and readable. Not counted: abstract metaphor scenes, type-only cards, logos, atmosphere plates, people reacting.
+   - **Consumer and physical goods:** the real object (photographed, captured, or a faithful 3D model of the real thing) in use, at real scale, with its real finish; renders of features it does not have are invented footage.
+   - **Fictional or concept products** (a pitch, a spec, a student brief): allowed, with a visible "concept" or "demo" label in the film and in VIDEO.md; never an invented URL, store badge, price or user count.
+3. **Name and promise by ~9 s; CTA (exact install command or URL) held ≥ 2 s at the end.** A trailer may hold the full title back for its peak: the name still appears small (a lower third, a stamp, a line of narration) by ~9 s, and the full title lands at the climax. With no real URL yet, the CTA is "link in bio" or a bracketed placeholder (`[URL]`) flagged in the close-out, never a made-up address.
+4. **No borrowed credit.** Never present AI-generated imagery, stock or hand-made artwork as the product's output. If generated plates are used for atmosphere, they are atmosphere, labelled in VIDEO.md.
+5. **Every claim gets visible proof** of the real behaviour; how claims and proofs are staged (chapters, a single journey, a transformation, a race…) is a creative choice of the film's direction (`video-creative-direction.md` §3), not a fixed pattern.
+
 ## 3. Explainer structures
 - **Problem → Solution → How → Proof → CTA** (classic, 60–90 s).
 - **Story:** character with a problem → discovers product → does the job → outcome (character-led 2D).
 - **Concept-first:** "Here's the idea" → analogy visual → mechanism → why it matters (for abstract tech: use an analogy from the directions library's metaphors).
 - **Kinetic manifesto:** type-only + VO, every line a composition.
-Script time budget: 60 s ≈ 150 spoken words.
+Script time budget: 60 s of narration ≈ 130–140 spoken words for a natural TTS read (150 is the ceiling for a fast human read); leave room for the music to breathe.
+
+**Accuracy gate [Rule].** An explainer teaches, so every factual claim (how something works, numbers, standards, history) is checked against a primary source (the spec, the official docs, the paper, the standard) before the script is approved. List each claim with its source in VIDEO.md; a claim with no source is cut or reworded as opinion.
 
 ## 4. Craft: what makes video look professional
 - **One message.** Write it as one sentence before anything else. Cut every shot that doesn't serve it.
-- **Hook:** pattern interrupt in the first frame (motion, contrast, question, surprising number that's true).
-- **Shot rhythm:** vary shot lengths (2 s, 2 s, 4 s); faster during excitement, slower for comprehension; hold text long enough (0.5 s + 0.3 s/word).
+- **Hook in frame 1, every genre:** the first frame is already worth stopping for (motion, contrast, a question, a surprising number that's true); no fade up from black, no logo first. Calm genres hook with an image or a line, not with speed.
+- **Shot rhythm:** vary shot lengths (2 s, 2 s, 4 s); faster during excitement, slower for comprehension; hold text long enough (0.5 s + 0.3 s/word). Holds longer than the genre's limit are allowed only for the end card (≤ 4 s), a loop seam, and a deliberate silence before a payoff (≤ 1 s).
 - **Cuts:** cut on action or on the beat; match cuts (shape/motion continuity) for elegance; avoid gratuitous transitions (no star wipes); one transition family per video.
-- **Composition:** rule of thirds or strong center; leading lines; safe margins for platform UI (vertical videos: keep text out of the bottom ~20 % and top ~12 %).
+- **Composition:** rule of thirds or strong center; leading lines; safe margins for platform UI. **Vertical (9:16) safe zones, one definition everywhere:** text stays out of the top 12 %, the bottom 20 %, and the right action rail (right 14 % of the width, between 45 % and 85 % of the height). The kit's renderer checks exactly these (`templates/video-kit/README.md`).
 - **Typography in video:** big (≥ 5 % of frame height for key lines), high contrast, few words per card, consistent type system from DESIGN.md.
 - **Color:** a grade that matches the brand direction; consistent across shots.
 - **Camera in motion graphics:** slow pushes, parallax between layers, rack focus via blur; motivated moves only.
 - **Sound:** designed with the picture (music bed + SFX + VO), silence before key moments, sonic logo on the end card (`../audio/sound-design.md` §6).
 - **UI footage:** high resolution capture (2× scale), clean data (realistic, not "John Doe"), cursor smoothed and slowed, zoom to the detail that matters, hide personal/real data.
 - **End card:** name, promise, CTA/URL, maybe QR for event screens.
+
+### 4b. The bar: quality invariants + an invented direction
+DENT's launch film (`video/launch/` in the DENT repository) passes every measured check; films made without its discipline failed them (86 % and 64 % of their running time frozen). What to take from it is the **discipline, not the look**:
+- **Quality invariants** for every film (timing grid, density, living frames, one transition grammar, physics and motion blur on hero moments, a type/colour system with one signature device, designed sound, honest proof, stills review, `scripts/video_qa.py`): `templates/video-kit/README.md`.
+- **An invented direction** for every film (concept, world, signature device, type, motion language, transitions, camera, colour script, structure, sound world), chosen with the user through the creative menu and film bibles, kept original by the originality guard, and held to the bar of its own genre: `video-creative-direction.md`.
 
 ## 5. Storyboard and animatic
 - Storyboard: one frame per shot with duration, composition sketch/description, motion, transition out, sound (`templates/VIDEO.md` §4). Frames can be quick HTML/SVG mockups.

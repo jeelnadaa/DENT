@@ -1,0 +1,1 @@
+A passkey isn't a secret you share. It's a signature only your device can make.

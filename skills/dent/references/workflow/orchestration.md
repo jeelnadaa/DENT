@@ -99,6 +99,7 @@ Merge the questions all commands in the pipeline need; remove duplicates; ask th
 - visual: style direction, light/dark, brand colors/fonts;
 - **built-in surfaces (any visual build at Standard+):** Match my design / Brand tint / Native / per element (`../built-in-surfaces.md` §2);
 - **motion (any visual build at Standard+):** which kinds of motion as a **multi-select** (scroll, hover, hero entrance, micro-interactions, transitions, text, data, layout, ambient, cursor, SVG, 3D, gestures, or "You choose") and the intensity (Subtle / Balanced / Expressive / Cinematic). Script: `../motion/motion-menu.md` §1. Skip only if the user already said what motion they want or "no motion";
+- video: the **video creative menu** (`../video/video-creative-direction.md` §2: feel, typography incl. custom lettering, motion language, graphics, sound, never) and 2–3 film directions to choose from;
 - media: sound on/off, narration voice, video length/platform, and **where each kind of media comes from** (local model / free cloud / paid or any provider / own assets: `../media-sourcing.md` §2), with one line on where real or generated assets would lift the result;
 - fonts: free and open (Recommended) / fonts the user owns / paid fonts worth buying (`../typography.md` §0);
 - content: real proof, screenshots, logo.

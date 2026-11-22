@@ -6,6 +6,12 @@
 - fonts.py: overuse flags, suggestions, every pairing face exists on Google Fonts and is not overused
 - tts.py: engine listing, install needs --yes, post (loudness, captions, timing) on synthetic tones
 - doctor.py: JSON capability report
+- tts.py home: a registered engine folder is found by new processes without env vars
+- tts.py voice tools: say --line renders one line; {shown|spoken} keeps the shown form in the line text; post --at places lines
+- video_qa.py: frozen and full-range clips fail (motion, variety, energy), a moving clip passes; short kind; loop seam;
+  a 200 ms A/V shift against the source mix fails; the video kit is complete and marked as placeholders; its technique bench
+  renders with no page errors; the render-time layout check flags tiny, clipped, unsafe, rail and overlapping text;
+  score.py masters to -14 LUFS with true peak <= -2 dBTP
 - verify_page.py (run with --surfaces match): evals/fixtures/bad.html must fail G2, G3, G4, G8_surfaces, G10, G11,
   G13 (each MWG rule and default surface it has);
   good.html must pass all (including a slowed progress spinner under reduced motion)
@@ -137,6 +143,8 @@ def test_fonts() -> None:
     overused = sorted(n for n in names if n in F.OVERUSED)
     check(not missing, f"pairing faces on Google Fonts ({len(names)} checked){': missing ' + ', '.join(missing) if missing else ''}")
     check(not overused, f"no overused face in the pairing library{': ' + ', '.join(overused) if overused else ''}")
+    r = subprocess.run([sys.executable, str(SCRIPTS / "fonts.py"), "check", "Impact", "Georgia", "Consolas"], capture_output=True, text=True)
+    check(r.stdout.count("OVERUSED") == 3, "system fonts (Impact, Georgia, Consolas) are flagged")
 
 
 def _tone(path: Path, seconds: float, freq: float, sr: int = 24000, amp: float = 0.3) -> None:
@@ -187,6 +195,136 @@ def test_tts() -> None:
         check(r.returncode == 0 and span(t2) > span(timing) * 1.15, "post --tempo 0.8 slows lines (pitch-preserving) and still passes loudness")
 
 
+def test_tts_voice_tools() -> None:
+    print("tts.py say --line / respell / post --at (system engine)")
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d)
+        (d / "s.txt").write_text("Hello {DENT|dent} one.\nSecond line here.\n", encoding="utf-8")
+        tts = [sys.executable, str(SCRIPTS / "tts.py")]
+        r = subprocess.run([*tts, "say", "--engine", "system", "--script", str(d / "s.txt"), "--out", str(d / "l"), "--line", "2"],
+                           capture_output=True, text=True, timeout=300)
+        if r.returncode != 0:
+            print("  skip  no system voice on this machine")
+            return
+        check(sorted(f.name for f in (d / "l").glob("line_*.wav")) == ["line_002.wav"], "say --line 2 renders only line 2")
+        subprocess.run([*tts, "say", "--engine", "system", "--script", str(d / "s.txt"), "--out", str(d / "l")], capture_output=True, timeout=300)
+        check((d / "l" / "line_001.txt").read_text(encoding="utf-8").strip() == "Hello DENT one.", "{shown|spoken}: the line text keeps the shown form")
+        if not shutil.which("ffmpeg"):
+            return
+        subprocess.run([*tts, "post", "--in", str(d / "l"), "--out", str(d / "n.wav"), "--at", "0.5,3.0"], capture_output=True, timeout=300)
+        tm = json.loads((d / "n.timing.json").read_text(encoding="utf-8")) if (d / "n.timing.json").is_file() else []
+        check(len(tm) == 2 and abs(tm[0]["start"] - 0.5) < .02 and abs(tm[1]["start"] - 3.0) < .02, "post --at places each line at its time")
+        check(not list(d.glob("**/_gap*")), "post --at cleans up its silence files")
+
+
+def test_tts_home() -> None:
+    print("tts.py home")
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d)
+        (d / "engines" / "kokoro").mkdir(parents=True)
+        env = {**__import__("os").environ, "DENT_TTS_POINTER": str(d / "pointer.txt")}
+        env.pop("DENT_TTS_HOME", None)
+        r = subprocess.run([sys.executable, str(SCRIPTS / "tts.py"), "home", str(d / "engines")], capture_output=True, text=True, env=env)
+        check(r.returncode == 0 and (d / "pointer.txt").is_file() and "kokoro" in r.stdout, "home registers a folder and finds engine folders in it")
+        r = subprocess.run([sys.executable, str(SCRIPTS / "tts.py"), "engines"], capture_output=True, text=True, env=env, timeout=300)
+        check(str((d / "engines").resolve()) in r.stdout and "registered" in r.stdout, "engines uses the registered folder in a new process (no env var needed)")
+
+
+def _clip(path: Path, moving: bool, full_range: bool = False) -> None:
+    src = "testsrc2=size=640x360:rate=30" if moving else "color=c=0x334455:size=640x360:rate=30"
+    pix = ["-pix_fmt", "yuvj420p"] if full_range else ["-pix_fmt", "yuv420p", "-color_range", "tv"]
+    subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi", "-i", src, "-f", "lavfi",
+                    "-i", "sine=frequency=330:sample_rate=48000", "-t", "8", "-af", "volume=0.2", *pix,
+                    "-c:v", "libx264", "-c:a", "aac", "-shortest", str(path)], check=True)
+
+
+def test_video_qa() -> None:
+    print("video_qa.py")
+    if not shutil.which("ffmpeg"):
+        print("  skip  ffmpeg not installed")
+        return
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d)
+        mov, still, full = d / "moving.mp4", d / "still.mp4", d / "full.mp4"
+        _clip(mov, True); _clip(still, False); _clip(full, True, full_range=True)
+        q = lambda f: subprocess.run([sys.executable, str(SCRIPTS / "video_qa.py"), str(f), "--lufs", "-21", "--end-hold", "1", "--json", str(d / "r.json")],  # noqa: E731
+                                     capture_output=True, text=True, timeout=300)
+        r = q(still)
+        rep = json.loads((d / "r.json").read_text(encoding="utf-8"))
+        check(r.returncode == 1 and rep["motion"]["frozen_share"] > 0.9, "a frozen clip fails the motion check")
+        r = q(mov)
+        rep = json.loads((d / "r.json").read_text(encoding="utf-8"))
+        check(rep["motion"]["frozen_share"] == 0 and "motion:" in r.stdout and "FAIL  motion" not in r.stdout, "a moving clip passes the motion check")
+        r = q(full)
+        check("FAIL  pixel format yuvj420p" in r.stdout, "full-range yuvj420p frames are flagged")
+        r = q(still)
+        check("FAIL  variety" in r.stdout and "FAIL  energy" in r.stdout, "a static clip also fails the variety and energy checks")
+        base = [sys.executable, str(SCRIPTS / "video_qa.py"), "--lufs", "-21", "--end-hold", "1"]
+        r = subprocess.run([*base, str(still), "--kind", "short"], capture_output=True, text=True, timeout=300)
+        check("limit 4.0 s for a short" in r.stdout, "short kind uses its own sameness limit")
+        r = subprocess.run([*base, str(still), "--loop"], capture_output=True, text=True, timeout=300)
+        check("ok    loop seam" in r.stdout, "a seamless loop passes the loop-seam check")
+        faded = d / "faded.mp4"   # starts black, ends grey-blue: cannot loop
+        subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(still), "-vf", "fade=t=in:st=0:d=2",
+                        "-pix_fmt", "yuv420p", "-c:a", "copy", str(faded)], check=True)
+        r = subprocess.run([*base, str(faded), "--loop"], capture_output=True, text=True, timeout=300)
+        check("FAIL  loop seam" in r.stdout, "a film whose end differs from its start fails the loop-seam check")
+        mix, shifted = d / "mix.wav", d / "shifted.mp4"
+        subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi", "-i",
+                        "aevalsrc='0.3*sin(2*PI*440*t)*lt(mod(t\\,0.5)\\,0.08)':s=48000:d=8", str(mix)], check=True)
+        synced = d / "synced.mp4"
+        for out, off in ((synced, "0"), (shifted, "0.2")):
+            subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(mov), "-itsoffset", off, "-i", str(mix),
+                            "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", str(out)], check=True)
+        r = subprocess.run([*base, str(synced), "--audio", str(mix)], capture_output=True, text=True, timeout=300)
+        check("ok    sync: film audio is" in r.stdout, "audio that matches its mix passes the sync check")
+        r = subprocess.run([*base, str(shifted), "--audio", str(mix)], capture_output=True, text=True, timeout=300)
+        check("FAIL  sync: film audio is +200 ms" in r.stdout, "audio shifted 200 ms against its mix fails the sync check")
+    kit = ROOT / "skills" / "dent" / "templates" / "video-kit"
+    try:
+        import playwright  # noqa: F401
+        with tempfile.TemporaryDirectory() as d:
+            k = Path(d) / "kit"
+            shutil.copytree(kit, k)
+            r = subprocess.run([sys.executable, "render.py", "stills", "--page", "techniques", "--times", "0.4", "2.3"],
+                               cwd=k, capture_output=True, text=True, timeout=300)
+            check(r.returncode == 0 and "page errors: none" in r.stdout and (k / "out" / "stills" / "_sheet-techniques.jpg").is_file(),
+                  "technique bench renders every module with no page errors")
+            html = (k / "composition.html").read_text(encoding="utf-8")
+            (k / "composition.html").write_text(html.replace("one-line promise", "a deliberately tiny line").replace(
+                'class="a soul" style="left:0;right:0;text-align:center;top:${PORT ? 960 * U : 560 * U}px;font-size:${54 * U}px"',
+                'class="a soul" style="left:0;right:0;text-align:center;top:${PORT ? 960 * U : 560 * U}px;font-size:${10 * U}px"'), encoding="utf-8")
+            r = subprocess.run([sys.executable, "render.py", "stills", "--ratio", "16x9", "--times", "10"], cwd=k, capture_output=True, text=True, timeout=300)
+            check("layout" in r.stdout and "small" in r.stdout and "deliberately tiny" in r.stdout, "layout check flags text too small for a phone")
+            (k / "planted.html").write_text(PLANTED, encoding="utf-8")
+            r = subprocess.run([sys.executable, "render.py", "stills", "--page", "planted", "--ratio", "9x16", "--times", "0"],
+                               cwd=k, capture_output=True, text=True, timeout=300)
+            for kind, word in (("clipped", "CLIPPEDWORD"), ("unsafe", "UNSAFEWORD"), ("rail", "RAILWORD"), ("overlap", "OVERLAPA")):
+                check(any(kind in ln and word in ln for ln in r.stdout.splitlines()), f"layout check flags {kind} text")
+            check("FINEWORD" not in r.stdout and "LAYEREDOK" not in r.stdout, "layout check leaves good and opted-out text alone")
+            if shutil.which("ffmpeg"):
+                r = subprocess.run([sys.executable, "score.py"], cwd=k, capture_output=True, text=True, timeout=600)
+                m = re.search(r"true peak (-?[\d.]+) dBTP", r.stdout)
+                check(r.returncode == 0 and m is not None and float(m.group(1)) <= -2.0, "score.py masters with true peak <= -2 dBTP")
+    except ImportError:
+        print("  skip  kit render tests: Playwright not installed")
+    check(all((kit / f).is_file() for f in ("README.md", "composition.html", "timeline.json", "render.py", "score.py")), "video kit is complete")
+    check("PLACEHOLDERS ONLY" in (kit / "composition.html").read_text(encoding="utf-8"), "kit scenes are marked as placeholders (originality guard)")
+
+
+PLANTED = """<!doctype html><html><head><meta charset="utf-8"><style>
+*{margin:0}html,body{width:100vw;height:100vh;overflow:hidden;background:#eee;font:700 60px sans-serif}
+div{position:absolute}</style></head><body>
+<div style="left:10%;top:40%">FINEWORD</div>
+<div style="left:10%;top:2%">UNSAFEWORD</div>
+<div style="right:0;top:60%;white-space:nowrap">RAILWORD</div>
+<div style="left:10%;top:30%;width:120px;overflow:hidden;white-space:nowrap"><span>CLIPPEDWORD LONG</span></div>
+<div style="left:10%;top:50%">OVERLAPA</div><div style="left:10%;top:50.5%">OVERLAPB</div>
+<div data-overlap-ok style="left:10%;top:70%"><div>LAYEREDOK</div><div style="top:4px">LAYEREDOK</div></div>
+<script>window.render = () => {}; document.fonts.ready.then(() => { window.READY = true; });</script>
+</body></html>"""
+
+
 def test_doctor() -> None:
     print("doctor.py")
     r = subprocess.run([sys.executable, str(SCRIPTS / "doctor.py"), "--json"], capture_output=True, text=True, timeout=600)
@@ -207,6 +345,9 @@ def main() -> int:
     test_palette()
     test_fonts()
     test_tts()
+    test_tts_voice_tools()
+    test_tts_home()
+    test_video_qa()
     test_doctor()
     test_verify()
     print(f"\n{len(failures)} failure(s)" if failures else "\nAll tool tests passed")

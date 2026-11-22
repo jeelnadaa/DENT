@@ -1,0 +1,1 @@
+To sign in, the site sends a fresh challenge. Your device signs it. The site checks.

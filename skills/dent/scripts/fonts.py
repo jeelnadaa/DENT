@@ -39,6 +39,11 @@ OVERUSED = {
     "Arial": "system default", "Helvetica": "system default", "Nunito Sans": "template default",
     "Source Sans 3": "template default", "Raleway": "template default", "Playfair Display": "default 'luxury' serif",
     "Bebas Neue": "default condensed display", "Anton": "default condensed display", "Oswald": "default condensed display",
+    # operating-system fonts reached for because they are installed (rendered with GDI/PIL in DENT's weakest test films)
+    "Impact": "system default display", "Georgia": "system default serif", "Times New Roman": "system default serif",
+    "Consolas": "system default mono", "Courier New": "system default mono", "Verdana": "system default",
+    "Tahoma": "system default", "Segoe UI": "system UI default", "Calibri": "Office default", "Cambria": "Office default",
+    "Trebuchet MS": "system default", "Comic Sans MS": "system default", "Arial Black": "system default display",
     # second order (the "anti-slop" picks that became the slop)
     "Satoshi": "the default 'not Inter' grotesk", "General Sans": "Fontshare default", "Switzer": "Fontshare default",
     "Cabinet Grotesk": "default 'bold startup' display", "Clash Display": "default 'bold startup' display",

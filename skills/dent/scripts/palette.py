@@ -249,8 +249,11 @@ def cmd_make(a) -> int:
         for label, r, need, ok in report(tokens):
             fails += not ok
             print(f"  {'ok  ' if ok else 'FAIL'} {label}: {r:.2f}:1 (needs {need})")
-        for h in cliche_hits({k: v for k, v in tokens.items() if k in ('bg', 'accent', 'second', 'surface')}):
+        hits = cliche_hits({k: v for k, v in tokens.items() if k in ('bg', 'accent', 'second', 'surface')})
+        for h in hits:
             print(f"  cliche: {h}")
+        if not hits:
+            print("  cliché check: none")
         if a.css:
             sel = ":root" if mode == "light" else "@media (prefers-color-scheme: dark) { :root"
             body = "\n".join(f"  --color-{k}: {v};" for k, v in tokens.items())
@@ -267,8 +270,11 @@ def cmd_check(a) -> int:
     for k in tokens:
         L, C, H = hex_to_oklch(tokens[k])
         print(f"  {k} {tokens[k]} = oklch({L * 100:.1f}% {C:.3f} {H:.0f})")
-    for h in cliche_hits({k: v for k, v in tokens.items() if k in ("bg", "surface", "accent", "second")}):
+    hits = cliche_hits({k: v for k, v in tokens.items() if k in ("bg", "surface", "accent", "second")})
+    for h in hits:
         print(f"cliche: {h}")
+    if not hits:
+        print("cliché check: none")
     return 1 if fails else 0
 
 

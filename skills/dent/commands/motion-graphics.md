@@ -16,10 +16,10 @@ Create motion graphics: kinetic typography, animated compositions, scroll storie
 
 ## Steps
 1. Ask (if unknown): where it lives (web page, README GIF/SVG, video), length, sound on/off, dimension (1D/2D/2.5D/3D), which motion kinds and intensity (references/motion/motion-menu.md §1), and where any imagery, footage or music comes from (references/media-sourcing.md §2).
-2. Concept → 2–3 motion directions (All-out) → storyboard with timing → animatic.
+2. Concept → 2–3 motion directions as bibles with a style frame each (references/video/video-creative-direction.md §3; menu §2 for typography and motion language; originality guard §4) → storyboard with timing → animatic.
 3. Choose technology with the selection ladder; justify it. For web pieces, retrieve the Modern Web Guidance guides for the effect first (scrollytelling, view transitions, motion).
 4. Build with a timeline; design the reduced-motion version; budget performance.
-5. Verify play-through, sync, loop point, frame rate, reduced motion, cleanup; capture video/GIF if useful.
+5. Verify play-through, sync, loop point, frame rate, reduced motion, cleanup; for rendered video run `python scripts/video_qa.py <file> --kind loop` and look at its sheet.
 
 ## Output
 MOTION.md (concept, storyboard, timing, tech), the piece, verification evidence.

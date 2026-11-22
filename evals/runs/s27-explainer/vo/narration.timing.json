@@ -1,0 +1,62 @@
+[
+  {
+    "line": 1,
+    "start": 0.9,
+    "end": 6.714,
+    "text": "A password is a secret you hand over. To every site, every time."
+  },
+  {
+    "line": 2,
+    "start": 7.114,
+    "end": 11.228,
+    "text": "Sites keep copies. Fake sites ask just as nicely."
+  },
+  {
+    "line": 3,
+    "start": 11.628,
+    "end": 16.193,
+    "text": "A passkey isn't a secret you share. It's a signature only your device can make."
+  },
+  {
+    "line": 4,
+    "start": 16.593,
+    "end": 24.312,
+    "text": "Your device makes a pair of keys. The private key never leaves it, and only your face, fingerprint or PIN unlocks it."
+  },
+  {
+    "line": 5,
+    "start": 24.712,
+    "end": 30.627,
+    "text": "The site keeps only the public key. It can check your signature, but never forge one."
+  },
+  {
+    "line": 6,
+    "start": 31.027,
+    "end": 37.091,
+    "text": "To sign in, the site sends a fresh challenge. Your device signs it, and the site checks."
+  },
+  {
+    "line": 7,
+    "start": 37.491,
+    "end": 43.079,
+    "text": "No secret crosses the wire. A stolen public key signs no one in."
+  },
+  {
+    "line": 8,
+    "start": 43.479,
+    "end": 48.616,
+    "text": "Each passkey is bound to the real site's domain. A lookalike gets nothing."
+  },
+  {
+    "line": 9,
+    "start": 49.016,
+    "end": 53.358,
+    "text": "Your keychain or password manager syncs them across your devices."
+  },
+  {
+    "line": 10,
+    "start": 53.758,
+    "end": 59.909,
+    "text": "Stop handing over secrets. Look for \"Create a passkey\" in your settings."
+  }
+]

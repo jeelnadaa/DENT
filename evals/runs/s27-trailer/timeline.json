@@ -1,0 +1,202 @@
+{
+ "_doc": "Single source of timing for picture (composition.html), narration placement and score (score_streak.py). 96 bpm grid.",
+ "bpm": 96,
+ "fps": 60,
+ "duration": 45.0,
+ "scenes": [
+  0,
+  4.35,
+  7.4,
+  10.0,
+  15.0,
+  20.0,
+  24.95,
+  32.5,
+  40.0
+ ],
+ "events": {
+  "miss": 3.125,
+  "reset": 4.375,
+  "fall": 5.3125,
+  "land": 5.9375,
+  "name": 7.5,
+  "tap1": 11.25,
+  "tap2": 12.5,
+  "tap3": 13.125,
+  "tap4": 13.75,
+  "garden": 15.0,
+  "lapse": 15.625,
+  "roots": 24.95,
+  "miss2": 20.0,
+  "w2": 21.5625,
+  "w3": 22.5,
+  "impact": 25.0,
+  "title": 28.75,
+  "water": 34.375,
+  "widget": 36.25,
+  "endname": 41.25,
+  "logo": 43.75
+ },
+ "blur": [
+  [
+   3.1,
+   3.4
+  ],
+  [
+   4.35,
+   5.0
+  ],
+  [
+   5.3,
+   6.0
+  ],
+  [
+   6.4,
+   7.2
+  ],
+  [
+   10.0,
+   10.9
+  ],
+  [
+   24.9,
+   25.5
+  ],
+  [
+   28.7,
+   29.2
+  ],
+  [
+   32.5,
+   33.4
+  ],
+  [
+   40.0,
+   40.75
+  ]
+ ],
+ "vo": [
+  {
+   "at": 0.45,
+   "src_start": 0.25,
+   "src_end": 1.501,
+   "text": "Twenty-nine days in a row."
+  },
+  {
+   "at": 2.95,
+   "src_start": 1.801,
+   "src_end": 4.083,
+   "text": "One missed day. Back to zero."
+  },
+  {
+   "at": 5.95,
+   "src_start": 4.383,
+   "src_end": 6.779,
+   "text": "What if a habit grew, instead?"
+  },
+  {
+   "at": 8.6,
+   "src_start": 7.079,
+   "src_end": 7.916,
+   "text": "Meet Streak."
+  },
+  {
+   "at": 10.6,
+   "src_start": 8.216,
+   "src_end": 12.311,
+   "text": "Every time you show up, your habit grows a leaf."
+  },
+  {
+   "at": 15.4,
+   "src_start": 12.611,
+   "src_end": 15.34,
+   "text": "Keep showing up, and the garden fills in."
+  },
+  {
+   "at": 20.4,
+   "src_start": 15.64,
+   "src_end": 18.575,
+   "text": "Miss a day? It wilts. It doesn't reset."
+  },
+  {
+   "at": 25.9,
+   "src_start": 18.875,
+   "src_end": 22.91,
+   "text": "Because the days you showed up are still there. In the roots."
+  },
+  {
+   "at": 33.4,
+   "src_start": 23.21,
+   "src_end": 26.46,
+   "text": "Streak. For iPhone and Android."
+  },
+  {
+   "at": 40.9,
+   "src_start": 26.76,
+   "src_end": 29.183,
+   "text": "Grow habits. Not checkmarks."
+  }
+ ],
+ "cues": [
+  {
+   "s": 0.45,
+   "e": 1.95,
+   "t": "Twenty-nine days in a row."
+  },
+  {
+   "s": 2.95,
+   "e": 5.48,
+   "t": "One missed day. Back to zero."
+  },
+  {
+   "s": 5.95,
+   "e": 8.6,
+   "t": "What if a habit grew, instead?"
+  },
+  {
+   "s": 8.6,
+   "e": 9.85,
+   "t": "Meet Streak."
+  },
+  {
+   "s": 10.6,
+   "e": 12.56,
+   "t": "Every time you show up,"
+  },
+  {
+   "s": 12.56,
+   "e": 14.95,
+   "t": "your habit grows a leaf."
+  },
+  {
+   "s": 15.4,
+   "e": 18.38,
+   "t": "Keep showing up, and the garden fills in."
+  },
+  {
+   "s": 20.4,
+   "e": 23.58,
+   "t": "Miss a day? It wilts. It doesn't reset."
+  },
+  {
+   "s": 25.9,
+   "e": 29.01,
+   "t": "Because the days you showed up are still there."
+  },
+  {
+   "s": 29.01,
+   "e": 30.18,
+   "t": "In the roots."
+  },
+  {
+   "s": 33.4,
+   "e": 36.9,
+   "t": "Streak. For iPhone and Android."
+  },
+  {
+   "s": 40.9,
+   "e": 43.57,
+   "t": "Grow habits. Not checkmarks."
+  }
+ ]
+}

@@ -34,6 +34,7 @@ Every substantial deliverable ends with an honest scorecard, an attribution summ
 
 ## 2. Scoring rules (keep yourself honest)
 - **No evidence, no high score.** A line you could not verify is capped at **6** and marked "unverified".
+- **Media you cannot perceive is unverified.** An agent that cannot hear scores sound, music and voice lines at most **6** until a person has listened (say which lines they heard); a video's overall score cannot pass the All-out bar on sound it never heard. Picture lines need a contact sheet you actually looked at.
 - **A failed gate caps its line at 4** until fixed.
 - **Requirements first:** if any Must requirement is not implemented, overall cannot exceed 6.
 - Use the full scale. 7 = solid professional work; 8 = would ship proudly; 9 = portfolio-grade; 10 = best-in-class, rarely given.
@@ -56,6 +57,8 @@ The builder is biased toward its own work. Before the final score at Polished an
 | **Visual** | Rendered screenshots at 320/390/768/1440, both themes | Composition and hierarchy, typography craft, color and contrast, consistency, brand fit, responsive rendering, distinctiveness (`../creative/anti-slop.md`), polish |
 | **UX** | The running page/app and the journeys | Task completion end to end, navigation and discoverability, interaction clarity, content and IA, empty/loading/success/error states, keyboard and screen-reader use |
 | **Engineering** | The code and the check output | Correctness and regression risk, architecture fit, types and error handling, performance (measured), security (unsafe HTML, secrets, validation), dependencies justified (`../catalog/component-selection.md` §4b), tests, MWG compliance (G13) |
+
+**[Rule] Independence is a fact, not a claim.** An evaluation is *independent* only if it ran in a fresh context (a subagent or another session) that never saw the builder's reasoning, or was done by a person. A review written by the same agent in the same session is a **self-review**: label it so in REVIEW.md, SCORECARD.md and the close-out, and never describe it as independent, external or as a "release decision".
 
 Each evaluator returns: a verdict (**Accept** / **Accept with fixes** / **Reject**), findings with severity (§6), evidence, and the lines it would score differently. **A Reject blocks delivery**: fix the cause or present the work with the rejection and its reasons stated plainly. Merge the three reports into `REVIEW.md` (`templates/REVIEW.md`) and use them when scoring; where the builder's score and an evaluator's differ by 2+ points, use the evaluator's unless you can show new evidence.
 

@@ -1,0 +1,1 @@
+Your device creates a pair of keys. The private one never leaves it, and only your face, fingerprint or PIN unlocks it.

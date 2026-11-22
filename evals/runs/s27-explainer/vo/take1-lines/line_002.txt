@@ -1,0 +1,1 @@
+Sites keep copies. And a fake site can ask for it just as nicely.

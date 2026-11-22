@@ -1,0 +1,57 @@
+# S27 (vertical short) eval result: where DENT's video instructions helped and where they didn't
+
+Prompt: `/dent:video a 20-second vertical social short for "Daybreak", a coffee subscription that ships beans roasted the day before. It has to stop the scroll.`
+Scripted answers: Polished · "You decide everything" · score + SFX, no voice · code-built, no generative or stock · music in code · 9:16 only, sound-off first.
+
+Deliverables in this folder: `VIDEO.md` (menu answers, 2 bibles, choice, guard, escalation), `composition.html` + `timeline.json` + `score.py` (the film's copy of the kit), `styleB.html` (style frame of the unchosen direction), `film.srt`, `film-9x16.mp4`, `out/layout-9x16.json`, `out/qa-sheet.jpg`, `out/stills/_sheet-9x16.jpg`, `qa-report.json`, `SCORECARD.md`.
+
+## Result
+- **Film:** `film-9x16.mp4` (20.00 s, 1080×1920, 60 fps, 13.1 MB). Direction A "Tear-Off Day": a desk calendar tears back through months of old dates ("When was your coffee roasted? / Three weeks ago? / Three months? / Who knows."), stops, then pages fly back on and Daybreak's cobalt page slams down: ROASTED YESTERDAY → SHIPPED TODAY → daybreak · Subscribe · link in bio → tears to frame 1 (loop).
+- **video_qa.py:** all measured checks pass (`--kind trailer`: 3 % frozen, longest hold 0.5 s, energy 41.6, −14.4 LUFS, −1.4 dBTP; also passes `--kind loop`). The first run failed 3 checks (true peak −0.2 dBTP after AAC, SRT line length, 0.6 s loop cue), fixed and re-rendered. Full output in VIDEO.md §9 and `qa-trailer.txt`.
+- **Layout check (9:16):** 0 too small, 0 cut off, 0 unsafe.
+- **Sound:** measured only; **not heard by a person** (scored 6).
+- **Scorecard:** self-review, 8.1/10 overall; the three independent evaluators SKILL.md §8 requires at Polished were not run.
+- **S27 hard-fail list:** no PIL/System.Drawing text, no system fonts (Anybody + Zalando Sans via the browser), not a clone of the launch film, self-review labelled as such, no 9/10 for unheard sound.
+
+## Findings: unclear, missing, contradictory or slow (ranked by how much they cost)
+
+### Contradictions
+1. **Safe-zone numbers disagree.** `video-types-and-craft.md` §4 says vertical text stays out of the top ~12 % and bottom ~20 %; `render.py`'s layout check enforces top 10 % and bottom 18 % (`r.top < H*.1 || r.bottom > H*.82`). A caption at y = 214 px passes the renderer and fails the craft rule. I moved it to 236 px by hand. One number, in one place, used by both.
+2. **Depth vs effort for video.** `video.md` says "Default depth: Advanced", and SKILL.md §1.0 says Advanced = `templates/PLAN.md` + plan audit; `video.md`'s steps never mention PLAN.md and use VIDEO.md as the plan. I wrote VIDEO.md only. Say explicitly that VIDEO.md *is* the plan for video (or that PLAN.md is also required).
+3. **`score.py` misses its own ceiling.** Its docstring promises "true peak ≤ −1.5 dBTP"; this film's score came out at **−1.34 dBTP** (`playful` preset plus my paper SFX). The limiter is set to −1.8 dBFS sample peak with 4× oversampling, but the corrective loop only re-targets loudness, not true peak. `video_qa.py`'s limit is −1 dBTP, so it still passes, but the kit's promise is wrong.
+4. **Sound is asked twice.** Command step 1 asks where media comes from (`media-sourcing.md` §2, which includes music/SFX/voice) and step 2's creative menu has its own Sound group (E: narration + score + SFX / score + SFX / …). The scripted answers covered both, but a real user would get the same question twice.
+
+### Missing
+5. **No "social short" in `video_qa.py`.** `--kind` offers trailer, explainer, tutorial, loop. S27 says "frozen ≤ 20 % for the trailer *and short*", so I ran `--kind trailer` (and `--kind loop` as a second opinion). Add `short` (frozen ≤ 20 %, hold ≤ 2.5 s, energy floor, and a loop-seam check).
+6. **No loop-seam check.** The genre bar says "a loop or payoff by 15 s", and the loop is the best scroll-stopping device for this format, yet nothing measures whether the last frame matches the first. I designed the seam (the end card tears off to reveal frame 1) and checked it only by eye on stills 19.95 s vs 0 s.
+7. **The right-hand action rail is not a safe zone anywhere.** Reels/TikTok/Shorts put like/comment/share buttons down the right edge (roughly the right 12–14 % of the width, lower half of the frame). `render.py` only checks top/bottom bands and the craft doc only mentions top/bottom. My pad's right edge (x 990) and its right-aligned header labels sit near that rail. Add a right-rail band to the 9:16 layout check and to §4.
+8. **Product truth (§2b) has no answer for a consumer product with no assets.** §2b's "≥ 60 % real UI / real output" is written for software. Daybreak is a physical subscription; the user ruled out stock and generative imagery and supplied no photos. The skill gives no rule for what "product truth" means here (the promise staged honestly? a labelled illustration of the bag?). I applied the three-question test and logged the 60 % rule as not applicable. Write a consumer-goods variant.
+9. **CTA when there is no URL.** §2b requires "exact install command or URL"; the brand is fictional and no URL was given. G6 forbids inventing one. Nothing says what to do; I used the platform-native "Subscribe · link in bio". Add that fallback (or a bracketed placeholder rule for video).
+10. **Style frames for unbuilt directions have no scaffold.** Step 4 requires "one rendered style frame" per bible (2 at Polished). The kit only renders `composition.html` and its technique gallery; a second direction needs a separate page that happens to satisfy `render.py`'s undocumented page contract (`window.render(t)` and `window.READY`). I wrote `styleB.html` by hand (rough: its caption overlaps the vertical "+18 h"; good enough to choose by eye, not polished). Document the contract (`--page` works for any page that defines both) or ship a one-page style-frame template.
+11. **Paper/foley SFX don't exist in the kit.** `score.py`'s SFX are the launch film's vocabulary (hit, stab, whoosh, type, impact, riser, tick, pop, logo). A paper film needs rips, flicks, a riffle; I added `paper_rip`, `paper_flick`, `paper_rush` and `rip/bigrip/flick/rush/thud` kinds to this film's copy. The README says "presets are instruments to shape", which is fine, but a few material families (paper, glass, liquid, cloth) would stop every film from sounding like the launch film's palette.
+12. **Category clichés for the *product's* category aren't in the video docs.** §5 lists genre clichés (social short: landscape crop, intro titles) but the coffee-ad clichés (steam, latte art, slow-mo beans, kraft brown, sunrise gradients for a brand called "Daybreak") come only from SKILL.md §1.4's general cliché check. Point to it from video-creative-direction.md §4 so the guard covers the product category too.
+
+### Unclear / slowed me down
+13. **`document.fonts.ready` is not enough when the composition measures text.** The kit says "render.py waits for document.fonts.ready". Fonts used only in hidden (`display:none`) pages were not loaded yet when my fit-to-width code measured, so it measured the fallback face and the words came out 50 % too wide (cut off in stills at 7.8 s and 12.5 s). Fix: `await document.fonts.load('900 300px Anybody', …)` for every face/weight before measuring. The kit should do this (or say it).
+14. **The layout check can't see text clipped inside the frame.** It flags text outside the *frame*, not text clipped by a parent's `overflow:hidden` (my calendar page). A word cut by the page edge but still inside the frame would pass. It also needs `data-crop` on every flying object, which is right for thrown pages but easy to over-use to silence real problems.
+15. **Which motion/surfaces questions apply to video?** SKILL.md §1.2 says "for any visual build at Standard+ ask which kinds of motion and how strong" and ask about built-in surfaces. `video.md` doesn't mention them and they don't fit a rendered film. I skipped them. Say so in `video.md`.
+16. **MWG for a render-only page.** `video.md` says run MWG search → retrieve → apply before writing HTML/CSS/JS. For a composition that only exists to be screenshotted, most guides (performance, CLS, accessibility) don't apply. I searched ("animation performance transform", "web fonts loading") and retrieved `individual-transform-properties`; nothing changed the build. A line saying which MWG checks matter for compositions (fonts loading, transforms) would save time.
+17. **Text-hold rule vs loop.** "0.5 s + 0.3 s/word" can't hold for the 0.6 s loop-seam caption (it repeats frame 1's question). Loops need an exception like the end card's.
+18. **`timeline.json` `progression` and `key_hz` are undocumented beyond a docstring.** I guessed that the arrays are semitone offsets from `key_hz` per bar (they are), and that `lift`/`drop` are seconds.
+19. **Polished requires three independent evaluators, but nothing in `video.md` mentions them.** SKILL.md §8 says at Polished and All-out run visual/UX/engineering evaluators before the final score; `video.md` step 8 only says "self-review is never called independent". This run wasn't told to start evaluator sessions, so none ran. `video.md` should say whether video at Polished needs them and how to run them.
+20. **The QA contact sheet has no timestamps.** `video_qa.py --sheet` tiles one frame every 1.2 s without labels; two frames looked broken (half-hidden captions) and I spent a re-extract to learn they were caption transitions, not bugs. Print the time under each tile.
+21. **The full render is slow and the kit doesn't warn.** `render.py` takes a screenshot per sub-frame (6× inside blur windows); 20 s at 60 fps with ~8 s of blur windows took ~20 minutes per render on an RTX 3070 Ti laptop, and I needed two. Say so, and suggest `stills` for every iteration and a short `--from/--to` range render (which doesn't exist yet).
+22. **A/V sync is listed as a video_qa check but the output only compares stream durations.** `video-tools-and-pipeline.md` §6 and `video.md` step 8 say video_qa checks "sync"; the report shows "A/V durations 20.00 s / 20.00 s", not event alignment.
+23. **AAC adds true peak the kit doesn't budget for.** score.wav at −1.34 dBTP became −0.2 dBTP in the MP4. `score.py`/`render.py` should leave ~2 dB of true-peak headroom before the AAC encode, or re-limit after muxing.
+
+### Things I had to invent that the skill could provide
+- The fit-to-width helper for display words (every kinetic-type film needs it; not in `techniques.js`).
+- The torn-page physics (peel → throw with gravity and spin → torn clip-path). `tornEdge()` exists but only as a static mask.
+- Paper SFX (see 11).
+- A second style-frame page (see 10).
+- The SRT for a voiceless film (on-screen text + bracketed page descriptions); the launch film did the same, but the template's §7 only talks about burned-in captions of speech.
+
+## What worked
+- The menu → bibles → guard → escalation chain made the direction feel deliberate rather than defaulted; the eight-axis comparison against `video/launch/VIDEO.md` was quick and concrete.
+- The kit's engine (deterministic `render(t)`, timeline grid, motion-blur windows, TV-range encode) needed no changes; `render.py stills` + contact sheet caught three real composition bugs before the full render.
+- `fonts.py` / `palette.py` produced a non-default pairing and a contrast-checked palette in two commands.

@@ -12,7 +12,15 @@ Run `python scripts/doctor.py` (tools, GPU, installed engines, API keys present)
 
 Before asking, say in one line where real or generated assets would lift this video ("A 3-second shot of the real app on a phone would make the hook land; do you have one, or should I generate or recreate it?"). If the user will record or edit themselves, give them the script, storyboard, assets and an edit plan.
 
-Then pick the stack (§3). Record every choice, cost and licence in `templates/VIDEO.md` §2.
+Then decide **how the film is made**, and say it in one line before building:
+- **Render (Recommended for product films):** code-built scenes in a browser engine from `templates/video-kit/` (HTML/CSS/SVG/Canvas/WebGL → headless Chromium → FFmpeg), or Remotion / HyperFrames / Motion Canvas.
+- **Capture:** real screen recordings of the product (Playwright video, OBS, asciinema for terminals), cut into the rendered film.
+- **Generate:** generative video or images (Veo, Sora, Runway, Kling, local Wan…) for atmosphere only, never as product output (`video-types-and-craft.md` §2b).
+- **Hybrid:** rendered chapters + captured product footage + optional generated atmosphere (the usual best).
+
+**[Rule] Code-built frames render through a browser engine** (or a motion tool with real typography), using the fonts chosen with `scripts/fonts.py` and the palette from `scripts/palette.py`. Never draw text frame by frame with OS raster APIs (Windows System.Drawing/GDI, PIL `ImageDraw`, OpenCV `putText`) and system fonts (Impact, Georgia, Consolas, Arial…): that path produced DENT's weakest test films.
+
+Record every choice, cost and licence in `templates/VIDEO.md` §2.
 
 ## 2. Pipeline
 1. **Brief** (type, sub-type, audience, platform, one message, CTA, length, aspect ratios) — `video-types-and-craft.md`.
@@ -64,7 +72,10 @@ Then pick the stack (§3). Record every choice, cost and licence in `templates/V
 
 ## 4. Build recipes (code-based)
 
-**HyperFrames-style approach (any HTML-to-video renderer):** build each scene as an HTML composition at the exact output size (1920×1080 / 1080×1920), drive all animation from a single time variable (GSAP timeline `seek(t)` or CSS animations with negative delays) so every frame is deterministic, put audio on the timeline, render, then check with ffprobe. Follow the tool's current docs for its composition format and CLI.
+**Start from `templates/video-kit/`** (copy it into `video/<film>/`): it carries the engine, the beat-grid timeline, motion blur, correct colour encoding, the beat-locked score and the method that makes DENT's own launch film work (`video-types-and-craft.md` §4b). Replace scenes, tokens and timeline; keep the method.
+
+
+**HyperFrames-style approach (any HTML-to-video renderer):** build each scene as an HTML composition at the exact output size (1920×1080 / 1080×1920), drive all animation from a single time variable (GSAP timeline `seek(t)` or CSS animations with negative delays) so every frame is deterministic, put audio on the timeline (anchor visual hits to the narration's word timestamps, e.g. from Whisper), render, then check with ffprobe. Review a contact sheet of stills at key times before spending minutes on a full render. Start from `templates/video-kit/` (engine + quality invariants). Follow the tool's current docs for its composition format and CLI.
 
 **Remotion:** `npx create-video@latest` → compositions in React using `useCurrentFrame()` + `interpolate()`/`spring()`; `<Audio>` and `<OffthreadVideo>` for media; `npx remotion render <Comp> out.mp4`. Remember the licence threshold.
 
@@ -106,7 +117,11 @@ Frame rates: 24 (cinematic), 30 (UI/screen), 60 (fast UI motion/games). Keep one
 | Check | How |
 |---|---|
 | File plays, correct duration/resolution/fps/codec | `ffprobe` output |
-| A/V sync | Scrub key moments (clap/impact frames) |
+| **Run `python scripts/video_qa.py <film> --kind <kind> --captions <srt> --audio <mix.wav> --sheet <jpg>`** (add `--loop` for loops) and look at the time-labelled sheet | Streams, colour range, A/V offset against the mix, loudness and true peak, frozen time, longest hold, visual sameness, energy, black frames, captions, loop seam; exit 1 on failure. Thresholds per kind below |
+| Product truth (`video-types-and-craft.md` §2b) | Three-question test written and passed with sound off; ≥ 60 % of screen time shows the real product or its real output |
+| Colour range is TV/limited `yuv420p`, not full-range `yuvj420p` (happens when screenshots are piped to FFmpeg as JPEG/PNG; players then show crushed or washed-out contrast) | `ffprobe` `pix_fmt` + `color_range`; encode with `-vf scale=in_range=full:out_range=tv,format=yuv420p -color_range tv -colorspace bt709` |
+| Narration says what the script says | `python scripts/tts.py check --in vo/lines` (`../audio/voice-and-narration.md` §5.2): per-line word error rate with **inserted, dropped and replaced words**; read them, since engines add words as well as mispronounce. In DENT's own trailer the engine read "DENT" as "PEN" |
+| A/V sync | `--audio out/score.wav` measures the film's offset against its own mix (≤ 20 ms); scrub the impact frames by eye and ear too |
 | Loudness and peaks | `ffmpeg -af ebur128` / loudnorm summary on target; true peak ≤ −1 dBTP |
 | Captions | Present, synced, spelled correctly, readable on phone |
 | Message with sound off | Watch muted: still understood? |
@@ -117,3 +132,17 @@ Frame rates: 24 (cinematic), 30 (UI/screen), 60 (fast UI motion/games). Keep one
 | Flashing | No > 3 flashes/s (check fast cuts/strobes) |
 | Versions | 16:9, 9:16, 1:1 rendered as planned; thumbnail exported |
 | Licences | Every asset in the licence table |
+
+### `video_qa.py` thresholds by `--kind`
+| Kind | Frozen time ≤ | Longest hold ≤ | Longest visually-unchanged stretch ≤ | Energy (mean change/s) ≥ |
+|---|---|---|---|---|
+| `trailer` | 20 % | 2.5 s | 6 s | 15 |
+| `short` | 20 % | 2.5 s | 4 s | 18 |
+| `explainer` | 35 % | 4 s | 10 s | none |
+| `tutorial` | 50 % | 6 s | 20 s | none |
+| `loop` | 20 % | 2.5 s | 6 s | 15, plus loop seam ≤ 12/255 |
+
+Energy calibration: DENT's launch film measures 35, a weak GPT-made trailer 18.6, a static slideshow 4.2. The end hold (`--end-hold`, default 3 s) is excluded except for loops. Loudness: −14 LUFS ± 1, true peak ≤ −1 dBTP. Sync: offset ≤ 20 ms against `--audio`.
+
+### Independent evaluation for video
+At Polished and All-out, the three evaluators (`../workflow/scoring-and-closeout.md` §3b) for a film are **Story** (three-question test, script, product truth, accuracy), **Picture** (contact sheets, stills, style frames, originality guard) and **Sound** (the mix, narration check output, loudness, sync). Start each as a subagent with a fresh context, or, with the user's OK, as a separate session; give it only the request, VIDEO.md, the film, its sheets and the QA output. If neither is possible, run them yourself and label the result **self-review**, never independent.

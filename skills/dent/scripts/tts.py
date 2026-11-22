@@ -16,9 +16,16 @@ Engines
           then run `post` on that folder (references/audio/voice-and-narration.md §5.6).
 
 Each local engine lives in its own virtual environment (their PyTorch/Transformers pins conflict) under
-$DENT_TTS_HOME (default ~/.dent/tts/<engine>). `say` re-runs itself inside that environment automatically.
+$DENT_TTS_HOME, else the folder registered with `tts.py home <folder>` (~/.dent/tts-home.txt), else ~/.dent/tts.
+`say` re-runs itself inside that environment automatically.
 Script file: one line of narration per line (blank lines and lines starting with # are ignored). Inline pauses
-`[pause 0.6]` split a line into parts with silence between them.
+`[pause 0.6]` split a line into parts with silence between them. `{passkey|pass-key}` = show "passkey" in captions,
+say "pass-key" (respell names the engine gets wrong without leaking the respelling into captions).
+
+  python tts.py check --in vo/lines        # speech-to-text every line: wrong, inserted or dropped words, pace
+  python tts.py words vo/narration.wav     # word timestamps -> narration.words.json (sync visuals to words)
+  python tts.py say ... --line 8           # re-render one line in place
+  python tts.py post ... --at 0.45,3.0,6.5 # place each line at a chosen time (on the film's grid)
 
 Nothing here spends money or installs software without an explicit flag (`--yes`), and API keys are only read
 from environment variables. Copyright 2026 Jeel Nada (solarquack). Licensed under the Apache License 2.0.
@@ -38,7 +45,23 @@ import urllib.request
 import wave
 from pathlib import Path
 
-HOME = Path(os.environ.get("DENT_TTS_HOME", Path.home() / ".dent" / "tts"))
+POINTER = Path(os.environ.get("DENT_TTS_POINTER", Path.home() / ".dent" / "tts-home.txt"))  # remembers a custom engine folder across sessions
+
+
+def _home() -> Path:
+    """$DENT_TTS_HOME, else the folder registered in ~/.dent/tts-home.txt, else ~/.dent/tts."""
+    if os.environ.get("DENT_TTS_HOME"):
+        return Path(os.environ["DENT_TTS_HOME"])
+    try:
+        reg = POINTER.read_text(encoding="utf-8").strip()
+        if reg and Path(reg).is_dir():
+            return Path(reg)
+    except OSError:
+        pass
+    return Path.home() / ".dent" / "tts"
+
+
+HOME = _home()
 TORCH = "torch torchaudio --index-url https://download.pytorch.org/whl/cu124"
 
 ENGINES = {
@@ -60,6 +83,9 @@ ENGINES = {
               "note": "fast offline fallback; sounds synthetic next to the engines above"},
     "system": {"pip": "", "torch": False, "module": None, "licence": "OS voices", "commercial": "check the OS vendor's terms",
                "size": "none", "hw": "any", "note": "last resort for drafts and timing; never for a produced video"},
+    "whisper": {"pip": "faster-whisper", "torch": False, "module": "faster_whisper", "licence": "MIT (faster-whisper, Whisper weights)",
+                "commercial": "yes", "size": "~150 MB + ~500 MB model (small.en)", "hw": "CPU is fine", "stt": True,
+                "note": "speech-to-text for `tts.py check` and `tts.py words`; not a voice"},
     "openai": {"cloud": True, "key": "OPENAI_API_KEY", "licence": "provider terms", "commercial": "per plan; disclose AI voice",
                "note": "paid API; steerable delivery via instructions"},
     "elevenlabs": {"cloud": True, "key": "ELEVENLABS_API_KEY", "licence": "provider terms", "commercial": "paid plans",
@@ -99,6 +125,8 @@ def has_module(python: str | Path, module: str) -> bool:
 
 def engine_python(engine: str) -> str | None:
     meta = ENGINES[engine]
+    if meta.get("stt"):
+        return find_python(meta["module"])
     if meta.get("cloud") or engine == "system":
         return sys.executable
     if engine == "piper" and shutil.which("piper"):
@@ -109,6 +137,92 @@ def engine_python(engine: str) -> str | None:
     if vp.is_file() and has_module(vp, meta["module"]):
         return str(vp)
     return None
+
+
+def find_python(module: str) -> str | None:
+    """This interpreter, then every environment under the engine home that has `module` installed."""
+    if has_module(sys.executable, module):
+        return sys.executable
+    if HOME.is_dir():
+        for d in sorted(HOME.iterdir()):
+            py = d / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+            if py.is_file() and has_module(py, module):
+                return str(py)
+    return None
+
+
+def _norm_words(t: str) -> list[str]:
+    t = t.lower().replace("’", "'")
+    return re.sub(r"[^a-z0-9' ]+", " ", t).split()
+
+
+def _whisper(model_name: str):
+    """CPU int8 by default: fast enough for narration and avoids CUDA/cuBLAS install problems that only fail
+    at the first encode. Set DENT_STT_DEVICE=cuda to use a working GPU setup."""
+    from faster_whisper import WhisperModel
+    dev = os.environ.get("DENT_STT_DEVICE", "cpu")
+    return WhisperModel(model_name, device=dev, compute_type="float16" if dev == "cuda" else "int8")
+
+
+def _reexec_in(module: str, a) -> int | None:
+    py = find_python(module)
+    if not py:
+        out("faster-whisper is not installed. Run: python tts.py install whisper   (ask the user first; ~650 MB)")
+        return 2
+    if py != sys.executable and not getattr(a, "_inner", False):
+        return subprocess.run([py, str(Path(__file__).resolve()), *sys.argv[1:], "--_inner"]).returncode
+    return None
+
+
+def cmd_check(a) -> int:
+    """Transcribe every line_NNN.wav and compare with line_NNN.txt. TTS engines mispronounce names AND sometimes
+    insert or drop whole words or phrases; nobody may listen in an unattended run, so read every transcript."""
+    r = _reexec_in("faster_whisper", a)
+    if r is not None:
+        return r
+    import difflib
+    model = _whisper(a.model)
+    rows, bad = [], 0
+    for w in sorted(Path(a.inp).glob("line_*.wav")):
+        ref_txt = w.with_suffix(".txt").read_text(encoding="utf-8") if w.with_suffix(".txt").is_file() else ""
+        segs, _ = model.transcribe(str(w), beam_size=5, language="en")
+        hyp_txt = " ".join(x.text.strip() for x in segs)
+        ref, hyp = _norm_words(ref_txt), _norm_words(hyp_txt)
+        sm = difflib.SequenceMatcher(a=ref, b=hyp, autojunk=False)
+        ins, dele, sub_ = [], [], []
+        for op, i1, i2, j1, j2 in sm.get_opcodes():
+            if op == "insert":
+                ins += hyp[j1:j2]
+            elif op == "delete":
+                dele += ref[i1:i2]
+            elif op == "replace":
+                sub_.append(f"{' '.join(ref[i1:i2])} -> {' '.join(hyp[j1:j2])}")
+        errs = len(ins) + len(dele) + sum(1 for _ in sub_)
+        wer = errs / max(1, len(ref))
+        dur = wav_duration(w)
+        flag = wer > 0.15 or len(ins) >= 2 or len(dele) >= 2
+        bad += flag
+        rows.append({"line": w.name, "wer": round(wer, 3), "inserted": ins, "dropped": dele, "replaced": sub_,
+                     "words_per_s": round(len(ref) / max(dur, .1), 2), "heard": hyp_txt})
+        out(f"{'FAIL' if flag else 'ok  '}  {w.name}  WER {wer:.0%}  {len(ref) / max(dur, .1):.1f} w/s"
+            + (f"  inserted: {' '.join(ins)}" if ins else "") + (f"  dropped: {' '.join(dele)}" if dele else "")
+            + (f"  replaced: {'; '.join(sub_)}" if sub_ else ""))
+    (Path(a.inp) / "check.json").write_text(json.dumps(rows, indent=1), encoding="utf-8")
+    out(f"{bad} line(s) to re-render (`say --line N`, new --seed, or a {{shown|spoken}} respelling); homophones like write/right are fine. Details: check.json")
+    return 1 if bad else 0
+
+
+def cmd_words(a) -> int:
+    r = _reexec_in("faster_whisper", a)
+    if r is not None:
+        return r
+    model = _whisper(a.model)
+    segs, _ = model.transcribe(a.wav, beam_size=5, language="en", word_timestamps=True)
+    words = [{"w": x.word.strip(), "s": round(x.start, 3), "e": round(x.end, 3)} for sg in segs for x in sg.words]
+    dst = Path(a.out or Path(a.wav).with_suffix(".words.json"))
+    dst.write_text(json.dumps(words, indent=1), encoding="utf-8")
+    out(f"{len(words)} words -> {dst}")
+    return 0
 
 
 def read_script(path: str | None, text: str | None) -> list[str]:
@@ -144,7 +258,7 @@ def wav_duration(path: Path) -> float:
 
 # ---------------------------------------------------------------- engines (run inside the engine's environment)
 
-def render_local(engine: str, lines: list[str], outdir: Path, a: argparse.Namespace) -> list[Path]:
+def render_local(engine: str, lines: list[tuple[int, str]], outdir: Path, a: argparse.Namespace) -> list[Path]:
     import numpy as np
     outdir.mkdir(parents=True, exist_ok=True)
     random.seed(a.seed)
@@ -239,12 +353,34 @@ def render_local(engine: str, lines: list[str], outdir: Path, a: argparse.Namesp
     return render_lines(synth, lines, outdir)
 
 
-def render_lines(synth, lines: list[str], outdir: Path) -> list[Path]:
+RESPELL = re.compile(r"\{([^|{}]*)\|([^{}]*)\}")
+
+
+def spoken(line: str) -> str:
+    """'{passkey|pass-key}' -> 'pass-key' (what the engine reads)."""
+    return RESPELL.sub(r"\2", line)
+
+
+def shown(line: str) -> str:
+    """'{passkey|pass-key}' -> 'passkey' (what captions show); pause marks removed."""
+    return re.sub(r"\[pause[^\]]*\]", " ", RESPELL.sub(r"\1", line)).replace("  ", " ").strip()
+
+
+def numbered(lines: list[str], only: int | None) -> list[tuple[int, str]]:
+    items = list(enumerate(lines, 1))
+    if only:
+        if not 1 <= only <= len(lines):
+            sys.exit(f"--line {only}: the script has {len(lines)} lines")
+        items = [items[only - 1]]
+    return items
+
+
+def render_lines(synth, lines: list[tuple[int, str]], outdir: Path) -> list[Path]:
     import numpy as np
     paths = []
-    for i, line in enumerate(lines, 1):
+    for i, line in lines:
         pieces, sr = [], 24000
-        for text, pause in split_pauses(line):
+        for text, pause in split_pauses(spoken(line)):
             if text:
                 audio, sr = synth(text)
                 pieces.append(np.asarray(audio, dtype="float32").reshape(-1))
@@ -252,21 +388,21 @@ def render_lines(synth, lines: list[str], outdir: Path) -> list[Path]:
                 pieces.append(np.zeros(int(sr * pause), dtype="float32"))
         p = outdir / f"line_{i:03d}.wav"
         write_wav(p, np.concatenate(pieces) if pieces else np.zeros(1), sr)
-        (outdir / f"line_{i:03d}.txt").write_text(re.sub(r"\[pause[^\]]*\]", " ", line).strip(), encoding="utf-8")
-        out(f"  {p.name}  {wav_duration(p):.2f}s  {line[:60]}")
+        (outdir / f"line_{i:03d}.txt").write_text(shown(line), encoding="utf-8")
+        out(f"  {p.name}  {wav_duration(p):.2f}s  {shown(line)[:60]}")
         paths.append(p)
     return paths
 
 
-def render_cloud(engine: str, lines: list[str], outdir: Path, a: argparse.Namespace) -> list[Path]:
+def render_cloud(engine: str, lines: list[tuple[int, str]], outdir: Path, a: argparse.Namespace) -> list[Path]:
     outdir.mkdir(parents=True, exist_ok=True)
     key_env = {"openai": "OPENAI_API_KEY", "elevenlabs": "ELEVENLABS_API_KEY"}.get(engine, a.key_env)
     key = os.environ.get(key_env or "")
     if not key:
         sys.exit(f"{engine}: set the API key in the environment variable {key_env} yourself (never paste it into chat).")
     paths = []
-    for i, line in enumerate(lines, 1):
-        text = re.sub(r"\[pause[^\]]*\]", " … ", line)
+    for i, line in lines:
+        text = re.sub(r"\[pause[^\]]*\]", " … ", spoken(line))
         if engine == "elevenlabs":
             voice = a.voice or "JBFqnCBsd6RMkjVDRZzb"
             url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice}?output_format=pcm_24000"
@@ -288,17 +424,30 @@ def render_cloud(engine: str, lines: list[str], outdir: Path, a: argparse.Namesp
             w.setsampwidth(2)
             w.setframerate(24000)
             w.writeframes(pcm)
-        (outdir / f"line_{i:03d}.txt").write_text(re.sub(r"\[pause[^\]]*\]", " ", line).strip(), encoding="utf-8")
-        out(f"  {p.name}  {wav_duration(p):.2f}s  {line[:60]}")
+        (outdir / f"line_{i:03d}.txt").write_text(shown(line), encoding="utf-8")
+        out(f"  {p.name}  {wav_duration(p):.2f}s  {shown(line)[:60]}")
         paths.append(p)
     return paths
 
 
 # ---------------------------------------------------------------- commands
 
+def cmd_home(a) -> int:
+    folder = Path(a.folder).expanduser().resolve()
+    if not folder.is_dir():
+        out(f"{folder} is not a folder")
+        return 1
+    POINTER.parent.mkdir(parents=True, exist_ok=True)
+    POINTER.write_text(str(folder), encoding="utf-8")
+    found = [e for e in ENGINES if not ENGINES[e].get("cloud") and e != "system" and (folder / e).is_dir()]
+    out(f"registered {folder} in {POINTER}; engine folders found: {', '.join(found) or 'none yet'}")
+    return 0
+
+
 def cmd_engines(_a) -> int:
     out(f"machine: {platform.system()} {platform.machine()}, GPU: {gpu()}, ffmpeg: {'yes' if shutil.which('ffmpeg') else 'NO (needed for post)'}")
-    out(f"engine environments: {HOME}  (set DENT_TTS_HOME to change)")
+    src = "DENT_TTS_HOME" if os.environ.get("DENT_TTS_HOME") else ("registered in ~/.dent/tts-home.txt" if POINTER.is_file() else "default")
+    out(f"engine environments: {HOME}  ({src}; `tts.py home <folder>` registers another)")
     for name, m in ENGINES.items():
         if m.get("cloud"):
             state = "key set" if os.environ.get(m["key"], "") else f"needs {m['key']}"
@@ -336,6 +485,9 @@ def cmd_install(a) -> int:
         out("Not installed. Ask the user first; re-run with --yes after they agree.")
         return 2
     HOME.mkdir(parents=True, exist_ok=True)
+    if HOME != Path.home() / ".dent" / "tts":   # remember a custom location for later sessions
+        POINTER.parent.mkdir(parents=True, exist_ok=True)
+        POINTER.write_text(str(HOME), encoding="utf-8")
     for c in cmds:
         r = subprocess.run(c)
         if r.returncode:
@@ -347,9 +499,10 @@ def cmd_install(a) -> int:
 
 
 def cmd_say(a) -> int:
-    lines = read_script(a.script, a.text)
+    lines = numbered(read_script(a.script, a.text), a.line)
     if not lines:
         sys.exit("nothing to say: give --script or --text")
+    out(f"{a.engine}: {len(lines)} line(s); the first run of a local engine also loads its model (several minutes on a laptop GPU)")
     outdir = Path(a.out)
     meta = ENGINES[a.engine]
     if meta.get("cloud"):
@@ -427,9 +580,13 @@ def cmd_post(a) -> int:
     tmp = work.parent / f"_{work.name}_concat.txt"
     sil = work.parent / f"_{work.name}_gap.wav"
     ffmpeg("-f", "lavfi", "-i", f"anullsrc=r=48000:cl=mono", "-t", str(a.gap), str(sil))
-    cues, t, entries = [], a.lead, []
+    at = [float(x) for x in a.at.split(",")] if a.at else None
+    if at and len(at) != len(wavs):
+        sys.exit(f"--at has {len(at)} times but there are {len(wavs)} lines")
+    lead_s = at[0] if at else a.lead
+    cues, t, entries = [], lead_s, []
     lead = work.parent / f"_{work.name}_lead.wav"
-    ffmpeg("-f", "lavfi", "-i", f"anullsrc=r=48000:cl=mono", "-t", str(max(a.lead, 0.01)), str(lead))
+    ffmpeg("-f", "lavfi", "-i", f"anullsrc=r=48000:cl=mono", "-t", str(max(lead_s, 0.01)), str(lead))
     entries.append(lead)
     timing = []
     for i, w in enumerate(wavs):
@@ -446,8 +603,17 @@ def cmd_post(a) -> int:
         entries.append(norm)
         t += d
         if i < len(wavs) - 1:
-            entries.append(sil)
-            t += a.gap
+            if at:
+                gap = at[i + 1] - t
+                if gap < 0:
+                    sys.exit(f"--at: line {i + 2} starts at {at[i + 1]} s but line {i + 1} only ends at {t:.2f} s")
+                g = work.parent / f"_{work.name}_gap{i}.wav"
+                ffmpeg("-f", "lavfi", "-i", "anullsrc=r=48000:cl=mono", "-t", f"{max(gap, 0.001):.3f}", str(g))
+                entries.append(g)
+                t += gap
+            else:
+                entries.append(sil)
+                t += a.gap
     tmp.write_text("".join(f"file '{p.resolve().as_posix()}'\n" for p in entries), encoding="utf-8")
     raw = work.parent / f"_{work.name}_raw.wav"
     ffmpeg("-f", "concat", "-safe", "0", "-i", str(tmp), "-c", "pcm_s16le", str(raw))
@@ -476,7 +642,7 @@ def cmd_post(a) -> int:
             if hit(final):
                 break
             gain += a.lufs - float(final["input_i"])
-    for p in [tmp, sil, lead, raw, *work.parent.glob(f"_{work.name}_line_*.wav")]:
+    for p in [tmp, sil, lead, raw, *work.parent.glob(f"_{work.name}_line_*.wav"), *work.parent.glob(f"_{work.name}_gap*.wav")]:
         p.unlink(missing_ok=True)
     if a.srt:
         Path(a.srt).write_text("".join(f"{n}\n{fmt_ts(s, ',')} --> {fmt_ts(e, ',')}\n{c}\n\n" for n, (s, e, c) in enumerate(cues, 1)), encoding="utf-8")
@@ -524,6 +690,17 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("engines")
+    ck = sub.add_parser("check", help="speech-to-text every line: wrong, inserted or dropped words, pace (needs faster-whisper)")
+    ck.add_argument("--in", dest="inp", required=True)
+    ck.add_argument("--model", default="small.en")
+    ck.add_argument("--_inner", action="store_true", help=argparse.SUPPRESS)
+    wd = sub.add_parser("words", help="word timestamps of a WAV -> JSON (for syncing visuals to narration)")
+    wd.add_argument("wav")
+    wd.add_argument("--out")
+    wd.add_argument("--model", default="small.en")
+    wd.add_argument("--_inner", action="store_true", help=argparse.SUPPRESS)
+    hm = sub.add_parser("home", help="register the folder that holds the engine environments (remembered for every session)")
+    hm.add_argument("folder")
     i = sub.add_parser("install")
     i.add_argument("engine", choices=sorted(ENGINES))
     i.add_argument("--yes", action="store_true", help="actually install (only after the user agreed)")
@@ -545,6 +722,7 @@ def main() -> int:
     s.add_argument("--seed", type=int, default=7)
     s.add_argument("--base-url", default="", help="http engine: base URL ending in /v1")
     s.add_argument("--key-env", default="", help="http engine: name of the env var holding the key")
+    s.add_argument("--line", type=int, help="re-render only this line (1-based) into --out, keeping the other files")
     s.add_argument("--_inner", action="store_true", help=argparse.SUPPRESS)
     p = sub.add_parser("post")
     p.add_argument("--in", dest="inp", required=True)
@@ -553,6 +731,7 @@ def main() -> int:
     p.add_argument("--tp", type=float, default=-1.5, help="true-peak ceiling dBTP")
     p.add_argument("--gap", type=float, default=0.35, help="seconds between lines")
     p.add_argument("--lead", type=float, default=0.25, help="silence before the first line")
+    p.add_argument("--at", help="comma-separated start times (s) for each line, e.g. 0.45,2.95,6.0 (places lines on the film's grid)")
     p.add_argument("--tempo", type=float, default=1.0, help="pitch-preserving speed change, 0.5-2.0 (e.g. 0.85 to calm a fast engine)")
     p.add_argument("--srt")
     p.add_argument("--vtt")
@@ -563,7 +742,8 @@ def main() -> int:
     c.add_argument("--out", required=True)
     c.add_argument("--seed", type=int, default=7)
     a = ap.parse_args()
-    return {"engines": cmd_engines, "install": cmd_install, "say": cmd_say, "post": cmd_post, "compare": cmd_compare}[a.cmd](a)
+    return {"engines": cmd_engines, "install": cmd_install, "say": cmd_say, "post": cmd_post, "compare": cmd_compare, "home": cmd_home,
+            "check": cmd_check, "words": cmd_words}[a.cmd](a)
 
 
 if __name__ == "__main__":

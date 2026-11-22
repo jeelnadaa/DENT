@@ -1,0 +1,1 @@
+The site keeps only the public key. It can check your signature, but never forge one.
